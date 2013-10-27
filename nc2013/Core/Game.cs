@@ -4,15 +4,19 @@ namespace Core
 {
 	public class Game
 	{
+		protected readonly ProgramStartInfo[] programStartInfos;
+		protected int currentStep = 0;
+
 		public Game(ProgramStartInfo[] programStartInfos)
 		{
+			this.programStartInfos = programStartInfos;
 		}
 
-		public Diff Step(int stepCount)
+		public virtual Diff Step(int stepCount)
 		{
-			throw new InvalidOperationException();
+			throw new NotImplementedException();
 		}
 
-		private GameState GameState { get; set; }
+		public GameState GameState { get; set; }
 	}
 }
