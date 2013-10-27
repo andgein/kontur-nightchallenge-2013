@@ -13,6 +13,12 @@ namespace Core
 			throw new InvalidOperationException();
 		}
 
-		private GameState GameState { get; set; }
+		public GameState GameState
+		{
+			get
+			{
+				return new GameState();
+			}
+		}
 	}
 }
