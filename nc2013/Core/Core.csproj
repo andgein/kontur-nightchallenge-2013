@@ -51,6 +51,9 @@
     <Compile Include="ProgramStateDiff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StupidGame.cs" />
+    <Compile Include="Parser\Warrior.cs" />
+    <Compile Include="Parser\WarriorParser.cs" />
+    <Compile Include="Parser\WarriorParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
