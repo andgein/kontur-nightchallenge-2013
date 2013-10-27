@@ -2,10 +2,65 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
-    <title>Core War Debugger</title>
+	<meta charset="utf-8" />
+	<title>Core War Debugger</title>
+	<script type="text/javascript" src="jquery-1.7.2.js"></script>
+	<script type="text/javascript">
+		function startGame() {
+			var memory = $("#memory");
+			for (var i = 0; i < 8000; i++) {
+				var cell = $("<div>").appendTo(memory);
+				if (i % 2 == 1)
+					cell.addClass("odd");
+			}
+		}
+	</script>
+	<style>
+		.program {
+			min-height: 100px;
+			width: 300px;
+			font-family: monospace;
+		}
+
+		.memory {
+		}
+
+		.memory div {
+			background-color: black;
+			width: 10px;
+			height: 10px;
+			float: left;
+		}
+
+		.memory div.odd {
+			background-color: red;
+		}
+	</style>
 </head>
 <body>
+	<table>
+		<thead>
+			<tr>
+				<th>Program A</th>
+				<th>Program B</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<textarea class="program"></textarea></td>
+				<td>
+					<textarea class="program"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button onclick="startGame()">Start Game</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
+	<div id="memory" class="memory">
+	</div>
 </body>
 </html>
