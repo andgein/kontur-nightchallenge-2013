@@ -121,16 +121,6 @@ namespace nMars.RedCode.Modules
             return shellModule.CreateShell();
         }
 
-        public static IIDEPlugin CreateIDEPlugin(string IDEPluginName)
-        {
-            IIDEPluginModule IDEPluginModule = FindModule(IDEPluginName) as IIDEPluginModule;
-            if (IDEPluginModule == null)
-            {
-                throw new FileNotFoundException("Cannot find module or interface");
-            }
-            return IDEPluginModule.CreateIDEPlugin();
-        }
-
         public static IModule FindModule(string name)
         {
             int idx = name.IndexOf('-');

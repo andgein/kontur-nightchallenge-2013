@@ -38,6 +38,20 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\EngineInstruction.cs" />
+    <Compile Include="Engine\EngineWarrior.cs" />
+    <Compile Include="Engine\Engine\Engine00Ground.cs" />
+    <Compile Include="Engine\Engine\Engine01Core.cs" />
+    <Compile Include="Engine\Engine\Engine02Placement.cs" />
+    <Compile Include="Engine\Engine\Engine03Tasks.cs" />
+    <Compile Include="Engine\Engine\Engine04Changes.cs" />
+    <Compile Include="Engine\Engine\Engine05Addressing.cs" />
+    <Compile Include="Engine\Engine\Engine06Instructions.cs" />
+    <Compile Include="Engine\Engine\Engine07Steps.cs" />
+    <Compile Include="Engine\Engine\Engine08Observer.cs" />
+    <Compile Include="Engine\Engine\Engine09History.cs" />
+    <Compile Include="Engine\Engine\Engine10StepBack.cs" />
+    <Compile Include="Engine\Module.cs" />
     <Compile Include="Parser\com\calitha\commons\AbstractSet.cs" />
     <Compile Include="Parser\com\calitha\commons\ArraySet.cs" />
     <Compile Include="Parser\com\calitha\commons\BinaryReader.cs" />
@@ -138,9 +152,6 @@
     <Compile Include="RedCode\Exceptions\DebuggerException.cs" />
     <Compile Include="RedCode\Exceptions\EngineException.cs" />
     <Compile Include="RedCode\Exceptions\ParserException.cs" />
-    <Compile Include="RedCode\IDE\ICoreWatch.cs" />
-    <Compile Include="RedCode\IDE\IIDEPlugin.cs" />
-    <Compile Include="RedCode\IDE\Solution.cs" />
     <Compile Include="RedCode\Module.cs" />
     <Compile Include="RedCode\Modules\CommandLine.cs" />
     <Compile Include="RedCode\Modules\ComponentLoader.cs" />
@@ -156,9 +167,11 @@
     <Compile Include="RedCode\Utils\Mono.cs" />
     <Compile Include="RedCode\Utils\SerializableDictionary.cs" />
     <Compile Include="Test\ComparingEngine.cs" />
+    <Compile Include="Test\MarsEngineRunner.cs" />
     <Compile Include="Test\EngineTest.cs" />
     <Compile Include="Test\Module.cs" />
     <Compile Include="Test\ParserTest.cs" />
+    <Compile Include="Test\SettingsFileHelper.cs" />
     <Compile Include="Test\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Properties\RedCode.cgt" />
+    <None Include="Properties\RedCode.grm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

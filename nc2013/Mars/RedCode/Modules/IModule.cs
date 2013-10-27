@@ -118,17 +118,6 @@ namespace nMars.RedCode.Modules
     }
 
     /// <summary>
-    /// Ide module interface
-    /// </summary>
-    public interface IIDEPluginModule : IModule
-    {
-        /// <summary>
-        /// Called during startup
-        /// </summary>
-        IIDEPlugin CreateIDEPlugin();
-    }
-
-    /// <summary>
     /// Abstract base of modules
     /// </summary>
     public abstract class BaseModule : IModule

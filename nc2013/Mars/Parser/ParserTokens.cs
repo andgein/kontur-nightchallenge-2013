@@ -23,7 +23,7 @@ namespace nMars.Parser
         protected ParserTokens()
         {
             Assembly assembly = typeof(ParserTokens).Assembly;
-            Stream redCode = assembly.GetManifestResourceStream("nMars.Parser.Properties.RedCode.cgt");
+			Stream redCode = assembly.GetManifestResourceStream("Mars.Properties.RedCode.cgt");
             if (redCode == null)
             {
                 redCode = assembly.GetManifestResourceStream("RedCode.cgt");

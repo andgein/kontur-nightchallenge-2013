@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using Mars.Test;
 
 namespace nMars.Test
 {
@@ -30,28 +31,7 @@ namespace nMars.Test
 
         public static string GetWarrirorsDirectory()
         {
-            string current = Directory.GetCurrentDirectory();
-            string basePath = Path.Combine(current, "Warriors");
-            if (!Directory.Exists(basePath))
-            {
-                current = Directory.GetParent(current).FullName;
-                basePath = Path.Combine(current, "Warriors");
-                if (!Directory.Exists(basePath))
-                {
-                    current = Directory.GetParent(current).FullName;
-                    basePath = Path.Combine(current, "Warriors");
-                    if (!Directory.Exists(basePath))
-                    {
-                        current = Directory.GetParent(current).FullName;
-                        basePath = Path.Combine(current, "Warriors");
-                        if (!Directory.Exists(basePath))
-                        {
-                            throw new ApplicationException("Could not find Warrirors at: " + basePath);
-                        }
-                    }
-                }
-            }
-            return basePath;
+	        return SettingsFileHelper.PatchDirectoryName("warriors", Directory.GetCurrentDirectory());
         }
     }
 }
