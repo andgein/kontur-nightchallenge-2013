@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,8 +29,9 @@ namespace Server
 				new StaticHandler(),
 				new RankingHandler(arena),
 				new AddProgramToArenaHandler(arena),
-				new ArenaPlayerHandler(arena), 
+				new ArenaPlayerHandler(arena),
 			};
+			Process.Start("http://localhost/corewar/index.html");
 			while (true)
 			{
 				var context = listener.GetContext();
