@@ -55,8 +55,8 @@ namespace Mars.Test
 		{
 			Console.WriteLine("Pair");
 			LoadRunPair(
-				Path.Combine(basePath, @"maniacs\5\coleman5.red"),
-				Path.Combine(basePath, @"pycorewar\Koenigstuhl\94\aggression.red"),
+				Path.Combine(basePath, @"imp.red"),
+				Path.Combine(basePath, @"dwarf.red"),
 				0);
 			Console.WriteLine("\nDone");
 		}
