@@ -1,1 +1,1 @@
-# NightChallenge КонфУР 2013 2013
+# NightChallenge КонфУР 2013
