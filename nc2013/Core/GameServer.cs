@@ -4,7 +4,8 @@
 	{
 		public Game StartNewGame(ProgramStartInfo[] programStartInfos)
 		{
-			return new Game(programStartInfos);
+			return new StupidGame(programStartInfos);
 		}
 	}
+
 }

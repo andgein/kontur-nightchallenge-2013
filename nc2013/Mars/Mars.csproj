@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23012EA9-C831-428F-A89A-1AB280FEB06A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mars</RootNamespace>
+    <AssemblyName>Mars</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Parser\com\calitha\commons\AbstractSet.cs" />
+    <Compile Include="Parser\com\calitha\commons\ArraySet.cs" />
+    <Compile Include="Parser\com\calitha\commons\BinaryReader.cs" />
+    <Compile Include="Parser\com\calitha\commons\FileUtil.cs" />
+    <Compile Include="Parser\com\calitha\commons\HashSet.cs" />
+    <Compile Include="Parser\com\calitha\commons\IntegerList.cs" />
+    <Compile Include="Parser\com\calitha\commons\ISet.cs" />
+    <Compile Include="Parser\com\calitha\commons\ResourceUtil.cs" />
+    <Compile Include="Parser\com\calitha\commons\StringUtil.cs" />
+    <Compile Include="Parser\com\calitha\commons\Util.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\ActionSubRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\CGTContent.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\CGTContentException.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\CharacterSetRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\CharacterSetTable.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\DFAStateRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\DFAStateTable.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\EdgeSubRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\InitialStatesRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\LALRStateRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\LALRStateTable.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\Parameters.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\RuleRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\RuleTable.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\SymbolRecord.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\SymbolTable.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\content\TableCounts.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\dfa\DFA.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\dfa\State.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\dfa\Transition.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\LALRParser.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\AcceptAction.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\Action.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\ActionFactory.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\GotoAction.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\ReduceAction.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\ShiftAction.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\lalr\State.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\Location.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\ParserEvents.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\ParserException.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\Reader.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\Rule.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\StateStack.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\StringTokenizer.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\structure\CGTStructure.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\structure\CGTStructureException.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\structure\Entry.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\structure\EntryFactory.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\structure\Record.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\Symbol.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\SymbolFactory.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\Token.cs" />
+    <Compile Include="Parser\com\calitha\goldparser\TokenStack.cs" />
+    <Compile Include="Parser\Expressions\Address.cs" />
+    <Compile Include="Parser\Expressions\BinaryExpression.cs" />
+    <Compile Include="Parser\Expressions\ComposedLabelName.cs" />
+    <Compile Include="Parser\Expressions\Expression.cs" />
+    <Compile Include="Parser\Expressions\LabelName.cs" />
+    <Compile Include="Parser\Expressions\ModifiedExpression.cs" />
+    <Compile Include="Parser\Expressions\TernaryExpression.cs" />
+    <Compile Include="Parser\Expressions\UnaryExpression.cs" />
+    <Compile Include="Parser\Expressions\Value.cs" />
+    <Compile Include="Parser\Expressions\Variables.cs" />
+    <Compile Include="Parser\Grammar.cs" />
+    <Compile Include="Parser\Module.cs" />
+    <Compile Include="Parser\ParserTokens.cs" />
+    <Compile Include="Parser\RedCode.cs" />
+    <Compile Include="Parser\Statements\AssertStatement.cs" />
+    <Compile Include="Parser\Statements\ContainerStatement.cs" />
+    <Compile Include="Parser\Statements\EquStatement.cs" />
+    <Compile Include="Parser\Statements\ForRofContainerStatement.cs" />
+    <Compile Include="Parser\Statements\InstructionStatement.cs" />
+    <Compile Include="Parser\Statements\Parameter.cs" />
+    <Compile Include="Parser\Statements\Statement.cs" />
+    <Compile Include="Parser\WarriorParser.cs" />
+    <Compile Include="Parser\Warrior\ExtendedInstruction.cs" />
+    <Compile Include="Parser\Warrior\ExtendedWarrior.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedCode\Basic\IInstruction.cs" />
+    <Compile Include="RedCode\Basic\Instruction.cs" />
+    <Compile Include="RedCode\Basic\IWarrior.cs" />
+    <Compile Include="RedCode\Basic\Mode.cs" />
+    <Compile Include="RedCode\Basic\Modifier.cs" />
+    <Compile Include="RedCode\Basic\Operation.cs" />
+    <Compile Include="RedCode\Basic\Rules.cs" />
+    <Compile Include="RedCode\Basic\Warrior.cs" />
+    <Compile Include="RedCode\Engine\AsyncEngine.cs" />
+    <Compile Include="RedCode\Engine\BreakPoint.cs" />
+    <Compile Include="RedCode\Engine\CoreBindingList.cs" />
+    <Compile Include="RedCode\Engine\EngineOptions.cs" />
+    <Compile Include="RedCode\Engine\IEngine.cs" />
+    <Compile Include="RedCode\Engine\IProject.cs" />
+    <Compile Include="RedCode\Engine\IPSpaces.cs" />
+    <Compile Include="RedCode\Engine\MatchResult.cs" />
+    <Compile Include="RedCode\Engine\Project.cs" />
+    <Compile Include="RedCode\Engine\PSpace.cs" />
+    <Compile Include="RedCode\Exceptions\DebuggerException.cs" />
+    <Compile Include="RedCode\Exceptions\EngineException.cs" />
+    <Compile Include="RedCode\Exceptions\ParserException.cs" />
+    <Compile Include="RedCode\IDE\ICoreWatch.cs" />
+    <Compile Include="RedCode\IDE\IIDEPlugin.cs" />
+    <Compile Include="RedCode\IDE\Solution.cs" />
+    <Compile Include="RedCode\Module.cs" />
+    <Compile Include="RedCode\Modules\CommandLine.cs" />
+    <Compile Include="RedCode\Modules\ComponentLoader.cs" />
+    <Compile Include="RedCode\Modules\IModule.cs" />
+    <Compile Include="RedCode\Modules\ModuleRegister.cs" />
+    <Compile Include="RedCode\Parser\BaseParser.cs" />
+    <Compile Include="RedCode\Parser\CachingParser.cs" />
+    <Compile Include="RedCode\Parser\IParser.cs" />
+    <Compile Include="RedCode\Parser\ParserOptions.cs" />
+    <Compile Include="RedCode\Utils\ConsoleWrapper.cs" />
+    <Compile Include="RedCode\Utils\ExceptionHandler.cs" />
+    <Compile Include="RedCode\Utils\IConsole.cs" />
+    <Compile Include="RedCode\Utils\Mono.cs" />
+    <Compile Include="RedCode\Utils\SerializableDictionary.cs" />
+    <Compile Include="Test\ComparingEngine.cs" />
+    <Compile Include="Test\EngineTest.cs" />
+    <Compile Include="Test\Module.cs" />
+    <Compile Include="Test\ParserTest.cs" />
+    <Compile Include="Test\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Parser\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

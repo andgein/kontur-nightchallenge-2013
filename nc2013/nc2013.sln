@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{4A6C10B8-FF5A-46BC-B607-0391A567F227}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mars", "Mars\Mars.csproj", "{23012EA9-C831-428F-A89A-1AB280FEB06A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{4A6C10B8-FF5A-46BC-B607-0391A567F227}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A6C10B8-FF5A-46BC-B607-0391A567F227}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A6C10B8-FF5A-46BC-B607-0391A567F227}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23012EA9-C831-428F-A89A-1AB280FEB06A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23012EA9-C831-428F-A89A-1AB280FEB06A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23012EA9-C831-428F-A89A-1AB280FEB06A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23012EA9-C831-428F-A89A-1AB280FEB06A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
