@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net;
 using Core;
 using ProgramStartInfo = Server.DataContracts.ProgramStartInfo;
 
@@ -19,17 +20,11 @@ namespace Server
 			return gameId;
 		}
 
-		public Game TryGetGame(Guid gameId)
-		{
-			Game game;
-			return games.TryGetValue(gameId, out game) ? game : null;
-		}
-
 		public Game GetGame(Guid gameId)
 		{
-			var game = TryGetGame(gameId);
-			if (game == null)
-				throw new InvalidOperationException(string.Format("Game {0} not found", gameId));
+			Game game;
+			if (!games.TryGetValue(gameId, out game))
+				throw new HttpException(HttpStatusCode.NotFound, string.Format("Game {0} not found", gameId));
 			return game;
 		}
 	}

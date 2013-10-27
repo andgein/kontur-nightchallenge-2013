@@ -40,6 +40,10 @@ namespace Server
 						context.Response.Close();
 					}
 				}
+				catch (HttpException e)
+				{
+					e.WriteToResponse(context.Response);
+				}
 				catch (Exception e)
 				{
 					context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;

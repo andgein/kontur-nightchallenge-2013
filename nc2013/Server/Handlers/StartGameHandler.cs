@@ -1,8 +1,9 @@
-﻿using Server.DataContracts;
+﻿using System.Net;
+using Server.DataContracts;
 
 namespace Server.Handlers
 {
-	public class StartGameHandler : GameFuncHandlerBase<ProgramStartInfo[], GameState>
+	public class StartGameHandler : GameHandlerBase
 	{
 		private readonly GameHttpServer gameHttpServer;
 
@@ -11,10 +12,11 @@ namespace Server.Handlers
 			this.gameHttpServer = gameHttpServer;
 		}
 
-		protected override GameState Handle(ProgramStartInfo[] request)
+		protected override void DoHandle(HttpListenerContext context)
 		{
-			var gameId = gameHttpServer.StartNewGame(request);
-			return GameState.FromCore(gameId, gameHttpServer.GetGame(gameId).GameState);
+			var programStartInfos = GetRequest<ProgramStartInfo[]>(context);
+			var gameId = gameHttpServer.StartNewGame(programStartInfos);
+			SendResponseRaw(context, gameId);
 		}
 	}
 }

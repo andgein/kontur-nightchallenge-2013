@@ -25,6 +25,36 @@ namespace Server.Handlers
 			return false;
 		}
 
+		protected Guid GetGameId(HttpListenerContext context)
+		{
+			var gameIdString = context.Request.QueryString["gameId"];
+			if (string.IsNullOrEmpty(gameIdString))
+				throw new HttpException(HttpStatusCode.BadRequest, "Query parameter 'gameId' is not specified");
+			Guid gameId;
+			if (!Guid.TryParse(gameIdString, out gameId))
+				throw new HttpException(HttpStatusCode.BadRequest, "Query parameter 'gameId' is invalid - Guid is expected");
+			return gameId;
+		}
+		
+		protected int GetIntParam(HttpListenerContext context, string paramName)
+		{
+			var result = GetOptionalIntParam(context, paramName);
+			if (!result.HasValue)
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
+			return result.Value;
+		}
+
+		protected int? GetOptionalIntParam(HttpListenerContext context, string paramName)
+		{
+			var valueString = context.Request.QueryString[paramName];
+			if (string.IsNullOrEmpty(valueString))
+				return null;
+			int value;
+			if (!int.TryParse(valueString, out value))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - int is expected", paramName));
+			return value;
+		}
+
 		protected T GetRequest<T>(HttpListenerContext context)
 		{
 			var reader = new StreamReader(context.Request.InputStream);
@@ -38,6 +68,14 @@ namespace Server.Handlers
 			var result = JsonConvert.SerializeObject(value);
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 				writer.Write(result);
+			context.Response.Close();
+		}
+
+		protected void SendResponseRaw(HttpListenerContext context, object value)
+		{
+			if (!ReferenceEquals(value, null))
+				using (var writer = new StreamWriter(context.Response.OutputStream))
+					writer.Write(value);
 			context.Response.Close();
 		}
 
