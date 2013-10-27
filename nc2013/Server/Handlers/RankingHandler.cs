@@ -13,42 +13,8 @@ namespace Server.Handlers
 
 		protected override void DoHandle(HttpListenerContext context)
 		{
-			var ranking = CreateDummyRanking();
-			SendResponse(context, ranking);
+			SendResponse(context, Ranking.CreateDummyRanking());
 		}
 
-		private static Ranking CreateDummyRanking()
-		{
-			return new Ranking
-				{
-					Programs = new[]
-						{
-							new ProgramRankInfo
-								{
-									Name = "xoposhiy",
-									Author = "Pavel Egorov",
-									Loses = 10,
-									Wins = 100500,
-									TotalGames = 100510
-								},
-							new ProgramRankInfo
-								{
-									Name = "spaceorc",
-									Author = "Ivan Dashkevich",
-									Loses = 100500,
-									Wins = 10,
-									TotalGames = 100510
-								},
-							new ProgramRankInfo
-								{
-									Name = "imp",
-									Author = "Andrey {Kostousov, Gein}",
-									Loses = 0,
-									Wins = 0,
-									TotalGames = 300
-								}
-						}
-				};
-		}
 	}
 }

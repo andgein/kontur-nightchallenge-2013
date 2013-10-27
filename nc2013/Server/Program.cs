@@ -27,7 +27,8 @@ namespace Server
 				new StepHandler(gameHttpServer),
 				new StaticHandler(),
 				new RankingHandler(arena),
-				new AddProgramToArenaHandler(arena)
+				new AddProgramToArenaHandler(arena),
+				new ArenaPlayerHandler(arena), 
 			};
 			while (true)
 			{
@@ -52,11 +53,13 @@ namespace Server
 				}
 				catch (HttpException e)
 				{
+					context.Response.ContentType = "text/plain; charset: utf-8";
 					e.WriteToResponse(context.Response);
 				}
 				catch (Exception e)
 				{
-					context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+					context.Response.ContentType = "text/plain; charset: utf-8";
+					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(context.Response.OutputStream))
 						writer.Write(e.ToString());
 					context.Response.Close();

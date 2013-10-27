@@ -41,12 +41,15 @@
   <ItemGroup>
     <Compile Include="DataContracts\CellState.cs" />
     <Compile Include="DataContracts\Diff.cs" />
+    <Compile Include="DataContracts\FinishedGameInfo.cs" />
     <Compile Include="DataContracts\MemoryDiff.cs" />
+    <Compile Include="DataContracts\PlayerInfo.cs" />
     <Compile Include="DataContracts\ProcessStateChangeType.cs" />
     <Compile Include="DataContracts\ProgramStateDiff.cs" />
     <Compile Include="DataContracts\Ranking.cs" />
     <Compile Include="Handlers\AddProgramToArenaHandler.cs" />
     <Compile Include="DataContracts\AddProgramToArenaRequest.cs" />
+    <Compile Include="Handlers\ArenaPlayerHandler.cs" />
     <Compile Include="Handlers\RankingHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="GameHttpServer.cs" />

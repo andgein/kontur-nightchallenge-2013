@@ -16,6 +16,7 @@ namespace Server.Handlers
 		{
 			if (context.Request.Url.AbsolutePath.Equals("/" + Program.CoreWarPrefix + "/" + path, StringComparison.OrdinalIgnoreCase))
 			{
+				Console.WriteLine(context.Request.Url);
 				DoHandle(context);
 				context.Response.Close();
 				return true;
