@@ -4,65 +4,39 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Core War Debugger</title>
-	<script type="text/javascript" src="jquery-1.7.2.js"></script>
-	<script type="text/javascript" src="base.js"></script>
-	<script type="text/javascript" src="memory.js"></script>
-	<script type="text/javascript">
-		function startGame() {
-			var memory = $("#memory");
-			for (var i = 0; i < 8000; i++) {
-				var cell = $("<div>").appendTo(memory);
-				if (i % 2 == 1)
-					cell.addClass("odd");
-			}
-		}
-	</script>
-	<style>
-		.program {
-			min-height: 100px;
-			width: 300px;
-			font-family: monospace;
-		}
-
-		.memory {
-		}
-
-		.memory div {
-			background-color: black;
-			width: 10px;
-			height: 10px;
-			float: left;
-		}
-
-		.memory div.odd {
-			background-color: red;
-		}
-	</style>
+	<script src="jquery-1.7.2.js"></script>
+	<script src="angular.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="common.js"></script>
 </head>
 <body>
-	<table>
-		<thead>
-			<tr>
-				<th>Program A</th>
-				<th>Program B</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<textarea class="program"></textarea></td>
-				<td>
-					<textarea class="program"></textarea></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<button onclick="startGame()">Start Game</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<div id="memory" class="memory">
+	<div class="container">
+		<script>nav()</script>
+		<div class="page-header">
+			<h1>Debugger</h1>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>Program A</th>
+					<th>Program B</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<textarea class="program"></textarea></td>
+					<td>
+						<textarea class="program"></textarea></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button onclick="alert('!')">Start Game</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 </html>
