@@ -38,6 +38,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arena.cs" />
     <Compile Include="CellState.cs" />
     <Compile Include="Diff.cs" />
     <Compile Include="GameServer.cs" />

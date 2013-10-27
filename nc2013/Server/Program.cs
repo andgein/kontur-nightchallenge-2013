@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Core;
 using Server.Handlers;
 
 namespace Server
@@ -15,12 +16,15 @@ namespace Server
 			listener.Prefixes.Add("http://*/corewars/");
 			listener.Start();
 			var gameHttpServer = new GameHttpServer();
+			var arena = new Arena();
 			var handlers = new GameHandlerBase[]
 			{
 				new StartGameHandler(gameHttpServer),
 				new GetGameStateHandler(gameHttpServer),
 				new StepHandler(gameHttpServer),
-				new StaticHandler()
+				new StaticHandler(),
+				new RankingHandler(arena),
+				new AddProgramToArenaHandler(arena),
 			};
 			while (true)
 			{

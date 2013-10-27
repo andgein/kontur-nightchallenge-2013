@@ -73,6 +73,7 @@ namespace Server.Handlers
 
 		protected void SendResponse<T>(HttpListenerContext context, T value)
 		{
+			context.Response.ContentType = "application/json; charset=utf-8";
 			var result = JsonConvert.SerializeObject(value);
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 				writer.Write(result);
