@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 
 namespace Server.Handlers
 {
@@ -13,9 +9,9 @@ namespace Server.Handlers
 		{
 			var localPath = TryGetLocalPath(context);
 			if (localPath == null) return false;
-			return 
-				TryHandleStatic("../../" + localPath, context) 
-				|| TryHandleStatic("../../StaticContent/" + localPath, context) 
+			return
+				TryHandleStatic("../../" + localPath, context)
+				|| TryHandleStatic("../../StaticContent/" + localPath, context)
 				|| TryHandleStatic(localPath, context)
 				|| TryHandleStatic("StaticContent/" + localPath, context)
 				;
@@ -32,8 +28,8 @@ namespace Server.Handlers
 		private static string TryGetLocalPath(HttpListenerContext context)
 		{
 			var relPath = context.Request.Url.LocalPath;
-			if (!relPath.Contains("..") 
-				&& relPath.StartsWith("/" + Program.CoreWarPrefix + "/"))
+			if (!relPath.Contains("..")
+			    && relPath.StartsWith("/" + Program.CoreWarPrefix + "/"))
 				return relPath.Substring(Program.CoreWarPrefix.Length + 2);
 			return null;
 		}

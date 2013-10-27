@@ -11,13 +11,17 @@ namespace Server.DataContracts
 
 		[JsonProperty]
 		public ProcessStateChangeType ChangeType { get; set; }
+		
+		[JsonProperty]
+		public uint NextPointer { get; set; }
 
 		public static ProgramStateDiff FromCore(Core.ProgramStateDiff diff)
 		{
 			return new ProgramStateDiff
 			{
 				Program = diff.Program,
-				ChangeType = Convert(diff.ChangeType)
+				ChangeType = Convert(diff.ChangeType),
+				NextPointer = diff.NextPointer
 			};
 		}
 

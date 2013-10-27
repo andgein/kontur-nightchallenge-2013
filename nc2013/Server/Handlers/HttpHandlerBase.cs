@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Server.Handlers
 {
@@ -49,14 +50,14 @@ namespace Server.Handlers
 		{
 			var reader = new StreamReader(context.Request.InputStream);
 			var data = reader.ReadToEnd();
-			var result = JsonConvert.DeserializeObject<T>(data);
+			var result = JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
 			return result;
 		}
 
 		protected void SendResponse<T>(HttpListenerContext context, T value)
 		{
 			context.Response.ContentType = "application/json; charset=utf-8";
-			var result = JsonConvert.SerializeObject(value);
+			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 				writer.Write(result);
 			context.Response.Close();
