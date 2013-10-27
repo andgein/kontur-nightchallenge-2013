@@ -25,7 +25,11 @@ namespace Server.Handlers
 				{
 					Info = ProgramRankInfo.CreateDummy(0),
 					SubmitTime = DateTime.Now - TimeSpan.FromHours(1),
-					LastFinishedGames = new FinishedGameInfo[0]
+					GamesByEnemy = new []
+						{
+							new FinishedGamesWithEnemy{Enemy="spaceorc", EnemyVersion = 3, Wins=100, Loses=20, Draws=80, LastGames = new []{new FinishedGameInfo()}},
+							new FinishedGamesWithEnemy{Enemy="imp", EnemyVersion = 1, Wins=100, Loses=20, Draws=80, LastGames = new []{new FinishedGameInfo()}},
+						}
 				};
 		}
 	}

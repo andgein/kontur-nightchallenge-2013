@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app>
+<head>
+	<meta charset="utf-8" />
+	<title>Core War</title>
+	<script src="jquery-1.7.2.js"></script>
+	<script src="angular.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="common.js"></script>
+	<script>
+		var PlayerController = MakeJsonController("/corewar/arena/player?name=" + qs["name"]);
+	</script>
+</head>
+<body>
+	<div class="container" ng-controller="PlayerController">
+		<script>nav()</script>
+		<div class="page-header">
+			<h1>Игрок {{Info.Name}}</h1>
+		</div>
+		<div>Побед: {{Info.Wins}}</div>
+		<div>Поражений: {{Info.Loses}}</div>
+		<div>Всего боев: {{Info.TotalGames}}</div>
+		<h2>Статистика боев с другими ботами</h2>
+		<table class="table table-bordered table-condensed">
+			<tr>
+				<th>Противник</th>
+				<th>Побед</th>
+				<th>Поражений</th>
+				<th>Ничьих</th>
+				<th>Последние игры</th>
+			</tr>
+			<tr ng-repeat="enemyStats in GamesByEnemy">
+				<td>{{enemyStats.Enemy}} v{{enemyStats.EnemyVersion}}</td>
+				<td>{{enemyStats.Wins}}</td>
+				<td>{{enemyStats.Loses}}</td>
+				<td>{{enemyStats.Draws}}</td>
+				<td>
+					тут будет список игр
+
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,21 +1,45 @@
 ﻿<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app>
 <head>
 	<meta charset="utf-8" />
-	<title>Core War Debugger</title>
-	<script type="text/javascript" src="jquery-1.7.2.js"></script>
-	<link rel="stylesheet" href="bootstrap/bootstrap.css"/>
+	<title>Core War Arena</title>
+	<script src="jquery-1.7.2.js"></script>
+	<script src="angular.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="common.js"></script>
+	<script>
+		var RankCtrl = MakeJsonController("/corewar/arena/ranking");
+	</script>
 </head>
-<body >
-	<h1>KoreWar current ranking!</h1>
-	<table class="table">
-		<tr>
-			<td>{{p.Name}}</td>
-			<td>{{p.Wins}}</td>
-			<td>{{p.Loses}}</td>
-			<td>{{p.TotalGames}}</td>
-		</tr>
-	</table>
+<body>
+	<div class="container">
+		
+		<script>nav()</script>
+
+		<div class="page-header">
+			<h1>Current ranking</h1>
+		</div>
+
+		<table class="table table-condensed table-bordered ranking-table" ng-controller="RankCtrl">
+			<tr>
+				<th>№</th>
+				<th>Warrior</th>
+				<th>Author</th>
+				<th>Wins</th>
+				<th>Loses</th>
+				<th>Total games</th>
+			</tr>
+			<tr ng-repeat="p in Programs">
+				<td>{{$index+1}}</td>
+				<td><a href="player.html?name={{p.Name}}">{{p.Name}}</a></td>
+				<td>{{p.Author}}</td>
+				<td>{{p.Wins}}</td>
+				<td>{{p.Loses}}</td>
+				<td>{{p.TotalGames}}</td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

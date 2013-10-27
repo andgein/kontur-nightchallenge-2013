@@ -12,6 +12,24 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public DateTime SubmitTime;
 		[JsonProperty]
-		public FinishedGameInfo[] LastFinishedGames;
+		public FinishedGamesWithEnemy[] GamesByEnemy;
+	}
+
+	[JsonObject]
+	public class FinishedGamesWithEnemy
+	{
+		[JsonProperty]
+		public string Enemy;
+		[JsonProperty]
+		public int EnemyVersion;
+		[JsonProperty]
+		public int Wins;
+		[JsonProperty]
+		public int Loses;
+		[JsonProperty]
+		public int Draws;
+
+		[JsonProperty]
+		public FinishedGameInfo[] LastGames;
 	}
 }
