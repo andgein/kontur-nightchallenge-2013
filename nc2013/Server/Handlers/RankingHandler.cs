@@ -4,10 +4,10 @@ using Server.DataContracts;
 
 namespace Server.Handlers
 {
-	public class RankingHandler : GameHandlerBase
+	public class RankingHandler : StrictPathHttpHandlerBase
 	{
 		public RankingHandler(Arena arena)
-			: base("/corewars/ranking")
+			: base("arena/ranking")
 		{
 		}
 

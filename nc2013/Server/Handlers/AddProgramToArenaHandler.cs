@@ -5,10 +5,10 @@ using Server.DataContracts;
 
 namespace Server.Handlers
 {
-	public class AddProgramToArenaHandler : GameHandlerBase
+	public class AddProgramToArenaHandler : StrictPathHttpHandlerBase
 	{
 		public AddProgramToArenaHandler(Arena arena)
-			: base("/corewars/add")
+			: base("arena/add")
 		{
 		}
 

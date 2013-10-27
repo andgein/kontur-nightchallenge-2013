@@ -27,7 +27,7 @@ namespace Server
 				new StepHandler(gameHttpServer),
 				new StaticHandler(),
 				new RankingHandler(arena),
-				new AddProgramToArenaHandler(arena),
+				new AddProgramToArenaHandler(arena)
 			};
 			while (true)
 			{
