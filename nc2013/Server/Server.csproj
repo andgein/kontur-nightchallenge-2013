@@ -39,16 +39,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CellState.cs" />
-    <Compile Include="GameFuncHandlerBase.cs" />
-    <Compile Include="GameHandlerBase.cs" />
+    <Compile Include="DataContracts\CellState.cs" />
+    <Compile Include="Handlers\GameFuncHandlerBase.cs" />
+    <Compile Include="Handlers\GameHandlerBase.cs" />
     <Compile Include="GameHttpServer.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="DataContracts\GameState.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramStartInfo.cs" />
-    <Compile Include="ProgramState.cs" />
+    <Compile Include="DataContracts\ProgramStartInfo.cs" />
+    <Compile Include="DataContracts\ProgramState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartGameHandler.cs" />
+    <Compile Include="Handlers\StartGameHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

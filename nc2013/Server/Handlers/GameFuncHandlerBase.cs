@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Server
+namespace Server.Handlers
 {
 	public abstract class GameFuncHandlerBase<TIn, TOut> : GameHandlerBase
 	{

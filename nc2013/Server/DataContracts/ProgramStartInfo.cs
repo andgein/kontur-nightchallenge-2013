@@ -1,7 +1,6 @@
-﻿using Core;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Server
+namespace Server.DataContracts
 {
 	[JsonObject]
 	public class ProgramStartInfo

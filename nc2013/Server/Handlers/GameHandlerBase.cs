@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 
-namespace Server
+namespace Server.Handlers
 {
 	public abstract class GameHandlerBase
 	{

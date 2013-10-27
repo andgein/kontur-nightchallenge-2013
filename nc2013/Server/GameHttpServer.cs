@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using Core;
+using ProgramStartInfo = Server.DataContracts.ProgramStartInfo;
 
 namespace Server
 {

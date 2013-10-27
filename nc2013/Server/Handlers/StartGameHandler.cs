@@ -1,4 +1,6 @@
-﻿namespace Server
+﻿using Server.DataContracts;
+
+namespace Server.Handlers
 {
 	public class StartGameHandler : GameFuncHandlerBase<ProgramStartInfo[], GameState>
 	{
