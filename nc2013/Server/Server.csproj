@@ -48,10 +48,12 @@
     <Compile Include="Handlers\AddProgramToArenaHandler.cs" />
     <Compile Include="DataContracts\AddProgramToArenaRequest.cs" />
     <Compile Include="Handlers\RankingHandler.cs" />
-    <Compile Include="Handlers\GameHandlerBase.cs" />
+    <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="GameHttpServer.cs" />
     <Compile Include="DataContracts\GameState.cs" />
     <Compile Include="Handlers\GetGameStateHandler.cs" />
+    <Compile Include="Handlers\HttpHandlerBase.cs" />
+    <Compile Include="Handlers\IHttpHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Handlers\StepHandler.cs" />
     <Compile Include="HttpException.cs" />
@@ -70,7 +72,9 @@
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="StaticContent\debugger.html" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="StaticContent\angular.min.js" />
     <EmbeddedResource Include="StaticContent\jquery-1.7.2.js" />

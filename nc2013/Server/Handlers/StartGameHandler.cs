@@ -3,7 +3,7 @@ using Server.DataContracts;
 
 namespace Server.Handlers
 {
-	public class StartGameHandler : GameHandlerBase
+	public class StartGameHandler : StrictPathHttpHandlerBase
 	{
 		private readonly GameHttpServer gameHttpServer;
 

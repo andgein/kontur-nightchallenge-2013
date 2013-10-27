@@ -5,26 +5,8 @@ using Newtonsoft.Json;
 
 namespace Server.Handlers
 {
-	public abstract class GameHandlerBase
+	public abstract class HttpHandlerBase : IHttpHandler
 	{
-		private readonly string path;
-
-		protected GameHandlerBase(string path)
-		{
-			this.path = path;
-		}
-
-		public bool Handle(HttpListenerContext context)
-		{
-			if (context.Request.Url.AbsolutePath.Equals("/corewars/" + path, StringComparison.OrdinalIgnoreCase))
-			{
-				DoHandle(context);
-				context.Response.Close();
-				return true;
-			}
-			return false;
-		}
-
 		protected Guid GetGameId(HttpListenerContext context)
 		{
 			var gameIdString = context.Request.QueryString["gameId"];
@@ -92,6 +74,6 @@ namespace Server.Handlers
 			context.Response.Close();
 		}
 
-		protected abstract void DoHandle(HttpListenerContext context);
+		public abstract bool Handle(HttpListenerContext context);
 	}
 }

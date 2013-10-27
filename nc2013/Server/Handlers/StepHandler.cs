@@ -3,7 +3,7 @@ using Server.DataContracts;
 
 namespace Server.Handlers
 {
-	public class StepHandler : GameHandlerBase
+	public class StepHandler : StrictPathHttpHandlerBase
 	{
 		private readonly GameHttpServer gameHttpServer;
 		private const int memoryDiffsLimit = 1000;

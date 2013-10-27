@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,14 +11,16 @@ namespace Server
 {
 	public class Program
 	{
+		public const string CoreWarPrefix = "corewar";
+
 		public static void Main()
 		{
 			var listener = new HttpListener();
-			listener.Prefixes.Add("http://*/corewars/");
+			listener.Prefixes.Add("http://*/" + CoreWarPrefix + "/");
 			listener.Start();
 			var gameHttpServer = new GameHttpServer();
 			var arena = new Arena();
-			var handlers = new GameHandlerBase[]
+			var handlers = new IHttpHandler[]
 			{
 				new StartGameHandler(gameHttpServer),
 				new GetGameStateHandler(gameHttpServer),
@@ -33,7 +36,7 @@ namespace Server
 			}
 		}
 
-		private static void HandleRequest(HttpListenerContext context, GameHandlerBase[] handlers)
+		private static void HandleRequest(HttpListenerContext context, IEnumerable<IHttpHandler> handlers)
 		{
 			try
 			{
