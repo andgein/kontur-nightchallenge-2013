@@ -19,7 +19,8 @@ namespace Server
 			{
 				new StartGameHandler(gameHttpServer),
 				new GetGameStateHandler(gameHttpServer),
-				new StepHandler(gameHttpServer)
+				new StepHandler(gameHttpServer),
+				new StaticHandler()
 			};
 			while (true)
 			{

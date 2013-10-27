@@ -7,8 +7,7 @@ namespace Server.Handlers
 	{
 		private readonly GameHttpServer gameHttpServer;
 
-		public GetGameStateHandler(GameHttpServer gameHttpServer)
-			: base("/corewars/state")
+		public GetGameStateHandler(GameHttpServer gameHttpServer) : base("state")
 		{
 			this.gameHttpServer = gameHttpServer;
 		}

@@ -48,6 +48,7 @@
     <Compile Include="GameHttpServer.cs" />
     <Compile Include="DataContracts\GameState.cs" />
     <Compile Include="Handlers\GetGameStateHandler.cs" />
+    <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Handlers\StepHandler.cs" />
     <Compile Include="HttpException.cs" />
     <Compile Include="Program.cs" />
@@ -64,6 +65,11 @@
       <Project>{c21ffadd-e5ae-4743-bcac-2b8502b636d2}</Project>
       <Name>Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="StaticContent\angular.min.js" />
+    <EmbeddedResource Include="StaticContent\jquery-1.7.2.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

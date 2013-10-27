@@ -7,7 +7,7 @@ namespace Server.Handlers
 	{
 		private readonly GameHttpServer gameHttpServer;
 
-		public StartGameHandler(GameHttpServer gameHttpServer) : base("/corewars/start")
+		public StartGameHandler(GameHttpServer gameHttpServer) : base("start")
 		{
 			this.gameHttpServer = gameHttpServer;
 		}

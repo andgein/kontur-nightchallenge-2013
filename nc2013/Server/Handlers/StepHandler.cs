@@ -9,8 +9,7 @@ namespace Server.Handlers
 		private const int memoryDiffsLimit = 1000;
 		private const int programStateDiffsLimit = 1000;
 
-		public StepHandler(GameHttpServer gameHttpServer)
-			: base("/corewars/step")
+		public StepHandler(GameHttpServer gameHttpServer) : base("step")
 		{
 			this.gameHttpServer = gameHttpServer;
 		}

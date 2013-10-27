@@ -16,7 +16,7 @@ namespace Server.Handlers
 
 		public bool Handle(HttpListenerContext context)
 		{
-			if (context.Request.Url.AbsolutePath.Equals(path, StringComparison.OrdinalIgnoreCase))
+			if (context.Request.Url.AbsolutePath.Equals("/corewars/" + path, StringComparison.OrdinalIgnoreCase))
 			{
 				DoHandle(context);
 				context.Response.Close();
@@ -35,7 +35,7 @@ namespace Server.Handlers
 				throw new HttpException(HttpStatusCode.BadRequest, "Query parameter 'gameId' is invalid - Guid is expected");
 			return gameId;
 		}
-		
+
 		protected int GetIntParam(HttpListenerContext context, string paramName)
 		{
 			var result = GetOptionalIntParam(context, paramName);
@@ -55,6 +55,14 @@ namespace Server.Handlers
 			return value;
 		}
 
+		protected string GetStringParam(HttpListenerContext context, string paramName)
+		{
+			var valueString = context.Request.QueryString[paramName];
+			if (string.IsNullOrEmpty(valueString))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
+			return valueString;
+		}
+
 		protected T GetRequest<T>(HttpListenerContext context)
 		{
 			var reader = new StreamReader(context.Request.InputStream);
@@ -71,11 +79,15 @@ namespace Server.Handlers
 			context.Response.Close();
 		}
 
-		protected void SendResponseRaw(HttpListenerContext context, object value)
+		protected void SendResponseRaw(HttpListenerContext context, object value, string contentType = null)
 		{
 			if (!ReferenceEquals(value, null))
+			{
+				if (!string.IsNullOrEmpty(contentType))
+					context.Response.ContentType = contentType;
 				using (var writer = new StreamWriter(context.Response.OutputStream))
 					writer.Write(value);
+			}
 			context.Response.Close();
 		}
 

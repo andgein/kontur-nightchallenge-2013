@@ -15,7 +15,7 @@ namespace Server
 
 		public void WriteToResponse(HttpListenerResponse response)
 		{
-			response.StatusCode = (int)HttpStatusCode.InternalServerError;
+			response.StatusCode = (int)httpStatusCode;
 			using (var writer = new StreamWriter(response.OutputStream))
 				writer.Write(Message);
 			response.Close();
