@@ -17,7 +17,7 @@ namespace Core
 			throw new NotImplementedException();
 		}
 
-		public GameState GameState
+		public virtual GameState GameState
 		{
 			get
 			{
