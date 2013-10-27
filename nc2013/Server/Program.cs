@@ -17,7 +17,9 @@ namespace Server
 			var gameHttpServer = new GameHttpServer();
 			var handlers = new GameHandlerBase[]
 			{
-				new StartGameHandler(gameHttpServer)
+				new StartGameHandler(gameHttpServer),
+				new GetGameStateHandler(gameHttpServer),
+				new StepHandler(gameHttpServer)
 			};
 			while (true)
 			{
