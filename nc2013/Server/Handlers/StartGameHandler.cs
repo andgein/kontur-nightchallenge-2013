@@ -16,6 +16,7 @@ namespace Server.Handlers
 		{
 			var programStartInfos = GetRequest<ProgramStartInfo[]>(context);
 			var gameId = gameHttpServer.StartNewGame(programStartInfos);
+			
 			SendResponseRaw(context, gameId);
 		}
 	}

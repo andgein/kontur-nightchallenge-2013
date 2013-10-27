@@ -74,6 +74,17 @@ namespace Server.Handlers
 			context.Response.Close();
 		}
 
+		protected void SendResponseRaw(HttpListenerContext context, byte[] value, string contentType = null)
+		{
+			if (!ReferenceEquals(value, null))
+			{
+				if (!string.IsNullOrEmpty(contentType))
+					context.Response.ContentType = contentType;
+				context.Response.OutputStream.Write(value, 0, value.Length);
+			}
+			context.Response.Close();
+		}
+
 		public abstract bool Handle(HttpListenerContext context);
 	}
 }

@@ -6,12 +6,14 @@ namespace Server.DataContracts
 	public class AddProgramToArenaRequest
 	{
 		[JsonProperty]
-		public string Program;
-		[JsonProperty]
 		public string Name;
 		[JsonProperty]
-		public string Author;
+		public string TeamName;
 		[JsonProperty]
 		public string Password;
+		[JsonProperty]
+		public string TeamAuthors;
+		[JsonProperty]
+		public string Program;
 	}
 }
