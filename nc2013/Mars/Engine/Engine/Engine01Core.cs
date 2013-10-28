@@ -80,7 +80,7 @@ namespace nMars.Engine
 
         #region Variables
 
-        protected EngineInstruction[] core;
+        public EngineInstruction[] core;
         protected PSpace[] pSpaces;
         protected EngineWarrior activeWarrior;
 

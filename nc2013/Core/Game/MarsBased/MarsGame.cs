@@ -47,12 +47,29 @@ namespace Core.Game.MarsBased
 			var project = new MarsProject(rules, warriors);
 			var engine = new MarsEngine(project);
 			engine.Run(turnsToMake);
+
 			var currentProgram = turnsToMake % project.Warriors.Count;
+
+			var memoryState = new CellState[engine.CoreSize];
+			for (var p = 0; p < memoryState.Length; p++)
+			{
+				memoryState[p] = new CellState
+				{
+					Command = engine.core[p].ToString(),
+					ArgA = engine.core[p].ValueA.ToString(),
+					ArgB = engine.core[p].ValueB.ToString(),
+					LastModifiedByProgram = engine.core[p].OriginalOwner.WarriorIndex,
+					LastModifiedStep = -1, // todo !!!
+				};
+			}
+
+			var programStates = new ProgramState[0]; // todo !!!
+
 			return new GameState
 			{
 				CurrentProgram = currentProgram,
-				MemoryState = new CellState[0],
-				ProgramStates = new ProgramState[0],
+				MemoryState = memoryState,
+				ProgramStates = programStates,
 			};
 		}
 
