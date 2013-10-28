@@ -5,9 +5,9 @@ namespace Core.Game
 	public interface IGame
 	{
 		[NotNull]
-		Diff Step(int stepCount);
+		GameState GameState { get; }
 
 		[NotNull]
-		GameState GameState { get; }
+		Diff Step(int stepCount);
 	}
 }

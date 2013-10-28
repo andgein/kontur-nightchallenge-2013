@@ -10,5 +10,4 @@ namespace Core.Game
 			return new StupidGame(programStartInfos);
 		}
 	}
-
 }

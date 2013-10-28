@@ -9,16 +9,18 @@ namespace Core.Game
 	{
 		private readonly Random r = new Random(12344);
 		private readonly ProgramStartInfo[] programStartInfos;
-		private GameState gameState;
-		private int currentStep = 0;
+		private readonly GameState gameState;
+		private int currentStep;
 
 		public StupidGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			this.programStartInfos = programStartInfos;
-			gameState = new GameState();
-			gameState.CurrentProgram = 0;
-			gameState.MemoryState = Enumerable.Range(0, 8000).Select(i => CreateRandomCommand()).ToArray();
-			gameState.ProgramStates = programStartInfos.Select((p, i) => new ProgramState { ProcessPointers = new[] { (uint)(i * 1000), (uint)(i * 1000 + 100) } }).ToArray();
+			gameState = new GameState
+			{
+				CurrentProgram = 0,
+				MemoryState = Enumerable.Range(0, 8000).Select(i => CreateRandomCommand()).ToArray(),
+				ProgramStates = programStartInfos.Select((p, i) => new ProgramState { ProcessPointers = new[] { (uint)(i * 1000), (uint)(i * 1000 + 100) } }).ToArray(),
+			};
 		}
 
 		[NotNull]
@@ -46,7 +48,7 @@ namespace Core.Game
 
 		private MemoryDiff RandomMemDiff()
 		{
-			return new MemoryDiff{Address = (uint)r.Next(8000), CellState = CreateRandomCommand()};
+			return new MemoryDiff { Address = (uint)r.Next(8000), CellState = CreateRandomCommand() };
 		}
 
 		private CellState CreateRandomCommand()
@@ -68,7 +70,7 @@ namespace Core.Game
 		[Test]
 		public void Test()
 		{
-			var game = new StupidGame(new[] {new ProgramStartInfo {Program = "JMP 0 0", StartAddress = 0}});
+			var game = new StupidGame(new[] { new ProgramStartInfo { Program = "JMP 0 0", StartAddress = 0 } });
 			game.Step(1);
 			game.Step(-1);
 			game.Step(2);
