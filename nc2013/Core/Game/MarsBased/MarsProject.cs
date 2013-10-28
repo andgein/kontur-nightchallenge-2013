@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 using nMars.Parser.Warrior;
 using nMars.RedCode;
 
-namespace Tests
+namespace Core.Game.MarsBased
 {
-	public class MyProject : IProject
+	public class MarsProject : IProject
 	{
-		public MyProject([NotNull] Rules rules, [NotNull] params ExtendedWarrior[] warriors)
+		public MarsProject([NotNull] Rules rules, [NotNull] params ExtendedWarrior[] warriors)
 		{
 			Rules = rules;
 			Warriors = warriors;

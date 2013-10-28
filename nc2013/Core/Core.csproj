@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Arena.cs" />
@@ -45,6 +46,9 @@
     <Compile Include="Game\GameServer.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\MarsBased\MarsEngine.cs" />
+    <Compile Include="Game\MarsBased\MarsProject.cs" />
+    <Compile Include="Game\MarsBased\MarsWarriorParser.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CompilationException.cs" />

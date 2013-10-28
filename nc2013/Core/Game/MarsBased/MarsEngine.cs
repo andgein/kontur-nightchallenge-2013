@@ -2,16 +2,16 @@ using JetBrains.Annotations;
 using nMars.Engine;
 using nMars.RedCode;
 
-namespace Tests
+namespace Core.Game.MarsBased
 {
-	public class MyEngineSteps : EngineInstructions
+	public class MarsEngine : EngineInstructions
 	{
-		private readonly MyProject project;
+		private readonly MarsProject project;
 		private StepResult lastStepResult;
 		private bool initBefore;
 		private int rounds;
 
-		public MyEngineSteps([NotNull] MyProject project)
+		public MarsEngine([NotNull] MarsProject project)
 		{
 			this.project = project;
 		}
@@ -107,7 +107,7 @@ namespace Tests
 			return results;
 		}
 
-		protected virtual void PerformInstruction()
+		private void PerformInstruction()
 		{
 			var warrior = liveWarriors.Dequeue();
 			var insructionPointer = warrior.Tasks.Dequeue();

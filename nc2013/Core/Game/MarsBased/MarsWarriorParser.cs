@@ -5,15 +5,14 @@ using nMars.Parser.Expressions;
 using nMars.Parser.Statements;
 using nMars.Parser.Warrior;
 using nMars.RedCode;
-using ParserException = nMars.RedCode.ParserException;
 
-namespace Tests
+namespace Core.Game.MarsBased
 {
-	public class MyWarriorParser : ParserTokens, IWarriorParser
+	public class MarsWarriorParser : ParserTokens, IWarriorParser
 	{
 		private readonly Rules rules;
 
-		public MyWarriorParser([NotNull] Rules rules)
+		public MarsWarriorParser([NotNull] Rules rules)
 		{
 			this.rules = rules;
 		}

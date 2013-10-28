@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Core;
+using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using nMars.Engine;
 using nMars.Parser;
@@ -83,8 +84,8 @@ namespace Tests
 			var f2 = Path.Combine(basePath, @"dwarf.red");
 			var w1 = ParseWarrior(rules, File.ReadAllText(f1), f1);
 			var w2 = ParseWarrior(rules, File.ReadAllText(f2), f2);
-			var project = new MyProject(rules, w1, w2);
-			var engine = new MyEngineSteps(project);
+			var project = new MarsProject(rules, w1, w2);
+			var engine = new MarsEngine(project);
 			var mr = engine.Run();
 			mr.Dump(wrappedConsole, project);
 		}
@@ -92,7 +93,7 @@ namespace Tests
 		[NotNull]
 		private static ExtendedWarrior ParseWarrior([NotNull] Rules rules, [NotNull] string source, [NotNull] string filename)
 		{
-			var warriorParser = new MyWarriorParser(rules);
+			var warriorParser = new MarsWarriorParser(rules);
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
 			var warrior = warriorParser.Parse(source, implicitName);
 			if (warrior == null)
