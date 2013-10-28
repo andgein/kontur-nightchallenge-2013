@@ -4,19 +4,26 @@ namespace Core.Parser
 {
     class Parser
     {
-        protected static String ParseToken(ParserState state, Func<char, bool> tokenValidator)
+        protected ParserState State;
+
+        protected String ParseToken(Func<char, bool> tokenValidator)
         {
-            while (state.Pos < state.Str.Length && Char.IsWhiteSpace(state.Str[state.Pos]))
-                state.Pos++;
+            SkipWhitespaces();
 
-            if (state.Pos >= state.Str.Length)
-                throw new CompilationException(String.Format("Can't parse token at position {0}: end of line", state.Pos));
+            if (State.Pos >= State.Str.Length)
+                throw new CompilationException(String.Format("Can't parse token at position {0}: end of line", State.Pos));
 
-            var startPos = state.Pos;
-            while (state.Pos < state.Str.Length && tokenValidator(state.Str[state.Pos]))
-                state.Pos++;
+            var startPos = State.Pos;
+            while (! State.Finished() && tokenValidator(State.Current))
+                State.Pos++;
 
-            return state.Str.Substring(startPos, state.Pos - startPos);
+            return State.Str.Substring(startPos, State.Pos - startPos);
+        }
+
+        protected void SkipWhitespaces()
+        {
+            while (! State.Finished() && Char.IsWhiteSpace(State.Current))
+                State.Pos++;            
         }
 
         protected static bool IsIdentificatorChar(char c)

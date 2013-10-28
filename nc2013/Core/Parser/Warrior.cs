@@ -29,14 +29,4 @@ namespace Core.Parser
                 LabelsAddresses[statement.Label] = (uint) Statements.Count - 1;
         }
     }
-
-    class Statement
-    {
-        public string Label { get; set; }
-
-        public bool HasLabel()
-        {
-            return Label != "";
-        }
-    }
 }

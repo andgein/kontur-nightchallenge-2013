@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Core.Parser
 {
     class ExpressionParser : Parser
     {
         private Lexem CurrentLexem;
-        private ParserState State;
 
         public Expression Parse(ParserState state)
         {
@@ -81,32 +77,31 @@ namespace Core.Parser
                 NextLexem();
                 return expr;
             }
-            throw new CompilationException(String.Format("Invalid token: '{0}'", CurrentLexem));
+            throw new CompilationException(String.Format("Invalid token in expression: '{0}'", CurrentLexem));
         }
 
         private void NextLexem()
         {
-            while (State.Pos < State.Str.Length && Char.IsWhiteSpace(State.Str, State.Pos))
-                State.Pos++;
+            SkipWhitespaces();
 
-            if (State.Pos >= State.Str.Length)
+            if (State.Finished())
             {
                 CurrentLexem = new Lexem(LexemType.End);
                 return;
             }
 
             /* Numbers */
-            if (Char.IsDigit(State.Str, State.Pos))
+            if (Char.IsDigit(State.Current))
             {
-                var token = ParseToken(State, Char.IsDigit);
+                var token = ParseToken(Char.IsDigit);
                 CurrentLexem = new Lexem(LexemType.Number, Int32.Parse(token));
                 return;
             }
 
             /* Variables */
-            if (IsIdentificatorChar(State.Str, State.Pos))
+            if (IsIdentificatorChar(State.Current))
             {
-                var token = ParseToken(State, IsIdentificatorChar);
+                var token = ParseToken(IsIdentificatorChar);
                 CurrentLexem = new Lexem(LexemType.Variable, token);
                 return;
             }
@@ -114,7 +109,9 @@ namespace Core.Parser
             LexemType lexemType;
             try
             {
-                lexemType = (LexemType) Enum.ToObject(typeof (LexemType), @State.Str[State.Pos]);
+                lexemType = (LexemType) Enum.ToObject(typeof (LexemType), @State.Current);
+                if (! Enum.IsDefined(typeof (LexemType), lexemType))
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -129,9 +126,9 @@ namespace Core.Parser
 
     class Lexem
     {
-        public LexemType Type;
+        public readonly LexemType Type;
         public int? IntValue;
-        public string StrValue;
+        public readonly string StrValue;
 
         public Lexem(LexemType type)
         {
@@ -160,68 +157,17 @@ namespace Core.Parser
         }
     }
 
-    enum LexemType
+    internal enum LexemType
     {
-        Number = '1', Variable = 'a', OpenBracket = '(', CloseBracket = ')', Plus = '+', Minus = '-', Multiply = '*', Divide = '/', Mod = '%', End
-    }
-
-    class Expression
-    {
-    }
-
-    class BinaryExpression : Expression
-    {
-        public BinaryOperation Op { get; private set; }
-        public Expression Left { get; private set; }
-        public Expression Right { get; private set; }
-
-        public BinaryExpression(BinaryOperation op, Expression left, Expression right)
-        {
-            Op = op;
-            Left = left;
-            Right = right;
-        }
-    }
-
-    class UnaryExpression : Expression
-    {
-        public UnaryOperation Op { get; private set; }
-        public Expression Sub { get; private set; }
-
-        public UnaryExpression(UnaryOperation op, Expression sub)
-        {
-            Op = op;
-            Sub = sub;
-        }
-    }
-
-    class NumberExpression : Expression
-    {
-        public int Value { get; private set; }
-
-        public NumberExpression(int value)
-        {
-            Value = value;
-        }
-    }
-
-    class VariableExpression : Expression
-    {
-        public string Name { get; private set; }
-
-        public VariableExpression(string name)
-        {
-            Name = name;
-        }
-    }
-
-    public enum BinaryOperation
-    {
-        Sum, Sub, Div, Mul, Mod
-    }
-
-    public enum UnaryOperation
-    {
-        Negate
+        Number = '1',
+        Variable = 'a',
+        OpenBracket = '(',
+        CloseBracket = ')',
+        Plus = '+',
+        Minus = '-',
+        Multiply = '*',
+        Divide = '/',
+        Mod = '%',
+        End
     }
 }

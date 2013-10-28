@@ -45,9 +45,15 @@
     <Compile Include="GameState.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="MemoryDiff.cs" />
+    <Compile Include="Parser\AddressingMode.cs" />
+    <Compile Include="Parser\CompilationException.cs" />
+    <Compile Include="Parser\Expression.cs" />
     <Compile Include="Parser\ExpressionParser.cs" />
     <Compile Include="Parser\ExpressionParserTest.cs" />
+    <Compile Include="Parser\Operator.cs" />
     <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParserState.cs" />
+    <Compile Include="Parser\Statement.cs" />
     <Compile Include="ProcessStateChangeType.cs" />
     <Compile Include="ProgramStartInfo.cs" />
     <Compile Include="ProgramState.cs" />
