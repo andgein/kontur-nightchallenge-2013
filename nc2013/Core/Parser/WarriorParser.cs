@@ -50,13 +50,13 @@ namespace Core.Parser
             var statement = StatementFactory.Create(command);
             statement.Label = label;
 
-            if (!RestOnlyWhitespace())
+            if (!RestOnlyWhitespaces())
             {
                 statement.ModeA = ParseAddressingMode();
                 statement.FieldA = ExpressionParser.Parse(State);
             }
 
-            if (!RestOnlyWhitespace())
+            if (!RestOnlyWhitespaces())
             {
                 ParseComma();
                 statement.ModeB = ParseAddressingMode();
@@ -71,7 +71,7 @@ namespace Core.Parser
             SkipWhitespaces();
             if (State.Finished() || State.Current != ',')
                 throw new CompilationException("Expected comma");
-            State.Pos++;
+            State.Next();
         }
 
         private AddressingMode ParseAddressingMode()
@@ -88,13 +88,13 @@ namespace Core.Parser
             {
                 return AddressingMode.Absolute;
             }
-            State.Pos++;
+            State.Next();
             return mode;
         }
 
-        private bool RestOnlyWhitespace()
+        private bool RestOnlyWhitespaces()
         {
-            return State.Str.Substring(State.Pos).All(Char.IsWhiteSpace);
+            return State.Tail.All(Char.IsWhiteSpace);
         }
 
         private static bool IsCommandToken(string token)

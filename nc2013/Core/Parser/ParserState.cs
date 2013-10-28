@@ -18,9 +18,19 @@ namespace Core.Parser
             get { return Str[Pos]; }
         }
 
+        public string Tail
+        {
+            get { return Str.Substring(Pos); }
+        }
+
         public bool Finished()
         {
             return Pos >= Str.Length;
+        }
+
+        public void Next()
+        {
+            Pos++;
         }
     }
 }

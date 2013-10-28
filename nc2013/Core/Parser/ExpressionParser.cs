@@ -118,7 +118,7 @@ namespace Core.Parser
                 CurrentLexem = new Lexem(LexemType.End);
                 return;
             }
-            State.Pos++;
+            State.Next();
 
             CurrentLexem = new Lexem(lexemType);
         }

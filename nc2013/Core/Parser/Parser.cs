@@ -15,7 +15,7 @@ namespace Core.Parser
 
             var startPos = State.Pos;
             while (! State.Finished() && tokenValidator(State.Current))
-                State.Pos++;
+                State.Next();
 
             return State.Str.Substring(startPos, State.Pos - startPos);
         }
@@ -23,7 +23,7 @@ namespace Core.Parser
         protected void SkipWhitespaces()
         {
             while (! State.Finished() && Char.IsWhiteSpace(State.Current))
-                State.Pos++;            
+                State.Next();            
         }
 
         protected static bool IsIdentificatorChar(char c)
