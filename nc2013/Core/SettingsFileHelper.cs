@@ -1,16 +1,19 @@
 using System;
 using System.IO;
+using JetBrains.Annotations;
 
 namespace Core
 {
 	public static class SettingsFileHelper
 	{
-		public static string PatchDirectoryName(string dirName, string baseDirectoryPath = null)
+		[NotNull]
+		public static string PatchDirectoryName([NotNull] string dirName, [CanBeNull] string baseDirectoryPath = null)
 		{
 			return Path.IsPathRooted(dirName) ? dirName : WalkDirectoryTree(dirName, Directory.Exists, baseDirectoryPath);
 		}
 
-		private static string WalkDirectoryTree(string filename, Func<string, bool> fileSystemObjectExists, string baseDirectoryPath = null)
+		[NotNull]
+		private static string WalkDirectoryTree([NotNull] string filename, Func<string, bool> fileSystemObjectExists, [CanBeNull] string baseDirectoryPath = null)
 		{
 			if (baseDirectoryPath == null)
 				baseDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
