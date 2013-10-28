@@ -31,13 +31,13 @@
 				<th>Loses</th>
 				<th>Total games</th>
 			</tr>
-			<tr ng-repeat="p in Programs">
+			<tr ng-repeat="p in programs">
 				<td>{{$index+1}}</td>
-				<td><a href="player.html?name={{p.Name}}">{{p.Name}}</a></td>
-				<td>{{p.Author}}</td>
-				<td>{{p.Wins}}</td>
-				<td>{{p.Loses}}</td>
-				<td>{{p.TotalGames}}</td>
+				<td><a href="player.html?name={{p.name}}">{{p.name}}</a></td>
+				<td>{{p.author}}</td>
+				<td>{{p.wins}}</td>
+				<td>{{p.loses}}</td>
+				<td>{{p.totalGames}}</td>
 			</tr>
 		</table>
 	</div>
