@@ -9,5 +9,7 @@ namespace Core.Game
 
 		[NotNull]
 		Diff Step(int stepCount);
+
+		void StepToEnd();
 	}
 }

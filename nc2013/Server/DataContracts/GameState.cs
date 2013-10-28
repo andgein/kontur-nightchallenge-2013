@@ -19,6 +19,12 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public int CurrentProgram { get; set; }
 
+		[JsonProperty]
+		public int? Winner { get; set; }
+
+		[JsonProperty]
+		public int CurrentStep { get; set; } 
+
 		public static GameState FromCore(Guid gameId, Core.Game.GameState gameState)
 		{
 			return new GameState
@@ -26,7 +32,9 @@ namespace Server.DataContracts
 				GameId = gameId,
 				CurrentProgram = gameState.CurrentProgram,
 				MemoryState = gameState.MemoryState.Select(CellState.FromCore).ToArray(),
-				ProgramStates = gameState.ProgramStates.Select(ProgramState.FromCore).ToArray()
+				ProgramStates = gameState.ProgramStates.Select(ProgramState.FromCore).ToArray(),
+				CurrentStep = gameState.CurrentStep,
+				Winner = gameState.Winner
 			};
 		}
 	}

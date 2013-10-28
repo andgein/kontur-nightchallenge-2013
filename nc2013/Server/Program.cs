@@ -27,6 +27,7 @@ namespace Server
 				new StartGameHandler(gameHttpServer),
 				new GetGameStateHandler(gameHttpServer),
 				new StepHandler(gameHttpServer),
+				new StepToEndHandler(gameHttpServer),
 				new StaticHandler(),
 				new RankingHandler(arena),
 				new AddProgramToArenaHandler(arena),

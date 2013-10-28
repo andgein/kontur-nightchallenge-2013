@@ -1,21 +1,21 @@
 var ProgramState = Base.extend({
-	constructor: function (containers, memory, programStartInfo) {
-		this.$taskCount = containers.$taskCount;
-		this.$last = containers.$last;
-		this.$next = containers.$next;
-		this.programStartInfo = programStartInfo;
-		this.memory = memory;
+	constructor: function (options) {
+		this.$processCount = options.$processCount;
+		this.$last = options.$last;
+		this.$next = options.$next;
+		this.$win = options.$win;
+		this.memory = options.memory;
 	},
 	applyDiff: function (programStateDiff) {
 		switch (programStateDiff.changeType) {
-			case "executed":
+			case "Executed":
 				this.programState.lastPointer = this.programState.processPointers.shift();
 				this.programState.processPointers.push(programStateDiff.nextPointer);
 				break;
-			case "killed":
+			case "Killed":
 				this.programState.lastPointer = this.programState.processPointers.shift();
 				break;
-			case "splitted":
+			case "Splitted":
 				this.programState.processPointers.push(programStateDiff.nextPointer);
 				break;
 			default:
@@ -23,19 +23,31 @@ var ProgramState = Base.extend({
 		}
 		this._refreshState();
 	},
+	reset: function () {
+		this.setProgramState(null);
+		this.$win.removeClass("winner");
+	},
+	win: function () {
+		this.$win.addClass("winner");
+	},
 	setProgramState: function (programState) {
 		this.programState = programState;
 		this._refreshState();
 	},
 	_refreshState: function () {
-		this.$taskCount.text(this.programState.processPointers.length);
-		if (this.programState.lastPointer) {
+		this.$processCount.text(this.programState ? this.programState.processPointers.length : "");
+
+		if (this.programState && this.programState.lastPointer) {
 			var lastCell = this.memory.getCell(this.programState.lastPointer);
 			this.$last.text(lastCell.getListingItemContent());
-		}
-		if (this.programState.processPointers.length > 0) {
+		} else
+			this.$last.text("");
+
+		if (this.programState && this.programState.processPointers.length > 0) {
 			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
 			this.$next.text(nextCell.getListingItemContent());
 		}
+		else
+			this.$next.text("");
 	}
 });

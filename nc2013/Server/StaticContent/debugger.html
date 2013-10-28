@@ -9,6 +9,213 @@
 	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<script src="common.js"></script>
+	<script src="base.js"></script>
+	<script src="server.js"></script>
+	<script src="game.js"></script>
+	<script src="memory.js"></script>
+	<script src="program.js"></script>
+	<script type="text/javascript">
+
+		var gameRunner;
+		$(function () {
+			$("#programsTab").click(switchToProgramsTab);
+			$("#debuggerTab").click(switchToDebuggerTab);
+
+			var memory = new Memory({
+				$map: $("#map"),
+				$listing: $("#listing"),
+				cellCount: 8000
+			});
+			var programs = [];
+			programs.push(new ProgramState({
+				memory: memory,
+				$processCount: $("#processCountA"),
+				$last: $("#lastCommandA"),
+				$next: $("#nextCommandA"),
+				$win: $("#programAWinner")
+			}));
+			programs.push(new ProgramState({
+				memory: memory,
+				$processCount: $("#processCountB"),
+				$last: $("#lastCommandB"),
+				$next: $("#nextCommandB"),
+				$win: $("#programBWinner")
+			}));
+			var game = new Game({
+				$currentStep: $("#currentStep"),
+				programs: programs,
+				memory: memory
+			});
+			gameRunner = new GameRunner({
+				game: game,
+				programs: [{ $program: $("#programA") }, { $program: $("#programB") }]
+			});
+			gameRunner.onGameStarted(switchToDebuggerTab);
+
+			$("#stepCount").keydown(function (event) {
+				if (event.which == 13)
+					step();
+			});
+
+			$listing = $("#listing");
+			var resizeCounter = 0;
+			$(window).resize(function () {
+				var counter = ++resizeCounter;
+				setTimeout(function () {
+					if (counter == resizeCounter)
+						adjustLayout();
+				}, 100);
+			});
+			adjustLayout();
+		});
+
+		var $listing;
+		var minDebuggerHeight = 400;
+		var oldDebuggerHeight;
+		function adjustLayout() {
+			var newHeight = $(window).height() - $listing.position().top - 20;
+			if (newHeight < minDebuggerHeight)
+				newHeight = minDebuggerHeight;
+			if (oldDebuggerHeight != newHeight) {
+				oldDebuggerHeight = newHeight;
+				$listing.height(newHeight);
+			}
+		}
+
+		function switchToProgramsTab() {
+			$("#programsTab").addClass("active");
+			$("#programsPanel").addClass("active");
+			$("#debuggerTab").removeClass("active");
+			$("#debuggerPanel").removeClass("active");
+		}
+
+		function switchToDebuggerTab() {
+			$("#debuggerTab").addClass("active");
+			$("#debuggerPanel").addClass("active");
+			$("#programsTab").removeClass("active");
+			$("#programsPanel").removeClass("active");
+			adjustLayout();
+		}
+
+		var fastSpeed = 16;
+		var slowSpeed = 1;
+
+		function step() {
+			var stepCount = parseInt($("#stepCount").val());
+			if (!stepCount)
+				stepCount = 1;
+			gameRunner.step(stepCount);
+		}
+
+	</script>
+	<style>
+		.debugger-programs {
+			width: 100%;
+		}
+
+			.debugger-programs td {
+				vertical-align: top;
+			}
+
+			.debugger-programs textarea.program {
+				width: 100%;
+				font-family: monospace;
+				min-height: 300px;
+			}
+
+		.debugger-map .mapCell {
+			background-color: black;
+			float: left;
+			width: 5px;
+			height: 5px;
+		}
+
+			.debugger-map .mapCell.modified0 {
+				background-color: red;
+			}
+
+			.debugger-map .mapCell.modified1 {
+				background-color: green;
+			}
+
+		.debugger-winnerState {
+			display: none;
+		}
+
+			.debugger-winnerState.winner {
+				display: inline;
+			}
+
+		.debugger-listing {
+			font-family: monospace;
+			overflow-y: scroll;
+		}
+
+		.debugger-mapContainer {
+			padding-right: 50px;
+		}
+
+		.debugger-listingContainer {
+			border: solid black 1px;
+		}
+
+		.debugger-tabs {
+			border-bottom: lightgrey solid 10px;
+			margin-bottom: 20px;
+		}
+
+		.debugger-tab {
+			padding: 5px 15px 5px 15px;
+			display: inline-block;
+			font-size: larger;
+			cursor: pointer;
+		}
+
+			.debugger-tab.active {
+				background-color: lightgrey;
+				cursor: default;
+			}
+
+		.debugger-panel {
+			display: none;
+		}
+
+			.debugger-panel.active {
+				display: block;
+			}
+
+		.debugger-panel-layout {
+			width: 100%;
+			min-width: 600px;
+		}
+
+			.debugger-panel-layout .left {
+				vertical-align: top;
+			}
+
+			.debugger-panel-layout .right {
+				vertical-align: top;
+				width: 200px;
+			}
+
+		.debugger-section-title {
+			font-size: larger;
+			font-weight: bolder;
+		}
+
+			.debugger-section-title.second {
+				padding-top: 20px;
+			}
+
+		.debugger-section-subtitle {
+			padding-top: 10px;
+			font-weight: bolder;
+		}
+
+		.debugger-buttons {
+			padding-bottom: 20px;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
@@ -16,27 +223,137 @@
 		<div class="page-header">
 			<h1>Debugger</h1>
 		</div>
-		<table>
-			<thead>
+		<div class="debugger-buttons">
+			<button title="Run without debugger" onclick="gameRunner.stepToEnd()">>>></button>
+			<button title="Run fast" onclick="gameRunner.run(fastSpeed)">>></button>
+			<button title="Run slow" onclick="gameRunner.run(slowSpeed)">></button>
+			<button title="Pause" onclick="gameRunner.pause()">||</button>
+			<button title="Reset" onclick="gameRunner.reset()">#</button>
+			&nbsp;
+			steps:
+			<button onclick="gameRunner.step(-4)">-4</button>
+			<button onclick="gameRunner.step(-2)">-2</button>
+			<button onclick="gameRunner.step(-1)">-1</button>
+			<button onclick="gameRunner.step(+1)">+1</button>
+			<button onclick="gameRunner.step(+2)">+2</button>
+			<button onclick="gameRunner.step(+4)">+4</button>
+			&nbsp;
+			<input type="text" value="+16" id="stepCount" />
+			<button onclick="step()">go</button>
+		</div>
+		<div class="debugger-tabs">
+			<div class="debugger-tab active" id="programsTab">Warriors</div>
+			<div class="debugger-tab" id="debuggerTab">Debuger</div>
+		</div>
+		<div id="programsPanel" class="debugger-panel active">
+			<table class="debugger-programs">
+				<thead>
+					<tr>
+						<th>Program A</th>
+						<th>Program B</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea class="program" id="programA"></textarea></td>
+						<td>
+							<textarea class="program" id="programB"></textarea></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="debuggerPanel" class="debugger-panel">
+			<table class="debugger-panel-layout">
 				<tr>
-					<th>Program A</th>
-					<th>Program B</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<textarea class="program"></textarea></td>
-					<td>
-						<textarea class="program"></textarea></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<button onclick="alert('!')">Start Game</button>
+					<td class="left">
+						<table>
+							<tr>
+								<td colspan="2">
+									<div class="debugger-section-title">Memory</div>
+									<div class="debugger-mapContainer">
+										<div id="map" class="debugger-map"></div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<div class="debugger-section-title second">Overview</div>
+									<div>
+										<span>Current Step: </span><span id="currentStep"></span>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="programInfoContainer">
+									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner">(winner)</span></div>
+									<div>
+										<span>Processes: </span><span id="processCountA"></span>
+										<div>
+										</div>
+										<span>Last: </span><span id="lastCommandA"></span>
+										<div>
+										</div>
+										<span>Next: </span><span id="nextCommandA"></span>
+									</div>
+								</td>
+								<td class="programInfoContainer">
+									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner">(winner)</span></div>
+									<div>
+										<span>Processes: </span><span id="processCountB"></span>
+										<div>
+										</div>
+										<span>Last: </span><span id="lastCommandB"></span>
+										<div>
+										</div>
+										<span>Next: </span><span id="nextCommandB"></span>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td class="right">
+						<div class="debugger-section-title">Listing</div>
+						<div class="debugger-listingContainer">
+							<div id="listing" class="debugger-listing"></div>
+						</div>
 					</td>
 				</tr>
-			</tbody>
-		</table>
+			</table>
+			<table style="display: none">
+				<col />
+				<col width="200px" />
+				<thead>
+					<tr>
+						<th>Memory</th>
+						<th>Listing</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					</tr>
+					<tr>
+						<td class="overviewContainer">
+							<table class="overview">
+								<thead>
+									<tr>
+										<th colspan="2">Overview</th>
+									</tr>
+									<tr>
+										<th>Program A</th>
+										<th>Program B</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

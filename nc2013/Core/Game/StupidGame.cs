@@ -30,11 +30,23 @@ namespace Core.Game
 		public Diff Step(int stepCount)
 		{
 			var res = new Diff();
-			currentStep = Math.Max(0, Math.Min(80000, currentStep + stepCount));
+			currentStep = currentStep + stepCount;
 			stepCount = Math.Abs(stepCount);
 			res.MemoryDiffs = Enumerable.Range(0, stepCount).Select(i => RandomMemDiff()).ToArray();
 			res.ProgramStateDiffs = Enumerable.Range(0, stepCount).Select(RandomProgramStateDiff).ToArray();
+			gameState.CurrentStep = currentStep;
+			res.CurrentStep = currentStep;
+			if (currentStep >= 80000)
+			{
+				gameState.Winner = r.Next(programStartInfos.Length);
+				res.Winner = gameState.Winner;
+			}
 			return res;
+		}
+
+		public void StepToEnd()
+		{
+			Step(80000);
 		}
 
 		private ProgramStateDiff RandomProgramStateDiff(int i)
@@ -42,7 +54,7 @@ namespace Core.Game
 			return new ProgramStateDiff
 				{
 					ChangeType = ProcessStateChangeType.Executed,
-					Program = i
+					Program = r.Next(programStartInfos.Length)
 				};
 		}
 

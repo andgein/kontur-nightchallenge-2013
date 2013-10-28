@@ -7,6 +7,8 @@ var server = {
 			url: this.root + url,
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8'
+		}).pipe(null, function (err) {
+			
 		});
 	},
 	get: function (url, params) {
@@ -15,6 +17,8 @@ var server = {
 			type: "GET",
 			url: this.root + url,
 			data: params
+		}).pipe(null, function (err) {
+			
 		});
 	}
 }

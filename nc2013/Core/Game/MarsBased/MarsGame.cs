@@ -39,6 +39,12 @@ namespace Core.Game.MarsBased
 			return null;
 		}
 
+		public void StepToEnd()
+		{
+			if (currentTurn < 80000) // todo !!! winner detection and this limit
+				Step(80000 - currentTurn);
+		}
+
 		[NotNull]
 		private GameState GetGameState(int turnsToMake)
 		{
@@ -70,6 +76,8 @@ namespace Core.Game.MarsBased
 				CurrentProgram = currentProgram,
 				MemoryState = memoryState,
 				ProgramStates = programStates,
+				CurrentStep = currentTurn,
+				Winner = null, // todo !!!
 			};
 		}
 

@@ -1,7 +1,8 @@
 var Memory = Base.extend({
-	constructor: function(containers, cellCount) {
+	constructor: function(options) {
 		var cellsHtml = "";
 		var listingHtml = "";
+		var cellCount = options.cellCount;
 		this.cells = [];
 		for (var i = 0; i < cellCount; ++i) {
 			var cell = new Cell(i);
@@ -9,14 +10,14 @@ var Memory = Base.extend({
 			cellsHtml += "<div class='mapCell'></div>";
 			listingHtml += "<div class='listingItem'>" + cell.getListingItemContent() + "</div>";
 		}
-		containers.$map.html(cellsHtml);
-		containers.$listing.html(cellsHtml);
+		options.$map.html(cellsHtml);
+		options.$listing.html(listingHtml);
 
 		var that = this;
-		containers.$map.find("div").each(function(index) {
+		options.$map.find("div").each(function(index) {
 			that.cells[index].attachMapCell($(this));
 		});
-		containers.$listing.find("div").each(function(index) {
+		options.$listing.find("div").each(function(index) {
 			that.cells[index].attachListingItem($(this));
 		});
 	},
@@ -32,6 +33,10 @@ var Memory = Base.extend({
 	},
 	getCell: function (address) {
 		return this.cells[address];
+	},
+	reset: function () {
+		for (var i = 0; i < this.cells.length; ++i)
+			this.cells[i].setCellState(null);
 	}
 });
 
@@ -83,6 +88,6 @@ var Cell = Base.extend({
 		return this.address + " " + this.cellState.command + " " + this.cellState.argA + " " + this.cellState.argB;
 	},
 	_isEmptyState: function () {
-		return this.cellState.command == "DAT" && this.cellState.argA == "0" && this.cellState.argB == "0";
+		return !this.cellState || this.cellState.command == "DAT" && this.cellState.argA == "0" && this.cellState.argB == "0";
 	}
 });

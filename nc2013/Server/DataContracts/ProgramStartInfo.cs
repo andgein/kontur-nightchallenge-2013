@@ -9,7 +9,7 @@ namespace Server.DataContracts
 		public string Program { get; set; }
 
 		[JsonProperty]
-		public uint StartAddress { get; set; }
+		public uint? StartAddress { get; set; }
 
 		public Core.Game.ProgramStartInfo ToCore()
 		{

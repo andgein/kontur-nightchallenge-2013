@@ -51,6 +51,7 @@
     <Compile Include="DataContracts\AddProgramToArenaRequest.cs" />
     <Compile Include="Handlers\ArenaPlayerHandler.cs" />
     <Compile Include="Handlers\RankingHandler.cs" />
+    <Compile Include="Handlers\StepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="GameHttpServer.cs" />
     <Compile Include="DataContracts\GameState.cs" />
