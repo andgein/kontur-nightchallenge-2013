@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C21FFADD-E5AE-4743-BCAC-2B8502B636D2}</ProjectGuid>
+    <ProjectGuid>{61E33836-4B61-4503-985B-BC7D08884324}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core</RootNamespace>
-    <AssemblyName>Core</AssemblyName>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,40 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arena.cs" />
-    <Compile Include="CellState.cs" />
-    <Compile Include="CodeAnnotations.cs" />
-    <Compile Include="Diff.cs" />
-    <Compile Include="GameServer.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="MemoryDiff.cs" />
-    <Compile Include="Parser\AddressingMode.cs" />
-    <Compile Include="Parser\CompilationException.cs" />
-    <Compile Include="Parser\Expression.cs" />
-    <Compile Include="Parser\ExpressionParser.cs" />
-    <Compile Include="Parser\ExpressionParserTest.cs" />
-    <Compile Include="Parser\Operator.cs" />
-    <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\ParserState.cs" />
-    <Compile Include="Parser\Statement.cs" />
-    <Compile Include="ProcessStateChangeType.cs" />
-    <Compile Include="ProgramStartInfo.cs" />
-    <Compile Include="ProgramState.cs" />
-    <Compile Include="ProgramStateDiff.cs" />
+    <Compile Include="MarsEngineRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StupidGame.cs" />
-    <Compile Include="Parser\Warrior.cs" />
-    <Compile Include="Parser\WarriorParser.cs" />
-    <Compile Include="Parser\WarriorParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

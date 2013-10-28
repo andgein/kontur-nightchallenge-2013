@@ -9,7 +9,7 @@ using Mars.Test;
 
 namespace nMars.Test
 {
-    class Utils
+	public class Utils
     {
         public static string CleanProblems(string basePath, string name)
         {

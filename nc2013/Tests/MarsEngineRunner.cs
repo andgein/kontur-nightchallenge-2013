@@ -8,7 +8,7 @@ using nMars.RedCode.Modules;
 using nMars.Test;
 using NUnit.Framework;
 
-namespace Mars.Test
+namespace Tests
 {
 	[TestFixture]
 	public class MarsEngineRunner

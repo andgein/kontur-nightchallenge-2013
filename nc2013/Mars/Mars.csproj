@@ -167,7 +167,6 @@
     <Compile Include="RedCode\Utils\Mono.cs" />
     <Compile Include="RedCode\Utils\SerializableDictionary.cs" />
     <Compile Include="Test\ComparingEngine.cs" />
-    <Compile Include="Test\MarsEngineRunner.cs" />
     <Compile Include="Test\EngineTest.cs" />
     <Compile Include="Test\Module.cs" />
     <Compile Include="Test\ParserTest.cs" />
