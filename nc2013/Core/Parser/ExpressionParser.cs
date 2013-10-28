@@ -58,7 +58,7 @@ namespace Core.Parser
             {
                 var intValue = CurrentLexem.IntValue;
                 NextLexem();
-                return new NumberExpression(intValue);
+                return new NumberExpression(intValue.GetValueOrDefault());
             }
             if (CurrentLexem.Type == LexemType.Variable)
             {
@@ -71,6 +71,15 @@ namespace Core.Parser
                 NextLexem();
                 var expr = ParseExpression();
                 return new UnaryExpression(UnaryOperation.Negate, expr);
+            }
+            if (CurrentLexem.Type == LexemType.OpenBracket)
+            {
+                NextLexem();
+                var expr = ParseExpression();
+                if (CurrentLexem.Type != LexemType.CloseBracket)
+                    throw new CompilationException(String.Format("Can't find close bracket"));
+                NextLexem();
+                return expr;
             }
             throw new CompilationException(String.Format("Invalid token: '{0}'", CurrentLexem));
         }
@@ -121,7 +130,7 @@ namespace Core.Parser
     class Lexem
     {
         public LexemType Type;
-        public int IntValue;
+        public int? IntValue;
         public string StrValue;
 
         public Lexem(LexemType type)
@@ -139,6 +148,15 @@ namespace Core.Parser
         {
             Type = type;
             StrValue = strValue;
+        }
+
+        public override string ToString()
+        {
+            if (IntValue != null)
+                return String.Format("{0}: {1}", Type, IntValue);
+            if (StrValue != null)
+                return String.Format("{0}: {1}", Type, StrValue);
+            return String.Format("{0}", Type);
         }
     }
 
