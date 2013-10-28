@@ -167,7 +167,6 @@ namespace Core.Parser
         Minus = '-',
         Multiply = '*',
         Divide = '/',
-        Mod = '%',
         End
     }
 }

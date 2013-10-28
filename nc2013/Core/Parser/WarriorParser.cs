@@ -86,7 +86,7 @@ namespace Core.Parser
             }
             catch (Exception)
             {
-                return AddressingMode.Absolute;
+                return AddressingMode.Direct;
             }
             State.Next();
             return mode;
@@ -97,9 +97,9 @@ namespace Core.Parser
             return State.Tail.All(Char.IsWhiteSpace);
         }
 
-        private static bool IsCommandToken(string token)
+        private bool IsCommandToken(string token)
         {
-            return token == "MOV";
+            return StatementFactory.Commands.ContainsKey(token.ToUpper());
         }
     }
 }

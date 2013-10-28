@@ -2,7 +2,7 @@
 {
     public enum BinaryOperation
     {
-        Sum, Sub, Div, Mul, Mod
+        Sum, Sub, Div, Mul
     }
 
     public enum UnaryOperation

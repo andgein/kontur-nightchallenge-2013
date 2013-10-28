@@ -84,5 +84,35 @@ namespace Core.Parser
 
             Parser.Parse(code);
         }
+
+        [Test]
+        [ExpectedException(typeof(CompilationException))]
+        public void TestIncompleteCommand()
+        {
+            Parser.Parse("MOV 0, ; comment");
+        }
+
+        [Test]
+        [ExpectedException(typeof(CompilationException))]
+        public void TestInvalidCommand()
+        {
+            Parser.Parse("INV 0, 1");
+        }
+
+        [Test]
+        public void TestDifferentAddressingModes()
+        {
+            var warrior = Parser.Parse("JMZ 0, #1");
+            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.Direct);
+            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.Immediate);
+
+            warrior = Parser.Parse("ADD @0, @1");
+            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.Indirect);
+            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.Indirect);
+
+            warrior = Parser.Parse("DJN <0, <1");
+            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.PredecrementIndirect);
+            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.PredecrementIndirect);
+        }
     }
 }
