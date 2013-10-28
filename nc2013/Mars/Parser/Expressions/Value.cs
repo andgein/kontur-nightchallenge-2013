@@ -31,7 +31,7 @@ namespace nMars.Parser.Expressions
 
         protected int value = 0;
 
-        public override int Evaluate(WarriorParser parser, int currentAddress)
+        public override int Evaluate(IWarriorParser parser, int currentAddress)
         {
             return value;
         }
@@ -41,7 +41,7 @@ namespace nMars.Parser.Expressions
             return value.ToString();
         }
 
-        public override Mode GetMode(WarriorParser parser, int currentAddress)
+        public override Mode GetMode(IWarriorParser parser, int currentAddress)
         {
             return Mode.NULL;
         }

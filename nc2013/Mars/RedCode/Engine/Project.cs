@@ -53,13 +53,11 @@ namespace nMars.RedCode
         EngineOptions IProject.EngineOptions
         {
             get { return EngineOptions; }
-            set { EngineOptions = value; }
         }
 
         ParserOptions IProject.ParserOptions
         {
             get { return ParserOptions; }
-            set { ParserOptions = value; }
         }
 
         IList<IWarrior> IProject.Warriors

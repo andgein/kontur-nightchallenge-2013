@@ -44,6 +44,9 @@
     <Compile Include="Mars\Module.cs" />
     <Compile Include="Mars\ParserTest.cs" />
     <Compile Include="Mars\Utils.cs" />
+    <Compile Include="MyEngineSteps.cs" />
+    <Compile Include="MyProject.cs" />
+    <Compile Include="MyWarriorParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

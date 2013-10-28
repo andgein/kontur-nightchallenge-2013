@@ -6,6 +6,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using com.calitha.goldparser;
+using nMars.Parser.Expressions;
 using nMars.RedCode.Modules;
 
 namespace nMars.RedCode
@@ -109,4 +111,10 @@ namespace nMars.RedCode
         /// <returns>list of errors</returns>
         ParseResult Parse(IProject project, ISimpleOutput console);
     }
+
+	public interface IWarriorParser : IParser
+	{
+		Variables Variables { get; }
+		void WriteError(string message, Location location);
+	}
 }

@@ -32,22 +32,16 @@ namespace nMars.RedCode
         /// <summary>
         /// Options for engine
         /// </summary>
-        EngineOptions EngineOptions { get; set; }
+        EngineOptions EngineOptions { get; }
 
         /// <summary>
         /// Options for parser
         /// </summary>
-        ParserOptions ParserOptions { get; set; }
+        ParserOptions ParserOptions { get; }
 
         /// <summary>
         /// Breakpoints
         /// </summary>
         BreakPoints BreakPoints { get; }
-
-        /// <summary>
-        /// Save/serialize project to file
-        /// </summary>
-        /// <param name="filename">filename should have extension .nmproj</param>
-        void SaveXml(string filename);
     }
 }

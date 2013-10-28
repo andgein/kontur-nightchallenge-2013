@@ -15,10 +15,10 @@ namespace nMars.Parser.Expressions
             Location = location;
         }
         
-        public abstract int Evaluate(WarriorParser parser, int currentAddress);
-        public abstract Mode GetMode(WarriorParser parser, int currentAddress);
+        public abstract int Evaluate(IWarriorParser parser, int currentAddress);
+		public abstract Mode GetMode(IWarriorParser parser, int currentAddress);
 
-        public int Evaluate(WarriorParser parser, int currentAddress, int coreSize)
+		public int Evaluate(IWarriorParser parser, int currentAddress, int coreSize)
         {
             int raw = Evaluate(parser, currentAddress);
             return Instruction.Wrap(raw, coreSize);

@@ -4,6 +4,7 @@
 // 2006 Pavel Savara
 
 using com.calitha.goldparser;
+using nMars.RedCode;
 
 namespace nMars.Parser.Expressions
 {
@@ -22,7 +23,7 @@ namespace nMars.Parser.Expressions
             get { return name + "&" + parameter; }
         }
 
-        public override string GetFullName(WarriorParser parser, int currentAddress)
+        public override string GetFullName(IWarriorParser parser, int currentAddress)
         {
             return name + parameter.Evaluate(parser, currentAddress).ToString("00");
         }

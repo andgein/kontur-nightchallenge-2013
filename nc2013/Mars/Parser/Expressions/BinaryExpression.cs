@@ -45,7 +45,7 @@ namespace nMars.Parser.Expressions
         private Expression left;
         private Expression right;
 
-        public override int Evaluate(WarriorParser parser, int currentAddress)
+        public override int Evaluate(IWarriorParser parser, int currentAddress)
         {
             int l = left.Evaluate(parser, currentAddress);
             int r = right.Evaluate(parser, currentAddress);
@@ -147,7 +147,7 @@ namespace nMars.Parser.Expressions
             }
         }
 
-        public override Mode GetMode(WarriorParser parser, int currentAddress)
+        public override Mode GetMode(IWarriorParser parser, int currentAddress)
         {
             Mode l = left.GetMode(parser, currentAddress);
             if (l != Mode.NULL)

@@ -80,6 +80,6 @@ namespace nMars.Parser.Warrior
         }
 
         [NonSerialized]
-        internal Variables Variables = null;
+        public Variables Variables = null;
     }
 }

@@ -18,7 +18,7 @@ namespace nMars.Parser.Statements
             this.expression = expression;
         }
 
-        public override void ExpandStatements(ExtendedWarrior warrior, WarriorParser parser, ref int currentAddress,
+        public override void ExpandStatements(ExtendedWarrior warrior, IWarriorParser parser, ref int currentAddress,
                                               int coreSize, bool evaluate)
         {
             //set labels, except last which is EQU expression
@@ -27,11 +27,11 @@ namespace nMars.Parser.Statements
                 LabelName label = Labels[l];
                 if (l == Labels.Count - 1)
                 {//equ
-                    parser.variables[label.GetFullName(parser, currentAddress)] = expression;
+                    parser.Variables[label.GetFullName(parser, currentAddress)] = expression;
                 }
                 else
                 {//labels
-                    parser.variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
+                    parser.Variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
                 }
             }
             return;

@@ -1130,7 +1130,7 @@ namespace nMars.Parser
             WriteError(message, null);
         }
 
-        protected internal void WriteError(string message, Location location)
+	    public void WriteError(string message, Location location)
         {
             if (location != null)
             {
@@ -1183,6 +1183,11 @@ namespace nMars.Parser
         #endregion
 
         #region Variables
+
+	    public Variables Variables
+	    {
+		    get { return variables; }
+	    }
 
         private LALRParser parser;
         protected internal Variables variables;

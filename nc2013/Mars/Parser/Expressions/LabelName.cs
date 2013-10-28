@@ -24,7 +24,7 @@ namespace nMars.Parser.Expressions
             get { return name; }
         }
 
-        public override int Evaluate(WarriorParser parser, int currentAddress)
+		public override int Evaluate(IWarriorParser parser, int currentAddress)
         {
             if (inEval)
             {
@@ -41,12 +41,12 @@ namespace nMars.Parser.Expressions
             }
         }
 
-        protected virtual int EvaluateInternal(WarriorParser parser, int currentAddress)
+		protected virtual int EvaluateInternal(IWarriorParser parser, int currentAddress)
         {
             string fullName = GetFullName(parser, currentAddress);
-            if (parser.variables.ContainsKey(fullName))
+            if (parser.Variables.ContainsKey(fullName))
             {
-                Expression ex = parser.variables[fullName];
+                Expression ex = parser.Variables[fullName];
                 if (ex == this)
                 {
                     parser.WriteError("Label not yet resolved: " + fullName + " at " + Location, Location);
@@ -61,12 +61,12 @@ namespace nMars.Parser.Expressions
             }
         }
 
-        public override Mode GetMode(WarriorParser parser, int currentAddress)
+		public override Mode GetMode(IWarriorParser parser, int currentAddress)
         {
             string fullName = GetFullName(parser, currentAddress);
-            if (parser.variables.ContainsKey(fullName))
+            if (parser.Variables.ContainsKey(fullName))
             {
-                Expression ex = parser.variables[fullName];
+                Expression ex = parser.Variables[fullName];
                 if (ex == this)
                 {
                     parser.WriteError("Label not yet resolved: " + fullName + " at " + Location, Location);
@@ -81,7 +81,7 @@ namespace nMars.Parser.Expressions
             }
         }
 
-        public virtual string GetFullName(WarriorParser parser, int currentAddress)
+        public virtual string GetFullName(IWarriorParser parser, int currentAddress)
         {
             return name;
         }

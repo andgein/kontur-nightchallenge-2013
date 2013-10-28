@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using com.calitha.goldparser;
 using nMars.Parser.Expressions;
 using nMars.Parser.Warrior;
+using nMars.RedCode;
 
 namespace nMars.Parser.Statements
 {
@@ -17,7 +18,7 @@ namespace nMars.Parser.Statements
             Location = location;
         }
 
-        public abstract void ExpandStatements(ExtendedWarrior warrior, WarriorParser parser, ref int currentAddress,
+        public abstract void ExpandStatements(ExtendedWarrior warrior, IWarriorParser parser, ref int currentAddress,
                                               int coreSize, bool evaluate);
 
         public List<LabelName> Labels = null;

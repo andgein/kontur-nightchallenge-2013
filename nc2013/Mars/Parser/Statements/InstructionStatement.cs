@@ -33,13 +33,13 @@ namespace nMars.Parser.Statements
         public Parameter A;
         public Parameter B;
 
-        public override void ExpandStatements(ExtendedWarrior warrior, WarriorParser parser, ref int currentAddress,
+        public override void ExpandStatements(ExtendedWarrior warrior, IWarriorParser parser, ref int currentAddress,
                                               int coreSize, bool evaluate)
         {
             //set all labels
             foreach (LabelName label in Labels)
             {
-                parser.variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
+                parser.Variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
             }
 
             ExtendedInstruction instruction;
@@ -100,7 +100,7 @@ namespace nMars.Parser.Statements
                 }
             }
             currentAddress++;
-            parser.variables["CURLINE"] = new Value(currentAddress);
+            parser.Variables["CURLINE"] = new Value(currentAddress);
         }
 
 

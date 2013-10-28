@@ -6,6 +6,7 @@
 using com.calitha.goldparser;
 using nMars.Parser.Expressions;
 using nMars.Parser.Warrior;
+using nMars.RedCode;
 
 namespace nMars.Parser.Statements
 {
@@ -16,22 +17,22 @@ namespace nMars.Parser.Statements
         {
         }
 
-        public override void ExpandStatements(ExtendedWarrior warrior, WarriorParser parser, ref int currentAddress,
+        public override void ExpandStatements(ExtendedWarrior warrior, IWarriorParser parser, ref int currentAddress,
                                               int coreSize, bool evaluate)
         {
             //set labels, except last which is FOR expression
             for (int l = 0; l < Labels.Count - 1; l++)
             {
                 LabelName label = Labels[l];
-                parser.variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
+                parser.Variables[label.GetFullName(parser, currentAddress)] = new Address(currentAddress);
             }
 
             string cnt = Labels[Labels.Count - 1].Name;
-            int count = parser.variables[LimitName].Evaluate(parser, currentAddress);
+            int count = parser.Variables[LimitName].Evaluate(parser, currentAddress);
 
             for (int i = 1; i <= count; i++)
             {
-                parser.variables[cnt] = new Value(i);
+                parser.Variables[cnt] = new Value(i);
                 base.ExpandStatements(warrior, parser, ref currentAddress, coreSize, evaluate);
             }
         }

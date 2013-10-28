@@ -3,6 +3,8 @@
 // http://sourceforge.net/projects/nmars/
 // 2006 Pavel Savara
 
+using nMars.RedCode;
+
 namespace nMars.Parser.Expressions
 {
     public class Address : Value
@@ -12,7 +14,7 @@ namespace nMars.Parser.Expressions
         {
         }
 
-        public override int Evaluate(WarriorParser parser, int currentAddress)
+        public override int Evaluate(IWarriorParser parser, int currentAddress)
         {
             return value - currentAddress;
         }
