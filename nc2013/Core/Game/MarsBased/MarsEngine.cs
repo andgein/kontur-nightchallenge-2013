@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using nMars.Engine;
 using nMars.RedCode;
@@ -16,10 +17,27 @@ namespace Core.Game.MarsBased
 			this.project = project;
 		}
 
+		public void Run(int turnsToMake)
+		{
+			if (turnsToMake < 0)
+				throw new InvalidOperationException("turnsToMake must be non negative");
+			var turns = 0;
+			BeginMatch();
+			if (turnsToMake > 0)
+			{
+				StepResult stepResult;
+				do
+				{
+					stepResult = NextStep();
+				} while (++turns < turnsToMake || stepResult != StepResult.Finished);
+			}
+		}
+
+		[NotNull]
 		public MatchResult Run()
 		{
-			StepResult stepResult;
 			BeginMatch();
+			StepResult stepResult;
 			do
 			{
 				stepResult = NextStep();

@@ -46,9 +46,12 @@
     <Compile Include="Game\GameServer.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\IGameServer.cs" />
+    <Compile Include="Game\MarsBased\MarsGameServer.cs" />
     <Compile Include="Game\MarsBased\MarsEngine.cs" />
     <Compile Include="Game\MarsBased\MarsProject.cs" />
     <Compile Include="Game\MarsBased\MarsWarriorParser.cs" />
+    <Compile Include="Game\MarsBased\MarsGame.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CompilationException.cs" />

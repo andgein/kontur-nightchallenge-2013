@@ -1,13 +1,13 @@
 ﻿using JetBrains.Annotations;
 
-namespace Core.Game
+namespace Core.Game.MarsBased
 {
-	public class GameServer : IGameServer
+	public class MarsGameServer : IGameServer
 	{
 		[NotNull]
 		public IGame StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
-			return new StupidGame(programStartInfos);
+			return new MarsGame(programStartInfos);
 		}
 	}
 }
