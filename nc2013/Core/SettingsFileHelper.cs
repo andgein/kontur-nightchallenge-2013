@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Mars.Test
+namespace Core
 {
 	public static class SettingsFileHelper
 	{

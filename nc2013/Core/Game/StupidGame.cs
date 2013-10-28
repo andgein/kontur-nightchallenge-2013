@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 
-namespace Core
+namespace Core.Game
 {
 	public class StupidGame : Game
 	{

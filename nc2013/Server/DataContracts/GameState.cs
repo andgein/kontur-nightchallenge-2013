@@ -19,7 +19,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public int CurrentProgram { get; set; }
 
-		public static GameState FromCore(Guid gameId, Core.GameState gameState)
+		public static GameState FromCore(Guid gameId, Core.Game.GameState gameState)
 		{
 			return new GameState
 			{

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Core;
+using Core.Game;
 using Server.Handlers;
 
 namespace Server

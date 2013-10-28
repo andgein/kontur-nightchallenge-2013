@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using Core;
+using Core.Game;
 using ProgramStartInfo = Server.DataContracts.ProgramStartInfo;
 
 namespace Server

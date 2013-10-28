@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Core;
+using Core.Game;
 using Server.DataContracts;
 
 namespace Server.Handlers

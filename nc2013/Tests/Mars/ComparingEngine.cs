@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using nMars.RedCode;
 using nMars.RedCode.Modules;
 
-namespace nMars.Test
+namespace Tests.Mars
 {
 
     #region Helper Classes

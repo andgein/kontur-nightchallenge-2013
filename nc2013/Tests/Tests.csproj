@@ -35,15 +35,25 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MarsEngineRunner.cs" />
+    <Compile Include="Mars\ComparingEngine.cs" />
+    <Compile Include="Mars\EngineTest.cs" />
+    <Compile Include="Mars\Module.cs" />
+    <Compile Include="Mars\ParserTest.cs" />
+    <Compile Include="Mars\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{C21FFADD-E5AE-4743-BCAC-2B8502B636D2}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mars\Mars.csproj">
       <Project>{23012EA9-C831-428F-A89A-1AB280FEB06A}</Project>
       <Name>Mars</Name>

@@ -20,7 +20,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public int LastModifiedStep { get; set; }
 
-		public static CellState FromCore(Core.CellState cellState)
+		public static CellState FromCore(Core.Game.CellState cellState)
 		{
 			return new CellState
 			{

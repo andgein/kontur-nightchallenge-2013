@@ -11,9 +11,9 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public uint StartAddress { get; set; }
 
-		public Core.ProgramStartInfo ToCore()
+		public Core.Game.ProgramStartInfo ToCore()
 		{
-			return new Core.ProgramStartInfo
+			return new Core.Game.ProgramStartInfo
 			{
 				Program = Program,
 				StartAddress = StartAddress

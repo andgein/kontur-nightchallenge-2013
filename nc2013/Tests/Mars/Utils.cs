@@ -5,9 +5,9 @@
 
 using System;
 using System.IO;
-using Mars.Test;
+using Core;
 
-namespace nMars.Test
+namespace Tests.Mars
 {
 	public class Utils
     {

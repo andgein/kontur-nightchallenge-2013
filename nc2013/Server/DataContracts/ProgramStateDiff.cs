@@ -15,7 +15,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public uint NextPointer { get; set; }
 
-		public static ProgramStateDiff FromCore(Core.ProgramStateDiff diff)
+		public static ProgramStateDiff FromCore(Core.Game.ProgramStateDiff diff)
 		{
 			return new ProgramStateDiff
 			{
@@ -25,15 +25,15 @@ namespace Server.DataContracts
 			};
 		}
 
-		private static ProcessStateChangeType Convert(Core.ProcessStateChangeType changeType)
+		private static ProcessStateChangeType Convert(Core.Game.ProcessStateChangeType changeType)
 		{
 			switch (changeType)
 			{
-				case Core.ProcessStateChangeType.Executed:
+				case Core.Game.ProcessStateChangeType.Executed:
 					return ProcessStateChangeType.Executed;
-				case Core.ProcessStateChangeType.Killed:
+				case Core.Game.ProcessStateChangeType.Killed:
 					return ProcessStateChangeType.Killed;
-				case Core.ProcessStateChangeType.Splitted:
+				case Core.Game.ProcessStateChangeType.Splitted:
 					return ProcessStateChangeType.Splitted;
 				default:
 					throw new InvalidOperationException(string.Format("Invalid changeType {0}", changeType));

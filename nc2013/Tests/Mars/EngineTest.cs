@@ -10,7 +10,7 @@ using nMars.RedCode;
 using nMars.RedCode.Modules;
 using NUnit.Framework;
 
-namespace nMars.Test
+namespace Tests.Mars
 {
     [TestFixture]
     public class EngineTest

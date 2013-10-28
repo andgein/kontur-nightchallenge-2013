@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Core;
 using nMars.Engine;
 using nMars.Parser;
 using nMars.RedCode;
 using nMars.RedCode.Modules;
-using nMars.Test;
 using NUnit.Framework;
+using Tests.Mars;
 
 namespace Tests
 {
@@ -16,7 +17,6 @@ namespace Tests
 		private WrappedConsole wrappedConsole;
 		private ComponentLoader components;
 		private string basePath;
-		private string problemsPath;
 		private Rules rules;
 
 		[SetUp]
@@ -26,8 +26,7 @@ namespace Tests
 			components = new ComponentLoader();
 			components.Parser = new WarriorParser();
 			components.Engine = new EngineSteps();
-			basePath = Utils.GetWarrirorsDirectory();
-			problemsPath = Utils.CleanProblems(basePath, "!problems");
+			basePath = SettingsFileHelper.PatchDirectoryName("warriors", Directory.GetCurrentDirectory());
 			rules = Rules.DefaultRules;
 		}
 

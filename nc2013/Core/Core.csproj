@@ -38,14 +38,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arena.cs" />
-    <Compile Include="CellState.cs" />
+    <Compile Include="Game\Arena.cs" />
+    <Compile Include="Game\CellState.cs" />
     <Compile Include="CodeAnnotations.cs" />
-    <Compile Include="Diff.cs" />
-    <Compile Include="GameServer.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="MemoryDiff.cs" />
+    <Compile Include="Game\Diff.cs" />
+    <Compile Include="Game\GameServer.cs" />
+    <Compile Include="Game\GameState.cs" />
+    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CompilationException.cs" />
     <Compile Include="Parser\Expression.cs" />
@@ -55,12 +55,13 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParserState.cs" />
     <Compile Include="Parser\Statement.cs" />
-    <Compile Include="ProcessStateChangeType.cs" />
-    <Compile Include="ProgramStartInfo.cs" />
-    <Compile Include="ProgramState.cs" />
-    <Compile Include="ProgramStateDiff.cs" />
+    <Compile Include="Game\ProcessStateChangeType.cs" />
+    <Compile Include="Game\ProgramStartInfo.cs" />
+    <Compile Include="Game\ProgramState.cs" />
+    <Compile Include="Game\ProgramStateDiff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StupidGame.cs" />
+    <Compile Include="SettingsFileHelper.cs" />
+    <Compile Include="Game\StupidGame.cs" />
     <Compile Include="Parser\Warrior.cs" />
     <Compile Include="Parser\WarriorParser.cs" />
     <Compile Include="Parser\WarriorParserTest.cs" />

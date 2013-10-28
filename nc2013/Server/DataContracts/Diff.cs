@@ -15,7 +15,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public GameState GameState { get; set; }
 
-		public static Diff FromCore(Core.Diff diff)
+		public static Diff FromCore(Core.Game.Diff diff)
 		{
 			return new Diff
 			{

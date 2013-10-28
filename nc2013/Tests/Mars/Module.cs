@@ -8,7 +8,7 @@ using nMars.RedCode;
 using nMars.RedCode.Modules;
 using nMars.RedCode.Utils;
 
-namespace nMars.Test
+namespace Tests.Mars
 {
     class Module : BaseModule, IEngineModule
     {

@@ -11,7 +11,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public CellState CellState { get; set; }
 
-		public static MemoryDiff FromCore(Core.MemoryDiff diff)
+		public static MemoryDiff FromCore(Core.Game.MemoryDiff diff)
 		{
 			return new MemoryDiff
 			{

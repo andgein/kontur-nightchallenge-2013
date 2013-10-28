@@ -11,7 +11,7 @@ namespace Server.DataContracts
 		[JsonProperty]
 		public uint[] ProcessPointers { get; set; }
 
-		public static ProgramState FromCore(Core.ProgramState programState)
+		public static ProgramState FromCore(Core.Game.ProgramState programState)
 		{
 			return new ProgramState
 			{
