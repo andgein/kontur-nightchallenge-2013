@@ -45,6 +45,9 @@
     <Compile Include="GameState.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="MemoryDiff.cs" />
+    <Compile Include="Parser\ExpressionParser.cs" />
+    <Compile Include="Parser\ExpressionParserTest.cs" />
+    <Compile Include="Parser\Parser.cs" />
     <Compile Include="ProcessStateChangeType.cs" />
     <Compile Include="ProgramStartInfo.cs" />
     <Compile Include="ProgramState.cs" />
@@ -57,6 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mars\Mars.csproj">
+      <Project>{23012EA9-C831-428F-A89A-1AB280FEB06A}</Project>
+      <Name>Mars</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

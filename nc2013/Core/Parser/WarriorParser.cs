@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Core.Parser
 {
-    class WarriorParser
+    class WarriorParser : Parser
     {
         private readonly StatementFactory StatementFactory = new StatementFactory();
 
@@ -32,11 +32,11 @@ namespace Core.Parser
             string command;
 
             var state = new ParserState(line);
-            var token = ParseToken(state);
+            var token = ParseToken(state, IsIdentificatorChar);
             if (! IsCommandToken(token))
             {
                 label = token;
-                command = ParseToken(state);
+                command = ParseToken(state, IsIdentificatorChar);
             }
             else
             {
@@ -55,26 +55,6 @@ namespace Core.Parser
         private static bool IsCommandToken(string token)
         {
             return token == "MOV";
-        }
-
-        private static String ParseToken(ParserState state)
-        {
-            while (state.Pos < state.Str.Length && Char.IsWhiteSpace(state.Str[state.Pos]))
-                state.Pos++;
-
-            if (state.Pos >= state.Str.Length)
-                throw new CompilationException(String.Format("Can't parse token at position {0}: end of line", state.Pos));
-
-            var startPos = state.Pos;
-            while (state.Pos < state.Str.Length && IsTokenChar(state.Str[state.Pos]))
-                state.Pos++;
-
-            return state.Str.Substring(startPos, state.Pos - startPos);
-        }
-
-        private static bool IsTokenChar(char c)
-        {
-            return Char.IsLetter(c) || Char.IsNumber(c) || c == '_';
         }
     }
 
