@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using NUnit.Framework;
 
 namespace Core.Game
 {
-	public class StupidGame : Game
+	public class StupidGame : IGame
 	{
 		private readonly Random r = new Random(12344);
+		private readonly ProgramStartInfo[] programStartInfos;
 		private GameState gameState;
+		private int currentStep = 0;
 
-		public StupidGame(ProgramStartInfo[] programStartInfos) : base(programStartInfos)
+		public StupidGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
+			this.programStartInfos = programStartInfos;
 			gameState = new GameState();
 			gameState.CurrentProgram = 0;
 			gameState.MemoryState = Enumerable.Range(0, 8000).Select(i => CreateRandomCommand()).ToArray();
 			gameState.ProgramStates = programStartInfos.Select((p, i) => new ProgramState { ProcessPointers = new[] { (uint)(i * 1000), (uint)(i * 1000 + 100) } }).ToArray();
 		}
 
-		public override Diff Step(int stepCount)
+		[NotNull]
+		public GameState GameState { get { return gameState; } }
+
+		[NotNull]
+		public Diff Step(int stepCount)
 		{
 			var res = new Diff();
 			currentStep = Math.Max(0, Math.Min(80000, currentStep + stepCount));
@@ -25,10 +33,7 @@ namespace Core.Game
 			res.MemoryDiffs = Enumerable.Range(0, stepCount).Select(i => RandomMemDiff()).ToArray();
 			res.ProgramStateDiffs = Enumerable.Range(0, stepCount).Select(RandomProgramStateDiff).ToArray();
 			return res;
-
 		}
-
-		public override GameState GameState { get { return gameState; } }
 
 		private ProgramStateDiff RandomProgramStateDiff(int i)
 		{

@@ -44,7 +44,7 @@
     <Compile Include="Game\Diff.cs" />
     <Compile Include="Game\GameServer.cs" />
     <Compile Include="Game\GameState.cs" />
-    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CompilationException.cs" />

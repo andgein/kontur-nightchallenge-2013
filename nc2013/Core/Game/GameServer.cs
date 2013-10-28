@@ -1,8 +1,11 @@
-﻿namespace Core.Game
+﻿using JetBrains.Annotations;
+
+namespace Core.Game
 {
 	public class GameServer
 	{
-		public Game StartNewGame(ProgramStartInfo[] programStartInfos)
+		[NotNull]
+		public IGame StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			return new StupidGame(programStartInfos);
 		}
