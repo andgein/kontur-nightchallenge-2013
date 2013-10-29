@@ -9,7 +9,6 @@ namespace Server.Arena
 {
 	public class ArenaSubmitHandler : StrictPathHttpHandlerBase
 	{
-		private const string nameValidationRegex = @"^[0-9A-Za-z_-]+$";
 		private readonly PlayersRepo players;
 
 		public ArenaSubmitHandler(PlayersRepo players)
@@ -23,10 +22,6 @@ namespace Server.Arena
 			try
 			{
 				var request = context.GetRequest<ArenaPlayer>();
-				if (!Regex.IsMatch(request.Name, nameValidationRegex))
-					throw new Exception(string.Format("Имя должно быть {0}! ;-)", nameValidationRegex));
-				if (string.IsNullOrEmpty(request.Password))
-					throw new Exception(@"Пароль должен быть непустым");
 				players.CreateOrUpdate(request);
 				context.SendResponse("OK");
 			}
