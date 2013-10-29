@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Server.DataContracts;
+using Core.Game;
 
 namespace Server.Handlers
 {
@@ -16,7 +16,7 @@ namespace Server.Handlers
 		{
 			var programStartInfos = GetRequest<ProgramStartInfo[]>(context);
 			var gameId = gameHttpServer.StartNewGame(programStartInfos);
-			
+
 			SendResponseRaw(context, gameId);
 		}
 	}

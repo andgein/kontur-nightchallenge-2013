@@ -1,4 +1,6 @@
 using System.Net;
+using Core.Game;
+using JetBrains.Annotations;
 using Server.DataContracts;
 
 namespace Server.Handlers
@@ -14,18 +16,25 @@ namespace Server.Handlers
 			this.gameHttpServer = gameHttpServer;
 		}
 
+
 		protected override void DoHandle(HttpListenerContext context)
 		{
 			var gameId = GetGameId(context);
 			var stepCount = GetOptionalIntParam(context, "count") ?? 1;
 			var game = gameHttpServer.GetGame(gameId);
 			var diff = game.Step(stepCount);
-			Diff response;
-			if (diff.MemoryDiffs.Length > memoryDiffsLimit || diff.ProgramStateDiffs.Length > programStateDiffsLimit)
-				response = new Diff {GameState = GameState.FromCore(gameId, game.GameState)};
+			var response = new StepResponse();
+			if (diff == null || DiffIsTooBig(diff))
+				response.GameState = game.GameState;
 			else
-				response = Diff.FromCore(diff);
+				response.Diff = diff;
 			SendResponse(context, response);
+		}
+
+		private bool DiffIsTooBig([NotNull] Diff diff)
+		{
+			return (diff.MemoryDiffs != null && diff.MemoryDiffs.Length > memoryDiffsLimit)
+				|| (diff.ProgramStateDiffs != null && diff.ProgramStateDiffs.Length > programStateDiffsLimit);
 		}
 	}
 }

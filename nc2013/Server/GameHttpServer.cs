@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Net;
 using Core.Game;
 using JetBrains.Annotations;
-using ProgramStartInfo = Server.DataContracts.ProgramStartInfo;
 
 namespace Server
 {
@@ -16,7 +14,7 @@ namespace Server
 		public Guid StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			var gameId = Guid.NewGuid();
-			games[gameId] = gameServer.StartNewGame(programStartInfos.Select(x => x.ToCore()).ToArray());
+			games[gameId] = gameServer.StartNewGame(programStartInfos);
 			return gameId;
 		}
 

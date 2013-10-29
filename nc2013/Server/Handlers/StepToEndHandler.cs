@@ -1,5 +1,4 @@
 using System.Net;
-using Server.DataContracts;
 
 namespace Server.Handlers
 {
@@ -17,8 +16,7 @@ namespace Server.Handlers
 			var gameId = GetGameId(context);
 			var game = gameHttpServer.GetGame(gameId);
 			game.StepToEnd();
-			var gameState = GameState.FromCore(gameId, game.GameState);
-			SendResponse(context, gameState);
+			SendResponse(context, game.GameState);
 		}
 	}
 }
