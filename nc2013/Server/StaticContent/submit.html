@@ -19,18 +19,18 @@
 			errorAlert.hide();
 			successAlert.hide();
 			$('form').FormCache().submit(function (e) {
+				errorAlert.hide();
+				successAlert.hide();
 				$.ajax("/corewar/arena/submit", {
 					type: "POST",
 					data: $('form').asJsonString(),
 					contentType: "application/json, charset=utf-8",
 					dataType: 'json',
 					success: function () {
-						successAlert.show();
-						errorAlert.hide();
+						successAlert.fadeIn();
 					},
 					error: function(data) {
-						successAlert.hide();
-						errorAlert.show();
+						errorAlert.fadeIn();
 						$("#error-message").text(data.responseText);
 					}
 				});
@@ -51,7 +51,7 @@
 					<p class="help-block">При первом использовании придумайте логин и пароль вашей команды и заполните поле "Состав команды".</p>
 				</div>
 				<div class="form-group" id="name-group">
-					<label for="">Название команды (логин)</label>
+					<label for="">Имя команды (логин)</label>
 					<input type="text" name="name" id="name" class="form-control" placeholder="логин" />
 				</div>
 				<div class="form-group" id="password-group">

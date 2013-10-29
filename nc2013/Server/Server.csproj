@@ -50,7 +50,6 @@
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
     <Compile Include="Arena\ArenaSubmitHandler.cs" />
-    <Compile Include="Arena\ArenaSubmitRequest.cs" />
     <Compile Include="Arena\ArenaPlayerHandler.cs" />
     <Compile Include="HttpListenerContextExtensions.cs" />
     <Compile Include="Arena\RankingHandler.cs" />

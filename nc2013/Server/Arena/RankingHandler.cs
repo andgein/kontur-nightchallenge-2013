@@ -7,7 +7,7 @@ namespace Server.Arena
 {
 	public class RankingHandler : StrictPathHttpHandlerBase
 	{
-		public RankingHandler(GamesHistory arena)
+		public RankingHandler()
 			: base("arena/ranking") {}
 
 		public override void DoHandle([NotNull] HttpListenerContext context)

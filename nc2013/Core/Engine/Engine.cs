@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Core.Engine
 {
-    class Engine
+    public class Engine
     {
         private readonly List<RunningWarrior> warriors;
         private int currentWarrior;
@@ -65,8 +65,8 @@ namespace Core.Engine
             killedInInstruction = true;
         }
     }
-    
-    class Instruction
+
+    public class Instruction
     {
         public Statement Statement { get; set; }
 
@@ -91,7 +91,7 @@ namespace Core.Engine
         }
     }
 
-    class StepResult
+    public class StepResult
     {
         
     }

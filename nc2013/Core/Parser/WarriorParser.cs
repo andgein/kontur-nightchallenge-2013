@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Core.Parser
 {
-    internal class WarriorParser : Parser
+	public class WarriorParser : Parser
     {
         private readonly StatementFactory statementFactory = new StatementFactory();
         private readonly 
@@ -49,7 +49,7 @@ namespace Core.Parser
             }
 
             if (!IsCommandToken(command))
-                throw new CompilationException(String.Format("Expected command, but found '{0}'", command));
+                throw new CompilationException(String.Format("Expected command, but found '{0} {1}'", label, command));
 
             var statement = statementFactory.Create(command);
             statement.Label = label;

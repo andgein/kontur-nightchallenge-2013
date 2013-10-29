@@ -2,7 +2,7 @@ using System;
 
 namespace Core.Parser
 {
-    internal class ParserState
+	public class ParserState
     {
         public String Str { get; private set; }
         public int Pos;

@@ -4,7 +4,7 @@ using Core.Engine;
 
 namespace Core.Parser
 {
-    abstract class Statement
+    public abstract class Statement
     {
         public string Label;
         public AddressingMode ModeA;

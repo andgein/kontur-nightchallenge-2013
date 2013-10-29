@@ -10,15 +10,17 @@
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<script src="common.js"></script>
 	<script>
-		var PlayerController = MakeJsonController("/corewar/arena/player?name=" + qs["name"]);
+		var PlayerController = MakeJsonController("/corewar/arena/player" + window.location.search);
 	</script>
 </head>
 <body>
 	<div class="container" ng-controller="PlayerController">
 		<script>nav()</script>
 		<div class="page-header">
-			<h1>Игрок {{info.name}}</h1>
+			<h1>Игрок {{info.name}} v{{version}}</h1>
 		</div>
+		<div>Авторство: {{authors}}</div>
+		<div>Время создания: {{submitTime}}</div>
 		<div>Побед: {{info.wins}}</div>
 		<div>Поражений: {{info.loses}}</div>
 		<div>Всего боев: {{info.totalGames}}</div>

@@ -3,7 +3,7 @@ using Core.Engine;
 
 namespace Core.Parser
 {
-    abstract class Expression
+    public abstract class Expression
     {
         public abstract int Calculate();
 

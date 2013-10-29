@@ -42,11 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arena\GamesHistory.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\EngineTest.cs" />
     <Compile Include="Engine\Parameters.cs" />
     <Compile Include="Engine\RunningWarrior.cs" />
+    <Compile Include="Arena\ArenaPlayer.cs" />
+    <Compile Include="Arena\PlayersRepo.cs" />
     <Compile Include="Game\CellState.cs" />
     <Compile Include="CodeAnnotations.cs" />
     <Compile Include="Game\CellType.cs" />
