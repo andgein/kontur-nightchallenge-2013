@@ -26,7 +26,7 @@ namespace Core.Game
 		[NotNull]
 		public GameState GameState { get { return gameState; } }
 
-		[NotNull]
+		[CanBeNull]
 		public Diff Step(int stepCount)
 		{
 			var res = new Diff();

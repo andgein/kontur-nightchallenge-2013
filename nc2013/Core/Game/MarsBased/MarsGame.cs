@@ -29,7 +29,7 @@ namespace Core.Game.MarsBased
 			get { return gameState ?? (gameState = GetGameState(0)); }
 		}
 
-		[NotNull]
+		[CanBeNull]
 		public Diff Step(int stepCount)
 		{
 			currentTurn += stepCount;

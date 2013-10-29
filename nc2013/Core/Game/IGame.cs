@@ -7,7 +7,7 @@ namespace Core.Game
 		[NotNull]
 		GameState GameState { get; }
 
-		[NotNull]
+		[CanBeNull]
 		Diff Step(int stepCount);
 
 		void StepToEnd();
