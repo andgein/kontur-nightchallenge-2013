@@ -49,8 +49,8 @@
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
-    <Compile Include="Arena\AddProgramToArenaHandler.cs" />
-    <Compile Include="Arena\AddProgramToArenaRequest.cs" />
+    <Compile Include="Arena\ArenaSubmitHandler.cs" />
+    <Compile Include="Arena\ArenaSubmitRequest.cs" />
     <Compile Include="Arena\ArenaPlayerHandler.cs" />
     <Compile Include="HttpListenerContextExtensions.cs" />
     <Compile Include="Arena\RankingHandler.cs" />
@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="StaticContent\bootstrap.min.js" />
+    <Content Include="StaticContent\common.css" />
     <None Include="StaticContent\json2.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

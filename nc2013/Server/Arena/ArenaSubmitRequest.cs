@@ -3,12 +3,11 @@
 namespace Server.Arena
 {
 	[JsonObject]
-	public class AddProgramToArenaRequest
+	public class ArenaSubmitRequest
 	{
 		[JsonProperty] public string Name;
-		[JsonProperty] public string TeamName;
 		[JsonProperty] public string Password;
-		[JsonProperty] public string TeamAuthors;
+		[JsonProperty] public string Authors;
 		[JsonProperty] public string Program;
 	}
 }

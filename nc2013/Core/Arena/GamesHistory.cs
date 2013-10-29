@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using Core.Game;
 
-namespace Core.Arenas
+namespace Core.Arena
 {
 	public class GamesHistory
 	{

@@ -8,7 +8,36 @@
 	<script src="angular.min.js"></script>
 	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<link rel="stylesheet" href="common.css" />
 	<script src="common.js"></script>
+	<script>
+		var successAlert;
+		var errorAlert;
+		$(document).ready(function () {
+			successAlert = $(".alert-success");
+			errorAlert = $(".alert-danger");
+			errorAlert.hide();
+			successAlert.hide();
+			$('form').FormCache().submit(function (e) {
+				$.ajax("/corewar/arena/submit", {
+					type: "POST",
+					data: $('form').asJsonString(),
+					contentType: "application/json, charset=utf-8",
+					dataType: 'json',
+					success: function () {
+						successAlert.show();
+						errorAlert.hide();
+					},
+					error: function(data) {
+						successAlert.hide();
+						errorAlert.show();
+						$("#error-message").text(data.responseText);
+					}
+				});
+				e.preventDefault();
+			});
+		});
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -17,31 +46,36 @@
 			<h1>Отправить бота</h1>
 		</div>
 		<div class="row">
-			<form class="col-md-6 form-horizontal">
+			<form class="col-md-4 form-horizontal">
 				<div class="form-group">
-					<label for="">Логин</label>
-					<input type="text" name="team" id="name" class="form-control" />
+					<p class="help-block">При первом использовании придумайте логин и пароль вашей команды и заполните поле "Состав команды".</p>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="name-group">
+					<label for="">Название команды (логин)</label>
+					<input type="text" name="name" id="name" class="form-control" placeholder="логин" />
+				</div>
+				<div class="form-group" id="password-group">
 					<label for="password">Пароль</label>
-					<input type="password" name="password" id="password" class="form-control" />
+					<input type="password" name="password" id="password" class="form-control" placeholder="пароль" />
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="authors-group">
 					<label for="people">Состав команды</label>
-					<textarea rows="5" name="people" id="people" class="form-control"></textarea>
+					<textarea rows="4" name="authors" id="authors" class="form-control" placeholder="обязательно лишь при отправке первой версии бота"></textarea>
 				</div>
-				<div class="form-group">
-					<label for="programName">Название бота</label>
-					<input type="text" name="programName" id="programName" class="form-control" />
-				</div>
-				<div class="form-group">
+				<div class="form-group" id="program-group">
 					<label for="program">Код бота</label>
-					<textarea rows="20" name="program" id="program" class="form-control"></textarea>
+					<textarea rows="10" name="program" id="program" class="form-control input-code" placeholder="MOV 0, 1"></textarea>
+				</div>
+				<div class="form-group alert alert-danger">
+					<strong>Бот не отправлен!</strong>
+					<div id="error-message"></div>
+				</div>
+				<div class="form-group alert alert-success">
+					Ваш бот был успешно отправлен в бой! :D
 				</div>
 				<div class="form-group">
-					<button class="btn btn-default" type="submit">В бой!</button>
+					<button class="btn btn-default btn-lg">В бой его!</button>
 				</div>
-
 			</form>
 		</div>
 	</div>

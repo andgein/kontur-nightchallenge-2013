@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Core.Game;
+using Core.Arena;
 using Core.Game.MarsBased;
 using Server.Arena;
 using Server.Debugging;
@@ -25,7 +25,7 @@ namespace Server
 			var listener = new HttpListener();
 			listener.Prefixes.Add("http://*" + CoreWarPrefix);
 			listener.Start();
-			var arena = new Core.Game.Arena();
+			var arena = new GamesHistory(new DirectoryInfo("history"));
 			var gameServer = new MarsGameServer();
 			var sessionManager = new SessionManager("sessions", gameServer);
 			var handlers = new IHttpHandler[]
@@ -38,7 +38,7 @@ namespace Server
 				new LoginHandler(sessionManager), 
 				new StaticHandler(),
 				new RankingHandler(arena),
-				new AddProgramToArenaHandler(arena),
+				new ArenaSubmitHandler(arena),
 				new ArenaPlayerHandler(arena)
 			};
 			Process.Start("http://localhost" + DefaultUrl);

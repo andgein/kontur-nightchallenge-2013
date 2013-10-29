@@ -71,8 +71,9 @@ namespace Server
 			return result;
 		}
 
-		public static void SendResponse<T>([NotNull] this HttpListenerContext context, T value)
+		public static void SendResponse<T>([NotNull] this HttpListenerContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
 		{
+			context.Response.StatusCode = (int)statusCode;
 			context.Response.ContentType = "application/json; charset=utf-8";
 			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
 			using (var writer = new StreamWriter(context.Response.OutputStream))

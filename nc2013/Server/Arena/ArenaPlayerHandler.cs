@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
 
@@ -7,7 +8,7 @@ namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
-		public ArenaPlayerHandler(Core.Game.Arena arena) : base("arena/player") {}
+		public ArenaPlayerHandler(GamesHistory arena) : base("arena/player") {}
 
 		public override void DoHandle([NotNull] HttpListenerContext context)
 		{
