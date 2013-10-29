@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Core.Game;
+using Core.Game.MarsBased;
 using Server.Arena;
 using Server.Debugging;
 using Server.Handlers;
@@ -25,7 +26,7 @@ namespace Server
 			listener.Prefixes.Add("http://*" + CoreWarPrefix);
 			listener.Start();
 			var arena = new Core.Game.Arena();
-			var gameServer = new GameServer();
+			var gameServer = new MarsGameServer();
 			var sessionManager = new SessionManager("sessions", gameServer);
 			var handlers = new IHttpHandler[]
 			{

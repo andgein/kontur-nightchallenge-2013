@@ -23,7 +23,7 @@ namespace Core.Game.MarsBased
 				Rounds = 1,
 				MaxCycles = 80000,
 				CoreSize = 8000,
-				PSpaceSize = 0,
+				PSpaceSize = 500, // coreSize / 16 
 				EnablePSpace = false,
 				MaxProcesses = 1000,
 				MaxLength = 100,
@@ -76,11 +76,14 @@ namespace Core.Game.MarsBased
 			var memoryState = new CellState[engine.CoreSize];
 			for (var addr = 0; addr < memoryState.Length; addr++)
 			{
+				var instruction = engine.core[addr].ToString();
+				var cellType = engine.core[addr].Operation == Operation.DAT ? CellType.Data : CellType.Command;
+				var lastModifiedByProgram = engine.core[addr].OriginalOwner == null ? (int?)null : engine.core[addr].OriginalOwner.WarriorIndex;
 				memoryState[addr] = new CellState
 				{
-					Instruction = engine.core[addr].ToString(),
-					CellType = engine.core[addr].Operation == Operation.DAT ? CellType.Data : CellType.Command,
-					LastModifiedByProgram = engine.core[addr].OriginalOwner.WarriorIndex,
+					Instruction = instruction,
+					CellType = cellType,
+					LastModifiedByProgram = lastModifiedByProgram,
 					LastModifiedStep = null, // todo !!!
 				};
 			}
@@ -89,10 +92,12 @@ namespace Core.Game.MarsBased
 			for (var idx = 0; idx < programStates.Length; idx++)
 			{
 				var w = engine.warriors[idx];
+				var lastPointer = currentTurn <= idx ? (uint?)null : (uint)w.PrevInstruction.Address;
+				var processPointers = w.Tasks.Select(ip => (uint)ip).ToArray();
 				programStates[idx] = new ProgramState
 				{
-					LastPointer = currentTurn <= idx ? (uint?)null : (uint)w.PrevInstruction.Address,
-					ProcessPointers = w.Tasks.Select(ip => (uint)ip).ToArray(),
+					LastPointer = lastPointer,
+					ProcessPointers = processPointers,
 				};
 			}
 
