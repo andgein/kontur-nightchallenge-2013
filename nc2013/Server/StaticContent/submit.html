@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app>
+<head>
+	<meta charset="utf-8" />
+	<title>Core War</title>
+	<script src="jquery-1.7.2.js"></script>
+	<script src="angular.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="common.js"></script>
+</head>
+<body>
+	<div class="container">
+		<script>nav()</script>
+		<div class="page-header">
+			<h1>Отправить бота</h1>
+		</div>
+		<div class="row">
+			<form class="col-md-6 form-horizontal">
+				<div class="form-group">
+					<label for="">Логин</label>
+					<input type="text" name="team" id="name" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="password">Пароль</label>
+					<input type="password" name="password" id="password" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="people">Состав команды</label>
+					<textarea rows="5" name="people" id="people" class="form-control"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="programName">Название бота</label>
+					<input type="text" name="programName" id="programName" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="program">Код бота</label>
+					<textarea rows="20" name="program" id="program" class="form-control"></textarea>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-default" type="submit">В бой!</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</body>
+</html>

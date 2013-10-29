@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Arena.cs" />
+    <Compile Include="Arenas\Arena.cs" />
     <Compile Include="Game\CellState.cs" />
     <Compile Include="CodeAnnotations.cs" />
     <Compile Include="Game\CellType.cs" />
