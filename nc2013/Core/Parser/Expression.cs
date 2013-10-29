@@ -1,6 +1,6 @@
 namespace Core.Parser
 {
-    class Expression
+	public class Expression
     {
     }
 

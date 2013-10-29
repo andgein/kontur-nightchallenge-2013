@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Parser
 {
-    class Warrior
+	public class Warrior
     {
         public List<Statement> Statements { get; private set; }
         public Dictionary<String, uint> LabelsAddresses { get; private set; }

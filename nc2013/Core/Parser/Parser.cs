@@ -2,7 +2,7 @@
 
 namespace Core.Parser
 {
-    class Parser
+	public class Parser
     {
         protected ParserState State;
 

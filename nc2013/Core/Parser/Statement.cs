@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Parser
 {
-    class Statement
+	public class Statement
     {
         public string Label;
         public AddressingMode ModeA;

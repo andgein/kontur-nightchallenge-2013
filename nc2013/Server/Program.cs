@@ -25,9 +25,9 @@ namespace Server
 			var listener = new HttpListener();
 			listener.Prefixes.Add("http://*" + CoreWarPrefix);
 			listener.Start();
-			var arena = new GamesHistory(new DirectoryInfo("history"));
 			var gameServer = new MarsGameServer();
 			var sessionManager = new SessionManager("sessions", gameServer);
+			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
 			var handlers = new IHttpHandler[]
 			{
 				new DebuggerHandler(),
@@ -37,9 +37,9 @@ namespace Server
 				new DebuggerStepToEndHandler(sessionManager),
 				new LoginHandler(sessionManager), 
 				new StaticHandler(),
-				new RankingHandler(arena),
-				new ArenaSubmitHandler(arena),
-				new ArenaPlayerHandler(arena)
+				new RankingHandler(),
+				new ArenaSubmitHandler(playersRepo),
+				new ArenaPlayerHandler(playersRepo)
 			};
 			Process.Start("http://localhost" + DefaultUrl);
 			while (true)

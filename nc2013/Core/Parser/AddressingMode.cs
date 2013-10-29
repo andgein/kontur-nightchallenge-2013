@@ -1,6 +1,6 @@
 namespace Core.Parser
 {
-    enum AddressingMode
+	public enum AddressingMode
     {
         Direct = '$',
         Immediate = '#',
