@@ -1,49 +1,33 @@
-using System.IO;
+using System;
 using System.Net;
+using JetBrains.Annotations;
 
 namespace Server.Handlers
 {
 	public class StaticHandler : HttpHandlerBase
 	{
-		public override bool Handle(HttpListenerContext context)
+		public override bool CanHandle([NotNull] HttpListenerContext context)
+		{
+			var contentType = HttpListenerContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
+			return contentType != null;
+		}
+
+		public override void DoHandle([NotNull] HttpListenerContext context)
 		{
 			var localPath = TryGetLocalPath(context);
-			if (localPath == null) return false;
-			return
-				TryHandleStatic("../../" + localPath, context)
-					|| TryHandleStatic("../../StaticContent/" + localPath, context)
-					|| TryHandleStatic(localPath, context)
-					|| TryHandleStatic("StaticContent/" + localPath, context)
-				;
+			if (localPath == null)
+				throw new HttpException(HttpStatusCode.NotFound, string.Format("Static resource '{0}' is not found", context.Request.RawUrl));
+			context.SendStaticFile(localPath);
 		}
 
-		private bool TryHandleStatic(string path, HttpListenerContext context)
-		{
-			if (!File.Exists(path)) return false;
-			var contentType = GetContentType(path);
-			SendResponseRaw(context, File.ReadAllBytes(path), contentType);
-			return true;
-		}
-
-		private static string TryGetLocalPath(HttpListenerContext context)
+		[CanBeNull]
+		private static string TryGetLocalPath([NotNull] HttpListenerContext context)
 		{
 			var relPath = context.Request.Url.LocalPath;
 			if (!relPath.Contains("..")
-				&& relPath.StartsWith("/" + Program.CoreWarPrefix + "/"))
-				return relPath.Substring(Program.CoreWarPrefix.Length + 2);
+				&& relPath.StartsWith(Program.CoreWarPrefix, StringComparison.OrdinalIgnoreCase))
+				return relPath.Substring(Program.CoreWarPrefix.Length);
 			return null;
-		}
-
-		private string GetContentType(string file)
-		{
-			file = file.ToLower();
-			if (Path.GetExtension(file) == ".js")
-				return "text/javascript; encoding=utf-8";
-			if (Path.GetExtension(file) == ".html" || Path.GetExtension(file) == ".htm")
-				return "text/html; encoding=utf-8";
-			if (Path.GetExtension(file) == ".css")
-				return "text/css; encoding=utf-8";
-			return "text/plain; encoding=utf-8";
 		}
 	}
 }

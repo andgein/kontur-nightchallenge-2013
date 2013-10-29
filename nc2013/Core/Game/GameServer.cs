@@ -9,5 +9,11 @@ namespace Core.Game
 		{
 			return new StupidGame(programStartInfos);
 		}
+
+		[NotNull]
+		public IGame ResumeGame([NotNull] GameState gameState)
+		{
+			return new StupidGame(gameState);
+		}
 	}
 }

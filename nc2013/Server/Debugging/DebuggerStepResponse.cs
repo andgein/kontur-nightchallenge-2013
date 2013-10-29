@@ -2,10 +2,10 @@
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace Server.DataContracts
+namespace Server.Debugging
 {
 	[JsonObject]
-	public class StepResponse
+	public class DebuggerStepResponse
 	{
 		[JsonProperty]
 		[CanBeNull]

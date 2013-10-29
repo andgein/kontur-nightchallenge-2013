@@ -6,5 +6,8 @@ namespace Core.Game
 	{
 		[NotNull]
 		IGame StartNewGame([NotNull] ProgramStartInfo[] programStartInfos);
+
+		[NotNull]
+		IGame ResumeGame([NotNull] GameState gameState);
 	}
 }

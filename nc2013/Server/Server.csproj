@@ -39,28 +39,38 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataContracts\FinishedGameInfo.cs" />
-    <Compile Include="DataContracts\FinishedGamesWithEnemy.cs" />
-    <Compile Include="DataContracts\PlayerInfo.cs" />
-    <Compile Include="DataContracts\ProgramRankInfo.cs" />
-    <Compile Include="DataContracts\Ranking.cs" />
-    <Compile Include="DataContracts\StepResponse.cs" />
-    <Compile Include="Handlers\AddProgramToArenaHandler.cs" />
-    <Compile Include="DataContracts\AddProgramToArenaRequest.cs" />
-    <Compile Include="Handlers\ArenaPlayerHandler.cs" />
-    <Compile Include="Handlers\RankingHandler.cs" />
-    <Compile Include="Handlers\StepToEndHandler.cs" />
+    <Compile Include="Arena\FinishedGameInfo.cs" />
+    <Compile Include="Arena\FinishedGamesWithEnemy.cs" />
+    <Compile Include="Arena\PlayerInfo.cs" />
+    <Compile Include="Arena\ProgramRankInfo.cs" />
+    <Compile Include="Arena\Ranking.cs" />
+    <Compile Include="Debugging\DebuggerHandler.cs" />
+    <Compile Include="Debugging\DebuggerHandlerBase.cs" />
+    <Compile Include="Debugging\DebuggerStepResponse.cs" />
+    <Compile Include="Debugging\Debugger.cs" />
+    <Compile Include="Arena\AddProgramToArenaHandler.cs" />
+    <Compile Include="Arena\AddProgramToArenaRequest.cs" />
+    <Compile Include="Arena\ArenaPlayerHandler.cs" />
+    <Compile Include="HttpListenerContextExtensions.cs" />
+    <Compile Include="Arena\RankingHandler.cs" />
+    <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
-    <Compile Include="GameHttpServer.cs" />
-    <Compile Include="Handlers\GetGameStateHandler.cs" />
+    <Compile Include="Debugging\DebuggerGameStateHandler.cs" />
     <Compile Include="Handlers\HttpHandlerBase.cs" />
     <Compile Include="Handlers\IHttpHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
-    <Compile Include="Handlers\StepHandler.cs" />
+    <Compile Include="Debugging\DebuggerStepHandler.cs" />
     <Compile Include="HttpException.cs" />
+    <Compile Include="Debugging\IDebugger.cs" />
+    <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handlers\StartGameHandler.cs" />
+    <Compile Include="Debugging\DebuggerStartGameHandler.cs" />
+    <Compile Include="Sessions\ISessionManager.cs" />
+    <Compile Include="Sessions\RequireAuthorizationAttribute.cs" />
+    <Compile Include="Sessions\Session.cs" />
+    <Compile Include="Sessions\SessionManager.cs" />
+    <Compile Include="Sessions\LoginHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\fonts\glyphicons-halflings-regular.eot">
@@ -146,6 +156,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

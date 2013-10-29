@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Server.DataContracts
+namespace Server.Arena
 {
 	[JsonObject]
 	public class PlayerInfo

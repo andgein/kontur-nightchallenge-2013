@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Net;
-using Core.Game;
-using Server.DataContracts;
+using JetBrains.Annotations;
+using Server.Handlers;
 
-namespace Server.Handlers
+namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
-		public ArenaPlayerHandler(Arena arena) : base("arena/player") {}
+		public ArenaPlayerHandler(Core.Game.Arena arena) : base("arena/player") {}
 
-		protected override void DoHandle(HttpListenerContext context)
+		public override void DoHandle([NotNull] HttpListenerContext context)
 		{
-			var programName = GetStringParam(context, "name");
-			var programVersion = GetOptionalIntParam(context, "version");
-			SendResponse(context, CreateDummyPlayerInfo());
+			var programName = context.GetStringParam("name");
+			var programVersion = context.GetOptionalIntParam("version");
+			context.SendResponse(CreateDummyPlayerInfo());
 		}
 
 		private PlayerInfo CreateDummyPlayerInfo()

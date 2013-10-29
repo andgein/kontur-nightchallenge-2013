@@ -1,91 +1,29 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using JetBrains.Annotations;
+using Server.Sessions;
 
 namespace Server.Handlers
 {
 	public abstract class HttpHandlerBase : IHttpHandler
 	{
-		protected Guid GetGameId(HttpListenerContext context)
+		public void Handle([NotNull] HttpListenerContext context)
 		{
-			var gameIdString = context.Request.QueryString["gameId"];
-			if (string.IsNullOrEmpty(gameIdString))
-				throw new HttpException(HttpStatusCode.BadRequest, "Query parameter 'gameId' is not specified");
-			Guid gameId;
-			if (!Guid.TryParse(gameIdString, out gameId))
-				throw new HttpException(HttpStatusCode.BadRequest, "Query parameter 'gameId' is invalid - Guid is expected");
-			return gameId;
-		}
-
-		protected int GetIntParam(HttpListenerContext context, string paramName)
-		{
-			var result = GetOptionalIntParam(context, paramName);
-			if (!result.HasValue)
-				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
-			return result.Value;
-		}
-
-		protected int? GetOptionalIntParam(HttpListenerContext context, string paramName)
-		{
-			var valueString = context.Request.QueryString[paramName];
-			if (string.IsNullOrEmpty(valueString))
-				return null;
-			int value;
-			if (!int.TryParse(valueString, out value))
-				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - int is expected", paramName));
-			return value;
-		}
-
-		protected string GetStringParam(HttpListenerContext context, string paramName)
-		{
-			var valueString = context.Request.QueryString[paramName];
-			if (string.IsNullOrEmpty(valueString))
-				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
-			return valueString;
-		}
-
-		protected T GetRequest<T>(HttpListenerContext context)
-		{
-			var reader = new StreamReader(context.Request.InputStream);
-			var data = reader.ReadToEnd();
-			var result = JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
-			return result;
-		}
-
-		protected void SendResponse<T>(HttpListenerContext context, T value)
-		{
-			context.Response.ContentType = "application/json; charset=utf-8";
-			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
-			using (var writer = new StreamWriter(context.Response.OutputStream))
-				writer.Write(result);
-			context.Response.Close();
-		}
-
-		protected void SendResponseRaw(HttpListenerContext context, object value, string contentType = null)
-		{
-			if (!ReferenceEquals(value, null))
+			if (GetType().IsDefined(typeof (RequireAuthorizationAttribute), true))
 			{
-				if (!string.IsNullOrEmpty(contentType))
-					context.Response.ContentType = contentType;
-				using (var writer = new StreamWriter(context.Response.OutputStream))
-					writer.Write(value);
+				var sessionId = context.TryGetSessionId();
+				if (!sessionId.HasValue)
+				{
+					if (context.IsAjax())
+						throw new HttpException(HttpStatusCode.Forbidden, "User is not logged in");
+					context.Redirect(Program.LoginUrl + "?back=" + Uri.EscapeDataString(context.Request.RawUrl));
+					return;
+				}
 			}
-			context.Response.Close();
+			DoHandle(context);
 		}
 
-		protected void SendResponseRaw(HttpListenerContext context, byte[] value, string contentType = null)
-		{
-			if (!ReferenceEquals(value, null))
-			{
-				if (!string.IsNullOrEmpty(contentType))
-					context.Response.ContentType = contentType;
-				context.Response.OutputStream.Write(value, 0, value.Length);
-			}
-			context.Response.Close();
-		}
-
-		public abstract bool Handle(HttpListenerContext context);
+		public abstract void DoHandle([NotNull] HttpListenerContext context);
+		public abstract bool CanHandle([NotNull] HttpListenerContext context);
 	}
 }

@@ -6,35 +6,33 @@ var Game = Base.extend({
 	},
 	start: function (programStartInfos) {
 		var that = this;
-		return server.post("start", programStartInfos)
-			.pipe(function (gameId) {
-				that.gameId = gameId;
-				return server.get("state", { gameId: gameId });
-			})
+		return server.post("debugger/start", programStartInfos)
 			.pipe(function (gameState) {
 				return that._setGameState(gameState);
 			});
 	},
 	stepToEnd: function () {
 		var that = this;
-		return server.get("step/end", { gameId: this.gameId })
+		return server.get("debugger/step/end")
 			.pipe(function (gameState) {
 				return that._setGameState(gameState);
 			});
 	},
 	step: function (stepCount) {
 		var that = this;
-		return server.get("step", { gameId: this.gameId, count: stepCount })
+		return server.get("debugger/step", { count: stepCount })
 			.pipe(function (diff) {
 				if (diff.gameState) {
 					return that._setGameState(diff.gameState);
 				} else {
 					that.$currentStep.text(diff.currentStep);
-					that.memory.applyDiffs(diff.memoryDiffs);
-					for (var i = 0; i < diff.programStateDiffs.length; ++i) {
-						var programStateDiff = diff.programStateDiffs[i];
-						that.programs[programStateDiff.program].applyDiff(programStateDiff);
-					}
+					if (diff.memoryDiffs)
+						that.memory.applyDiffs(diff.memoryDiffs);
+					if (diff.programStateDiffs)
+						for (var i = 0; i < diff.programStateDiffs.length; ++i) {
+							var programStateDiff = diff.programStateDiffs[i];
+							that.programs[programStateDiff.program].applyDiff(programStateDiff);
+						}
 					if (diff.winner) {
 						that.programs[diff.winner].win();
 						return $.Deferred().reject("gameover");

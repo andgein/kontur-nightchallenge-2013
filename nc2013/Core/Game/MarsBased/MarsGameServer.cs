@@ -9,5 +9,11 @@ namespace Core.Game.MarsBased
 		{
 			return new MarsGame(programStartInfos);
 		}
+
+		[NotNull]
+		public IGame ResumeGame([NotNull] GameState gameState)
+		{
+			return new MarsGame(gameState);
+		}
 	}
 }

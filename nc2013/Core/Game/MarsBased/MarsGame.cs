@@ -23,6 +23,12 @@ namespace Core.Game.MarsBased
 			};
 		}
 
+		public MarsGame([NotNull] GameState gameState)
+		{
+			this.gameState = gameState;
+			// todo - resume game
+		}
+
 		[NotNull]
 		public GameState GameState
 		{
