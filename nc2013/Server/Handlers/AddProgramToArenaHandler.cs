@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using Core;
 using Core.Game;
 using Server.DataContracts;
 
@@ -9,9 +8,7 @@ namespace Server.Handlers
 	public class AddProgramToArenaHandler : StrictPathHttpHandlerBase
 	{
 		public AddProgramToArenaHandler(Arena arena)
-			: base("arena/add")
-		{
-		}
+			: base("arena/add") {}
 
 		protected override void DoHandle(HttpListenerContext context)
 		{

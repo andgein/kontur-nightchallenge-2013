@@ -11,9 +11,9 @@ namespace Server.Handlers
 			if (localPath == null) return false;
 			return
 				TryHandleStatic("../../" + localPath, context)
-				|| TryHandleStatic("../../StaticContent/" + localPath, context)
-				|| TryHandleStatic(localPath, context)
-				|| TryHandleStatic("StaticContent/" + localPath, context)
+					|| TryHandleStatic("../../StaticContent/" + localPath, context)
+					|| TryHandleStatic(localPath, context)
+					|| TryHandleStatic("StaticContent/" + localPath, context)
 				;
 		}
 
@@ -29,7 +29,7 @@ namespace Server.Handlers
 		{
 			var relPath = context.Request.Url.LocalPath;
 			if (!relPath.Contains("..")
-			    && relPath.StartsWith("/" + Program.CoreWarPrefix + "/"))
+				&& relPath.StartsWith("/" + Program.CoreWarPrefix + "/"))
 				return relPath.Substring(Program.CoreWarPrefix.Length + 2);
 			return null;
 		}

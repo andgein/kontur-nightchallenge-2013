@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Core;
 using Core.Game;
 using Server.Handlers;
 
@@ -63,7 +62,7 @@ namespace Server
 				catch (Exception e)
 				{
 					context.Response.ContentType = "text/plain; charset: utf-8";
-					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+					context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(context.Response.OutputStream))
 						writer.Write(e.ToString());
 					context.Response.Close();

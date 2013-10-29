@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContracts\FinishedGameInfo.cs" />
+    <Compile Include="DataContracts\FinishedGamesWithEnemy.cs" />
     <Compile Include="DataContracts\PlayerInfo.cs" />
+    <Compile Include="DataContracts\ProgramRankInfo.cs" />
     <Compile Include="DataContracts\Ranking.cs" />
     <Compile Include="DataContracts\StepResponse.cs" />
     <Compile Include="Handlers\AddProgramToArenaHandler.cs" />
