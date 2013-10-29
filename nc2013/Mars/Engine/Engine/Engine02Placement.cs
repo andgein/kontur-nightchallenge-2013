@@ -318,7 +318,7 @@ namespace nMars.Engine
         #region Variables
 
         //various views
-        protected List<EngineWarrior> warriors;
+	    public List<EngineWarrior> warriors;
         private List<IRunningWarrior> runningWarriors;
         private List<IWarrior> iWarriors;
 

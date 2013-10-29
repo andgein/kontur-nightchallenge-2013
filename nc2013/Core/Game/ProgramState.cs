@@ -9,8 +9,8 @@ namespace Core.Game
 		[JsonProperty]
 		public uint? LastPointer { get; set; }
 
-		[JsonProperty]
 		[NotNull]
+		[JsonProperty]
 		public uint[] ProcessPointers { get; set; }
 	}
 }

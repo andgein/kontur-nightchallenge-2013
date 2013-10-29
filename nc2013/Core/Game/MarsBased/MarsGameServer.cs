@@ -13,7 +13,9 @@ namespace Core.Game.MarsBased
 		[NotNull]
 		public IGame ResumeGame([NotNull] GameState gameState)
 		{
-			return new MarsGame(gameState);
+			var game = new MarsGame(gameState.ProgramStartInfos);
+			game.Step(gameState.CurrentStep);
+			return game;
 		}
 	}
 }

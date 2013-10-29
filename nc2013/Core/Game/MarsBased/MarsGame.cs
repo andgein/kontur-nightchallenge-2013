@@ -20,13 +20,18 @@ namespace Core.Game.MarsBased
 			rules = new Rules
 			{
 				WarriorsCount = programStartInfos.Length,
+				Rounds = 1,
+				MaxCycles = 80000,
+				CoreSize = 8000,
+				PSpaceSize = 0,
+				EnablePSpace = false,
+				MaxProcesses = 1000,
+				MaxLength = 100,
+				MinDistance = 100,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
 			};
-		}
-
-		public MarsGame([NotNull] GameState gameState)
-		{
-			this.gameState = gameState;
-			// todo - resume game
 		}
 
 		[NotNull]
@@ -42,59 +47,84 @@ namespace Core.Game.MarsBased
 			if (currentTurn < 0)
 				throw new InvalidOperationException(string.Format("Cannot rewind game state behind 0 turn. StepCount: {0}", stepCount));
 			gameState = GetGameState(currentTurn);
-			return null;
+			return null; // todo !!!
 		}
 
 		public void StepToEnd()
 		{
-			if (currentTurn < 80000) // todo !!! winner detection and this limit
-				Step(80000 - currentTurn);
+			var stepsToEnd = rules.MaxCycles - currentTurn;
+			if (stepsToEnd > 0)
+				Step(stepsToEnd);
 		}
 
 		[NotNull]
 		private GameState GetGameState(int turnsToMake)
 		{
-			//todo !!! account for start pi.StartAddress
-			var warriors = programStartInfos.Select((pi, idx) => ParseWarrior(pi.Program, string.Format("w{0}", idx))).ToArray();
-			var project = new MarsProject(rules, warriors);
-			var engine = new MarsEngine(project);
-			engine.Run(turnsToMake);
+			var engine = CreateEngine();
+			var finished = engine.Run(turnsToMake);
 
-			var currentProgram = turnsToMake % project.Warriors.Count;
+			var startInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
+			{
+				Program = pi.Program,
+				StartAddress = (uint)engine.warriors[idx].LoadAddress,
+			}).ToArray();
+
+			var currentProgram = turnsToMake % engine.WarriorsCount;
+
+			var winner = !finished || engine.LiveWarriorsCount != 1 ? (int?)null : engine.LiveWarriors.Single().WarriorIndex;
 
 			var memoryState = new CellState[engine.CoreSize];
-			for (var p = 0; p < memoryState.Length; p++)
+			for (var addr = 0; addr < memoryState.Length; addr++)
 			{
-				memoryState[p] = new CellState
+				memoryState[addr] = new CellState
 				{
-					Instruction = engine.core[p].ToString(),
-					CellType = engine.core[p].Operation == Operation.DAT ? CellType.Data : CellType.Command,
-					LastModifiedByProgram = engine.core[p].OriginalOwner.WarriorIndex,
-					LastModifiedStep = null,
+					Instruction = engine.core[addr].ToString(),
+					CellType = engine.core[addr].Operation == Operation.DAT ? CellType.Data : CellType.Command,
+					LastModifiedByProgram = engine.core[addr].OriginalOwner.WarriorIndex,
+					LastModifiedStep = null, // todo !!!
 				};
 			}
 
-			var programStates = new ProgramState[0]; // todo !!!
+			var programStates = new ProgramState[engine.WarriorsCount];
+			for (var idx = 0; idx < programStates.Length; idx++)
+			{
+				var w = engine.warriors[idx];
+				programStates[idx] = new ProgramState
+				{
+					LastPointer = currentTurn <= idx ? (uint?)null : (uint)w.PrevInstruction.Address,
+					ProcessPointers = w.Tasks.Select(ip => (uint)ip).ToArray(),
+				};
+			}
 
 			return new GameState
 			{
+				ProgramStartInfos = startInfos,
+				CurrentStep = currentTurn,
 				CurrentProgram = currentProgram,
+				Winner = winner,
 				MemoryState = memoryState,
 				ProgramStates = programStates,
-				CurrentStep = currentTurn,
-				Winner = null, // todo !!!
 			};
 		}
 
 		[NotNull]
-		private ExtendedWarrior ParseWarrior([NotNull] string source, [NotNull] string filename)
+		private MarsEngine CreateEngine()
+		{
+			var warriors = programStartInfos.Select((pi, idx) => ParseWarrior(pi, string.Format("w{0}", idx))).ToArray();
+			var project = new MarsProject(rules, warriors);
+			return new MarsEngine(project);
+		}
+
+		[NotNull]
+		private ExtendedWarrior ParseWarrior([NotNull] ProgramStartInfo programStartInfo, [NotNull] string filename)
 		{
 			var warriorParser = new MarsWarriorParser(rules);
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
-			var warrior = warriorParser.Parse(source, implicitName);
+			var warrior = warriorParser.Parse(programStartInfo.Program, implicitName);
 			if (warrior == null)
-				throw new InvalidOperationException(string.Format("Failed to parse warrior {0}: {1}", implicitName, source));
+				throw new InvalidOperationException(string.Format("Failed to parse warrior {0}: {1}", implicitName, programStartInfo));
 			warrior.FileName = filename;
+			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
 			return warrior;
 		}
 	}

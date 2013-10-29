@@ -19,6 +19,8 @@ namespace Core.Game
 		{
 			gameState = new GameState
 			{
+				ProgramStartInfos = programStartInfos,
+				CurrentStep = 0,
 				CurrentProgram = 0,
 				ProgramStates = programStartInfos.Select((p, i) => new ProgramState {ProcessPointers = new[] {(uint) (i*1000), (uint) (i*1000 + 100)}}).ToArray(),
 			};

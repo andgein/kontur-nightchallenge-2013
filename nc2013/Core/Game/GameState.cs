@@ -6,11 +6,15 @@ namespace Core.Game
 	[JsonObject]
 	public class GameState
 	{
+		[NotNull]
 		[JsonProperty]
-		public int CurrentProgram { get; set; }
+		public ProgramStartInfo[] ProgramStartInfos { get; set; }
 
 		[JsonProperty]
 		public int CurrentStep { get; set; }
+
+		[JsonProperty]
+		public int CurrentProgram { get; set; }
 
 		[JsonProperty]
 		public int? Winner { get; set; }
