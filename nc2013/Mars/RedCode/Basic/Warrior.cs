@@ -91,6 +91,11 @@ namespace nMars.RedCode
             get { return StartOffset; }
         }
 
+		int? IWarrior.PredefinedLoadAddress
+		{
+			get { return PredefinedLoadAddress; }
+		}
+
         string IWarrior.Name
         {
             get { return Name; }
@@ -235,6 +240,7 @@ namespace nMars.RedCode
         public string Version = "";
         public int Pin = PSpace.UNSHARED;
         public string FileName = null;
+		public int? PredefinedLoadAddress = null;
         public Rules Rules;
 
         #endregion

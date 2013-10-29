@@ -53,10 +53,23 @@ namespace nMars.Engine
             get { return SourceWarrior.StartOffset; }
         }
 
+		public int? PredefinedLoadAddress
+        {
+            get { return SourceWarrior.PredefinedLoadAddress; }
+        }
+
         public int LoadAddress
         {
-            get { return loadAddress; }
-            set { loadAddress = value; }
+	        get
+	        {
+				return PredefinedLoadAddress.HasValue ? PredefinedLoadAddress.Value : loadAddress;
+	        }
+	        set
+	        {
+				if (PredefinedLoadAddress.HasValue)
+					throw new InvalidOperationException("Cannot change LoadAddress");
+		        loadAddress = value;
+	        }
         }
 
         public string Name

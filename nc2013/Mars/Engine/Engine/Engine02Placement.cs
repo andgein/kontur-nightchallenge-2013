@@ -63,16 +63,26 @@ namespace nMars.Engine
             {
                 if (rules.WarriorsCount == 2)
                 {
-                    if (permutate)
-                    {
-                        throw new NotImplementedException("Permutations are not implemented");
-                    }
-                    else
-                    {
-                        int positions = coreSize + 1 - (rules.MinDistance << 1);
-                        warriors[1].LoadAddress = rules.MinDistance + seed % positions;
-                        seed = Rng(seed);
-                    }
+	                if (permutate)
+		                throw new NotImplementedException("Permutations are not implemented");
+
+	                var w1 = warriors[0];
+	                var w2 = warriors[1];
+	                if (w1.PredefinedLoadAddress.HasValue)
+	                {
+		                if (!w2.PredefinedLoadAddress.HasValue)
+							w2.LoadAddress = NextLoadAddress(w1.PredefinedLoadAddress.Value);
+	                }
+	                else
+	                {
+		                if (w2.PredefinedLoadAddress.HasValue)
+							w1.LoadAddress = NextLoadAddress(w2.PredefinedLoadAddress.Value);
+		                else
+		                {
+							w1.LoadAddress = 0;
+							w2.LoadAddress = NextLoadAddress(0);
+		                }
+	                }
                 }
                 else
                 {
@@ -84,19 +94,25 @@ namespace nMars.Engine
             //Load warriors
             for (int w = 0; w < rules.WarriorsCount; w++)
             {
-                EngineWarrior engineWarrior = warriors[w];
-                Load(engineWarrior, engineWarrior.LoadAddress);
+                var engineWarrior = warriors[w];
+                Load(engineWarrior);
             }
         }
 
-        #endregion
+		private int NextLoadAddress(int baseAddress)
+		{
+			var positions = coreSize + 1 - (rules.MinDistance << 1);
+			var nextLoadAddress = mod(baseAddress + rules.MinDistance + seed % positions);
+			seed = Rng(seed);
+			return nextLoadAddress;
+		}
+
+	    #endregion
 
         #region Helpers
 
-        public void Load(EngineWarrior warrior, int loadAddress)
+	    private void Load(EngineWarrior warrior)
         {
-            warrior.LoadAddress = loadAddress;
-
             //copy warrior to core
             for (int a = 0; a < warrior.Length; a++)
             {
@@ -113,7 +129,7 @@ namespace nMars.Engine
                         throw new RulesException("Current rules don't support p-space operations");
                     }
                 }
-                int addr = mod(loadAddress + a);
+				int addr = mod(warrior.LoadAddress + a);
                 core[addr] = new EngineInstruction(instruction, addr, warrior);
             }
         }

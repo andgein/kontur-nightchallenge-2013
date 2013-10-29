@@ -14,6 +14,8 @@ namespace nMars.RedCode
         /// </summary>
         int StartOffset { get; }
 
+		int? PredefinedLoadAddress { get; }
+
         /// <summary>
         /// Length
         /// </summary>
