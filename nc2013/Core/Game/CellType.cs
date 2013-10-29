@@ -4,10 +4,9 @@ using Newtonsoft.Json.Converters;
 namespace Core.Game
 {
 	[JsonConverter(typeof(StringEnumConverter))]
-	public enum ProcessStateChangeType
+	public enum CellType
 	{
-		Executed,
-		Killed,
-		Splitted
+		Data,
+		Command,
 	}
 }

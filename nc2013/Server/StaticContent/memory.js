@@ -85,9 +85,9 @@ var Cell = Base.extend({
 	_calcListingItemContent: function () {
 		if (!this.cellState)
 			return this.address + " DAT 0 0";
-		return this.address + " " + this.cellState.command + " " + this.cellState.argA + " " + this.cellState.argB;
+		return this.address + " " + this.cellState.instruction;
 	},
 	_isEmptyState: function () {
-		return !this.cellState || this.cellState.command == "DAT" && this.cellState.argA == "0" && this.cellState.argB == "0";
+		return !this.cellState || this.cellState.cellType == "Data";
 	}
 });

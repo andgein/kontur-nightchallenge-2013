@@ -6,22 +6,17 @@ namespace Core.Game
 	[JsonObject]
 	public class CellState
 	{
-		[JsonProperty]
 		[NotNull]
-		public string Command { get; set; }
+		[JsonProperty]
+		public string Instruction { get; set; }
 
 		[JsonProperty]
-		[NotNull]
-		public string ArgA { get; set; }
+		public CellType CellType { get; set; }
 
 		[JsonProperty]
-		[NotNull]
-		public string ArgB { get; set; }
+		public int? LastModifiedByProgram { get; set; }
 
 		[JsonProperty]
-		public int LastModifiedByProgram { get; set; }
-
-		[JsonProperty]
-		public int LastModifiedStep { get; set; }
+		public int? LastModifiedStep { get; set; }
 	}
 }

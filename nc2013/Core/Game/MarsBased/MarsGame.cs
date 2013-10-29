@@ -67,11 +67,10 @@ namespace Core.Game.MarsBased
 			{
 				memoryState[p] = new CellState
 				{
-					Command = engine.core[p].ToString(),
-					ArgA = engine.core[p].ValueA.ToString(),
-					ArgB = engine.core[p].ValueB.ToString(),
+					Instruction = engine.core[p].ToString(),
+					CellType = engine.core[p].Operation == Operation.DAT ? CellType.Data : CellType.Command,
 					LastModifiedByProgram = engine.core[p].OriginalOwner.WarriorIndex,
-					LastModifiedStep = -1, // todo !!!
+					LastModifiedStep = null,
 				};
 			}
 

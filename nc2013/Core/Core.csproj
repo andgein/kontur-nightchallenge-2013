@@ -45,6 +45,7 @@
     <Compile Include="Game\Arena.cs" />
     <Compile Include="Game\CellState.cs" />
     <Compile Include="CodeAnnotations.cs" />
+    <Compile Include="Game\CellType.cs" />
     <Compile Include="Game\Diff.cs" />
     <Compile Include="Game\GameServer.cs" />
     <Compile Include="Game\GameState.cs" />
