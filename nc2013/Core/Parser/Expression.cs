@@ -1,7 +1,16 @@
+using System;
+using Core.Engine;
+
 namespace Core.Parser
 {
-    class Expression
+    abstract class Expression
     {
+        public abstract int Calculate();
+
+        public Expression Decremented()
+        {
+            return new NumberExpression((Calculate() - 1) % Parameters.CORESIZE);
+        }
     }
 
     class BinaryExpression : Expression
@@ -16,6 +25,29 @@ namespace Core.Parser
             Left = left;
             Right = right;
         }
+
+        public override int Calculate()
+        {
+            int answer;
+            switch (Op)
+            {
+                case BinaryOperation.Sum:
+                    answer = Left.Calculate() + Right.Calculate();
+                    break;
+                case BinaryOperation.Sub:
+                    answer = Left.Calculate() - Right.Calculate();
+                    break;
+                case BinaryOperation.Mul:
+                    answer = Left.Calculate() * Right.Calculate();
+                    break;
+                case BinaryOperation.Div:
+                    answer = Left.Calculate() / Right.Calculate();
+                    break;
+                default:
+                    throw new InvalidOperationException("Invalid operation to calculate: " + Op);
+            }
+            return answer % Parameters.CORESIZE;
+        }
     }
 
     class UnaryExpression : Expression
@@ -28,6 +60,16 @@ namespace Core.Parser
             Op = op;
             Sub = sub;
         }
+
+        public override int Calculate()
+        {
+            switch (Op)
+            {
+                case UnaryOperation.Negate:
+                    return -Sub.Calculate();
+            }
+            throw new InvalidOperationException("Internal error. Unknown unary operation.");
+        }
     }
 
     class NumberExpression : Expression
@@ -38,6 +80,11 @@ namespace Core.Parser
         {
             Value = value;
         }
+
+        public override int Calculate()
+        {
+            return Value;
+        }
     }
 
     class VariableExpression : Expression
@@ -47,6 +94,11 @@ namespace Core.Parser
         public VariableExpression(string name)
         {
             Name = name;
+        }
+
+        public override int Calculate()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

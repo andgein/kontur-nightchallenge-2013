@@ -5,9 +5,9 @@ namespace Core.Parser
 {
     internal class WarriorParser : Parser
     {
-        private readonly StatementFactory StatementFactory = new StatementFactory();
+        private readonly StatementFactory statementFactory = new StatementFactory();
         private readonly 
-			ExpressionParser ExpressionParser = new ExpressionParser();
+			ExpressionParser expressionParser = new ExpressionParser();
 
         public Warrior Parse(String text)
         {
@@ -19,6 +19,9 @@ namespace Core.Parser
                     continue;
                 warrior.AddStatement(ParseLine(stLine));
             }
+
+            // TODO warrior.EvaluateAllExpressions()
+
             return warrior;
         }
 
@@ -48,20 +51,20 @@ namespace Core.Parser
             if (!IsCommandToken(command))
                 throw new CompilationException(String.Format("Expected command, but found '{0}'", command));
 
-            var statement = StatementFactory.Create(command);
+            var statement = statementFactory.Create(command);
             statement.Label = label;
 
             if (!RestOnlyWhitespaces())
             {
                 statement.ModeA = ParseAddressingMode();
-                statement.FieldA = ExpressionParser.Parse(State);
+                statement.FieldA = expressionParser.Parse(State);
             }
 
             if (!RestOnlyWhitespaces())
             {
                 ParseComma();
                 statement.ModeB = ParseAddressingMode();
-                statement.FieldB = ExpressionParser.Parse(State);
+                statement.FieldB = expressionParser.Parse(State);
             }
 
             return statement;
@@ -100,7 +103,7 @@ namespace Core.Parser
 
         private bool IsCommandToken(string token)
         {
-            return StatementFactory.Commands.ContainsKey(token.ToUpper());
+            return statementFactory.Commands.ContainsKey(token.ToUpper());
         }
     }
 }

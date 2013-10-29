@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Core.Parser
 {
     [TestFixture]
     class ExpressionParserTest
     {
-        private ExpressionParser Parser;
+        private ExpressionParser parser;
 
         [SetUp]
         public void SetUp()
         {
-            Parser = new ExpressionParser();
+            parser = new ExpressionParser();
         }
 
         [Test]
         public void TestSimpleExpression()
         {
-            var expr = Parser.Parse("1 + 2");
+            var expr = parser.Parse("1 + 2");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression) expr).Op, BinaryOperation.Sum);
             var left = ((BinaryExpression) expr).Left;
@@ -36,7 +32,7 @@ namespace Core.Parser
         [Test]
         public void TestSimpleTreeSum()
         {
-            var expr = Parser.Parse("1 + 2 + 3");
+            var expr = parser.Parse("1 + 2 + 3");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression) expr).Op, BinaryOperation.Sum);
             var left = ((BinaryExpression) expr).Left;
@@ -51,7 +47,7 @@ namespace Core.Parser
         [Test]
         public void TestBrackets()
         {
-            var expr = Parser.Parse("1 + (2 + 3)");
+            var expr = parser.Parse("1 + (2 + 3)");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression)expr).Op, BinaryOperation.Sum);
             var left = ((BinaryExpression) expr).Left;
@@ -66,7 +62,7 @@ namespace Core.Parser
         [Test]
         public void TestBracketsWithSub()
         {
-            var expr = Parser.Parse("1 - (2 - 3)");
+            var expr = parser.Parse("1 - (2 - 3)");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression) expr).Op, BinaryOperation.Sub);
             var left = ((BinaryExpression) expr).Left;
@@ -79,7 +75,7 @@ namespace Core.Parser
         [Test]
         public void TestPriority()
         {
-            var expr = Parser.Parse("1 + 2 * 10");
+            var expr = parser.Parse("1 + 2 * 10");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression) expr).Op, BinaryOperation.Sum);
             var left = ((BinaryExpression) expr).Left;
@@ -100,7 +96,7 @@ namespace Core.Parser
         [Test]
         public void TestVariables()
         {
-            var expr = Parser.Parse("1 + a_1b3");
+            var expr = parser.Parse("1 + a_1b3");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
             Assert.AreEqual(((BinaryExpression)expr).Op, BinaryOperation.Sum);
             var left = ((BinaryExpression)expr).Left;
@@ -116,7 +112,7 @@ namespace Core.Parser
         [Test]
         public void TestWhitespaces()
         {
-            var expr = Parser.Parse("       1 \t + \t\t\t    2  \t");
+            var expr = parser.Parse("       1 \t + \t\t\t    2  \t");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
         }
     }
