@@ -2,7 +2,7 @@
 
 namespace Core.Game
 {
-	public class GameServer : IGameServer
+	public class StupidGameServer : IGameServer
 	{
 		[NotNull]
 		public IGame StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)

@@ -1,31 +1,29 @@
 using System;
+using System.Collections;
 using System.IO;
-using Core.Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Server.Debugging;
 
 namespace Server.Sessions
 {
-	public class Session : ISession
+	public class Session : ISession, ISessionItems
 	{
 		private readonly string sessionStorageFolder;
-		private readonly Lazy<IDebugger> lazyDebugger;
+		private readonly Hashtable items = new Hashtable();
 
-		public Session(Guid sessionId, [NotNull] string sessionStorageFolder, [NotNull] IGameServer gameServer)
+		public Session(Guid sessionId, [NotNull] string sessionStorageFolder)
 		{
 			SessionId = sessionId;
 			this.sessionStorageFolder = sessionStorageFolder;
-			lazyDebugger = new Lazy<IDebugger>(() => new Debugger(gameServer, this));
 		}
 
 		public Guid SessionId { get; private set; }
 
 		[NotNull]
-		public IDebugger Debugger
+		public ISessionItems Items
 		{
-			get { return lazyDebugger.Value; }
+			get { return this; }
 		}
 
 		public void Save<T>([NotNull] string key, [CanBeNull] T value)
@@ -46,6 +44,13 @@ namespace Server.Sessions
 			var valueString = File.ReadAllText(key);
 			var result = JsonConvert.DeserializeObject<T>(valueString, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
 			return result;
+		}
+
+		[CanBeNull]
+		object ISessionItems.this[object key]
+		{
+			get { return items[key]; }
+			set { items[key] = value; }
 		}
 	}
 }

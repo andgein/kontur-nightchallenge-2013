@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -47,30 +50,32 @@
     <Compile Include="Arena\Ranking.cs" />
     <Compile Include="Debugging\DebuggerHandler.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
+    <Compile Include="Debugging\DebuggerManager.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
     <Compile Include="Arena\ArenaSubmitHandler.cs" />
     <Compile Include="Arena\ArenaPlayerHandler.cs" />
+    <Compile Include="Debugging\IDebuggerManager.cs" />
     <Compile Include="HttpListenerContextExtensions.cs" />
     <Compile Include="Arena\RankingHandler.cs" />
     <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerGameStateHandler.cs" />
-    <Compile Include="Handlers\HttpHandlerBase.cs" />
     <Compile Include="Handlers\IHttpHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Debugging\DebuggerStepHandler.cs" />
     <Compile Include="HttpException.cs" />
     <Compile Include="Debugging\IDebugger.cs" />
+    <Compile Include="Sessions\HttpSessionManager.cs" />
+    <Compile Include="Sessions\IHttpSessionManager.cs" />
     <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Debugging\DebuggerStartGameHandler.cs" />
+    <Compile Include="Sessions\ISessionItems.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
-    <Compile Include="Sessions\RequireAuthorizationAttribute.cs" />
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
-    <Compile Include="Sessions\LoginHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\fonts\glyphicons-halflings-regular.eot">
@@ -109,6 +114,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="log.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="StaticContent\bootstrap.min.js" />
     <Content Include="StaticContent\common.css" />
     <None Include="StaticContent\json2.js">

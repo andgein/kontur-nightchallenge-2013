@@ -5,8 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Core;
 using Core.Arena;
-using Core.Game.MarsBased;
+using Core.Game;
+using JetBrains.Annotations;
+using log4net;
+using log4net.Config;
 using Server.Arena;
 using Server.Debugging;
 using Server.Handlers;
@@ -14,34 +18,39 @@ using Server.Sessions;
 
 namespace Server
 {
-	public class Program
+	public static class Program
 	{
 	    private const int port = 19999;
 		public const string CoreWarPrefix = "/corewar/";
 		public const string DefaultUrl = CoreWarPrefix + "index.html";
-		public const string LoginUrl = CoreWarPrefix + "login";
+
+		private static readonly ILog mainLog = LogManager.GetLogger("main");
+		private static readonly ILog log = LogManager.GetLogger(typeof (Program));
 
 		public static void Main()
 		{
+			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
 			var listener = new HttpListener();
-			listener.Prefixes.Add(String.Format("http://*:{0}{1}", port, CoreWarPrefix));
+			string prefix = String.Format("http://*:{0}{1}", port, CoreWarPrefix);
+			listener.Prefixes.Add(prefix);
 			listener.Start();
-			var gameServer = new MarsGameServer();
-			var sessionManager = new SessionManager("sessions", gameServer);
+			var gameServer = new StupidGameServer();
+			var debuggerManager = new DebuggerManager(gameServer);
+			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
 			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
 			var handlers = new IHttpHandler[]
 			{
 				new DebuggerHandler(),
-				new DebuggerStartGameHandler(sessionManager),
-				new DebuggerGameStateHandler(sessionManager),
-				new DebuggerStepHandler(sessionManager),
-				new DebuggerStepToEndHandler(sessionManager),
-				new LoginHandler(sessionManager), 
+				new DebuggerStartGameHandler(httpSessionManager, debuggerManager),
+				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
+				new DebuggerStepHandler(httpSessionManager, debuggerManager),
+				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
 				new StaticHandler(),
 				new RankingHandler(),
 				new ArenaSubmitHandler(playersRepo),
 				new ArenaPlayerHandler(playersRepo)
 			};
+            mainLog.InfoFormat("Listening {0}", prefix);
 			Process.Start(String.Format("http://localhost:{0}{1}", port, DefaultUrl));
 			while (true)
 			{
@@ -50,15 +59,19 @@ namespace Server
 			}
 		}
 
-		private static void HandleRequest(HttpListenerContext context, IEnumerable<IHttpHandler> handlers)
+		private static void HandleRequest([NotNull] HttpListenerContext context, [NotNull] IEnumerable<IHttpHandler> handlers)
 		{
 			try
 			{
 				try
 				{
+					log.InfoFormat("Incoming request: {0}", context.Request.RawUrl);
 					var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 					if (handlersThatCanHandle.Length == 1)
+					{
+						log.InfoFormat("Handing request with {0}", handlersThatCanHandle[0].GetType().Name);
 						handlersThatCanHandle[0].Handle(context);
+					}
 					else if (handlersThatCanHandle.Length == 0)
 						throw new HttpException(HttpStatusCode.NotImplemented, string.Format("Method '{0}' is not implemented", context.Request.RawUrl));
 					else
@@ -71,6 +84,7 @@ namespace Server
 				}
 				catch (Exception e)
 				{
+					log.Error("Request failed", e);
 					context.Response.ContentType = "text/plain; charset: utf-8";
 					context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(context.Response.OutputStream))

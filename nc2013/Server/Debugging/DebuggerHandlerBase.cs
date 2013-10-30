@@ -5,20 +5,25 @@ using Server.Sessions;
 
 namespace Server.Debugging
 {
-	[RequireAuthorization]
 	public abstract class DebuggerHandlerBase : StrictPathHttpHandlerBase
 	{
-		private readonly ISessionManager sessionManager;
+		private readonly IHttpSessionManager httpSessionManager;
+		private readonly IDebuggerManager debuggerManager;
 
-		protected DebuggerHandlerBase([NotNull] string path, [NotNull] ISessionManager sessionManager) : base(path)
+		protected DebuggerHandlerBase([NotNull] string path, [NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base(path)
 		{
-			this.sessionManager = sessionManager;
+			this.httpSessionManager = httpSessionManager;
+			this.debuggerManager = debuggerManager;
 		}
 
-		public override sealed void DoHandle([NotNull] HttpListenerContext context)
+		public override sealed void Handle([NotNull] HttpListenerContext context)
 		{
-			var session = sessionManager.GetSession(context.GetSessionId());
-			DoHandle(context, session.Debugger);
+			var session = httpSessionManager.GetSession(context);
+			lock (session)
+			{
+				var debugger = debuggerManager.GetDebugger(session);
+				DoHandle(context, debugger);
+			}
 		}
 
 		protected abstract void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger);
