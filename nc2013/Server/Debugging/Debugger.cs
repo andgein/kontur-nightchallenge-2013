@@ -2,6 +2,7 @@
 using System.Net;
 using Core.Game;
 using JetBrains.Annotations;
+using log4net;
 using Server.Sessions;
 
 namespace Server.Debugging
@@ -13,13 +14,22 @@ namespace Server.Debugging
 		private readonly ISession session;
 		private IGame game;
 
+		private static readonly ILog log = LogManager.GetLogger(typeof (Debugger));
+
 		public Debugger([NotNull] IGameServer gameServer, [NotNull] ISession session)
 		{
 			this.gameServer = gameServer;
 			this.session = session;
 			var persistedGameState = session.Load<GameState>(debuggerGameStateKey);
 			if (persistedGameState != null)
-				game = gameServer.ResumeGame(persistedGameState);
+				try
+				{
+					game = gameServer.ResumeGame(persistedGameState);
+				}
+				catch (Exception e)
+				{
+					log.Error("Resume game failed", e);
+				}
 		}
 
 		public void StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
