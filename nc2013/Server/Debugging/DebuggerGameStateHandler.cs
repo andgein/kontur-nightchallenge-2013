@@ -6,7 +6,7 @@ namespace Server.Debugging
 {
 	public class DebuggerGameStateHandler : DebuggerHandlerBase
 	{
-		public DebuggerGameStateHandler([NotNull] ISessionManager sessionManager) : base("debugger/state", sessionManager) {}
+		public DebuggerGameStateHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/state", httpSessionManager, debuggerManager) {}
 
 		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
 		{

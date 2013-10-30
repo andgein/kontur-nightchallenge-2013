@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using Core.Game;
 using JetBrains.Annotations;
 
 namespace Server.Sessions
@@ -8,13 +7,11 @@ namespace Server.Sessions
 	public class SessionManager : ISessionManager
 	{
 		private readonly string sessionStorageFolder;
-		private readonly IGameServer gameServer;
 		private readonly ConcurrentDictionary<Guid, ISession> sessions = new ConcurrentDictionary<Guid, ISession>();
 
-		public SessionManager([NotNull] string sessionStorageFolder, [NotNull] IGameServer gameServer)
+		public SessionManager([NotNull] string sessionStorageFolder)
 		{
 			this.sessionStorageFolder = sessionStorageFolder;
-			this.gameServer = gameServer;
 		}
 
 		[NotNull]
@@ -34,7 +31,7 @@ namespace Server.Sessions
 		[NotNull]
 		private Session CreateSession(Guid sessionId)
 		{
-			return new Session(sessionId, sessionStorageFolder, gameServer);
+			return new Session(sessionId, sessionStorageFolder);
 		}
 	}
 }

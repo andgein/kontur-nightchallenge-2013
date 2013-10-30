@@ -6,7 +6,7 @@ namespace Server.Debugging
 {
 	public class DebuggerStepToEndHandler : DebuggerHandlerBase
 	{
-		public DebuggerStepToEndHandler([NotNull] ISessionManager sessionManager) : base("debugger/step/end", sessionManager) {}
+		public DebuggerStepToEndHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/step/end", httpSessionManager, debuggerManager) {}
 
 		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
 		{

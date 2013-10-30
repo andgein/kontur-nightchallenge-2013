@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Core.Arena;
-using Core.Game.MarsBased;
+using Core.Game;
 using Server.Arena;
 using Server.Debugging;
 using Server.Handlers;
@@ -14,28 +14,27 @@ using Server.Sessions;
 
 namespace Server
 {
-	public class Program
+	public static class Program
 	{
 		public const string CoreWarPrefix = "/corewar/";
 		public const string DefaultUrl = CoreWarPrefix + "index.html";
-		public const string LoginUrl = CoreWarPrefix + "login";
 
 		public static void Main()
 		{
 			var listener = new HttpListener();
 			listener.Prefixes.Add("http://*" + CoreWarPrefix);
 			listener.Start();
-			var gameServer = new MarsGameServer();
-			var sessionManager = new SessionManager("sessions", gameServer);
+			var gameServer = new StupidGameServer();
+			var debuggerManager = new DebuggerManager(gameServer);
+			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
 			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
 			var handlers = new IHttpHandler[]
 			{
 				new DebuggerHandler(),
-				new DebuggerStartGameHandler(sessionManager),
-				new DebuggerGameStateHandler(sessionManager),
-				new DebuggerStepHandler(sessionManager),
-				new DebuggerStepToEndHandler(sessionManager),
-				new LoginHandler(sessionManager), 
+				new DebuggerStartGameHandler(httpSessionManager, debuggerManager),
+				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
+				new DebuggerStepHandler(httpSessionManager, debuggerManager),
+				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
 				new StaticHandler(),
 				new RankingHandler(),
 				new ArenaSubmitHandler(playersRepo),

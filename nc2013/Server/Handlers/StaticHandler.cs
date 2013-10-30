@@ -4,15 +4,15 @@ using JetBrains.Annotations;
 
 namespace Server.Handlers
 {
-	public class StaticHandler : HttpHandlerBase
+	public class StaticHandler : IHttpHandler
 	{
-		public override bool CanHandle([NotNull] HttpListenerContext context)
+		public bool CanHandle([NotNull] HttpListenerContext context)
 		{
 			var contentType = HttpListenerContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
 			return contentType != null;
 		}
 
-		public override void DoHandle([NotNull] HttpListenerContext context)
+		public void Handle([NotNull] HttpListenerContext context)
 		{
 			var localPath = TryGetLocalPath(context);
 			if (localPath == null)

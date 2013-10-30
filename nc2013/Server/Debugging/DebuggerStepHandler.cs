@@ -10,7 +10,7 @@ namespace Server.Debugging
 		private const int memoryDiffsLimit = 1000;
 		private const int programStateDiffsLimit = 1000;
 
-		public DebuggerStepHandler([NotNull] ISessionManager sessionManager) : base("debugger/step", sessionManager) {}
+		public DebuggerStepHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/step", httpSessionManager, debuggerManager) {}
 
 		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
 		{

@@ -7,7 +7,7 @@ namespace Server.Debugging
 {
 	public class DebuggerStartGameHandler : DebuggerHandlerBase
 	{
-		public DebuggerStartGameHandler([NotNull] ISessionManager sessionManager) : base("debugger/start", sessionManager) {}
+		public DebuggerStartGameHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/start", httpSessionManager, debuggerManager) {}
 
 		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
 		{

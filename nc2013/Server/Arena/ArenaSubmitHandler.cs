@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Text.RegularExpressions;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
@@ -17,7 +16,7 @@ namespace Server.Arena
 			this.players = players;
 		}
 
-		public override void DoHandle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] HttpListenerContext context)
 		{
 			try
 			{

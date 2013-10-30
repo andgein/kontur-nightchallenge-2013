@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
@@ -15,7 +14,7 @@ namespace Server.Arena
 			this.players = players;
 		}
 
-		public override void DoHandle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] HttpListenerContext context)
 		{
 			var programName = context.GetStringParam("name");
 			var programVersion = context.GetOptionalIntParam("version");
@@ -23,7 +22,7 @@ namespace Server.Arena
 			context.SendResponse(CreateDummyPlayerInfo(arenaPlayer));
 		}
 
-		private PlayerInfo CreateDummyPlayerInfo(ArenaPlayer arenaPlayer)
+		private static PlayerInfo CreateDummyPlayerInfo(ArenaPlayer arenaPlayer)
 		{
 			return
 				new PlayerInfo
@@ -41,7 +40,7 @@ namespace Server.Arena
 					GamesByEnemy = new[]
 					{
 						new FinishedGamesWithEnemy {Enemy = "spaceorc", EnemyVersion = 3, Wins = 100, Loses = 20, Draws = 80, LastGames = new[] {new FinishedGameInfo()}},
-						new FinishedGamesWithEnemy {Enemy = "imp", EnemyVersion = 1, Wins = 100, Loses = 20, Draws = 80, LastGames = new[] {new FinishedGameInfo()}},
+						new FinishedGamesWithEnemy {Enemy = "imp", EnemyVersion = 1, Wins = 100, Loses = 20, Draws = 80, LastGames = new[] {new FinishedGameInfo()}}
 					}
 				};
 		}

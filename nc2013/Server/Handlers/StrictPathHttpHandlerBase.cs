@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Server.Handlers
 {
-	public abstract class StrictPathHttpHandlerBase : HttpHandlerBase
+	public abstract class StrictPathHttpHandlerBase : IHttpHandler
 	{
 		private readonly string path;
 
@@ -13,7 +13,7 @@ namespace Server.Handlers
 			this.path = path;
 		}
 
-		public override bool CanHandle([NotNull] HttpListenerContext context)
+		public bool CanHandle([NotNull] HttpListenerContext context)
 		{
 			if (context.Request.Url.AbsolutePath.Equals(Program.CoreWarPrefix + path, StringComparison.OrdinalIgnoreCase))
 			{
@@ -22,5 +22,7 @@ namespace Server.Handlers
 			}
 			return false;
 		}
+
+		public abstract void Handle([NotNull] HttpListenerContext context);
 	}
 }
