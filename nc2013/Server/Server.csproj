@@ -114,6 +114,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="log.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="StaticContent\bootstrap.min.js" />
     <Content Include="StaticContent\common.css" />
     <None Include="StaticContent\json2.js">

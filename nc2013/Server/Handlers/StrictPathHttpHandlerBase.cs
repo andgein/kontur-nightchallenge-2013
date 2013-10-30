@@ -15,12 +15,7 @@ namespace Server.Handlers
 
 		public bool CanHandle([NotNull] HttpListenerContext context)
 		{
-			if (context.Request.Url.AbsolutePath.Equals(Program.CoreWarPrefix + path, StringComparison.OrdinalIgnoreCase))
-			{
-				Console.WriteLine(context.Request.Url);
-				return true;
-			}
-			return false;
+			return context.Request.Url.AbsolutePath.Equals(Program.CoreWarPrefix + path, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public abstract void Handle([NotNull] HttpListenerContext context);
