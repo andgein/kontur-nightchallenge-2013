@@ -1,11 +1,10 @@
 using JetBrains.Annotations;
-using Server.Sessions;
 
 namespace Server.Debugging
 {
 	public class DebuggerGameStateHandler : DebuggerHandlerBase
 	{
-		public DebuggerGameStateHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/state", httpSessionManager, debuggerManager) {}
+		public DebuggerGameStateHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/state", debuggerManager) {}
 
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{

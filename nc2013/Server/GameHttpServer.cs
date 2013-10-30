@@ -25,6 +25,7 @@ namespace Server
 		private Task listenerTask;
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
+		private readonly SessionManager sessionManager;
 
 		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo)
 		{
@@ -34,16 +35,16 @@ namespace Server
 
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
+			sessionManager = new SessionManager("sessions");
 			var gameServer = new MarsGameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
-			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
 			handlers = new IHttpHandler[]
 			{
-				new DebuggerStartHandler(httpSessionManager, debuggerManager),
-				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
-				new DebuggerStepHandler(httpSessionManager, debuggerManager),
-				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
-				new DebuggerResetHandler(httpSessionManager, debuggerManager), 
+				new DebuggerStartHandler(debuggerManager),
+				new DebuggerGameStateHandler(debuggerManager),
+				new DebuggerStepHandler(debuggerManager),
+				new DebuggerStepToEndHandler(debuggerManager),
+				new DebuggerResetHandler(debuggerManager),
 				new StaticHandler(),
 				new RankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo),
@@ -86,10 +87,9 @@ namespace Server
 			try
 			{
 				log.DebugFormat("Incoming request: {0}", httpListenerContext.Request.RawUrl);
-				var context = new GameHttpContext(httpListenerContext, basePath);
-				context.SetBasePathCookie();
 				var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 				if (handlersThatCanHandle.Length == 1)
+				var context = new GameHttpContext(httpListenerContext, basePath, sessionManager);
 				{
 					log.DebugFormat("Handling request with {0}", handlersThatCanHandle[0].GetType().Name);
 					handlersThatCanHandle[0].Handle(context);

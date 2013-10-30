@@ -9,9 +9,6 @@ namespace Server
 {
 	public static class GameHttpContextExtensions
 	{
-		private const string sessionIdCookieName = "sessionId";
-		private const string basePathCookieName = "basePath";
-
 		public static Guid GetGuidParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
 		{
 			var value = context.GetOptionalGuidParam(paramName);
@@ -117,31 +114,35 @@ namespace Server
 			return context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 		}
 
-		public static Guid? TryGetSessionId([NotNull] this GameHttpContext context)
+		public static void SetCookie([NotNull] this GameHttpContext context, [NotNull] string cookieName, [NotNull] string cookieValue, bool httpOnly, bool persistent)
 		{
-			var sessionIdCookie = context.Request.Cookies[sessionIdCookieName];
-			Guid sessionId;
-			if (sessionIdCookie == null || String.IsNullOrEmpty(sessionIdCookie.Value) || !Guid.TryParse(sessionIdCookie.Value, out sessionId))
+			var header = string.Format("{0}={1}; path={2}", cookieName, cookieValue, context.BasePath);
+			if (persistent)
+				header += "; expires=" + DateTime.Now.AddYears(1).ToString("R");
+			if (httpOnly)
+				header += "; httponly";
+			context.Response.AppendHeader("Set-Cookie", header);
+		}
+
+		[CanBeNull]
+		public static string TryGetCookie([NotNull] this GameHttpContext context, [NotNull] string cookieName)
+		{
+			var cookie = context.Request.Cookies[cookieName];
+			if (cookie == null || string.IsNullOrEmpty(cookie.Value))
 				return null;
-			return sessionId;
+			return cookie.Value;
 		}
 
-		public static void SetSessionId([NotNull] this GameHttpContext context, Guid sessionId)
-		{
-			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), context.BasePath) {Expires = DateTime.Now.AddYears(1), HttpOnly = true});
-		}
+		public delegate bool TryParseDelegate<T>([NotNull] string source, out T result);
 
-		public static Guid GetSessionId([NotNull] this GameHttpContext context)
+		[CanBeNull]
+		public static T? TryGetCookie<T>([NotNull] this GameHttpContext context, [NotNull] string cookieName, [NotNull] TryParseDelegate<T> tryParse) where T : struct
 		{
-			var sessionId = context.TryGetSessionId();
-			if (!sessionId.HasValue)
-				throw new InvalidOperationException(sessionIdCookieName + " cookie is not set");
-			return sessionId.Value;
-		}
-
-		public static void SetBasePathCookie([NotNull] this GameHttpContext context)
-		{
-			context.Response.AppendCookie(new Cookie(basePathCookieName, context.BasePath, context.BasePath) {Expires = DateTime.Now.AddYears(1)});
+			var cookieValue = TryGetCookie(context, cookieName);
+			T result;
+			if (string.IsNullOrEmpty(cookieValue) || !tryParse(cookieValue, out result))
+				return null;
+			return result;
 		}
 
 		[CanBeNull]

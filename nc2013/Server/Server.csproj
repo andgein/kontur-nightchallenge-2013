@@ -70,8 +70,6 @@
     <Compile Include="HttpException.cs" />
     <Compile Include="Debugging\IDebugger.cs" />
     <Compile Include="Runtime.cs" />
-    <Compile Include="Sessions\HttpSessionManager.cs" />
-    <Compile Include="Sessions\IHttpSessionManager.cs" />
     <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

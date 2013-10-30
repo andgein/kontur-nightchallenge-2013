@@ -18,11 +18,8 @@ namespace Server.Sessions
 
 		public Session(Guid sessionId, [NotNull] string sessionStorageFolder)
 		{
-			SessionId = sessionId;
 			this.sessionStorageFolder = Path.Combine(sessionStorageFolder, sessionId.ToString());
 		}
-
-		public Guid SessionId { get; private set; }
 
 		[NotNull]
 		public ISessionItems Items
@@ -41,7 +38,7 @@ namespace Server.Sessions
 					{
 						if (!Directory.Exists(sessionStorageFolder))
 							Directory.CreateDirectory(sessionStorageFolder);
-						var valueString = JsonConvert.SerializeObject(value, new JsonSerializerSettings {Formatting = Formatting.None, ContractResolver = new CamelCasePropertyNamesContractResolver()});
+						var valueString = JsonConvert.SerializeObject(value, new JsonSerializerSettings {Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver()});
 						File.WriteAllText(Path.Combine(sessionStorageFolder, key), valueString);
 					}
 				}
