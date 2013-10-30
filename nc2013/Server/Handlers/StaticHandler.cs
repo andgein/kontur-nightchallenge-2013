@@ -6,13 +6,13 @@ namespace Server.Handlers
 {
 	public class StaticHandler : IHttpHandler
 	{
-		public bool CanHandle([NotNull] HttpListenerContext context)
+		public bool CanHandle([NotNull] GameHttpContext context)
 		{
 			var contentType = HttpListenerContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
 			return contentType != null;
 		}
 
-		public void Handle([NotNull] HttpListenerContext context)
+		public void Handle([NotNull] GameHttpContext context)
 		{
 			var localPath = TryGetLocalPath(context);
 			if (localPath == null)
@@ -21,12 +21,12 @@ namespace Server.Handlers
 		}
 
 		[CanBeNull]
-		private static string TryGetLocalPath([NotNull] HttpListenerContext context)
+		private static string TryGetLocalPath([NotNull] GameHttpContext context)
 		{
 			var relPath = context.Request.Url.LocalPath;
 			if (!relPath.Contains("..")
-				&& relPath.StartsWith(Program.CoreWarPrefix, StringComparison.OrdinalIgnoreCase))
-				return relPath.Substring(Program.CoreWarPrefix.Length);
+				&& relPath.StartsWith(context.BasePath, StringComparison.OrdinalIgnoreCase))
+				return relPath.Substring(context.BasePath.Length);
 			return null;
 		}
 	}

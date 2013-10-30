@@ -1,4 +1,3 @@
-using System.Net;
 using JetBrains.Annotations;
 using Server.Handlers;
 using Server.Sessions;
@@ -16,7 +15,7 @@ namespace Server.Debugging
 			this.debuggerManager = debuggerManager;
 		}
 
-		public override sealed void Handle([NotNull] HttpListenerContext context)
+		public override sealed void Handle([NotNull] GameHttpContext context)
 		{
 			var session = httpSessionManager.GetSession(context);
 			lock (session)
@@ -26,6 +25,6 @@ namespace Server.Debugging
 			}
 		}
 
-		protected abstract void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger);
+		protected abstract void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger);
 	}
 }

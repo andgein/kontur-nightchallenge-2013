@@ -1,4 +1,3 @@
-using System.Net;
 using JetBrains.Annotations;
 
 namespace Server.Sessions
@@ -12,7 +11,8 @@ namespace Server.Sessions
 			this.sessionManager = sessionManager;
 		}
 
-		public ISession GetSession(HttpListenerContext context)
+		[NotNull]
+		public ISession GetSession([NotNull] GameHttpContext context)
 		{
 			var sessionId = context.TryGetSessionId();
 			if (sessionId.HasValue)

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Core.Arena;
+﻿using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
 
@@ -14,7 +13,7 @@ namespace Server.Arena
 			this.players = players;
 		}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var programName = context.GetStringParam("name");
 			var programVersion = context.GetOptionalIntParam("version");

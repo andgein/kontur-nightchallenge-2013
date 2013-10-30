@@ -1,5 +1,4 @@
-﻿using System.Net;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Server.Handlers;
 
 namespace Server.Debugging
@@ -8,7 +7,7 @@ namespace Server.Debugging
 	{
 		public DebuggerHandler() : base("debugger") {}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			context.SendStaticFile("debugger.html");
 		}

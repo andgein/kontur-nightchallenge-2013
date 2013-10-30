@@ -1,5 +1,4 @@
-﻿using System.Net;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Server.Handlers;
 
 namespace Server.Arena
@@ -9,7 +8,7 @@ namespace Server.Arena
 		public RankingHandler()
 			: base("arena/ranking") {}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			context.SendResponse(Ranking.CreateDummyRanking());
 		}

@@ -8,7 +8,7 @@ namespace Server.Debugging
 	{
 		public DebuggerGameStateHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/state", httpSessionManager, debuggerManager) {}
 
-		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			context.SendResponse(debugger.GameState);
 		}

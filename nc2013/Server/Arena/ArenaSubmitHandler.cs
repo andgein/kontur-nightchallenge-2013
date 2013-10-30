@@ -16,7 +16,7 @@ namespace Server.Arena
 			this.players = players;
 		}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			try
 			{

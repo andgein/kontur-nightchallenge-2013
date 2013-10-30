@@ -63,7 +63,7 @@
 		<appender-ref ref="errors-file" />
 	</root>
 
-	<logger name="main" additivity="false">
+	<logger name="Server.Program" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
