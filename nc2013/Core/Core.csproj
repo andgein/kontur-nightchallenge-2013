@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arena\BattlePlayerResult.cs" />
+    <Compile Include="Arena\GamesRepo.cs" />
     <Compile Include="Arena\RoundRobinTournament.cs" />
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
     <Compile Include="Arena\TournamentPlayer.cs" />

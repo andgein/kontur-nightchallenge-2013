@@ -26,7 +26,7 @@ namespace Server
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
 
-		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo)
+		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo)
 		{
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, "index.html").AbsoluteUri;
@@ -45,9 +45,9 @@ namespace Server
 				new DebuggerStepHandler(httpSessionManager, debuggerManager),
 				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
 				new StaticHandler(),
-				new RankingHandler(),
+				new RankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo),
-				new ArenaPlayerHandler(playersRepo)
+				new ArenaPlayerHandler(playersRepo, gamesRepo)
 			};
 			stopEvent = new ManualResetEvent(false);
 		}

@@ -31,17 +31,14 @@
 				<th>Противник</th>
 				<th>Побед</th>
 				<th>Поражений</th>
-				<th>Ничьих</th>
 				<th>Последние игры</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
 				<td>{{enemyStats.wins}}</td>
 				<td>{{enemyStats.loses}}</td>
-				<td>{{enemyStats.draws}}</td>
 				<td>
 					тут будет список игр
-
 				</td>
 			</tr>
 		</table>

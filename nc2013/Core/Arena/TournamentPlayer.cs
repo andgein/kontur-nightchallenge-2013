@@ -14,31 +14,25 @@ namespace Core.Arena
 		[JsonIgnore]
 		public Warrior Warrior;
 
-		private sealed class NameVersionEqualityComparer : IEqualityComparer<TournamentPlayer>
+		protected bool Equals(TournamentPlayer other)
 		{
-			public bool Equals(TournamentPlayer x, TournamentPlayer y)
-			{
-				if (ReferenceEquals(x, y)) return true;
-				if (ReferenceEquals(x, null)) return false;
-				if (ReferenceEquals(y, null)) return false;
-				if (x.GetType() != y.GetType()) return false;
-				return string.Equals(x.Name, y.Name) && x.Version == y.Version;
-			}
-
-			public int GetHashCode(TournamentPlayer obj)
-			{
-				unchecked
-				{
-					return ((obj.Name != null ? obj.Name.GetHashCode() : 0)*397) ^ obj.Version;
-				}
-			}
+			return string.Equals(Name, other.Name) && Version == other.Version;
 		}
 
-		private static readonly IEqualityComparer<TournamentPlayer> nameVersionComparerInstance = new NameVersionEqualityComparer();
-
-		public static IEqualityComparer<TournamentPlayer> NameVersionComparer
+		public override bool Equals(object obj)
 		{
-			get { return nameVersionComparerInstance; }
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((TournamentPlayer) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((Name != null ? Name.GetHashCode() : 0)*397) ^ Version;
+			}
 		}
 	}
 }

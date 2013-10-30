@@ -34,7 +34,8 @@ namespace Server
 		{
 			var prefix = GetPrefix(args);
 			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
-			var httpServer = new GameHttpServer(prefix, playersRepo);
+			var gamesRepo = new GamesRepo(new DirectoryInfo("games"));
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -43,11 +44,7 @@ namespace Server
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
 			Process.Start(httpServer.DefaultUrl);
-			var tournamentRunner = new TournamentRunner(
-				playersRepo,
-				new DirectoryInfo("games"),
-				new FileInfo("games\\ranking.json"),
-				10);
+			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
 			tournamentRunner.Start();
 			httpServer.WaitForTermination();
 			log.InfoFormat("Stopped");

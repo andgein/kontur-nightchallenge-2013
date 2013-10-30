@@ -12,18 +12,15 @@ namespace Server.Arena
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(TournamentRunner));
 		private readonly PlayersRepo playersRepo;
-		private readonly DirectoryInfo gameLogsDir;
-		private readonly FileInfo rankingFile;
+		private readonly GamesRepo gamesRepo;
 		private readonly int battlesPerPair;
 		private readonly WarriorParser parser = new WarriorParser();
 
-		public TournamentRunner(PlayersRepo playersRepo, DirectoryInfo gameLogsDir, FileInfo rankingFile, int battlesPerPair)
+		public TournamentRunner(PlayersRepo playersRepo, GamesRepo gamesRepo, int battlesPerPair)
 		{
 			this.playersRepo = playersRepo;
-			this.gameLogsDir = gameLogsDir;
-			this.rankingFile = rankingFile;
+			this.gamesRepo = gamesRepo;
 			this.battlesPerPair = battlesPerPair;
-			if (!gameLogsDir.Exists) gameLogsDir.Create();
 		}
 
 		public void Start()
@@ -47,8 +44,8 @@ namespace Server.Arena
 					log.InfoFormat("Warriors changed! Tournament {0}. {1} warriors", i, players.Length);
 					var tournament = new RoundRobinTournament(
 						battlesPerPair,
-						new FileInfo(gameLogsDir.FullName + "\\" + DateTime.Now.ToString("yyMMdd-HHmmss") + ".json"),
-						rankingFile,
+						i.ToString(),
+						gamesRepo,
 						players.Select(p => new TournamentPlayer {Name = p.Name, Version = p.Version, Warrior = parser.Parse(p.Program)}).ToArray()
 						);
 					tournament.Run();
