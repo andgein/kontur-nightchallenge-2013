@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Parser;
+﻿using Core.Parser;
 using Newtonsoft.Json;
 
 namespace Core.Arena
@@ -11,6 +10,8 @@ namespace Core.Arena
 		public string Name;
 		[JsonProperty]
 		public int Version;
+		[JsonIgnore]
+		public string Program;
 		[JsonIgnore]
 		public Warrior Warrior;
 

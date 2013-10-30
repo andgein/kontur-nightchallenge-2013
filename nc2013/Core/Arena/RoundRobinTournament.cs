@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
+using Core.Game;
+using Core.Game.MarsBased;
 
 namespace Core.Arena
 {
@@ -60,7 +63,7 @@ namespace Core.Arena
 				foreach (var pair in pairs)
 				{
 					var battlePlayers = new[] {pair.Item1, pair.Item2};
-					BattlePlayerResult[] res = RunEngine(battlePlayers);
+					var res = RunEngine(battlePlayers);
 					yield return res;
 				}
 		}
@@ -68,7 +71,17 @@ namespace Core.Arena
 		private BattlePlayerResult[] RunEngine(TournamentPlayer[] battlePlayers)
 		{
 			//TODO fix this dummy Code. Use Engine to run battle
-			return battlePlayers.Select(p => new BattlePlayerResult {Player = p, Score = random.Next(2)}).ToArray();
+			var programStartInfos = battlePlayers.Select(p => new ProgramStartInfo { Program = p.Program }).ToArray();
+			var marsGame = new MarsGame(programStartInfos);
+			marsGame.StepToEnd();
+			return battlePlayers.Select((p, idx) => new BattlePlayerResult {Player = p, Score = GetScore(idx, marsGame.GameState.Winner)}).ToArray();
+		}
+
+		private static int GetScore(int player, int? winner)
+		{
+			return !winner.HasValue
+				? 1
+				: player == winner.Value ? 3 : 0;
 		}
 	}
 }

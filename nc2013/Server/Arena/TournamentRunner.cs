@@ -46,7 +46,13 @@ namespace Server.Arena
 						battlesPerPair,
 						i.ToString(),
 						gamesRepo,
-						players.Select(p => new TournamentPlayer {Name = p.Name, Version = p.Version, Warrior = parser.Parse(p.Program)}).ToArray()
+						players.Select(p => new TournamentPlayer
+						{
+							Name = p.Name,
+							Version = p.Version,
+							Program = p.Program,
+							Warrior = parser.Parse(p.Program),
+						}).ToArray()
 						);
 					tournament.Run();
 					lastPlayersHash = playersHash;
