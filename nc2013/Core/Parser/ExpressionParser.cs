@@ -2,9 +2,9 @@
 
 namespace Core.Parser
 {
-    class ExpressionParser : Parser
+    public class ExpressionParser : Parser
     {
-        private Lexem CurrentLexem;
+        private Lexem currentLexem;
 
         public Expression Parse(ParserState state)
         {
@@ -21,9 +21,9 @@ namespace Core.Parser
         private Expression ParseExpression()
         {
             var left = ParseSummand();
-            while (CurrentLexem.Type == LexemType.Plus || CurrentLexem.Type == LexemType.Minus)
+            while (currentLexem.Type == LexemType.Plus || currentLexem.Type == LexemType.Minus)
             {
-                var op = CurrentLexem.Type;
+                var op = currentLexem.Type;
                 NextLexem();
                 var right = ParseSummand();
                 left = (op == LexemType.Plus)
@@ -36,9 +36,9 @@ namespace Core.Parser
         private Expression ParseSummand()
         {
             var left = ParseFactor();
-            while (CurrentLexem.Type == LexemType.Multiply || CurrentLexem.Type == LexemType.Divide)
+            while (currentLexem.Type == LexemType.Multiply || currentLexem.Type == LexemType.Divide)
             {
-                var op = CurrentLexem.Type;
+                var op = currentLexem.Type;
                 NextLexem();
                 var right = ParseFactor();
                 left = (op == LexemType.Multiply)
@@ -50,34 +50,34 @@ namespace Core.Parser
 
         private Expression ParseFactor()
         {
-            if (CurrentLexem.Type == LexemType.Number)
+            if (currentLexem.Type == LexemType.Number)
             {
-                var intValue = CurrentLexem.IntValue;
+                var intValue = currentLexem.IntValue;
                 NextLexem();
                 return new NumberExpression(intValue.GetValueOrDefault());
             }
-            if (CurrentLexem.Type == LexemType.Variable)
+            if (currentLexem.Type == LexemType.Variable)
             {
-                var name = CurrentLexem.StrValue;
+                var name = currentLexem.StrValue;
                 NextLexem();
                 return new VariableExpression(name);
             }
-            if (CurrentLexem.Type == LexemType.Minus)
+            if (currentLexem.Type == LexemType.Minus)
             {
                 NextLexem();
                 var expr = ParseExpression();
                 return new UnaryExpression(UnaryOperation.Negate, expr);
             }
-            if (CurrentLexem.Type == LexemType.OpenBracket)
+            if (currentLexem.Type == LexemType.OpenBracket)
             {
                 NextLexem();
                 var expr = ParseExpression();
-                if (CurrentLexem.Type != LexemType.CloseBracket)
+                if (currentLexem.Type != LexemType.CloseBracket)
                     throw new CompilationException(String.Format("Can't find close bracket"));
                 NextLexem();
                 return expr;
             }
-            throw new CompilationException(String.Format("Invalid token in expression: '{0}'", CurrentLexem));
+            throw new CompilationException(String.Format("Invalid token in expression: '{0}'", currentLexem));
         }
 
         private void NextLexem()
@@ -86,7 +86,7 @@ namespace Core.Parser
 
             if (State.Finished())
             {
-                CurrentLexem = new Lexem(LexemType.End);
+                currentLexem = new Lexem(LexemType.End);
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace Core.Parser
             if (Char.IsDigit(State.Current))
             {
                 var token = ParseToken(Char.IsDigit);
-                CurrentLexem = new Lexem(LexemType.Number, Int32.Parse(token));
+                currentLexem = new Lexem(LexemType.Number, Int32.Parse(token));
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace Core.Parser
             if (IsIdentificatorChar(State.Current))
             {
                 var token = ParseToken(IsIdentificatorChar);
-                CurrentLexem = new Lexem(LexemType.Variable, token);
+                currentLexem = new Lexem(LexemType.Variable, token);
                 return;
             }
 
@@ -115,12 +115,12 @@ namespace Core.Parser
             }
             catch (Exception)
             {
-                CurrentLexem = new Lexem(LexemType.End);
+                currentLexem = new Lexem(LexemType.End);
                 return;
             }
             State.Next();
 
-            CurrentLexem = new Lexem(lexemType);
+            currentLexem = new Lexem(lexemType);
         }
     }
 

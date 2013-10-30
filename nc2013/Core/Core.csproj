@@ -43,7 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\Engine.cs" />
-    <Compile Include="Engine\EngineTest.cs" />
+    <Compile Include="Engine\Memory.cs" />
+    <Compile Include="Engine\ModularArith.cs" />
     <Compile Include="Engine\Parameters.cs" />
     <Compile Include="Engine\RunningWarrior.cs" />
     <Compile Include="Arena\ArenaPlayer.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Parser\CompilationException.cs" />
     <Compile Include="Parser\Expression.cs" />
     <Compile Include="Parser\ExpressionParser.cs" />
-    <Compile Include="Parser\ExpressionParserTest.cs" />
     <Compile Include="Parser\Operator.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParserState.cs" />
@@ -80,7 +80,6 @@
     <Compile Include="Game\StupidGame.cs" />
     <Compile Include="Parser\Warrior.cs" />
     <Compile Include="Parser\WarriorParser.cs" />
-    <Compile Include="Parser\WarriorParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

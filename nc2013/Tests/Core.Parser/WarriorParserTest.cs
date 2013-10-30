@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Core.Parser;
 using NUnit.Framework;
 
-namespace Core.Parser
+namespace Tests.Core.Parser
 {
     [TestFixture]
     class WarriorParserTest

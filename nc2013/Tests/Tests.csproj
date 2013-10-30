@@ -38,6 +38,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core.Engine\EngineTest.cs" />
+    <Compile Include="Core.Engine\ModularArithTest.cs" />
+    <Compile Include="Core.Parser\ExpressionParserTest.cs" />
+    <Compile Include="Core.Parser\WarriorParserTest.cs" />
     <Compile Include="MarsEngineRunner.cs" />
     <Compile Include="Mars\ComparingEngine.cs" />
     <Compile Include="Mars\EngineTest.cs" />

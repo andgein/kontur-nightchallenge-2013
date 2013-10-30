@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Core.Parser;
+using NUnit.Framework;
 
-namespace Core.Parser
+namespace Tests.Core.Parser
 {
     [TestFixture]
     class ExpressionParserTest

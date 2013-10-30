@@ -19,7 +19,7 @@ namespace Core.Parser
 
         public abstract void Execute(Engine.Engine engine);
 
-        protected int CalcAddress(Engine.Engine engine, AddressingMode mode, Expression expression)
+        protected static int CalcAddress(Engine.Engine engine, AddressingMode mode, Expression expression)
         {
             int address;
             switch (mode)
@@ -27,14 +27,14 @@ namespace Core.Parser
                 case AddressingMode.Immediate:
                     throw new InvalidOperationException();
                 case AddressingMode.Direct:
-                    return (engine.CurrentIp + expression.Calculate())%Parameters.CORESIZE;
+                    return engine.CurrentIp + expression.Calculate();
                 case AddressingMode.Indirect:
                     address = expression.Calculate();
-                    return (address + engine.Memory[address].Statement.FieldB.Calculate())%Parameters.CORESIZE;
+                    return address + engine.Memory[address].Statement.FieldB.Calculate();
                 case AddressingMode.PredecrementIndirect:
                     address = expression.Calculate();
                     engine.Memory[address].Statement.FieldB = engine.Memory[address].Statement.FieldB.Decremented();
-                    return (address + engine.Memory[address].Statement.FieldB.Calculate()) % Parameters.CORESIZE;
+                    return address + engine.Memory[address].Statement.FieldB.Calculate();
             }
             throw new InvalidOperationException("Internal error. Unknown addressing mode");
         }
@@ -88,7 +88,7 @@ namespace Core.Parser
         }
     }
 
-    class MovStatement : Statement
+    public class MovStatement : Statement
     {
         public override void Execute(Engine.Engine engine)
         {
