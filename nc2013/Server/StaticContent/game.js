@@ -95,8 +95,7 @@ var GameRunner = Base.extend({
 			})
 			.fail(function (err) {
 				that.pause();
-				if (err != "gameover")
-					that.onGameError && that.onGameError(err);
+				that.onGameError && that.onGameError(err);
 			});
 	},
 	reset: function () {
