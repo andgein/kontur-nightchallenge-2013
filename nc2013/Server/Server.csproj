@@ -49,7 +49,6 @@
     <Compile Include="Arena\FinishedGamesWithEnemy.cs" />
     <Compile Include="Arena\PlayerInfo.cs" />
     <Compile Include="Arena\TournamentRunner.cs" />
-    <Compile Include="Debugging\DebuggerHandler.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />
     <Compile Include="Debugging\DebuggerResetHandler.cs" />

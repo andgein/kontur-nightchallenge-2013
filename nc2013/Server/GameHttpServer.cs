@@ -39,7 +39,6 @@ namespace Server
 			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
 			handlers = new IHttpHandler[]
 			{
-				new DebuggerHandler(),
 				new DebuggerStartHandler(httpSessionManager, debuggerManager),
 				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
 				new DebuggerStepHandler(httpSessionManager, debuggerManager),
