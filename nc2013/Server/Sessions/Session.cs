@@ -41,7 +41,7 @@ namespace Server.Sessions
 						if (!Directory.Exists(sessionStorageFolder))
 							Directory.CreateDirectory(sessionStorageFolder);
 						var valueString = JsonConvert.SerializeObject(value, new JsonSerializerSettings {Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver()});
-						File.WriteAllText(Path.Combine(sessionStorageFolder, key), valueString);
+						File.WriteAllText(GetKeyFilename(key), valueString);
 					}
 				}
 			});
@@ -50,7 +50,7 @@ namespace Server.Sessions
 		[CanBeNull]
 		public T Load<T>([NotNull] string key)
 		{
-			var filename = Path.Combine(sessionStorageFolder, key);
+			var filename = GetKeyFilename(key);
 			if (!File.Exists(filename))
 				return default(T);
 			var valueString = File.ReadAllText(filename);
@@ -64,6 +64,12 @@ namespace Server.Sessions
 				log.Error(string.Format("Failed to deserialize session key {0} from file {1}", key, filename), e);
 				return default(T);
 			}
+		}
+
+		[NotNull]
+		private string GetKeyFilename([NotNull] string key)
+		{
+			return Path.Combine(sessionStorageFolder, key) + ".json";
 		}
 
 		[CanBeNull]
