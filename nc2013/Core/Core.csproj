@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arena\BattlePlayerResult.cs" />
+    <Compile Include="Arena\RoundRobinTournament.cs" />
+    <Compile Include="Arena\RoundRobinTournament_Test.cs" />
+    <Compile Include="Arena\TournamentPlayer.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\Memory.cs" />
     <Compile Include="Engine\ModularArith.cs" />
