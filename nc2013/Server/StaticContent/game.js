@@ -65,10 +65,8 @@ var GameRunner = Base.extend({
 	constructor: function (options) {
 		this.game = options.game;
 		this.programs = options.programs;
-		this.onGameStartedHandlers = [];
-	},
-	onGameStarted: function (callback) {
-		this.onGameStartedHandlers.push(callback);
+		this.onGameStarted = options.onGameStarted;
+		this.onGameError = options.onGameError;
 	},
 	_play: function (action) {
 		if (!this.gameQueue) {
@@ -78,8 +76,7 @@ var GameRunner = Base.extend({
 				programStartInfos.push({ program: this.programs[i].$program.val() });
 			}
 			this.gameQueue = this.game.start(programStartInfos);
-			for (var i = 0; i < this.onGameStartedHandlers.length; i++)
-				this.onGameStartedHandlers[i].call();
+			this.onGameStarted && this.onGameStarted();
 		}
 		else if (!this.gameQueue.isResolved())
 			return this.gameQueue.isRejected() ? this.gameQueue : $.Deferred().reject("busy");
@@ -90,7 +87,8 @@ var GameRunner = Base.extend({
 			})
 			.fail(function (err) {
 				that.pause();
-				alert(err);
+				if (err != "gameover")
+					that.onGameError && that.onGameError(err);
 			});
 	},
 	reset: function () {

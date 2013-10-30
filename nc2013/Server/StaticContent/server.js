@@ -25,7 +25,9 @@ var server = {
 			return that._getErrorMessage(err);
 		});
 	},
-	_getErrorMessage: function(err) {
-		return err && err.responseText || "Unknown error";
+	_getErrorMessage: function (err) {
+		var errorMessage = err && err.responseText || "";
+		var userErrorMessage = errorMessage.match(/\[\[(.*)\]\]/);
+		return userErrorMessage && userErrorMessage[1] || "Internal Server Error";
 	}
 }

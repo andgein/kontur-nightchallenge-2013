@@ -48,9 +48,10 @@
 			});
 			gameRunner = new GameRunner({
 				game: game,
-				programs: [{ $program: $("#programA") }, { $program: $("#programB") }]
+				programs: [{ $program: $("#programA") }, { $program: $("#programB") }],
+				onGameStarted: gameStarted,
+				onGameError: showGameError
 			});
-			gameRunner.onGameStarted(switchToDebuggerTab);
 
 			$("#stepCount").keydown(function (event) {
 				if (event.which == 13)
@@ -79,6 +80,18 @@
 			if (oldDebuggerHeight != newHeight) {
 				oldDebuggerHeight = newHeight;
 				$listing.height(newHeight);
+			}
+		}
+
+		function gameStarted() {
+			$("#error-message").addClass("hidden");
+			switchToDebuggerTab();
+		}
+
+		function showGameError(err) {
+			if (err) {
+				$("#error-message").text(err);
+				$("#error-message").removeClass("hidden");
 			}
 		}
 
@@ -135,20 +148,34 @@
 			}
 
 			.debugger-map .mapCell.modified1 {
-				background-color: green;
+				background-color: lightgreen;
 			}
 
 		.debugger-winnerState {
 			display: none;
+			background-color: palegreen;
+			padding: 2px 10px 2px 10px;
+			border-radius: 3px;
 		}
 
 			.debugger-winnerState.winner {
-				display: inline;
+				display: inline-block;
 			}
 
 		.debugger-listing {
-			font-family: monospace;
 			overflow-y: scroll;
+		}
+
+		.debugger-listing .listingItem {
+			font-family: monospace;
+		}
+		
+		.debugger-listing .listingItem.modified0 {
+			background-color: red;
+		}
+		
+		.debugger-listing .listingItem.modified1 {
+			background-color: lightgreen;
 		}
 
 		.debugger-mapContainer {
@@ -215,6 +242,19 @@
 		.debugger-buttons {
 			padding-bottom: 20px;
 		}
+
+		.programInfoContainer .command {
+			font-family: monospace;
+		}
+		
+		.debugger-error {
+			color: #b94a48;
+			background-color: #f2dede;
+			border-color: #eed3d7;
+			border-radius: 5px;
+			padding: 5px 10px 5px 10px;
+			display: inline-block;
+		}
 	</style>
 </head>
 <body>
@@ -273,6 +313,8 @@ DAT #0, #0
 				<tr>
 					<td class="left">
 						<table>
+							<col width="50%"/>
+							<col width="50%"/>
 							<tr>
 								<td colspan="2">
 									<div class="debugger-section-title">Memory</div>
@@ -287,31 +329,32 @@ DAT #0, #0
 									<div>
 										<span>Current Step: </span><span id="currentStep"></span>
 									</div>
+									<div id="error-message" class="debugger-error hidden"></div>
 								</td>
 							</tr>
 							<tr>
 								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner">(winner)</span></div>
+									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner">winner</span></div>
 									<div>
 										<span>Processes: </span><span id="processCountA"></span>
 										<div>
 										</div>
-										<span>Last: </span><span id="lastCommandA"></span>
+										<span>Last: </span><span id="lastCommandA" class="command"></span>
 										<div>
 										</div>
-										<span>Next: </span><span id="nextCommandA"></span>
+										<span>Next: </span><span id="nextCommandA" class="command"></span>
 									</div>
 								</td>
 								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner">(winner)</span></div>
+									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner">winner</span></div>
 									<div>
 										<span>Processes: </span><span id="processCountB"></span>
 										<div>
 										</div>
-										<span>Last: </span><span id="lastCommandB"></span>
+										<span>Last: </span><span id="lastCommandB" class="command"></span>
 										<div>
 										</div>
-										<span>Next: </span><span id="nextCommandB"></span>
+										<span>Next: </span><span id="nextCommandB" class="command"></span>
 									</div>
 								</td>
 							</tr>
@@ -324,39 +367,6 @@ DAT #0, #0
 						</div>
 					</td>
 				</tr>
-			</table>
-			<table style="display: none">
-				<col />
-				<col width="200px" />
-				<thead>
-					<tr>
-						<th>Memory</th>
-						<th>Listing</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					</tr>
-					<tr>
-						<td class="overviewContainer">
-							<table class="overview">
-								<thead>
-									<tr>
-										<th colspan="2">Overview</th>
-									</tr>
-									<tr>
-										<th>Program A</th>
-										<th>Program B</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-				</tbody>
 			</table>
 		</div>
 	</div>
