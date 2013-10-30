@@ -128,7 +128,7 @@ namespace Server
 
 		public static void SetSessionId([NotNull] this GameHttpContext context, Guid sessionId)
 		{
-			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), context.BasePath) { Expires = DateTime.Now.AddYears(1), HttpOnly = true });
+			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), context.BasePath) {Expires = DateTime.Now.AddYears(1), HttpOnly = true});
 		}
 
 		public static Guid GetSessionId([NotNull] this GameHttpContext context)
@@ -141,7 +141,7 @@ namespace Server
 
 		public static void SetBasePathCookie([NotNull] this GameHttpContext context)
 		{
-			context.Response.AppendCookie(new Cookie(basePathCookieName, context.BasePath, context.BasePath) { Expires = DateTime.Now.AddYears(1) });
+			context.Response.AppendCookie(new Cookie(basePathCookieName, context.BasePath, context.BasePath) {Expires = DateTime.Now.AddYears(1)});
 		}
 
 		[CanBeNull]
