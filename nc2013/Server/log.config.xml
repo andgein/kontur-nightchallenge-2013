@@ -51,22 +51,15 @@
 		</layout>
 	</appender>
 
-	<appender name="console-warn" type="log4net.Appender.ForwardingAppender" >
-		<threshold value="WARN"/>
+	<appender name="console-info" type="log4net.Appender.ForwardingAppender" >
+		<threshold value="INFO"/>
 		<appender-ref ref="console" />
 	</appender>
 
 	<root>
 		<level value="DEBUG" />
-		<appender-ref ref="console-warn" />
+		<appender-ref ref="console-info" />
 		<appender-ref ref="file" />
 		<appender-ref ref="errors-file" />
 	</root>
-
-	<logger name="Server.Program" additivity="false">
-		<level value="DEBUG" />
-		<appender-ref ref="console" />
-		<appender-ref ref="file" />
-		<appender-ref ref="errors-file" />
-	</logger>
 </log4net>

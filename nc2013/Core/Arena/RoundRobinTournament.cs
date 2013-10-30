@@ -37,7 +37,7 @@ namespace Core.Arena
 		private void MakeRankingTable(List<BattlePlayerResult> res)
 		{
 			var ranking = res.GroupBy(g => g.Player).Select(g => new {name=g.Key.Name, version=g.Key.Version, score=g.Sum(r => r.Score)}).OrderByDescending(t => t.score);
-			File.WriteAllLines(rankingResultFile.FullName, ranking.Select(JsonConvert.SerializeObject));
+			File.WriteAllText(rankingResultFile.FullName, JsonConvert.SerializeObject(new{ranking, dateTime=DateTime.Now }, Formatting.Indented));
 		}
 
 		private IEnumerable<BattlePlayerResult[]> RunTournament(IEnumerable<Tuple<TournamentPlayer, TournamentPlayer>> pairs)

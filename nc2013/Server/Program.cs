@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Core.Arena;
+using Server.Arena;
 using log4net;
 using log4net.Config;
 
@@ -18,7 +20,8 @@ namespace Server
 			var prefix = GetPrefix(args);
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
 			Runtime.Init(log);
-			var httpServer = new GameHttpServer(prefix);
+			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
+			var httpServer = new GameHttpServer(prefix, playersRepo);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -27,6 +30,12 @@ namespace Server
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
 			Process.Start(httpServer.DefaultUrl);
+			new TournamentRunner(
+				playersRepo, 
+				new DirectoryInfo("games"), 
+				new FileInfo("games\\ranking.json"), 
+				10
+				).Start();
 			httpServer.WaitForTermination();
 			log.InfoFormat("Stopped");
 		}

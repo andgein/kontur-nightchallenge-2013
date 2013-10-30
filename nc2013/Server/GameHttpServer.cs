@@ -25,7 +25,7 @@ namespace Server
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
 
-		public GameHttpServer([NotNull] string prefix)
+		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo)
 		{
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, "index.html").AbsoluteUri;
@@ -36,7 +36,6 @@ namespace Server
 			var gameServer = new StupidGameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
 			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
-			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
 			handlers = new IHttpHandler[]
 			{
 				new DebuggerHandler(),
@@ -85,13 +84,13 @@ namespace Server
 		{
 			try
 			{
-				log.InfoFormat("Incoming request: {0}", httpListenerContext.Request.RawUrl);
+				log.DebugFormat("Incoming request: {0}", httpListenerContext.Request.RawUrl);
 				var context = new GameHttpContext(httpListenerContext, basePath);
 				context.SetBasePathCookie();
 				var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 				if (handlersThatCanHandle.Length == 1)
 				{
-					log.InfoFormat("Handing request with {0}", handlersThatCanHandle[0].GetType().Name);
+					log.DebugFormat("Handling request with {0}", handlersThatCanHandle[0].GetType().Name);
 					handlersThatCanHandle[0].Handle(context);
 				}
 				else if (handlersThatCanHandle.Length == 0)

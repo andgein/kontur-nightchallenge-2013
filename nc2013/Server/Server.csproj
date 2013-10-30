@@ -49,6 +49,7 @@
     <Compile Include="Arena\PlayerInfo.cs" />
     <Compile Include="Arena\ProgramRankInfo.cs" />
     <Compile Include="Arena\Ranking.cs" />
+    <Compile Include="Arena\TournamentRunner.cs" />
     <Compile Include="Debugging\DebuggerHandler.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />

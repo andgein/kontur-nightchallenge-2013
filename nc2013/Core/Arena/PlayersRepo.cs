@@ -7,8 +7,8 @@ using Newtonsoft.Json;
 
 namespace Core.Arena
 {
-	public class PlayersRepo {
-
+	public class PlayersRepo
+	{
 		private const string nameValidationRegex = @"^[0-9A-Za-z_-]+$";
 		private readonly DirectoryInfo playersDir;
 
@@ -23,9 +23,29 @@ namespace Core.Arena
 		{
 			lock (playersDir)
 			{
-				var versions = DeserializePlayerVersions(request.Name);
+				ArenaPlayer[] versions = DeserializePlayerVersions(request.Name);
 				versions = UpdatePlayer(versions, request);
 				SerializePlayerVersions(request.Name, versions);
+			}
+		}
+
+		public ArenaPlayer LoadPlayer(string name, int? version)
+		{
+			lock (playersDir)
+			{
+				ArenaPlayer[] versions = DeserializePlayerVersions(name);
+				return GetVersion(versions, version);
+			}
+		}
+
+		public ArenaPlayer[] LoadLastVersions()
+		{
+			lock (playersDir)
+			{
+				return playersDir
+					.GetFiles("*.json")
+					.Select(file => GetVersion(DeserializePlayerVersions(Path.GetFileNameWithoutExtension(file.Name))))
+					.ToArray();
 			}
 		}
 
@@ -41,9 +61,14 @@ namespace Core.Arena
 			if (string.IsNullOrEmpty(request.Program))
 				throw new Exception("Бот пуст?!? O_o");
 			new WarriorParser().Parse(request.Program);
-			var last = GetVersion(versions);
-			if (last.Program != request.Program || !string.IsNullOrWhiteSpace(request.Authors) && request.Authors != last.Authors)
-				versions = versions.Concat(new[] {request}).ToArray();
+			if (versions.Length == 0)
+				versions = new[] {request};
+			else
+			{
+				ArenaPlayer last = GetVersion(versions);
+				if (last.Program != request.Program || !string.IsNullOrWhiteSpace(request.Authors) && request.Authors != last.Authors)
+					versions = versions.Concat(new[] {request}).ToArray();
+			}
 			if (versions.All(v => string.IsNullOrWhiteSpace(v.Authors)))
 				throw new Exception("Не заполнен список авторов");
 			return versions;
@@ -51,13 +76,13 @@ namespace Core.Arena
 
 		private void SerializePlayerVersions(string playerName, ArenaPlayer[] playerVersions)
 		{
-			var file = GetFile(playerName);
+			FileInfo file = GetFile(playerName);
 			File.WriteAllText(file.FullName, JsonConvert.SerializeObject(playerVersions, Formatting.Indented));
 		}
 
 		private ArenaPlayer[] DeserializePlayerVersions(string playerName)
 		{
-			var file = GetFile(playerName);
+			FileInfo file = GetFile(playerName);
 			if (file.Exists)
 				return JsonConvert.DeserializeObject<ArenaPlayer[]>(File.ReadAllText(file.FullName));
 			return new ArenaPlayer[0];
@@ -68,19 +93,10 @@ namespace Core.Arena
 			return new FileInfo(Path.Combine(playersDir.FullName, playerName + ".json"));
 		}
 
-		public ArenaPlayer LoadPlayer(string name, int? version)
-		{
-			lock (playersDir)
-			{
-				var versions = DeserializePlayerVersions(name);
-				return GetVersion(versions, version);
-			}
-		}
-
 		private static ArenaPlayer GetVersion(ArenaPlayer[] versions, int? version = null)
 		{
-			var index = (version ?? versions.Length) - 1;
-			var result = versions[index];
+			int index = (version ?? versions.Length) - 1;
+			ArenaPlayer result = versions[index];
 			return
 				new ArenaPlayer
 				{
