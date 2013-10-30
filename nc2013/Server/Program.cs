@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace Server
 {
 	public static class Program
 	{
-	    private const int port = 19999;
 		public const string CoreWarPrefix = "/corewar/";
 		public const string DefaultUrl = CoreWarPrefix + "index.html";
 
@@ -30,8 +30,19 @@ namespace Server
 		public static void Main()
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
-			var listener = new HttpListener();
-			string prefix = String.Format("http://*:{0}{1}", port, CoreWarPrefix);
+		    int port;
+            try
+            {
+                port = Convert.ToUInt16(ConfigurationManager.AppSettings["Port"]);
+            }
+            catch (Exception)
+            {
+                mainLog.ErrorFormat("Invalid port: {0}", ConfigurationManager.AppSettings["Port"]);
+                return;
+            }
+
+		    var listener = new HttpListener();
+			var prefix = String.Format("http://*:{0}{1}", port, CoreWarPrefix);
 			listener.Prefixes.Add(prefix);
 			listener.Start();
 			var gameServer = new StupidGameServer();
