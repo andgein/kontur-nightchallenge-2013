@@ -16,6 +16,7 @@ namespace Server
 {
 	public class Program
 	{
+	    private const int port = 19999;
 		public const string CoreWarPrefix = "/corewar/";
 		public const string DefaultUrl = CoreWarPrefix + "index.html";
 		public const string LoginUrl = CoreWarPrefix + "login";
@@ -23,7 +24,7 @@ namespace Server
 		public static void Main()
 		{
 			var listener = new HttpListener();
-			listener.Prefixes.Add("http://*" + CoreWarPrefix);
+			listener.Prefixes.Add(String.Format("http://*:{0}{1}", port, CoreWarPrefix));
 			listener.Start();
 			var gameServer = new MarsGameServer();
 			var sessionManager = new SessionManager("sessions", gameServer);
@@ -41,7 +42,7 @@ namespace Server
 				new ArenaSubmitHandler(playersRepo),
 				new ArenaPlayerHandler(playersRepo)
 			};
-			Process.Start("http://localhost" + DefaultUrl);
+			Process.Start(String.Format("http://localhost:{0}{1}", port, DefaultUrl));
 			while (true)
 			{
 				var context = listener.GetContext();
