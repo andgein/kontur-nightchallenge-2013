@@ -42,21 +42,29 @@ var Game = Base.extend({
 			});
 	},
 	reset: function () {
-		this.$currentStep.text("");
-		this.memory.reset();
-		for (var i = 0; i < this.programs.length; ++i) {
-			this.programs[i].reset();
-		}
+		var that = this;
+		return server.get("debugger/reset")
+			.pipe(function () {
+				return that._setGameState(null);
+			});
 	},
 	_setGameState: function (gameState) {
-		this.$currentStep.text(gameState.currentStep);
-		this.memory.setCellStates(gameState.memoryState);
-		for (var i = 0; i < gameState.programStates.length; ++i) {
-			this.programs[i].setProgramState(gameState.programStates[i]);
-		}
-		if (gameState.winner) {
-			this.programs[gameState.winner].win();
-			return $.Deferred().reject("gameover");
+		if (!gameState) {
+			this.$currentStep.text("");
+			this.memory.reset();
+			for (var i = 0; i < this.programs.length; ++i) {
+				this.programs[i].reset();
+			}
+		} else {
+			this.$currentStep.text(gameState.currentStep);
+			this.memory.setCellStates(gameState.memoryState);
+			for (var i = 0; i < gameState.programStates.length; ++i) {
+				this.programs[i].setProgramState(gameState.programStates[i]);
+			}
+			if (gameState.winner) {
+				this.programs[gameState.winner].win();
+				return $.Deferred().reject("gameover");
+			}
 		}
 	}
 });

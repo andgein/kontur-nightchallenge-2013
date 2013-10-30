@@ -52,6 +52,7 @@
     <Compile Include="Debugging\DebuggerHandler.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />
+    <Compile Include="Debugging\DebuggerResetHandler.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
     <Compile Include="Arena\ArenaSubmitHandler.cs" />

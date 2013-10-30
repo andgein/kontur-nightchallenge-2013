@@ -27,6 +27,12 @@ namespace Server.Debugging
 			game = gameServer.StartNewGame(programStartInfos);
 		}
 
+		public void Reset()
+		{
+			game = null;
+			session.Save(debuggerGameStateKey, (GameState) null);
+		}
+
 		public T Play<T>([NotNull] Func<IGame, T> action)
 		{
 			if (game == null)
