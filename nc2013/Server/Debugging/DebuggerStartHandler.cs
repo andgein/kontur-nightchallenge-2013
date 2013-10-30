@@ -4,15 +4,14 @@ using Server.Sessions;
 
 namespace Server.Debugging
 {
-	public class DebuggerStartGameHandler : DebuggerHandlerBase
+	public class DebuggerStartHandler : DebuggerHandlerBase
 	{
-		public DebuggerStartGameHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/start", httpSessionManager, debuggerManager) {}
+		public DebuggerStartHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/start", httpSessionManager, debuggerManager) {}
 
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var programStartInfos = context.GetRequest<ProgramStartInfo[]>();
 			debugger.StartNewGame(programStartInfos);
-			context.SendResponse(debugger.GameState);
 		}
 	}
 }

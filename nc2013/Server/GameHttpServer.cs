@@ -40,10 +40,11 @@ namespace Server
 			handlers = new IHttpHandler[]
 			{
 				new DebuggerHandler(),
-				new DebuggerStartGameHandler(httpSessionManager, debuggerManager),
+				new DebuggerStartHandler(httpSessionManager, debuggerManager),
 				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
 				new DebuggerStepHandler(httpSessionManager, debuggerManager),
 				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
+				new DebuggerResetHandler(httpSessionManager, debuggerManager), 
 				new StaticHandler(),
 				new RankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo),

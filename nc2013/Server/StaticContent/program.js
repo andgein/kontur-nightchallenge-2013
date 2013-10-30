@@ -4,6 +4,7 @@ var ProgramState = Base.extend({
 		this.$last = options.$last;
 		this.$next = options.$next;
 		this.$win = options.$win;
+		this.$source = options.$source;
 		this.memory = options.memory;
 	},
 	applyDiff: function (programStateDiff) {
@@ -33,6 +34,13 @@ var ProgramState = Base.extend({
 	setProgramState: function (programState) {
 		this.programState = programState;
 		this._refreshState();
+	},
+	setProgramStartInfo: function (programStartInfo) {
+		this.$source.val(programStartInfo && programStartInfo.program || "");
+	},
+	getProgramStartInfo: function () {
+		var source = this.$source.val();
+		return source && { program: source };
 	},
 	_refreshState: function () {
 		this.$processCount.text(this.programState ? this.programState.processPointers.length : "");

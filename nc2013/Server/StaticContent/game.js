@@ -4,11 +4,32 @@ var Game = Base.extend({
 		this.memory = options.memory;
 		this.$currentStep = options.$currentStep;
 	},
-	start: function (programStartInfos) {
+	load: function () {
+		var that = this;
+		return server.get("debugger/state")
+			.pipe(function (gameState) {
+				for (var i = 0; i < that.programs.length; ++i)
+					that.programs[i].setProgramStartInfo(gameState && gameState.programStartInfos && gameState.programStartInfos[i]);
+				return that._setGameState(gameState);
+			});
+	},
+	start: function () {
+		var programStartInfos = [];
+		for (var i = 0; i < this.programs.length; ++i) {
+			var programStartInfo = this.programs[i].getProgramStartInfo();
+			if (programStartInfo)
+				programStartInfos.push(programStartInfo);
+		}
+		if (programStartInfos.length == 0)
+			return $.Deferred().reject("At least one program should not be empty");
+
 		var that = this;
 		return server.post("debugger/start", programStartInfos)
-			.pipe(function (gameState) {
-				return that._setGameState(gameState);
+			.pipe(function () {
+				return server.get("debugger/state")
+					.pipe(function (gameState) {
+						return that._setGameState(gameState);
+					});
 			});
 	},
 	stepToEnd: function () {
@@ -24,7 +45,7 @@ var Game = Base.extend({
 			.pipe(function (stepResponse) {
 				if (stepResponse.gameState) {
 					return that._setGameState(stepResponse.gameState);
-				} 
+				}
 				else if (stepResponse.diff) {
 					that.$currentStep.text(stepResponse.diff.currentStep);
 					if (stepResponse.diff.memoryDiffs)
@@ -36,8 +57,9 @@ var Game = Base.extend({
 						}
 					if (stepResponse.diff.winner) {
 						that.programs[stepResponse.diff.winner].win();
-						return $.Deferred().reject("gameover");
+						return "gameover";
 					}
+					return "playing";
 				}
 			});
 	},
@@ -55,16 +77,17 @@ var Game = Base.extend({
 			for (var i = 0; i < this.programs.length; ++i) {
 				this.programs[i].reset();
 			}
+			return "reset";
 		} else {
 			this.$currentStep.text(gameState.currentStep);
 			this.memory.setCellStates(gameState.memoryState);
-			for (var i = 0; i < gameState.programStates.length; ++i) {
+			for (var i = 0; i < gameState.programStates.length; ++i)
 				this.programs[i].setProgramState(gameState.programStates[i]);
-			}
 			if (gameState.winner) {
 				this.programs[gameState.winner].win();
-				return $.Deferred().reject("gameover");
+				return "gameover";
 			}
+			return "playing";
 		}
 	}
 });
@@ -72,53 +95,65 @@ var Game = Base.extend({
 var GameRunner = Base.extend({
 	constructor: function (options) {
 		this.game = options.game;
-		this.programs = options.programs;
 		this.onGameStarted = options.onGameStarted;
 		this.onGameError = options.onGameError;
 	},
-	_play: function (action) {
-		if (!this.gameQueue) {
-			this.game.reset();
-			var programStartInfos = [];
-			for (var i = 0; i < this.programs.length; ++i) {
-				programStartInfos.push({ program: this.programs[i].$program.val() });
-			}
-			this.gameQueue = this.game.start(programStartInfos);
-			this.onGameStarted && this.onGameStarted();
-		}
-		else if (!this.gameQueue.isResolved())
-			return this.gameQueue.isRejected() ? this.gameQueue : $.Deferred().reject("busy");
+	_play: function (options) {
+		options = $.extend({ requirePlaying: true }, options);
+
 		var that = this;
-		return this.gameQueue = this.gameQueue
-			.pipe(function () {
-				return action(that.game);
+		function nextAction(gameRunStatus) {
+			var result;
+			if (options.requirePlaying && gameRunStatus != "playing") {
+				result = that.game.start();
+				that.onGameStarted && that.onGameStarted();
+			} else {
+				result = $.when(gameRunStatus);
+			}
+			if (options.action)
+				result = result.pipe(function () {
+					return options.action(that.game);
+				});
+			return result;
+		}
+
+		return this.gameQueue = (this.gameQueue || this.game.load())
+			.pipe(nextAction, nextAction)
+			.done(function () {
+				that.onGameError && that.onGameError(null);
 			})
 			.fail(function (err) {
 				that.pause();
 				that.onGameError && that.onGameError(err);
 			});
 	},
+	load: function () {
+		this.pause();
+		this._play({ requirePlaying: false });
+	},
 	reset: function () {
-		var that = this;
-		function reset() {
-			that.game.reset();
-			that.gameQueue = null;
-		}
-		if (this.gameQueue) {
-			this.pause();
-			this.gameQueue.pipe(reset, reset);
-		}
+		this.pause();
+		this._play({
+			requirePlaying: false,
+			action: function (game) {
+				return game.reset();
+			}
+		});
 	},
 	step: function (stepCount) {
 		this.pause();
-		this._play(function (game) {
-			return game.step(stepCount);
+		this._play({
+			action: function (game) {
+				return game.step(stepCount);
+			}
 		});
 	},
 	stepToEnd: function () {
 		this.pause();
-		this._play(function (game) {
-			return game.stepToEnd();
+		this._play({
+			action: function (game) {
+				return game.stepToEnd();
+			}
 		});
 	},
 	run: function (speed) {
@@ -126,11 +161,16 @@ var GameRunner = Base.extend({
 			var that = this;
 			function iteration() {
 				if (that.speed)
-					that._play(function (game) {
-						if (that.speed)
-							return game.step(that.speed).pipe(function () {
-								setTimeout(iteration, 0);
-							});
+					that._play({
+						action: function (game) {
+							if (that.speed)
+								return game.step(that.speed).done(function (gameRunStatus) {
+									if (gameRunStatus == "playing")
+										setTimeout(iteration, 0);
+									else
+										that.pause();
+								});
+						}
 					});
 			}
 			if (this.speed)

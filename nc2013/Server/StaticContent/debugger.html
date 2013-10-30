@@ -21,6 +21,11 @@
 			$("#programsTab").click(switchToProgramsTab);
 			$("#debuggerTab").click(switchToDebuggerTab);
 
+			$("#stepCount").keydown(function (event) {
+				if (event.which == 13)
+					step();
+			});
+
 			var memory = new Memory({
 				$map: $("#map"),
 				$listing: $("#listing"),
@@ -32,14 +37,16 @@
 				$processCount: $("#processCountA"),
 				$last: $("#lastCommandA"),
 				$next: $("#nextCommandA"),
-				$win: $("#programAWinner")
+				$win: $("#programAWinner"),
+				$source: $("#programA")
 			}));
 			programs.push(new ProgramState({
 				memory: memory,
 				$processCount: $("#processCountB"),
 				$last: $("#lastCommandB"),
 				$next: $("#nextCommandB"),
-				$win: $("#programBWinner")
+				$win: $("#programBWinner"),
+				$source: $("#programB")
 			}));
 			var game = new Game({
 				$currentStep: $("#currentStep"),
@@ -48,15 +55,10 @@
 			});
 			gameRunner = new GameRunner({
 				game: game,
-				programs: [{ $program: $("#programA") }, { $program: $("#programB") }],
 				onGameStarted: gameStarted,
 				onGameError: showGameError
 			});
-
-			$("#stepCount").keydown(function (event) {
-				if (event.which == 13)
-					step();
-			});
+			gameRunner.load();
 
 			$listing = $("#listing");
 			var resizeCounter = 0;
@@ -84,7 +86,7 @@
 		}
 
 		function gameStarted() {
-			$("#error-message").addClass("hidden");
+			showGameError(null);
 			switchToDebuggerTab();
 		}
 
@@ -92,6 +94,10 @@
 			if (err) {
 				$("#error-message").text(err);
 				$("#error-message").removeClass("hidden");
+			}
+			else {
+				$("#error-message").text("");
+				$("#error-message").addClass("hidden");
 			}
 		}
 
@@ -296,14 +302,9 @@
 				<tbody>
 					<tr>
 						<td>
-							<textarea class="program" id="programA">MOV 0, 1</textarea></td>
+							<textarea class="program" id="programA"></textarea></td>
 						<td>
-							<textarea class="program" id="programB">; dwarf strategy
-ADD #4, 3
-MOV 2, @2
-JMP -2
-DAT #0, #0
-</textarea></td>
+							<textarea class="program" id="programB"></textarea></td>
 					</tr>
 				</tbody>
 			</table>

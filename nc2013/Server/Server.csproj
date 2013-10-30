@@ -76,7 +76,7 @@
     <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Debugging\DebuggerStartGameHandler.cs" />
+    <Compile Include="Debugging\DebuggerStartHandler.cs" />
     <Compile Include="Sessions\ISessionItems.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\Session.cs" />
