@@ -15,8 +15,5 @@ namespace Core.Game
 
 		[JsonProperty]
 		public int? LastModifiedByProgram { get; set; }
-
-		[JsonProperty]
-		public int? LastModifiedStep { get; set; }
 	}
 }

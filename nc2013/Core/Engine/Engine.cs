@@ -55,7 +55,6 @@ namespace Core.Engine
         {
             Memory[address].Statement = statement;
             Memory[address].LastModifiedByProgram = currentWarrior;
-            Memory[address].LastModifiedStep = currentStep;
         }
 
         public void KillCurrentProcess()
@@ -69,7 +68,6 @@ namespace Core.Engine
         public Statement Statement { get; set; }
 
         public int? LastModifiedByProgram;
-        public int? LastModifiedStep;
 
         public Instruction() : this(new DatStatement
             {

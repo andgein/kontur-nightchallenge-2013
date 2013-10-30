@@ -76,7 +76,6 @@ namespace Core.Game
 				Instruction = "nope 12 23",
 				CellType = r.Next() % 2 == 0 ? CellType.Data : CellType.Command,
 				LastModifiedByProgram = r.Next(gameState.ProgramStates.Length),
-				LastModifiedStep = r.Next(gameState.CurrentStep),
 			};
 		}
 	}

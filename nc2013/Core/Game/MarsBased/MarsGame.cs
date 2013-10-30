@@ -86,7 +86,6 @@ namespace Core.Game.MarsBased
 					Instruction = instruction,
 					CellType = cellType,
 					LastModifiedByProgram = lastModifiedByProgram,
-					LastModifiedStep = null, // todo !!!
 				};
 			}
 
