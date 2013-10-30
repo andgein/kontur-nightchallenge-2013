@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arena;
 using Core.Game;
+using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using log4net;
 using Server.Arena;
@@ -33,7 +34,7 @@ namespace Server
 
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
-			var gameServer = new StupidGameServer();
+			var gameServer = new MarsGameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
 			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
 			handlers = new IHttpHandler[]

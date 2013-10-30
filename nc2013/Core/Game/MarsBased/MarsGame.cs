@@ -16,7 +16,6 @@ namespace Core.Game.MarsBased
 
 		public MarsGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
-			this.programStartInfos = programStartInfos;
 			rules = new Rules
 			{
 				WarriorsCount = programStartInfos.Length,
@@ -32,6 +31,15 @@ namespace Core.Game.MarsBased
 				ScoreFormula = ScoreFormula.Standard,
 				ICWSStandard = ICWStandard.ICWS88,
 			};
+
+			this.programStartInfos = programStartInfos;
+			var engine = CreateEngine();
+			engine.Run(0);
+			this.programStartInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
+			{
+				Program = pi.Program,
+				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : (uint)engine.warriors[idx].LoadAddress,
+			}).ToArray();
 		}
 
 		[NotNull]
@@ -62,12 +70,6 @@ namespace Core.Game.MarsBased
 		{
 			var engine = CreateEngine();
 			var finished = engine.Run(turnsToMake);
-
-			var startInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
-			{
-				Program = pi.Program,
-				StartAddress = (uint)engine.warriors[idx].LoadAddress,
-			}).ToArray();
 
 			var currentProgram = turnsToMake % engine.WarriorsCount;
 
@@ -103,7 +105,7 @@ namespace Core.Game.MarsBased
 
 			return new GameState
 			{
-				ProgramStartInfos = startInfos,
+				ProgramStartInfos = programStartInfos,
 				CurrentStep = currentTurn,
 				CurrentProgram = currentProgram,
 				Winner = winner,

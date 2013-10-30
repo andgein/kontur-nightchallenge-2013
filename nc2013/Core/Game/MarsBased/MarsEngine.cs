@@ -30,7 +30,7 @@ namespace Core.Game.MarsBased
 				do
 				{
 					stepResult = NextStep();
-				} while (++turns < turnsToMake || stepResult != StepResult.Finished);
+				} while (++turns < turnsToMake && stepResult != StepResult.Finished);
 				finished = stepResult == StepResult.Finished;
 			}
 			return finished;
