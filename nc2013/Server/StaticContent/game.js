@@ -21,20 +21,21 @@ var Game = Base.extend({
 	step: function (stepCount) {
 		var that = this;
 		return server.get("debugger/step", { count: stepCount })
-			.pipe(function (diff) {
-				if (diff.gameState) {
-					return that._setGameState(diff.gameState);
-				} else {
-					that.$currentStep.text(diff.currentStep);
-					if (diff.memoryDiffs)
-						that.memory.applyDiffs(diff.memoryDiffs);
-					if (diff.programStateDiffs)
-						for (var i = 0; i < diff.programStateDiffs.length; ++i) {
-							var programStateDiff = diff.programStateDiffs[i];
+			.pipe(function (stepResponse) {
+				if (stepResponse.gameState) {
+					return that._setGameState(stepResponse.gameState);
+				} 
+				else if (stepResponse.diff) {
+					that.$currentStep.text(stepResponse.diff.currentStep);
+					if (stepResponse.diff.memoryDiffs)
+						that.memory.applyDiffs(stepResponse.diff.memoryDiffs);
+					if (stepResponse.diff.programStateDiffs)
+						for (var i = 0; i < stepResponse.diff.programStateDiffs.length; ++i) {
+							var programStateDiff = stepResponse.diff.programStateDiffs[i];
 							that.programs[programStateDiff.program].applyDiff(programStateDiff);
 						}
-					if (diff.winner) {
-						that.programs[diff.winner].win();
+					if (stepResponse.diff.winner) {
+						that.programs[stepResponse.diff.winner].win();
 						return $.Deferred().reject("gameover");
 					}
 				}
