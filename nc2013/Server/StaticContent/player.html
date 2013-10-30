@@ -9,8 +9,9 @@
 	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<script src="common.js"></script>
+	<script src="server.js"></script>
 	<script>
-		var PlayerController = MakeJsonController("/corewar/arena/player" + window.location.search);
+		var PlayerController = MakeJsonController(server.basePath() + "arena/player" + window.location.search);
 	</script>
 </head>
 <body>

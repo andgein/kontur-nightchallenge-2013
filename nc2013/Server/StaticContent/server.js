@@ -1,11 +1,13 @@
 var server = {
-	root: "/corewar/",
+	basePath: function () {
+		return $.cookie('basePath');
+	},
 	post: function (url, data) {
 		var that = this;
 		return $.ajax({
 			cache: false,
 			type: "POST",
-			url: this.root + url,
+			url: this.basePath() + url,
 			data: JSON.stringify(data),
 			contentType: 'application/json; charset=utf-8'
 		}).pipe(null, function (err) {
@@ -17,7 +19,7 @@ var server = {
 		return $.ajax({
 			cache: false,
 			type: "GET",
-			url: this.root + url,
+			url: this.basePath() + url,
 			data: params
 		}).pipe(null, function (err) {
 			return that._getErrorMessage(err);

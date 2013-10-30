@@ -7,9 +7,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace Server
 {
-	public static class HttpListenerContextExtensions
+	public static class GameHttpContextExtensions
 	{
 		private const string sessionIdCookieName = "sessionId";
+		private const string basePathCookieName = "basePath";
 
 		public static Guid GetGuidParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
 		{
@@ -127,7 +128,7 @@ namespace Server
 
 		public static void SetSessionId([NotNull] this GameHttpContext context, Guid sessionId)
 		{
-			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), context.BasePath) { Expires = DateTime.Now.AddYears(1) });
+			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), context.BasePath) { Expires = DateTime.Now.AddYears(1), HttpOnly = true });
 		}
 
 		public static Guid GetSessionId([NotNull] this GameHttpContext context)
@@ -136,6 +137,11 @@ namespace Server
 			if (!sessionId.HasValue)
 				throw new InvalidOperationException(sessionIdCookieName + " cookie is not set");
 			return sessionId.Value;
+		}
+
+		public static void SetBasePathCookie([NotNull] this GameHttpContext context)
+		{
+			context.Response.AppendCookie(new Cookie(basePathCookieName, context.BasePath, context.BasePath) { Expires = DateTime.Now.AddYears(1) });
 		}
 
 		[CanBeNull]

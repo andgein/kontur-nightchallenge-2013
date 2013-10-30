@@ -8,7 +8,7 @@ namespace Server.Handlers
 	{
 		public bool CanHandle([NotNull] GameHttpContext context)
 		{
-			var contentType = HttpListenerContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
+			var contentType = GameHttpContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
 			return contentType != null;
 		}
 

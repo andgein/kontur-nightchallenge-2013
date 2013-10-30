@@ -87,6 +87,7 @@ namespace Server
 			{
 				log.InfoFormat("Incoming request: {0}", httpListenerContext.Request.RawUrl);
 				var context = new GameHttpContext(httpListenerContext, basePath);
+				context.SetBasePathCookie();
 				var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 				if (handlersThatCanHandle.Length == 1)
 				{
