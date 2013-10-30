@@ -60,7 +60,7 @@ namespace Core.Arena
 				throw new Exception("Неверный пароль");
 			if (string.IsNullOrEmpty(request.Program))
 				throw new Exception("Бот пуст?!? O_o");
-			new WarriorParser().Parse(request.Program);
+//			new WarriorParser().Parse(request.Program);
 			if (versions.Length == 0)
 				versions = new[] {request};
 			else

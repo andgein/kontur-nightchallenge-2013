@@ -22,21 +22,20 @@
 		</div>
 		<div>Авторство: {{authors}}</div>
 		<div>Время создания: {{submitTime}}</div>
-		<div>Побед: {{info.wins}}</div>
-		<div>Поражений: {{info.loses}}</div>
-		<div>Всего боев: {{info.totalGames}}</div>
+		<div>Очков: {{info.score}}</div>
+		<div>Всего боев: {{info.games}}</div>
 		<h2>Статистика боев с другими ботами</h2>
 		<table class="table table-bordered table-condensed">
 			<tr>
 				<th>Противник</th>
-				<th>Побед</th>
-				<th>Поражений</th>
+				<th>Очки</th>
+				<th>Очки противника</th>
 				<th>Последние игры</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
-				<td>{{enemyStats.wins}}</td>
-				<td>{{enemyStats.loses}}</td>
+				<td>{{enemyStats.score}}</td>
+				<td>{{enemyStats.enemyScore}}</td>
 				<td>
 					тут будет список игр
 				</td>

@@ -37,30 +37,46 @@ namespace Server.Arena
 			int lastPlayersHash = 0;
 			while (true)
 			{
-				var players = playersRepo.LoadLastVersions();
-				var playersHash = string.Join(" ", players.Select(p => p.Name + " " + p.Version)).GetHashCode();
-				if (playersHash != lastPlayersHash)
+				try
 				{
-					log.InfoFormat("Warriors changed! Tournament {0}. {1} warriors", i, players.Length);
-					var tournament = new RoundRobinTournament(
-						battlesPerPair,
-						i.ToString(),
-						gamesRepo,
-						players.Select(p => new TournamentPlayer
-						{
-							Name = p.Name,
-							Version = p.Version,
-							Program = p.Program,
-							Warrior = parser.Parse(p.Program),
-						}).ToArray()
-						);
-					tournament.Run();
-					lastPlayersHash = playersHash;
-					log.InfoFormat("Tournament {0} finished.", i);
-					i++;
+					var newPlayersHash = RunTournament(lastPlayersHash, i);
+					if (newPlayersHash != lastPlayersHash)
+					{
+						lastPlayersHash = newPlayersHash;
+						i++;
+					}
+				}
+				catch (Exception e)
+				{
+					log.Error("Tournament failed!", e);
 				}
 				Thread.Sleep(TimeSpan.FromSeconds(1));
 			}
+		}
+
+		private int RunTournament(int lastPlayersHash, int i)
+		{
+			var players = playersRepo.LoadLastVersions();
+			var playersHash = string.Join(" ", players.Select(p => p.Name + " " + p.Version)).GetHashCode();
+			if (playersHash != lastPlayersHash)
+			{
+				log.InfoFormat("Warriors changed! Tournament {0}. {1} warriors", i, players.Length);
+				var tournament = new RoundRobinTournament(
+					battlesPerPair,
+					i.ToString(),
+					gamesRepo,
+					players.Select(p => new TournamentPlayer
+					{
+						Name = p.Name,
+						Version = p.Version,
+						Program = p.Program,
+						//Warrior = parser.Parse(p.Program),
+					}).ToArray()
+					);
+				tournament.Run();
+				log.InfoFormat("Tournament {0} finished.", i);
+			}
+			return playersHash;
 		}
 	}
 }

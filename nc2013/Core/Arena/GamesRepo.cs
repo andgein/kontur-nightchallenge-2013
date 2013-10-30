@@ -17,7 +17,7 @@ namespace Core.Arena
 	{
 		public string Name;
 		public int Version;
-		public int Wins;
+		public int Score;
 		public int Games;
 	}
 

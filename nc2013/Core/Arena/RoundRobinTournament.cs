@@ -44,10 +44,10 @@ namespace Core.Arena
 					{
 						Name = g.Key.Name,
 						Version = g.Key.Version,
-						Wins = g.Sum(r => r.Score),
+						Score = g.Sum(r => r.Score),
 						Games = g.Count()
 					}
-				).OrderByDescending(t => t.Wins);
+				).OrderByDescending(t => t.Score);
 			gamesRepo.SaveRanking(
 				new TournamentRanking
 				{

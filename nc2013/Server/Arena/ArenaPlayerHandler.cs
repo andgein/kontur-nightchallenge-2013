@@ -32,14 +32,14 @@ namespace Server.Arena
 			var allGames = games.Concat(games.Select(g => g.Reverse().ToArray()));
 			var byEnemy = allGames.Where(g => g[0].Player.Name == arenaPlayer.Name && g[0].Player.Version == arenaPlayer.Version)
 								.GroupBy(g => g[1].Player).ToList();
-			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry {Games = 0, Wins = 0};
+			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry {Games = 0, Score = 0};
 			return
 				new PlayerInfo
 				{
 					Info = new RankingEntry
 					{
 						Name = arenaPlayer.Name,
-						Wins = rankingEntry.Wins,
+						Score = rankingEntry.Score,
 						Games = rankingEntry.Games
 					},
 					Authors = arenaPlayer.Authors,
@@ -51,8 +51,8 @@ namespace Server.Arena
 							{
 								Enemy = e.Key.Name,
 								EnemyVersion = e.Key.Version,
-								Wins = e.Sum(r => r[0].Score),
-								Loses = e.Sum(r => r[1].Score),
+								Score = e.Sum(r => r[0].Score),
+								EnemyScore = e.Sum(r => r[1].Score),
 							}).ToArray()
 				};
 		}
