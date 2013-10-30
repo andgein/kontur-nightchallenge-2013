@@ -25,6 +25,7 @@ namespace Server.Debugging
 		public void StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			game = gameServer.StartNewGame(programStartInfos);
+			session.Save(debuggerGameStateKey, game.GameState);
 		}
 
 		public void Reset()
