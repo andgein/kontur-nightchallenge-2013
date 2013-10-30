@@ -76,7 +76,6 @@ namespace Server
 			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 				writer.Write(result);
-			context.Response.Close();
 		}
 
 		public static void SendResponseRaw([NotNull] this GameHttpContext context, object value, string contentType = null)
@@ -88,7 +87,6 @@ namespace Server
 				using (var writer = new StreamWriter(context.Response.OutputStream))
 					writer.Write(value);
 			}
-			context.Response.Close();
 		}
 
 		public static void SendResponseRaw([NotNull] this GameHttpContext context, [CanBeNull] byte[] value, string contentType = null)
@@ -99,14 +97,12 @@ namespace Server
 					context.Response.ContentType = contentType;
 				context.Response.OutputStream.Write(value, 0, value.Length);
 			}
-			context.Response.Close();
 		}
 
 		public static void Redirect([NotNull] this GameHttpContext context, [NotNull] string url)
 		{
 			context.Response.StatusCode = (int) HttpStatusCode.Redirect;
 			context.Response.RedirectLocation = url;
-			context.Response.Close();
 		}
 
 		public static bool IsAjax([NotNull] this GameHttpContext context)

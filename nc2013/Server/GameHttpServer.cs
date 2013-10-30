@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arena;
-using Core.Game;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using log4net;
@@ -26,6 +27,8 @@ namespace Server
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
 		private readonly SessionManager sessionManager;
+		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
+		private int requestId;
 
 		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo)
 		{
@@ -84,35 +87,68 @@ namespace Server
 
 		private void HandleRequest([NotNull] HttpListenerContext httpListenerContext)
 		{
+			var currentRequestId = Interlocked.Increment(ref requestId);
 			try
 			{
-				log.DebugFormat("Incoming request: {0}", httpListenerContext.Request.RawUrl);
-				var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
-				if (handlersThatCanHandle.Length == 1)
+				var requestUrl = httpListenerContext.Request.RawUrl;
+				log.DebugFormat("Incoming request: {0}", requestUrl);
+				var handleTime = Stopwatch.StartNew();
+				activeRequests[currentRequestId] = Tuple.Create(requestUrl, handleTime);
 				var context = new GameHttpContext(httpListenerContext, basePath, sessionManager);
+				if (TryHandleActivity(context))
+					return;
+				try
 				{
-					log.DebugFormat("Handling request with {0}", handlersThatCanHandle[0].GetType().Name);
-					handlersThatCanHandle[0].Handle(context);
+					lock (context.Session)
+					{
+						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
+						if (handlersThatCanHandle.Length == 1)
+						{
+							log.DebugFormat("Handling request with {0}: {1}", handlersThatCanHandle[0].GetType().Name, requestUrl);
+							handlersThatCanHandle[0].Handle(context);
+							context.Response.Close();
+							log.DebugFormat("Request handled in {0} ms: {1}", handleTime.ElapsedMilliseconds, requestUrl);
+						}
+						else if (handlersThatCanHandle.Length == 0)
+							throw new HttpException(HttpStatusCode.NotImplemented, string.Format("Method '{0}' is not implemented", requestUrl));
+						else
+							throw new HttpException(HttpStatusCode.InternalServerError, string.Format("Method '{0}' can be handled with many handlers: {1}", requestUrl, string.Join(", ", handlersThatCanHandle.Select(h => h.GetType().Name))));
+					}
 				}
-				else if (handlersThatCanHandle.Length == 0)
-					throw new HttpException(HttpStatusCode.NotImplemented, string.Format("Method '{0}' is not implemented", httpListenerContext.Request.RawUrl));
-				else
-					throw new HttpException(HttpStatusCode.InternalServerError, string.Format("Method '{0}' can be handled with many handlers: {1}", httpListenerContext.Request.RawUrl, string.Join(", ", handlersThatCanHandle.Select(h => h.GetType().Name))));
+				catch (HttpException e)
+				{
+					context.Response.ContentType = "text/plain; charset: utf-8";
+					e.WriteToResponse(context.Response);
+					context.Response.Close();
+				}
+				catch (Exception e)
+				{
+					log.Error("Request failed", e);
+					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
+					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+						writer.Write(e.ToString());
+					httpListenerContext.Response.Close();
+				}
 			}
-			catch (HttpException e)
+			finally
 			{
-				httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-				e.WriteToResponse(httpListenerContext.Response);
+				Tuple<string, Stopwatch> dummy;
+				activeRequests.TryRemove(currentRequestId, out dummy);
 			}
-			catch (Exception e)
+		}
+
+		private bool TryHandleActivity([NotNull] GameHttpContext context)
+		{
+			if (!string.Equals(context.Request.Url.AbsolutePath, basePath + "activity", StringComparison.OrdinalIgnoreCase))
+				return false;
+			using (var writer = new StreamWriter(context.Response.OutputStream))
 			{
-				log.Error("Request failed", e);
-				httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-				httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-				using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
-					writer.Write(e.ToString());
-				httpListenerContext.Response.Close();
+				foreach (var activeRequest in activeRequests.Values.OrderBy(x => x.Item1, StringComparer.OrdinalIgnoreCase))
+					writer.WriteLine("{0} running for {1} ms", activeRequest.Item1, activeRequest.Item2.ElapsedMilliseconds);
 			}
+			context.Response.Close();
+			return true;
 		}
 	}
 }

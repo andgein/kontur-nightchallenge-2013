@@ -23,7 +23,6 @@ namespace Server
 				if (InnerException != null)
 					writer.Write(InnerException);
 			}
-			response.Close();
 		}
 	}
 }
