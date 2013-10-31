@@ -34,7 +34,7 @@ namespace Core.Game.MarsBased
 
 			this.programStartInfos = programStartInfos;
 			var engine = CreateEngine();
-			engine.Run(0);
+			engine.Run(0, out currentTurn);
 			this.programStartInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
 			{
 				Program = pi.Program,
@@ -53,7 +53,7 @@ namespace Core.Game.MarsBased
 		{
 			currentTurn += stepCount;
 			if (currentTurn < 0)
-				throw new InvalidOperationException(string.Format("Cannot rewind game state behind 0 turn. StepCount: {0}", stepCount));
+				currentTurn = 0;
 			gameState = GetGameState(currentTurn);
 			return null; // todo !!!
 		}
@@ -69,7 +69,7 @@ namespace Core.Game.MarsBased
 		private GameState GetGameState(int turnsToMake)
 		{
 			var engine = CreateEngine();
-			var finished = engine.Run(turnsToMake);
+			var finished = engine.Run(turnsToMake, out currentTurn);
 
 			var currentProgram = turnsToMake % engine.WarriorsCount;
 
