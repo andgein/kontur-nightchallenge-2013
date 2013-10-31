@@ -127,9 +127,9 @@ namespace Core.Game.MarsBased
 		{
 			var warriorParser = new MarsWarriorParser(rules);
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
-			var warrior = warriorParser.Parse(programStartInfo.Program, implicitName);
+			var warrior = warriorParser.TryParse(programStartInfo.Program, implicitName);
 			if (warrior == null)
-				throw new InvalidOperationException(string.Format("Failed to parse warrior {0}: {1}", implicitName, programStartInfo));
+				throw new ParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
 			warrior.FileName = filename;
 			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
 			return warrior;

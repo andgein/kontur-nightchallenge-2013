@@ -95,7 +95,7 @@ namespace Tests
 		{
 			var warriorParser = new MarsWarriorParser(rules);
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
-			var warrior = warriorParser.Parse(source, implicitName);
+			var warrior = warriorParser.TryParse(source, implicitName);
 			if (warrior == null)
 				throw new InvalidOperationException(string.Format("Failed to parse warrior {0}: {1}", implicitName, source));
 			warrior.FileName = filename;
