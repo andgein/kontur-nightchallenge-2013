@@ -105,7 +105,14 @@ var GameRunner = Base.extend({
 		this.onGameError = options.onGameError;
 	},
 	_play: function (options) {
-		options = $.extend({ requirePlaying: true }, options);
+		options = $.extend({ requirePlaying: true, singleAction: true }, options);
+
+		if (options.singleAction) {
+			if (this.speed)
+				this.pause();
+			else if (this.gameQueue && !this.gameQueue.isRejected() && !this.gameQueue.isResolved())
+				return;
+		}
 
 		var that = this;
 		function nextAction(gameRunStatus) {
@@ -135,11 +142,11 @@ var GameRunner = Base.extend({
 			});
 	},
 	load: function () {
-		this.pause();
-		this._play({ requirePlaying: false });
+		this._play({
+			requirePlaying: false
+		});
 	},
 	reset: function () {
-		this.pause();
 		this._play({
 			requirePlaying: false,
 			action: function (game) {
@@ -148,7 +155,6 @@ var GameRunner = Base.extend({
 		});
 	},
 	step: function (stepCount) {
-		this.pause();
 		this._play({
 			action: function (game) {
 				return game.step(stepCount);
@@ -156,7 +162,6 @@ var GameRunner = Base.extend({
 		});
 	},
 	stepToEnd: function () {
-		this.pause();
 		this._play({
 			action: function (game) {
 				return game.stepToEnd();
@@ -169,6 +174,7 @@ var GameRunner = Base.extend({
 			function iteration() {
 				if (that.speed)
 					that._play({
+						singleAction: false,
 						action: function (game) {
 							if (that.speed)
 								return game.step(that.speed).done(function (gameRunStatus) {
