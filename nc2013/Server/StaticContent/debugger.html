@@ -90,7 +90,6 @@
 
 		function gameStarted() {
 			showGameError(null);
-			switchToDebuggerTab();
 		}
 
 		function gameRunStatusChanged(gameRunStatus) {
@@ -373,20 +372,16 @@
 			</h1>
 		</div>
 		<div class="debugger-buttons">
-			<button title="Run to end" onclick="gameRunner.stepToEnd()">>>>|</button>
-			<button title="Run very fast (x32)" onclick="gameRunner.run(speedX32)">>>></button>
-			<button title="Run fast (x16)" onclick="gameRunner.run(speedX16)">>></button>
-			<button title="Run slow (x1)" onclick="gameRunner.run(slowSpeed)">></button>
-			<button title="Pause" onclick="gameRunner.pause()">||</button>
-			<button title="Reset" onclick="gameRunner.reset()">#</button>
+			<button title="Run to end" onclick="switchToDebuggerTab(); gameRunner.stepToEnd();">>>>|</button>
+			<button title="Run very fast (x32)" onclick="switchToDebuggerTab(); gameRunner.run(speedX32);">>>></button>
+			<button title="Run fast (x16)" onclick="switchToDebuggerTab(); gameRunner.run(speedX16);">>></button>
+			<button title="Run slow (x1)" onclick="switchToDebuggerTab(); gameRunner.run(slowSpeed);">></button>
+			<button title="Pause" onclick="switchToDebuggerTab(); gameRunner.pause();">||</button>
+			<button title="Reset" onclick="switchToDebuggerTab(); gameRunner.reset();">#</button>
 			&nbsp;
 			steps:
-			<button onclick="gameRunner.step(-4)">-4</button>
-			<button onclick="gameRunner.step(-2)">-2</button>
-			<button onclick="gameRunner.step(-1)">-1</button>
-			<button onclick="gameRunner.step(+1)">+1</button>
-			<button onclick="gameRunner.step(+2)">+2</button>
-			<button onclick="gameRunner.step(+4)">+4</button>
+			<button onclick="switchToDebuggerTab(); gameRunner.step(-1);">-1</button>
+			<button onclick="switchToDebuggerTab(); gameRunner.step(+1);">+1</button>
 			&nbsp;
 			<input type="text" value="+16" id="stepCount" />
 			<button onclick="step()">go</button>
