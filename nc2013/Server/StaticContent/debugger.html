@@ -63,6 +63,11 @@
 			});
 			gameRunner.load();
 
+			$("#autofocus").click(function () {
+				for (var i = 0; i < programs.length; ++i)
+					programs[i].autofocus(!!$("#autofocus:checked").length);
+			});
+
 			$listing = $("#listing");
 			var resizeCounter = 0;
 			$(window).resize(function () {
@@ -229,6 +234,19 @@
 
 		.debugger-winnerState.winner .winner-info, .debugger-winnerState.draw .draw-info {
 			display: inline-block;
+		}
+
+		.listing-autofocus {
+			padding-left: 10px;
+			font-size: 14px;
+			font-weight: normal;
+			display: inline-block;
+		}
+
+		.listing-autofocus label {
+			font-weight: normal;
+			position: relative;
+			top: -2px;
 		}
 
 		.debugger-listing {
@@ -470,7 +488,7 @@
 						</table>
 					</td>
 					<td class="right">
-						<div class="debugger-section-title">Listing</div>
+						<div class="debugger-section-title">Listing <span class="listing-autofocus"><input type="checkbox" id="autofocus" /> <label for="autofocus">autofocus</label></span></div>
 						<div class="debugger-listingContainer">
 							<div id="listing" class="debugger-listing"></div>
 						</div>

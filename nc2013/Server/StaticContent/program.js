@@ -54,9 +54,15 @@ var ProgramState = Base.extend({
 		this.$win.removeClass("winner");
 		this.$win.addClass("draw");
 	},
+	autofocus: function (autofocus) {
+		this.useAutofocus = autofocus;
+	},
 	current: function (isCurrent) {
-		if (isCurrent)
+		if (isCurrent) {
 			this.$next.addClass("current");
+			if (this.useAutofocus)
+				this._scrollIntoNext();
+		}
 		else
 			this.$next.removeClass("current");
 	},
