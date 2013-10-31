@@ -38,7 +38,8 @@
 				$last: $("#lastCommandA"),
 				$next: $("#nextCommandA"),
 				$win: $("#programAWinner"),
-				$source: $("#programA")
+				$source: $("#programA"),
+				programIndex: 0
 			}));
 			programs.push(new ProgramState({
 				memory: memory,
@@ -46,7 +47,8 @@
 				$last: $("#lastCommandB"),
 				$next: $("#nextCommandB"),
 				$win: $("#programBWinner"),
-				$source: $("#programB")
+				$source: $("#programB"),
+				programIndex: 1
 			}));
 			var game = new Game({
 				$currentStep: $("#currentStep"),
@@ -154,8 +156,8 @@
 		.debugger-map .mapCell {
 			background-color: black;
 			float: left;
-			width: 5px;
-			height: 5px;
+			width: 6px;
+			height: 6px;
 		}
 
 			.debugger-map .mapCell.Data {
@@ -165,19 +167,51 @@
 			.debugger-map .mapCell.Command.modified0 {
 				background-color: darkorange;
 			}
+			.debugger-map .mapCell.Command.modified0.ip0 {
+				background-color: darkorange;
+				border: 1px red solid;
+			}
+			.debugger-map .mapCell.Command.modified0.ip1 {
+				background-color: darkorange;
+				border: 1px green solid;
+			}
 
 			.debugger-map .mapCell.Data.modified0 {
 				background-color: black;
 				border: 1px darkorange solid;
 			}
+			.debugger-map .mapCell.Data.modified0.ip0 {
+				background-color: black;
+				border: 1px red solid;
+			}
+			.debugger-map .mapCell.Data.modified0.ip1 {
+				background-color: black;
+				border: 1px green solid;
+			}
 
 			.debugger-map .mapCell.Command.modified1 {
 				background-color: lightgreen;
+			}
+			.debugger-map .mapCell.Command.modified1.ip0 {
+				background-color: lightgreen;
+				border: 1px red solid;
+			}
+			.debugger-map .mapCell.Command.modified1.ip1 {
+				background-color: lightgreen;
+				border: 1px green solid;
 			}
 
 			.debugger-map .mapCell.Data.modified1 {
 				background-color: black;
 				border: 1px lightgreen solid;
+			}
+			.debugger-map .mapCell.Data.modified1.ip0 {
+				background-color: black;
+				border: 1px red solid;
+			}
+			.debugger-map .mapCell.Data.modified1.ip1 {
+				background-color: black;
+				border: 1px green solid;
 			}
 
 		.debugger-winnerState .winner-info {
@@ -281,6 +315,9 @@
 
 		.programInfoContainer .command {
 			font-family: monospace;
+		}
+		.programInfoContainer .command.current {
+			background-color: gold;
 		}
 
 		.debugger-error {

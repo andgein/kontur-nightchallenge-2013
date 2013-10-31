@@ -17,12 +17,10 @@ var Game = Base.extend({
 		var programStartInfos = [];
 		for (var i = 0; i < this.programs.length; ++i) {
 			var programStartInfo = this.programs[i].getProgramStartInfo();
-			if (programStartInfo)
-				programStartInfos.push(programStartInfo);
+			if (!programStartInfo)
+				return $.Deferred().reject("Program text should not be empty");
+			programStartInfos.push(programStartInfo);
 		}
-		if (programStartInfos.length == 0)
-			return $.Deferred().reject("At least one program should not be empty");
-
 		var that = this;
 		return server.post("debugger/start", programStartInfos)
 			.pipe(function (gameState) {
@@ -45,6 +43,8 @@ var Game = Base.extend({
 				}
 				else if (stepResponse.diff) {
 					that.$currentStep.text(stepResponse.diff.currentStep);
+					for (var i = 0; i < that.programs.length; ++i)
+						this.programs[i].current(stepResponse.diff.currentProgram == i);
 					if (stepResponse.diff.memoryDiffs)
 						that.memory.applyDiffs(stepResponse.diff.memoryDiffs);
 					if (stepResponse.diff.programStateDiffs)
@@ -60,6 +60,8 @@ var Game = Base.extend({
 								that.programs[i].draw();
 						return "gameover";
 					}
+					for (var i = 0; i < that.programs.length; ++i)
+						that.programs[i].plays();
 					return "playing";
 				}
 			});
@@ -82,8 +84,10 @@ var Game = Base.extend({
 		} else {
 			this.$currentStep.text(gameState.currentStep);
 			this.memory.setCellStates(gameState.memoryState);
-			for (var i = 0; i < gameState.programStates.length; ++i)
+			for (var i = 0; i < gameState.programStates.length; ++i) {
 				this.programs[i].setProgramState(gameState.programStates[i]);
+				this.programs[i].current(gameState.currentProgram == i);
+			}
 			if (gameState.gameOver) {
 				if (gameState.winner != null)
 					this.programs[gameState.winner].win();
@@ -92,6 +96,8 @@ var Game = Base.extend({
 						this.programs[i].draw();
 				return "gameover";
 			}
+			for (var i = 0; i < this.programs.length; ++i)
+				this.programs[i].plays();
 			return "playing";
 		}
 	}

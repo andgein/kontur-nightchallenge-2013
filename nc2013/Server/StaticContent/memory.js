@@ -36,29 +36,48 @@ var Memory = Base.extend({
 	},
 	reset: function () {
 		for (var i = 0; i < this.cells.length; ++i)
-			this.cells[i].setCellState(null);
+			this.cells[i].reset();
 	}
 });
 
 var Cell = Base.extend({
-	constructor: function (address) {
+	constructor: function(address) {
 		this.address = address;
 		this.lastModifiedClass = "";
 		this.lastContentClass = "";
 		this.listingItemContent = this._calcListingItemContent();
+		this.activeInstructionPointers = {};
 	},
-	getListingItemContent: function () {
+	getListingItemContent: function() {
 		return this.listingItemContent;
 	},
-	attachMapCell: function ($mapCell) {
+	attachMapCell: function($mapCell) {
 		this.$mapCell = $mapCell;
 	},
-	attachListingItem: function ($listingItem) {
+	attachListingItem: function($listingItem) {
 		this.$listingItem = $listingItem;
 	},
-	setCellState: function (cellState) {
+	setCellState: function(cellState) {
 		this.cellState = cellState;
 		this._refreshState();
+	},
+	reset: function () {
+		var instructionPointersToRemove = [];
+		for (var i in this.activeInstructionPointers)
+			instructionPointersToRemove.push(i);
+		for (var i = 0; i < instructionPointersToRemove.length; ++i)
+			this.removeInstructionPointer(instructionPointersToRemove[i]);
+		this.setCellState(null);
+	},
+	removeInstructionPointer: function (programIndex) {
+		delete this.activeInstructionPointers[programIndex];
+		this.$mapCell.removeClass("ip" + programIndex);
+		this.$listingItem.removeClass("ip" + programIndex);
+	},
+	setInstructionPointer: function (programIndex) {
+		this.$mapCell.addClass("ip" + programIndex);
+		this.$listingItem.addClass("ip" + programIndex);
+		this.activeInstructionPointers[programIndex] = true;
 	},
 	_refreshState: function () {
 		var modifiedClass;

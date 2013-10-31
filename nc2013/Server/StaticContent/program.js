@@ -6,8 +6,10 @@ var ProgramState = Base.extend({
 		this.$win = options.$win;
 		this.$source = options.$source;
 		this.memory = options.memory;
+		this.programIndex = options.programIndex;
 	},
 	applyDiff: function (programStateDiff) {
+		this._removeInstructionPointers();
 		switch (programStateDiff.changeType) {
 			case "Executed":
 				this.programState.lastPointer = this.programState.processPointers.shift();
@@ -23,11 +25,17 @@ var ProgramState = Base.extend({
 				throw "Invalid changeType: " + programStateDiff.changeType;
 		}
 		this._refreshState();
+		this._setInstructionPointers();
 	},
 	reset: function () {
 		this.setProgramState(null);
 		this.$win.removeClass("winner");
 		this.$win.removeClass("draw");
+		this.$win.removeClass("current");
+	},
+	plays: function () {
+		this.$win.removeClass("draw");
+		this.$win.removeClass("winner");
 	},
 	win: function () {
 		this.$win.removeClass("draw");
@@ -37,9 +45,17 @@ var ProgramState = Base.extend({
 		this.$win.removeClass("winner");
 		this.$win.addClass("draw");
 	},
+	current: function (isCurrent) {
+		if (isCurrent)
+			this.$next.addClass("current");
+		else
+			this.$next.removeClass("current");
+	},
 	setProgramState: function (programState) {
+		this._removeInstructionPointers();
 		this.programState = programState;
 		this._refreshState();
+		this._setInstructionPointers();
 	},
 	setProgramStartInfo: function (programStartInfo) {
 		this.$source.val(programStartInfo && programStartInfo.program || "");
@@ -47,6 +63,18 @@ var ProgramState = Base.extend({
 	getProgramStartInfo: function () {
 		var source = this.$source.val();
 		return source && { program: source };
+	},
+	_removeInstructionPointers: function () {
+		if (!this.programState || !this.programState.processPointers)
+			return;
+		for (var i = 0; i < this.programState.processPointers.length; ++i)
+			this.memory.getCell(this.programState.processPointers[i]).removeInstructionPointer(this.programIndex);
+	},
+	_setInstructionPointers: function () {
+		if (!this.programState || !this.programState.processPointers)
+			return;
+		for (var i = 0; i < this.programState.processPointers.length; ++i)
+			this.memory.getCell(this.programState.processPointers[i]).setInstructionPointer(this.programIndex);
 	},
 	_refreshState: function () {
 		this.$processCount.text(this.programState ? this.programState.processPointers.length : "");
