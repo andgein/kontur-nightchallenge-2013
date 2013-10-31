@@ -7,6 +7,15 @@ var ProgramState = Base.extend({
 		this.$source = options.$source;
 		this.memory = options.memory;
 		this.programIndex = options.programIndex;
+		var that = this;
+		this.$next.click(function () {
+			that._scrollIntoNext();
+			return false;
+		});
+		this.$last.click(function () {
+			that._scrollIntoLast();
+			return false;
+		});
 	},
 	applyDiff: function (programStateDiff) {
 		this._removeInstructionPointers();
@@ -91,5 +100,17 @@ var ProgramState = Base.extend({
 		}
 		else
 			this.$next.text("");
+	},
+	_scrollIntoNext: function () {
+		if (this.programState && this.programState.processPointers.length > 0) {
+			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
+			nextCell.scrollIntoView();
+		}
+	},
+	_scrollIntoLast: function () {
+		if (this.programState && this.programState.lastPointer) {
+			var lastCell = this.memory.getCell(this.programState.lastPointer);
+			lastCell.scrollIntoView();
+		}
 	}
 });

@@ -53,6 +53,11 @@ var Cell = Base.extend({
 	},
 	attachMapCell: function($mapCell) {
 		this.$mapCell = $mapCell;
+		var that = this;
+		this.$mapCell.click(function () {
+			that.scrollIntoView();
+			return false;
+		});
 	},
 	attachListingItem: function($listingItem) {
 		this.$listingItem = $listingItem;
@@ -61,7 +66,15 @@ var Cell = Base.extend({
 		this.cellState = cellState;
 		this._refreshState();
 	},
+	scrollIntoView: function () {
+		if (Cell._lastScrolledInto)
+			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
+		this.$listingItem.addClass("justScrolled");
+		this.$listingItem[0].scrollIntoView();
+		Cell._lastScrolledInto = this;
+	},
 	reset: function () {
+		this.$listingItem.removeClass("justScrolled");
 		var instructionPointersToRemove = [];
 		for (var i in this.activeInstructionPointers)
 			instructionPointersToRemove.push(i);
@@ -123,4 +136,6 @@ var Cell = Base.extend({
 			return "";
 		return this.address + " " + this.cellState.instruction;
 	}
+}, {
+	_lastScrolledInto: null
 });
