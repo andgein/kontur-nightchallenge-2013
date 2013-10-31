@@ -81,11 +81,12 @@ namespace Core.Arena
 				var marsGame = new MarsGame(battle.GetProgramStartInfos());
 				marsGame.StepToEnd();
 				var winner = marsGame.GameState.Winner;
+				//TODO: set StartAddress after our Engine replace MarsEngine
 				return new BattleResult
 				{
 					RunToCompletion = true,
-					Player1Result = new BattlePlayerResult { Player = battle.Player1, Score = GetScore(0, winner) },
-					Player2Result = new BattlePlayerResult { Player = battle.Player2, Score = GetScore(1, winner) },
+					Player1Result = new BattlePlayerResult { Player = battle.Player1, Score = GetScore(0, winner), StartAddress = 42 },
+					Player2Result = new BattlePlayerResult { Player = battle.Player2, Score = GetScore(1, winner), StartAddress = 42 },
 				};
 			}
 			catch (Exception e)
