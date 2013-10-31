@@ -124,8 +124,9 @@
 			adjustLayout();
 		}
 
-		var fastSpeed = 16;
 		var slowSpeed = 1;
+		var speedX16 = 16;
+		var speedX32 = 32;
 
 		function step() {
 			var stepCount = parseInt($("#stepCount").val());
@@ -335,9 +336,10 @@
 			</h1>
 		</div>
 		<div class="debugger-buttons">
-			<button title="Run without debugger" onclick="gameRunner.stepToEnd()">>>></button>
-			<button title="Run fast" onclick="gameRunner.run(fastSpeed)">>></button>
-			<button title="Run slow" onclick="gameRunner.run(slowSpeed)">></button>
+			<button title="Run to end" onclick="gameRunner.stepToEnd()">>>>|</button>
+			<button title="Run very fast (x32)" onclick="gameRunner.run(speedX32)">>>></button>
+			<button title="Run fast (x16)" onclick="gameRunner.run(speedX16)">>></button>
+			<button title="Run slow (x1)" onclick="gameRunner.run(slowSpeed)">></button>
 			<button title="Pause" onclick="gameRunner.pause()">||</button>
 			<button title="Reset" onclick="gameRunner.reset()">#</button>
 			&nbsp;
