@@ -157,12 +157,26 @@
 			height: 5px;
 		}
 
-			.debugger-map .mapCell.modified0 {
-				background-color: red;
+			.debugger-map .mapCell.Data {
+				background-color: black;
 			}
 
-			.debugger-map .mapCell.modified1 {
+			.debugger-map .mapCell.Command.modified0 {
+				background-color: darkorange;
+			}
+
+			.debugger-map .mapCell.Data.modified0 {
+				background-color: black;
+				border: 1px darkorange solid;
+			}
+
+			.debugger-map .mapCell.Command.modified1 {
 				background-color: lightgreen;
+			}
+
+			.debugger-map .mapCell.Data.modified1 {
+				background-color: black;
+				border: 1px lightgreen solid;
 			}
 
 		.debugger-winnerState .winner-info {
@@ -192,7 +206,7 @@
 			}
 
 				.debugger-listing .listingItem.modified0 {
-					background-color: red;
+					background-color: darkorange;
 				}
 
 				.debugger-listing .listingItem.modified1 {

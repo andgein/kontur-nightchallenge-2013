@@ -43,7 +43,8 @@ var Memory = Base.extend({
 var Cell = Base.extend({
 	constructor: function (address) {
 		this.address = address;
-		this.lastClass = "";
+		this.lastModifiedClass = "";
+		this.lastContentClass = "";
 		this.listingItemContent = this._calcListingItemContent();
 	},
 	getListingItemContent: function () {
@@ -60,20 +61,36 @@ var Cell = Base.extend({
 		this._refreshState();
 	},
 	_refreshState: function () {
-		var newClass;
-		if (this._isEmptyState())
-			newClass = "";
+		var modifiedClass;
+		if (!this.cellState || this.cellState.lastModifiedByProgram == null)
+			modifiedClass = "";
 		else
-			newClass = "modified" + this.cellState.lastModifiedByProgram;
-		if (newClass != this.lastClass) {
-			if (this.lastClass) {
-				this.$mapCell.removeClass(this.lastClass);
-				this.$listingItem.removeClass(this.lastClass);
+			modifiedClass = "modified" + this.cellState.lastModifiedByProgram;
+		if (modifiedClass != this.lastModifiedClass) {
+			if (this.lastModifiedClass) {
+				this.$mapCell.removeClass(this.lastModifiedClass);
+				this.$listingItem.removeClass(this.lastModifiedClass);
 			}
-			this.lastClass = newClass;
-			if (this.lastClass) {
-				this.$mapCell.addClass(this.lastClass);
-				this.$listingItem.addClass(this.lastClass);
+			this.lastModifiedClass = modifiedClass;
+			if (this.lastModifiedClass) {
+				this.$mapCell.addClass(this.lastModifiedClass);
+				this.$listingItem.addClass(this.lastModifiedClass);
+			}
+		}
+		var contentClass;
+		if (!this.cellState)
+			contentClass = "Data";
+		else
+			contentClass = this.cellState.cellType;
+		if (contentClass != this.lastContentClass) {
+			if (this.lastContentClass) {
+				this.$mapCell.removeClass(this.lastContentClass);
+				this.$listingItem.removeClass(this.lastContentClass);
+			}
+			this.lastContentClass = contentClass;
+			if (this.lastContentClass) {
+				this.$mapCell.addClass(this.lastContentClass);
+				this.$listingItem.addClass(this.lastContentClass);
 			}
 		}
 		var listingItemContent = this._calcListingItemContent();
@@ -84,10 +101,7 @@ var Cell = Base.extend({
 	},
 	_calcListingItemContent: function () {
 		if (!this.cellState)
-			return this.address + " DAT 0 0";
+			return "";
 		return this.address + " " + this.cellState.instruction;
-	},
-	_isEmptyState: function () {
-		return !this.cellState || this.cellState.cellType == "Data";
 	}
 });
