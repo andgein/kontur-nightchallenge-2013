@@ -153,6 +153,8 @@ namespace Server
 				return "text/css; encoding=utf-8";
 			if (Path.GetExtension(file) == ".txt")
 				return "text/plain; encoding=utf-8";
+			if (Path.GetExtension(file) == ".gif")
+				return "image/gif";
 			return null;
 		}
 

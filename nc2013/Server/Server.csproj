@@ -121,6 +121,9 @@
     <Content Include="log.config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="StaticContent\ajax-loader.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="StaticContent\bootstrap.min.js" />
     <Content Include="StaticContent\common.css" />
     <None Include="StaticContent\json2.js">

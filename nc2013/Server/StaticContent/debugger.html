@@ -346,6 +346,11 @@
 			display: none;
 			background-color: lightgreen;
 		}
+			.debugger-gameRunStatus .debugger-gameRunStatus-playing .loader {
+				background: url("ajax-loader.gif") no-repeat;
+				position: relative;
+				top: 6px;
+			}
 
 		.debugger-gameRunStatus .debugger-gameRunStatus-loading {
 			display: none;
@@ -365,7 +370,7 @@
 			<h1>
 				Debugger
 				<span class="debugger-gameRunStatus loading">
-					<span class="debugger-gameRunStatus-playing">playing</span>
+					<span class="debugger-gameRunStatus-playing"><span class="loader"></span>playing</span>
 					<span class="debugger-gameRunStatus-gameover">game over</span>
 					<span class="debugger-gameRunStatus-loading">loading, please wait...</span>
 				</span>
