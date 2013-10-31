@@ -31,7 +31,7 @@ namespace Server
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo)
+		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo, string staticContentPath)
 		{
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, "index.html").AbsoluteUri;
@@ -49,7 +49,7 @@ namespace Server
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
-				new StaticHandler(),
+				new StaticHandler(staticContentPath),
 				new RankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo),
 				new ArenaPlayerHandler(playersRepo, gamesRepo)

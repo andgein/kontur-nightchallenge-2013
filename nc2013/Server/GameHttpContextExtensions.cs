@@ -168,7 +168,7 @@ namespace Server
 
 		public static void SendStaticFile([NotNull] this GameHttpContext context, [NotNull] string localPath)
 		{
-			if (!context.TryHandleStatic(Path.Combine("StaticContent", localPath)))
+			if (!context.TryHandleStatic(localPath))
 				throw new HttpException(HttpStatusCode.NotFound, String.Format("Static resource '{0}' is not found", context.Request.RawUrl));
 		}
 	}

@@ -35,7 +35,7 @@ namespace Server
 			var prefix = GetPrefix(args);
 			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
 			var gamesRepo = new GamesRepo(new DirectoryInfo("games"));
-			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo);
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, GetStaticContentDir());
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -54,6 +54,12 @@ namespace Server
 		{
 			var prefix = args.FirstOrDefault();
 			return string.IsNullOrEmpty(prefix) ? defaultPrefix : prefix;
+		}
+
+		private static string GetStaticContentDir()
+		{
+			if (Directory.GetCurrentDirectory().EndsWith("bin\\Debug")) return "..\\..";
+			else return ".";
 		}
 	}
 }

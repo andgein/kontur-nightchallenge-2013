@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using JetBrains.Annotations;
 
@@ -6,6 +7,13 @@ namespace Server.Handlers
 {
 	public class StaticHandler : IHttpHandler
 	{
+		private readonly string staticContentPath;
+
+		public StaticHandler(string staticContentPath)
+		{
+			this.staticContentPath = staticContentPath;
+		}
+
 		public bool CanHandle([NotNull] GameHttpContext context)
 		{
 			var contentType = GameHttpContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath);
@@ -17,7 +25,7 @@ namespace Server.Handlers
 			var localPath = TryGetLocalPath(context);
 			if (localPath == null)
 				throw new HttpException(HttpStatusCode.NotFound, string.Format("Static resource '{0}' is not found", context.Request.RawUrl));
-			context.SendStaticFile(localPath);
+			context.SendStaticFile(Path.Combine(staticContentPath, "StaticContent", localPath));
 		}
 
 		[CanBeNull]
