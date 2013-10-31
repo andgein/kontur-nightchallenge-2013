@@ -44,7 +44,7 @@ namespace Server
 			handlers = new IHttpHandler[]
 			{
 				new DebuggerStartHandler(debuggerManager),
-				new DebuggerGameStateHandler(debuggerManager),
+				new DebuggerStateHandler(debuggerManager),
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),

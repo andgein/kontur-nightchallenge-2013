@@ -16,7 +16,7 @@ namespace Server.Debugging
 			var diff = debugger.Play(game => game.Step(stepCount));
 			var response = new DebuggerStepResponse();
 			if (diff == null || DiffIsTooBig(diff))
-				response.GameState = debugger.GameState;
+				response.GameState = debugger.State.GameState;
 			else
 				response.Diff = diff;
 			context.SendResponse(response);

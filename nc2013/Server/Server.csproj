@@ -52,6 +52,7 @@
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />
     <Compile Include="Debugging\DebuggerResetHandler.cs" />
+    <Compile Include="Debugging\DebuggerState.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
     <Compile Include="Arena\ArenaSubmitHandler.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="Arena\RankingHandler.cs" />
     <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
-    <Compile Include="Debugging\DebuggerGameStateHandler.cs" />
+    <Compile Include="Debugging\DebuggerStateHandler.cs" />
     <Compile Include="Handlers\IHttpHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Debugging\DebuggerStepHandler.cs" />

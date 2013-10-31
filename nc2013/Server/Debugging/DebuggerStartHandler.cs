@@ -11,6 +11,7 @@ namespace Server.Debugging
 		{
 			var programStartInfos = context.GetRequest<ProgramStartInfo[]>();
 			debugger.StartNewGame(programStartInfos);
+			context.SendResponse(debugger.State.GameState);
 		}
 	}
 }

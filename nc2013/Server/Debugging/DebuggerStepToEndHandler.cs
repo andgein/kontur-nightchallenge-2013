@@ -9,7 +9,7 @@ namespace Server.Debugging
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			debugger.Play(game => game.StepToEnd());
-			context.SendResponse(debugger.GameState);
+			context.SendResponse(debugger.State.GameState);
 		}
 	}
 }

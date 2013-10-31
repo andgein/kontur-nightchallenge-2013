@@ -7,10 +7,10 @@ var Game = Base.extend({
 	load: function () {
 		var that = this;
 		return server.get("debugger/state")
-			.pipe(function (gameState) {
+			.pipe(function (debuggerState) {
 				for (var i = 0; i < that.programs.length; ++i)
-					that.programs[i].setProgramStartInfo(gameState && gameState.programStartInfos && gameState.programStartInfos[i]);
-				return that._setGameState(gameState);
+					that.programs[i].setProgramStartInfo(debuggerState.programStartInfos && debuggerState.programStartInfos[i]);
+				return that._setGameState(debuggerState.gameState);
 			});
 	},
 	start: function () {
@@ -25,11 +25,8 @@ var Game = Base.extend({
 
 		var that = this;
 		return server.post("debugger/start", programStartInfos)
-			.pipe(function () {
-				return server.get("debugger/state")
-					.pipe(function (gameState) {
-						return that._setGameState(gameState);
-					});
+			.pipe(function (gameState) {
+					return that._setGameState(gameState);
 			});
 	},
 	stepToEnd: function () {

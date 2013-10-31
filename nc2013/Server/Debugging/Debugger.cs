@@ -9,39 +9,46 @@ namespace Server.Debugging
 {
 	public class Debugger : IDebugger
 	{
-		private const string debuggerGameStateKey = "debuggerGameState";
+		private const string debuggerStateKey = "debuggerState";
 		private readonly IGameServer gameServer;
 		private readonly ISession session;
 		private IGame game;
 
 		private static readonly ILog log = LogManager.GetLogger(typeof (Debugger));
+		private ProgramStartInfo[] lastProgramStartInfos;
 
 		public Debugger([NotNull] IGameServer gameServer, [NotNull] ISession session)
 		{
 			this.gameServer = gameServer;
 			this.session = session;
-			var persistedGameState = session.Load<GameState>(debuggerGameStateKey);
-			if (persistedGameState != null)
-				try
-				{
-					game = gameServer.ResumeGame(persistedGameState);
-				}
-				catch (Exception e)
-				{
-					log.Error("Resume game failed", e);
-				}
+			var state = session.Load<DebuggerState>(debuggerStateKey);
+			if (state != null)
+			{
+				lastProgramStartInfos = state.ProgramStartInfos;
+				if (state.GameState != null)
+					try
+					{
+						game = gameServer.ResumeGame(state.GameState);
+						State.GameState = game.GameState;
+					}
+					catch (Exception e)
+					{
+						log.Error("Resume game failed", e);
+					}
+			}
 		}
 
 		public void StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
+			lastProgramStartInfos = programStartInfos;
 			game = gameServer.StartNewGame(programStartInfos);
-			session.Save(debuggerGameStateKey, game.GameState);
+			session.Save(debuggerStateKey, State);
 		}
 
 		public void Reset()
 		{
 			game = null;
-			session.Save(debuggerGameStateKey, (GameState) null);
+			session.Save(debuggerStateKey, (DebuggerState) null);
 		}
 
 		public T Play<T>([NotNull] Func<IGame, T> action)
@@ -49,7 +56,7 @@ namespace Server.Debugging
 			if (game == null)
 				throw new HttpException(HttpStatusCode.Conflict, "Debugger is not started yet");
 			var result = action(game);
-			session.Save(debuggerGameStateKey, game.GameState);
+			session.Save(debuggerStateKey, State);
 			return result;
 		}
 
@@ -62,10 +69,17 @@ namespace Server.Debugging
 			});
 		}
 
-		[CanBeNull]
-		public GameState GameState
+		[NotNull]
+		public DebuggerState State
 		{
-			get { return game == null ? null : game.GameState; }
+			get
+			{
+				return new DebuggerState
+				{
+					GameState = game == null ? null : game.GameState,
+					ProgramStartInfos = lastProgramStartInfos
+				};
+			}
 		}
 	}
 }
