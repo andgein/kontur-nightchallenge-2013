@@ -8,14 +8,17 @@ namespace Core.Arena
 	{
 		[JsonProperty]
 		public string Name;
+
 		[JsonProperty]
 		public int Version;
+
 		[JsonIgnore]
 		public string Program;
+
 		[JsonIgnore]
 		public Warrior Warrior;
 
-		protected bool Equals(TournamentPlayer other)
+		private bool Equals(TournamentPlayer other)
 		{
 			return string.Equals(Name, other.Name) && Version == other.Version;
 		}
@@ -34,6 +37,11 @@ namespace Core.Arena
 			{
 				return ((Name != null ? Name.GetHashCode() : 0)*397) ^ Version;
 			}
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Name: {0}, Version: {1}, Program: {2}", Name, Version, Program);
 		}
 	}
 }

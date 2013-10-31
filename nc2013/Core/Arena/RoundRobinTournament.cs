@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Pipes;
 using System.Linq;
 using Core.Game;
 using Core.Game.MarsBased;
+using JetBrains.Annotations;
+using log4net;
 
 namespace Core.Arena
 {
 	public class RoundRobinTournament
 	{
-		private static readonly Random random = new Random();
+		private static readonly ILog log = LogManager.GetLogger(typeof(RoundRobinTournament));
 		private readonly int battlesPerPair;
 		private readonly GamesRepo gamesRepo;
 		private readonly TournamentPlayer[] players;
@@ -62,19 +63,36 @@ namespace Core.Arena
 			for (int i = 0; i < battlesPerPair; i++)
 				foreach (var pair in pairs)
 				{
-					var battlePlayers = new[] {pair.Item1, pair.Item2};
-					var res = RunEngine(battlePlayers);
-					yield return res;
+					var battle = new Battle
+					{
+						Player1 = pair.Item1,
+						Player2 = pair.Item2,
+					};
+					var battleResult = RunBattle(battle);
+					if (battleResult.RunToCompletion)
+						yield return battleResult.Results;
 				}
 		}
 
-		private BattlePlayerResult[] RunEngine(TournamentPlayer[] battlePlayers)
+		private BattleResult RunBattle([NotNull] Battle battle)
 		{
-			//TODO fix this dummy Code. Use Engine to run battle
-			var programStartInfos = battlePlayers.Select(p => new ProgramStartInfo { Program = p.Program }).ToArray();
-			var marsGame = new MarsGame(programStartInfos);
-			marsGame.StepToEnd();
-			return battlePlayers.Select((p, idx) => new BattlePlayerResult {Player = p, Score = GetScore(idx, marsGame.GameState.Winner)}).ToArray();
+			try
+			{
+				var marsGame = new MarsGame(battle.GetProgramStartInfos());
+				marsGame.StepToEnd();
+				var winner = marsGame.GameState.Winner;
+				return new BattleResult
+				{
+					RunToCompletion = true,
+					Player1Result = new BattlePlayerResult { Player = battle.Player1, Score = GetScore(0, winner) },
+					Player2Result = new BattlePlayerResult { Player = battle.Player2, Score = GetScore(1, winner) },
+				};
+			}
+			catch (Exception e)
+			{
+				log.Error(string.Format("Battle failed: {0}", battle), e);
+				return new BattleResult { RunToCompletion = false };
+			}
 		}
 
 		private static int GetScore(int player, int? winner)

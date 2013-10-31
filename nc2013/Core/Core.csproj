@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -42,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arena\Battle.cs" />
     <Compile Include="Arena\BattlePlayerResult.cs" />
+    <Compile Include="Arena\BattleResult.cs" />
     <Compile Include="Arena\GamesRepo.cs" />
     <Compile Include="Arena\RoundRobinTournament.cs" />
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
