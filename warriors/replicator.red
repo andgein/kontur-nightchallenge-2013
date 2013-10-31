@@ -9,7 +9,7 @@ code	mov to, (to+size)
 loop	mov @from, @to
 	add #1, from
 	add #1, to
-	djn loop, cnt
+	djn loop, cnt ;undefined label!
 	jmp last
 	dat 0, 0
 	dat 0, 0
