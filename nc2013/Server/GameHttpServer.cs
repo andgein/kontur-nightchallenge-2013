@@ -116,15 +116,15 @@ namespace Server
 							throw new HttpException(HttpStatusCode.InternalServerError, string.Format("Method '{0}' can be handled with many handlers: {1}", requestUrl, string.Join(", ", handlersThatCanHandle.Select(h => h.GetType().Name))));
 					}
 				}
+				catch (HttpListenerException)
+				{
+					throw;
+				}
 				catch (HttpException e)
 				{
 					context.Response.ContentType = "text/plain; charset: utf-8";
 					e.WriteToResponse(context.Response);
 					context.Response.Close();
-				}
-				catch (HttpListenerException)
-				{
-					throw;
 				}
 				catch (Exception e)
 				{
