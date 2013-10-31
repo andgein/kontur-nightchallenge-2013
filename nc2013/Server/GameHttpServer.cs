@@ -20,6 +20,7 @@ namespace Server
 	public class GameHttpServer
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof (GameHttpServer));
+		private static readonly ILog httpListenerExceptionLog = LogManager.GetLogger("network");
 
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
@@ -121,6 +122,10 @@ namespace Server
 					e.WriteToResponse(context.Response);
 					context.Response.Close();
 				}
+				catch (HttpListenerException)
+				{
+					throw;
+				}
 				catch (Exception e)
 				{
 					log.Error("Request failed", e);
@@ -130,6 +135,10 @@ namespace Server
 						writer.Write(e.ToString());
 					httpListenerContext.Response.Close();
 				}
+			}
+			catch (HttpListenerException e)
+			{
+				httpListenerExceptionLog.Debug("HttpListener failure", e);
 			}
 			finally
 			{

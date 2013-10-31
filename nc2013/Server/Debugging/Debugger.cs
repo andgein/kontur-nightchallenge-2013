@@ -60,7 +60,7 @@ DAT #0, #0"}
 		public void Reset()
 		{
 			game = null;
-			session.Save(debuggerStateKey, (DebuggerState)null);
+			SaveState();
 		}
 
 		public T Play<T>([NotNull] Func<IGame, T> action)
@@ -68,8 +68,13 @@ DAT #0, #0"}
 			if (game == null)
 				throw new HttpException(HttpStatusCode.Conflict, "Debugger is not started yet");
 			var result = action(game);
-			session.Save(debuggerStateKey, State);
+			SaveState();
 			return result;
+		}
+
+		private void SaveState()
+		{
+			session.Save(debuggerStateKey, State);
 		}
 
 		public void Play([NotNull] Action<IGame> action)

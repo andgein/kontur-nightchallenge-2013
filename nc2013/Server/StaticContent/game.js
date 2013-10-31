@@ -6,7 +6,10 @@ var Game = Base.extend({
 	},
 	load: function () {
 		var that = this;
-		return server.get("debugger/state")
+		return server.get("debugger/reset")
+			.pipe(function () {
+				return server.get("debugger/state");
+			})
 			.pipe(function (debuggerState) {
 				for (var i = 0; i < that.programs.length; ++i)
 					that.programs[i].setProgramStartInfo(debuggerState.programStartInfos && debuggerState.programStartInfos[i]);
