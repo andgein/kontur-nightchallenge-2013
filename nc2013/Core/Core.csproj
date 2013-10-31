@@ -74,6 +74,7 @@
     <Compile Include="Game\MarsBased\MarsGame.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
+    <Compile Include="Parser\CommandDescriber.cs" />
     <Compile Include="Parser\CompilationException.cs" />
     <Compile Include="Parser\Expression.cs" />
     <Compile Include="Parser\ExpressionParser.cs" />

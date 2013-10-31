@@ -78,6 +78,13 @@ namespace Server
 				writer.Write(result);
 		}
 
+		public static void SendResponseString([NotNull] this GameHttpContext context, string value)
+		{
+			context.Response.ContentType = "text/plain; charset=utf-8";
+			using (var writer = new StreamWriter(context.Response.OutputStream))
+				writer.Write(value);
+		}
+
 		public static void SendResponseRaw([NotNull] this GameHttpContext context, object value, string contentType = null)
 		{
 			if (!ReferenceEquals(value, null))

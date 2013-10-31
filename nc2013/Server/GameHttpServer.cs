@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arena;
 using Core.Game.MarsBased;
+using Core.Parser;
 using JetBrains.Annotations;
 using log4net;
 using Server.Arena;
@@ -50,7 +51,8 @@ namespace Server
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
 				new StaticHandler(staticContentPath),
-				new RankingHandler(gamesRepo),
+				new CommandDescribeHandler(),
+				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo),
 				new ArenaPlayerHandler(playersRepo, gamesRepo)
 			};
@@ -158,6 +160,18 @@ namespace Server
 			}
 			context.Response.Close();
 			return true;
+		}
+	}
+
+	public class CommandDescribeHandler : StrictPathHttpHandlerBase
+	{
+		public CommandDescribeHandler() : base("describe") {}
+
+		public override void Handle(GameHttpContext context)
+		{
+			string cmd = context.GetOptionalStringParam("cmd");
+			var description = new CommandDescriber().Describe(cmd);
+			context.SendResponseRaw(description, "text/plain; charset=utf-8");
 		}
 	}
 }

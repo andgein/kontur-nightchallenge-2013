@@ -4,11 +4,11 @@ using Server.Handlers;
 
 namespace Server.Arena
 {
-	public class RankingHandler : StrictPathHttpHandlerBase
+	public class ArenaRankingHandler : StrictPathHttpHandlerBase
 	{
 		private readonly GamesRepo gamesRepo;
 
-		public RankingHandler(GamesRepo gamesRepo)
+		public ArenaRankingHandler(GamesRepo gamesRepo)
 			: base("arena/ranking")
 		{
 			this.gamesRepo = gamesRepo;
