@@ -157,14 +157,21 @@
 				background-color: lightgreen;
 			}
 
-		.debugger-winnerState {
+		.debugger-winnerState .winner-info {
 			display: none;
 			background-color: palegreen;
 			padding: 2px 10px 2px 10px;
 			border-radius: 3px;
 		}
 
-			.debugger-winnerState.winner {
+		.debugger-winnerState .draw-info {
+			display: none;
+			background-color: yellow;
+			padding: 2px 10px 2px 10px;
+			border-radius: 3px;
+		}
+
+			.debugger-winnerState.winner .winner-info, .debugger-winnerState.draw .draw-info {
 				display: inline-block;
 			}
 
@@ -335,7 +342,7 @@
 							</tr>
 							<tr>
 								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner">winner</span></div>
+									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></div>
 									<div>
 										<span>Processes: </span><span id="processCountA"></span>
 										<div>
@@ -347,7 +354,7 @@
 									</div>
 								</td>
 								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner">winner</span></div>
+									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></div>
 									<div>
 										<span>Processes: </span><span id="processCountB"></span>
 										<div>

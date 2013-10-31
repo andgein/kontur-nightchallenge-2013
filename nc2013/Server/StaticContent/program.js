@@ -31,6 +31,9 @@ var ProgramState = Base.extend({
 	win: function () {
 		this.$win.addClass("winner");
 	},
+	draw: function() {
+		this.$win.addClass("draw");
+	},
 	setProgramState: function (programState) {
 		this.programState = programState;
 		this._refreshState();

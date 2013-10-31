@@ -26,7 +26,7 @@ var Game = Base.extend({
 		var that = this;
 		return server.post("debugger/start", programStartInfos)
 			.pipe(function (gameState) {
-					return that._setGameState(gameState);
+				return that._setGameState(gameState);
 			});
 	},
 	stepToEnd: function () {
@@ -52,8 +52,12 @@ var Game = Base.extend({
 							var programStateDiff = stepResponse.diff.programStateDiffs[i];
 							that.programs[programStateDiff.program].applyDiff(programStateDiff);
 						}
-					if (stepResponse.diff.winner) {
-						that.programs[stepResponse.diff.winner].win();
+					if (stepResponse.diff.gameOver) {
+						if (stepResponse.diff.winner != null)
+							that.programs[stepResponse.diff.winner].win();
+						else
+							for (var i = 0; i < that.programs.length; ++i)
+								that.programs[i].draw();
 						return "gameover";
 					}
 					return "playing";
@@ -80,8 +84,12 @@ var Game = Base.extend({
 			this.memory.setCellStates(gameState.memoryState);
 			for (var i = 0; i < gameState.programStates.length; ++i)
 				this.programs[i].setProgramState(gameState.programStates[i]);
-			if (gameState.winner) {
-				this.programs[gameState.winner].win();
+			if (gameState.gameOver) {
+				if (gameState.winner != null)
+					this.programs[gameState.winner].win();
+				else
+					for (var i = 0; i < this.programs.length; ++i)
+						this.programs[i].draw();
 				return "gameover";
 			}
 			return "playing";
