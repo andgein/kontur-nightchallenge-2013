@@ -16,6 +16,17 @@ namespace Server.Debugging
 
 		private static readonly ILog log = LogManager.GetLogger(typeof (Debugger));
 		private ProgramStartInfo[] lastProgramStartInfos;
+		private readonly ProgramStartInfo[] defaultProgramStartInfos =
+		{
+			new ProgramStartInfo{Program = @";imp strategy
+MOV 0, 1"}, 
+			new ProgramStartInfo{Program = @";dwarf strategy
+ADD #4, 3
+MOV 2, @2
+JMP -2
+DAT #0, #0"}
+		};
+
 
 		public Debugger([NotNull] IGameServer gameServer, [NotNull] ISession session)
 		{
@@ -36,6 +47,8 @@ namespace Server.Debugging
 						log.Error("Resume game failed", e);
 					}
 			}
+			if (lastProgramStartInfos == null)
+				lastProgramStartInfos = defaultProgramStartInfos;
 		}
 
 		public void StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
