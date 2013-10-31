@@ -108,6 +108,7 @@ namespace Core.Game.MarsBased
 				CurrentStep = currentTurn,
 				CurrentProgram = currentProgram,
 				Winner = winner,
+				GameOver = finished,
 				MemoryState = memoryState,
 				ProgramStates = programStates,
 			};

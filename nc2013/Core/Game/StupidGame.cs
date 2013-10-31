@@ -46,6 +46,7 @@ namespace Core.Game
 			{
 				gameState.Winner = r.Next(gameState.ProgramStates.Length);
 				res.Winner = gameState.Winner;
+				res.GameOver = true;
 			}
 			return res;
 		}
