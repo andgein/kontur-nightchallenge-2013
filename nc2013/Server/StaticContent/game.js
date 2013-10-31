@@ -111,7 +111,7 @@ var GameRunner = Base.extend({
 			if (this.speed)
 				this.pause();
 			else if (this.gameQueue && !this.gameQueue.isRejected() && !this.gameQueue.isResolved())
-				return;
+				return $.Deferred().reject("busy");
 		}
 
 		var that = this;
