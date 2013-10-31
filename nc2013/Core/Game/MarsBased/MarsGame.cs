@@ -60,7 +60,7 @@ namespace Core.Game.MarsBased
 
 		public void StepToEnd()
 		{
-			var stepsToEnd = rules.MaxCycles - currentTurn;
+			var stepsToEnd = rules.MaxCycles * 2 - currentTurn;
 			if (stepsToEnd > 0)
 				Step(stepsToEnd);
 		}
