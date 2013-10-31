@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Components>
+    <ParserName>nMars.Parser</ParserName>
+    <EngineName>nMars.Engine-StepBack</EngineName>
+  </Components>
+  <ProjectFiles>
+    <string>C:\projects\fun\nightchallenge2013\git\nMars-0.9.5\NewProject1.nmproj</string>
+  </ProjectFiles>
+  <ActiveProject>NewProject1.nmproj</ActiveProject>
+</Solution>
