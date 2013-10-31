@@ -27,11 +27,14 @@ var ProgramState = Base.extend({
 	reset: function () {
 		this.setProgramState(null);
 		this.$win.removeClass("winner");
+		this.$win.removeClass("draw");
 	},
 	win: function () {
+		this.$win.removeClass("draw");
 		this.$win.addClass("winner");
 	},
 	draw: function() {
+		this.$win.removeClass("winner");
 		this.$win.addClass("draw");
 	},
 	setProgramState: function (programState) {

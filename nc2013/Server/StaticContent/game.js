@@ -100,6 +100,7 @@ var Game = Base.extend({
 var GameRunner = Base.extend({
 	constructor: function (options) {
 		this.game = options.game;
+		this.onGameRunStatusChanged = options.onGameRunStatusChanged;
 		this.onGameStarted = options.onGameStarted;
 		this.onGameError = options.onGameError;
 	},
@@ -124,7 +125,8 @@ var GameRunner = Base.extend({
 
 		return this.gameQueue = (this.gameQueue || this.game.load())
 			.pipe(nextAction, nextAction)
-			.done(function () {
+			.done(function (gameRunStatus) {
+				that.onGameRunStatusChanged && that.onGameRunStatusChanged(gameRunStatus);
 				that.onGameError && that.onGameError(null);
 			})
 			.fail(function (err) {

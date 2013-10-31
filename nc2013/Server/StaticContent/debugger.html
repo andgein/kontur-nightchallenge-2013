@@ -56,7 +56,8 @@
 			gameRunner = new GameRunner({
 				game: game,
 				onGameStarted: gameStarted,
-				onGameError: showGameError
+				onGameError: showGameError,
+				onGameRunStatusChanged: gameRunStatusChanged
 			});
 			gameRunner.load();
 
@@ -88,6 +89,13 @@
 		function gameStarted() {
 			showGameError(null);
 			switchToDebuggerTab();
+		}
+
+		function gameRunStatusChanged(gameRunStatus) {
+			$(".debugger-gameRunStatus").removeClass("playing");
+			$(".debugger-gameRunStatus").removeClass("loading");
+			$(".debugger-gameRunStatus").removeClass("gameover");
+			$(".debugger-gameRunStatus").addClass(gameRunStatus);
 		}
 
 		function showGameError(err) {
@@ -171,25 +179,25 @@
 			border-radius: 3px;
 		}
 
-			.debugger-winnerState.winner .winner-info, .debugger-winnerState.draw .draw-info {
-				display: inline-block;
-			}
+		.debugger-winnerState.winner .winner-info, .debugger-winnerState.draw .draw-info {
+			display: inline-block;
+		}
 
 		.debugger-listing {
 			overflow-y: scroll;
 		}
 
-		.debugger-listing .listingItem {
-			font-family: monospace;
-		}
-		
-		.debugger-listing .listingItem.modified0 {
-			background-color: red;
-		}
-		
-		.debugger-listing .listingItem.modified1 {
-			background-color: lightgreen;
-		}
+			.debugger-listing .listingItem {
+				font-family: monospace;
+			}
+
+				.debugger-listing .listingItem.modified0 {
+					background-color: red;
+				}
+
+				.debugger-listing .listingItem.modified1 {
+					background-color: lightgreen;
+				}
 
 		.debugger-mapContainer {
 			padding-right: 50px;
@@ -259,7 +267,7 @@
 		.programInfoContainer .command {
 			font-family: monospace;
 		}
-		
+
 		.debugger-error {
 			color: #b94a48;
 			background-color: #f2dede;
@@ -268,13 +276,49 @@
 			padding: 5px 10px 5px 10px;
 			display: inline-block;
 		}
+
+		.debugger-gameRunStatus.playing .debugger-gameRunStatus-playing,
+		.debugger-gameRunStatus.loading .debugger-gameRunStatus-loading,
+		.debugger-gameRunStatus.gameover .debugger-gameRunStatus-gameover {
+			display: inline-block;
+		}
+
+		.debugger-gameRunStatus span {
+			position: relative;
+			padding: 5px 10px 5px 10px;
+			border-radius: 5px;
+			font-size: 16px;
+			top: -3px;
+		}
+
+		.debugger-gameRunStatus .debugger-gameRunStatus-playing {
+			display: none;
+			background-color: lightgreen;
+		}
+
+		.debugger-gameRunStatus .debugger-gameRunStatus-loading {
+			display: none;
+			background-color: lightpink;
+		}
+
+		.debugger-gameRunStatus .debugger-gameRunStatus-gameover {
+			display: none;
+			background-color: yellow;
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<script>nav()</script>
 		<div class="page-header">
-			<h1>Debugger</h1>
+			<h1>
+				Debugger
+				<span class="debugger-gameRunStatus loading">
+					<span class="debugger-gameRunStatus-playing">playing</span>
+					<span class="debugger-gameRunStatus-gameover">game over</span>
+					<span class="debugger-gameRunStatus-loading">loading, please wait...</span>
+				</span>
+			</h1>
 		</div>
 		<div class="debugger-buttons">
 			<button title="Run without debugger" onclick="gameRunner.stepToEnd()">>>></button>
@@ -321,8 +365,8 @@
 				<tr>
 					<td class="left">
 						<table>
-							<col width="50%"/>
-							<col width="50%"/>
+							<col width="50%" />
+							<col width="50%" />
 							<tr>
 								<td colspan="2">
 									<div class="debugger-section-title">Memory</div>

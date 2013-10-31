@@ -14,7 +14,7 @@ namespace Server.Debugging
 		private readonly ISession session;
 		private IGame game;
 
-		private static readonly ILog log = LogManager.GetLogger(typeof (Debugger));
+		private static readonly ILog log = LogManager.GetLogger(typeof(Debugger));
 		private ProgramStartInfo[] lastProgramStartInfos;
 		private readonly ProgramStartInfo[] defaultProgramStartInfos =
 		{
@@ -26,7 +26,6 @@ MOV 2, @2
 JMP -2
 DAT #0, #0"}
 		};
-
 
 		public Debugger([NotNull] IGameServer gameServer, [NotNull] ISession session)
 		{
@@ -61,7 +60,7 @@ DAT #0, #0"}
 		public void Reset()
 		{
 			game = null;
-			session.Save(debuggerStateKey, (DebuggerState) null);
+			session.Save(debuggerStateKey, (DebuggerState)null);
 		}
 
 		public T Play<T>([NotNull] Func<IGame, T> action)
