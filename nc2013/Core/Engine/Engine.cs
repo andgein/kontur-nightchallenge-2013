@@ -1,25 +1,30 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Core.Parser;
 
 namespace Core.Engine
 {
     public class Engine
     {
-        private readonly List<RunningWarrior> warriors = new List<RunningWarrior>();
+        public List<RunningWarrior> Warriors { get; private set; }
         public readonly Memory Memory;
         public int CurrentWarrior { get; private set; }
         public int CurrentStep { get; private set; }
         public int CurrentIp { get; private set; }
+        public bool GameOver { get; private set; }
+        public int? Winner { get; private set; }
+
         private StepResult stepResult;
 
         public Engine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
         {
             Memory = new Memory(Parameters.CORESIZE);
+            Warriors = new List<RunningWarrior>();
             var idx = 0;
             foreach (var wsi in warriorsStartInfos)
             {
                 var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress);
-                warriors.Add(warrior);
+                Warriors.Add(warrior);
                 PlaceWarrior(warrior, wsi.LoadAddress);
             }
             CurrentWarrior = 0;
@@ -35,16 +40,10 @@ namespace Core.Engine
 
         public StepResult Step()
         {
-            if (warriors[CurrentWarrior].Queue.Count == 0)
-            {
-                var startWarrior = CurrentWarrior;
-                CurrentWarrior = (CurrentWarrior + 1)%warriors.Count;
-                while (CurrentWarrior != startWarrior && warriors[CurrentWarrior].Queue.Count == 0)
-                    CurrentWarrior = (CurrentWarrior + 1)%warriors.Count;
-                if (CurrentWarrior == startWarrior)
-                    return new StepResult {GameFinished = true};
-            }
-            CurrentIp = warriors[CurrentWarrior].Queue.Dequeue();
+            if (GameOver)
+                return new StepResult();
+
+            CurrentIp = Warriors[CurrentWarrior].Queue.Dequeue();
             var instruction = Memory[CurrentIp];
 
             stepResult = new StepResult();
@@ -52,15 +51,36 @@ namespace Core.Engine
             ExecuteInstruction(instruction);
             
             if (! stepResult.KilledInInstruction)
-                warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
+                Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
 
             if (stepResult.SplittedInInstruction.HasValue)
-                warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
+                Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
-            CurrentWarrior = (CurrentWarrior + 1) % warriors.Count;
+            var nextWarrior = GetNextWarrior(CurrentWarrior);
+            if (! nextWarrior.HasValue)
+            {
+                GameOver = true;
+                Winner = CurrentWarrior;
+                return stepResult;
+            }
+            CurrentWarrior = nextWarrior.GetValueOrDefault();
             CurrentStep++;
 
             return stepResult;
+        }
+
+        private int? GetNextWarrior(int currentWarrior)
+        {
+            var startWarrior = currentWarrior;
+            currentWarrior = (currentWarrior + 1) % Warriors.Count;
+            if (Warriors[currentWarrior].Queue.Count == 0)
+            {
+                while (currentWarrior != startWarrior && Warriors[currentWarrior].Queue.Count == 0)
+                    currentWarrior = (currentWarrior + 1) % Warriors.Count;
+                if (currentWarrior == startWarrior)
+                    return null;
+            }
+            return currentWarrior;
         }
 
         private void ExecuteInstruction(Instruction instruction)

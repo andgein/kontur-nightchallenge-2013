@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Core.Engine;
 using Core.Parser;
+using JetBrains.Annotations;
 
 namespace Core.Game
 {
@@ -11,12 +13,11 @@ namespace Core.Game
         private readonly Engine.Engine engine;
         private readonly ProgramStartInfo[] programStartInfos = new ProgramStartInfo[0];
 
-        public Game(IEnumerable<ProgramStartInfo> programStartInfos)
+        public Game(ProgramStartInfo[] programStartInfos)
         {
-            if (programStartInfos != null)
-                this.programStartInfos = programStartInfos.ToArray();
+            this.programStartInfos = programStartInfos;
 
-            //TODO:
+            //TODO: RandomAllocator
             var r = new Random();
 
             var parser = new WarriorParser();
@@ -37,7 +38,14 @@ namespace Core.Game
                     CurrentProgram = engine.CurrentWarrior,
                     CurrentStep = engine.CurrentStep,
                     ProgramStartInfos = programStartInfos,
-                    MemoryState = engine.Memory.ToMemoryState()
+                    GameOver = engine.GameOver,
+                    Winner = engine.Winner,
+                    MemoryState = engine.Memory.ToMemoryState(),
+                    ProgramStates = engine.Warriors.Select(w => new ProgramState
+                    {
+                        LastPointer = (uint) w.Queue.Peek(),
+                        ProcessPointers = w.Queue.ToArray().Select(x => (uint) x).ToArray()
+                    }).ToArray(),
                 };
             }
         }
@@ -45,7 +53,19 @@ namespace Core.Game
         public Diff Step(int stepCount)
         {
             if (stepCount == 0)
-                return new Diff();
+                return new Diff
+                {
+                    CurrentProgram = engine.CurrentWarrior,
+                    CurrentStep = engine.CurrentStep,
+                    GameOver = engine.GameOver,
+                    Winner = engine.Winner,
+                    ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
+                    {
+                        NextPointer = (uint) w.Queue.Peek(),
+                        Program = w.Index,
+                        ChangeType = ProcessStateChangeType.Executed
+                    }).ToArray()
+                };
             var memoryDiffs = new Dictionary<int, CellState>();
             StepResult stepResult = null;
             for (var i = 0; i < stepCount; ++i)
@@ -58,11 +78,18 @@ namespace Core.Game
             {
                 CurrentProgram = engine.CurrentWarrior,
                 CurrentStep = engine.CurrentStep,
-                GameOver = stepResult.GameFinished,
+                GameOver = engine.GameOver,
+                Winner = engine.Winner,
                 MemoryDiffs = stepResult.MemoryDiff.Select(md => new MemoryDiff
                 {
                     Address = (uint) md.Key,
                     CellState = md.Value
+                }).ToArray(),
+                ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
+                {
+                    NextPointer = (uint)w.Queue.Peek(),
+                    Program = w.Index,
+                    ChangeType = ProcessStateChangeType.Executed
                 }).ToArray()
             };
         }

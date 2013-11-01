@@ -9,7 +9,6 @@ namespace Core.Engine
         public bool KilledInInstruction;
         public int? SetNextIP;
         public int? SplittedInInstruction;
-        public bool GameFinished;
         public readonly Dictionary<int, CellState> MemoryDiff;
 
         public StepResult()
@@ -17,7 +16,6 @@ namespace Core.Engine
             KilledInInstruction = false;
             SetNextIP = null;
             SplittedInInstruction = null;
-            GameFinished = false;
             MemoryDiff = new Dictionary<int, CellState>();
         }
 

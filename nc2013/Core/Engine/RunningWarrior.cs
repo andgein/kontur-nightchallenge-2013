@@ -2,7 +2,7 @@
 
 namespace Core.Engine
 {
-    class RunningWarrior
+    public class RunningWarrior
     {
         public Warrior Warrior { get; private set; }
 
