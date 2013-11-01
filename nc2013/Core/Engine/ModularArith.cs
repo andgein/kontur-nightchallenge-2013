@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Core.Engine
+﻿namespace Core.Engine
 {
-    public class ModularArith
+    public static class ModularArith
     {
-        public static int Mod(int a, int b)
+        public static int Mod(int a, int b = Parameters.CORESIZE)
         {
             var result = a % b;
             if (result < 0)

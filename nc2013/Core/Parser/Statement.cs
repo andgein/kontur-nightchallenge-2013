@@ -1,190 +1,102 @@
 using System;
-using System.Collections.Generic;
-using Core.Engine;
 
 namespace Core.Parser
 {
-    public abstract class Statement
+    public class Statement
     {
+        private AddressingMode modeA;
+        private Expression fieldA;
+        private AddressingMode modeB;
+        private Expression fieldB;
+        
         public string Label;
-        public AddressingMode ModeA;
-        public Expression FieldA;
-        public AddressingMode ModeB;
-        public Expression FieldB;
+        public StatementType Type;
+        public AddressingMode ModeA { get { return modeA; } set { ExistsFieldA = true; modeA = value; } }
+        public Expression FieldA { get { return fieldA; } set { ExistsFieldA = true; fieldA = value; } }
+        public AddressingMode ModeB { get { return modeB; } set { ExistsFieldB = true; modeB = value; } }
+        public Expression FieldB { get { return fieldB; } set { ExistsFieldB = true; fieldB = value; } }
+
+        public bool ExistsFieldA { get; private set; }
+        public bool ExistsFieldB { get; private set; }
+
+        public Statement(Statement another)
+        {
+            Type = another.Type;
+            ModeA = another.ModeA;
+            FieldA = another.FieldA;
+            ModeB = another.ModeB;
+            FieldB = another.FieldB;
+            ExistsFieldA = another.ExistsFieldA;
+            ExistsFieldB = another.ExistsFieldB;
+        }
+
+        public Statement()
+        {
+            Type = StatementType.Dat;
+            ModeA = AddressingMode.Direct;
+            FieldA = new NumberExpression(0);
+            ModeB = AddressingMode.Direct;
+            FieldB = new NumberExpression(0);
+            ExistsFieldA = ExistsFieldB = false;
+        }
 
         public bool HasLabel()
         {
             return Label != "";
         }
 
-        public abstract void Execute(Engine.Engine engine);
-
-        protected static int CalcAddress(Engine.Engine engine, AddressingMode mode, Expression expression)
+        public static bool operator==(Statement left, Statement right)
         {
-            int address;
-            switch (mode)
+            if (ReferenceEquals(left, right))
+                return true;
+            if (((object)left == null) || ((object)right == null))
+                return false;
+
+            return left.Type == right.Type &&
+                   left.ModeA == right.ModeA &&
+                   left.FieldA.Calculate() == right.FieldA.Calculate() &&
+                   left.ModeB == right.ModeB &&
+                   left.FieldB.Calculate() == right.FieldB.Calculate();
+        }
+
+        public static bool operator !=(Statement left, Statement right)
+        {
+            return !(left == right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
             {
-                case AddressingMode.Immediate:
-                    throw new InvalidOperationException();
-                case AddressingMode.Direct:
-                    return engine.CurrentIp + expression.Calculate();
-                case AddressingMode.Indirect:
-                    address = expression.Calculate();
-                    return address + engine.Memory[address].Statement.FieldB.Calculate();
-                case AddressingMode.PredecrementIndirect:
-                    address = expression.Calculate();
-                    engine.Memory[address].Statement.FieldB = engine.Memory[address].Statement.FieldB.Decremented();
-                    return address + engine.Memory[address].Statement.FieldB.Calculate();
+                return false;
             }
-            throw new InvalidOperationException("Internal error. Unknown addressing mode");
+
+            return this == (Statement) obj;
         }
 
-        public Statement Copy()
+        // override object.GetHashCode
+        public override int GetHashCode()
         {
-            var constructor = GetType().GetConstructor(new Type[0]);
-            if (constructor == null)
-                throw new InvalidOperationException("Internal error. Can't create a copy of statement");
-            var stmt = (Statement) constructor.Invoke(new object[0]);
-            stmt.FieldA = FieldA;
-            stmt.ModeA = ModeA;
-            stmt.FieldB = FieldB;
-            stmt.ModeB = ModeB;
-            return stmt;
-        }
-    }
-
-    class StatementFactory
-    {
-        public Dictionary<String, Type> Commands { get; private set; }
-
-        public StatementFactory()
-        {
-            Commands = new Dictionary<string, Type>
-                           {
-                               {"MOV", typeof (MovStatement)},
-                               {"ADD", typeof (AddStatement)},
-                               {"SUB", typeof (SubStatement)},
-                               {"CMP", typeof (CmpStatement)},
-                               {"SLT", typeof (SltStatement)},
-                               {"JMP", typeof (JmpStatement)},
-                               {"JMZ", typeof (JmzStatement)},
-                               {"JMN", typeof (JmnStatement)},
-                               {"DJN", typeof (DjnStatement)},
-                               {"SPL", typeof (SplStatement)},
-                               {"DAT", typeof (DatStatement)}
-                           };
-        }
-
-        public Statement Create(string command)
-        {
-            if (! Commands.ContainsKey(command.ToUpper()))
-                throw new Exception(String.Format("Internal error: can't create statement from command {0}", command));
-
-            var constructor = Commands[command.ToUpper()].GetConstructor(new Type[0]);
-            if (constructor == null)
-                throw new Exception(String.Format("Internal error: can't create statement from command {0}", command));
-
-            return (Statement) constructor.Invoke(new object[0]);
-        }
-    }
-
-    public class MovStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            if (ModeA == AddressingMode.Immediate)
-            {
-                var address = CalcAddress(engine, ModeB, FieldB);
-                var newStatement = engine.Memory[address].Statement.Copy();
-                newStatement.FieldB = new NumberExpression(FieldA.Calculate());
-                engine.WriteToMemory(address, newStatement);
-            }
-            else
-            {
-                var addressA = CalcAddress(engine, ModeA, FieldA);
-                var addressB = CalcAddress(engine, ModeB, FieldB);
-                engine.WriteToMemory(addressB, engine.Memory[addressA].Statement);
-            }
-        }
-    }
-
-    class AddStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
+            // TODO: write your implementation of GetHashCode() here
             throw new NotImplementedException();
+            return base.GetHashCode();
         }
     }
 
-    class SubStatement : Statement
+    public enum StatementType
     {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class CmpStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class SltStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class JmpStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class JmzStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class JmnStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class DjnStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class SplStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class DatStatement : Statement
-    {
-        public override void Execute(Engine.Engine engine)
-        {
-            engine.KillCurrentProcess();
-        }
+        Mov,
+        Add,
+        Sub,
+        Cmp,
+        Slt,
+        Jmp,
+        Jmz,
+        Jmn,
+        Djn,
+        Spl,
+        Dat,
+        End,
+        Equ,
     }
 }

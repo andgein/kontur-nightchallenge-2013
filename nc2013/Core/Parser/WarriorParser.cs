@@ -17,7 +17,14 @@ namespace Core.Parser
                 var stLine = TrimComment(line);
                 if (stLine.All(Char.IsWhiteSpace))
                     continue;
-                warrior.AddStatement(ParseLine(stLine));
+                var statement = ParseLine(stLine);
+                if (statement.Type == StatementType.End)
+                {
+                    if (statement.ExistsFieldA)
+                        warrior.StartAddress = warrior.Statements.Count + statement.FieldA.Calculate();
+                    break;
+                }
+                warrior.AddStatement(statement);
             }
 
             // TODO warrior.EvaluateAllExpressions()

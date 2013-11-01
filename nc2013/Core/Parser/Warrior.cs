@@ -7,6 +7,7 @@ namespace Core.Parser
     {
         public List<Statement> Statements { get; private set; }
         public Dictionary<String, uint> LabelsAddresses { get; private set; }
+	    public int StartAddress;
 
         public Warrior(List<Statement> statements)
         {

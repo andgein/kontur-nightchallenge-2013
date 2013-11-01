@@ -8,5 +8,7 @@ namespace Core.Engine
     static class Parameters
     {
         public const int CORESIZE = 80000;
+
+        public const int MaxQueueSize = 8000;
     }
 }

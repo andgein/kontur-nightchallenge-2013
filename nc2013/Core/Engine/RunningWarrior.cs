@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core.Parser;
+﻿using Core.Parser;
 
 namespace Core.Engine
 {
@@ -12,14 +8,14 @@ namespace Core.Engine
 
         public int Index { get; private set; }
 
-        public readonly Queue<int> Queue;
+        public readonly RunningQueue Queue;
 
         public RunningWarrior(Warrior warrior, int index, int loadAddress)
         {
             Warrior = warrior;
             Index = index;
-            Queue = new Queue<int>();
-            Queue.Enqueue(loadAddress);
+            Queue = new RunningQueue();
+            Queue.Enqueue(loadAddress + warrior.StartAddress);
         }
     }
 }

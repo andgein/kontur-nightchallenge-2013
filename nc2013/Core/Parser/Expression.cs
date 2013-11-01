@@ -9,7 +9,7 @@ namespace Core.Parser
 
         public Expression Decremented()
         {
-            return new NumberExpression(ModularArith.Mod(Calculate() - 1, Parameters.CORESIZE));
+            return new NumberExpression(ModularArith.Mod(Calculate() - 1));
         }
     }
 
@@ -46,7 +46,7 @@ namespace Core.Parser
                 default:
                     throw new InvalidOperationException("Invalid operation to calculate: " + Op);
             }
-            return ModularArith.Mod(answer, Parameters.CORESIZE);
+            return ModularArith.Mod(answer);
         }
     }
 
@@ -78,7 +78,7 @@ namespace Core.Parser
 
         public NumberExpression(int value)
         {
-            Value = value;
+            Value = ModularArith.Mod(value);
         }
 
         public override int Calculate()

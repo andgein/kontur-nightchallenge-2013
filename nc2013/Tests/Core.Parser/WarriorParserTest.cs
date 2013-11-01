@@ -21,27 +21,27 @@ namespace Tests.Core.Parser
         public void TestImp()
         {
             var warrior = parser.Parse(imp);
-            Assert.AreEqual(warrior.Statements.Count, 1);
-            Assert.AreEqual(warrior.Statements[0].HasLabel(), false);
-            Assert.AreEqual(warrior.Statements[0].GetType(), typeof (MovStatement));
+            Assert.AreEqual(1, warrior.Statements.Count);
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
         [Test]
         public void TestImpWithComment()
         {
             var warrior = parser.Parse(imp + "     ; any comment here");
-            Assert.AreEqual(warrior.Statements.Count, 1);
-            Assert.AreEqual(warrior.Statements[0].HasLabel(), false);
-            Assert.AreEqual(warrior.Statements[0].GetType(), typeof (MovStatement));
+            Assert.AreEqual(1, warrior.Statements.Count);
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
         [Test]
         public void TestImpWithCommentsAndNewLines()
         {
             var warrior = parser.Parse("  ; comment 1\n   \n" + imp + "     ; any comment here\n\t  \t\n;comment 2");
-            Assert.AreEqual(warrior.Statements.Count, 1);
-            Assert.AreEqual(warrior.Statements[0].HasLabel(), false);
-            Assert.AreEqual(warrior.Statements[0].GetType(), typeof (MovStatement));
+            Assert.AreEqual(1, warrior.Statements.Count);
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
         [Test]
@@ -51,11 +51,11 @@ namespace Tests.Core.Parser
             var code = String.Concat(Enumerable.Repeat(imp + " ; any comment \n", count));
 
             var warrior = parser.Parse(code);
-            Assert.AreEqual(warrior.Statements.Count, count);
+            Assert.AreEqual(count, warrior.Statements.Count);
             for (var i = 0; i < count; ++i)
             {
-                Assert.AreEqual(warrior.Statements[i].HasLabel(), false);
-                Assert.AreEqual(warrior.Statements[i].GetType(), typeof (MovStatement));
+                Assert.AreEqual(false, warrior.Statements[i].HasLabel());
+                Assert.AreEqual(StatementType.Mov, warrior.Statements[i].Type);
             }
         }
 
@@ -67,12 +67,12 @@ namespace Tests.Core.Parser
                                 "label3 " + imp + "\n";
 
             var warrior = parser.Parse(code);
-            Assert.AreEqual(warrior.Statements.Count, 3);
+            Assert.AreEqual(3, warrior.Statements.Count);
             for (var i = 0; i < 3; ++i)
             {
-                Assert.AreEqual(warrior.Statements[i].HasLabel(), true);
-                Assert.AreEqual(warrior.Statements[i].GetType(), typeof(MovStatement));
-                Assert.AreEqual(warrior.Statements[i].Label, String.Format("label{0}", i + 1));
+                Assert.AreEqual(true, warrior.Statements[i].HasLabel());
+                Assert.AreEqual(String.Format("label{0}", i + 1), warrior.Statements[i].Label);
+                Assert.AreEqual(StatementType.Mov, warrior.Statements[i].Type);
             }
         }
 
@@ -104,16 +104,32 @@ namespace Tests.Core.Parser
         public void TestDifferentAddressingModes()
         {
             var warrior = parser.Parse("JMZ 0, #1");
-            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.Direct);
-            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.Immediate);
+            Assert.AreEqual(AddressingMode.Direct, warrior.Statements[0].ModeA);
+            Assert.AreEqual(AddressingMode.Immediate, warrior.Statements[0].ModeB);
 
             warrior = parser.Parse("ADD @0, @1");
-            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.Indirect);
-            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.Indirect);
+            Assert.AreEqual(AddressingMode.Indirect, warrior.Statements[0].ModeA);
+            Assert.AreEqual(AddressingMode.Indirect, warrior.Statements[0].ModeB);
 
             warrior = parser.Parse("DJN <0, <1");
-            Assert.AreEqual(warrior.Statements[0].ModeA, AddressingMode.PredecrementIndirect);
-            Assert.AreEqual(warrior.Statements[0].ModeB, AddressingMode.PredecrementIndirect);
+            Assert.AreEqual(AddressingMode.PredecrementIndirect, warrior.Statements[0].ModeA);
+            Assert.AreEqual(AddressingMode.PredecrementIndirect, warrior.Statements[0].ModeB);
+        }
+
+        [Test]
+        public void TestEndWithoutAddress()
+        {
+            var warrior = parser.Parse(imp + "\n" + imp + "\n" + "END\nline will be ignored");
+            Assert.AreEqual(2, warrior.Statements.Count);
+            Assert.AreEqual(0, warrior.StartAddress);
+        }
+
+        [Test]
+        public void TestEnd()
+        {
+            var warrior = parser.Parse(imp + "\n" + imp + "\n" + "END -1\nline will be ignored");
+            Assert.AreEqual(2, warrior.Statements.Count);
+            Assert.AreEqual(1, warrior.StartAddress);
         }
     }
 }

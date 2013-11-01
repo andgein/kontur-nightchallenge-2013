@@ -11,7 +11,7 @@ namespace Core.Engine
         public Memory(int coresize)
         {
             this.coresize = coresize;
-            memory = Enumerable.Range(0, coresize).Select(x => new Instruction()).ToList();
+            memory = Enumerable.Range(0, coresize).Select(x => new Instruction(x)).ToList();
         }
 
         public Instruction this[int index]

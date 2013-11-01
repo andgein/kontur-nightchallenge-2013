@@ -11,7 +11,7 @@ namespace Core.Engine
         private int currentWarrior;
         private int currentStep;
         public int CurrentIp { get; private set; }
-        private bool killedInInstruction;
+        private StepResult stepResult;
 
         public Engine(IEnumerable<Warrior> warriors)
         {
@@ -27,70 +27,63 @@ namespace Core.Engine
         {
             var statements = warrior.Warrior.Statements;
             for (var i = 0; i < statements.Count; ++i)
-                Memory[address + i] = new Instruction(statements[i], warrior.Index);
+                Memory[address + i] = new Instruction(statements[i], ModularArith.Mod(address + i), warrior.Index);
         }
 
         public StepResult Step()
         {
+            if (warriors[currentWarrior].Queue.Count == 0)
+            {
+                var startWarrior = currentWarrior;
+                currentWarrior = (currentWarrior + 1)%warriors.Count;
+                while (currentWarrior != startWarrior && warriors[currentWarrior].Queue.Count == 0)
+                    currentWarrior = (currentWarrior + 1)%warriors.Count;
+                if (currentWarrior == startWarrior)
+                    return new StepResult {GameFinished = true};
+            }
             CurrentIp = warriors[currentWarrior].Queue.Dequeue();
             var instruction = Memory[CurrentIp];
 
+            stepResult = new StepResult();
+
             ExecuteInstruction(instruction);
             
-            if (! killedInInstruction)
-                warriors[currentWarrior].Queue.Enqueue(CurrentIp + 1);
+            if (! stepResult.KilledInInstruction)
+                warriors[currentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
+
+            if (stepResult.SplittedInInstruction.HasValue)
+                warriors[currentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
+
             currentWarrior = (currentWarrior + 1) % warriors.Count;
             currentStep++;
 
-            return new StepResult();
+            return stepResult;
         }
 
         private void ExecuteInstruction(Instruction instruction)
         {
-            var stmt = instruction.Statement;
-            stmt.Execute(this);
+            new InstructionExecutor(instruction).Execute(this);
         }
 
         public void WriteToMemory(int address, Statement statement)
         {
             Memory[address].Statement = statement;
             Memory[address].LastModifiedByProgram = currentWarrior;
-            Memory[address].LastModifiedStep = currentStep;
         }
 
         public void KillCurrentProcess()
         {
-            killedInInstruction = true;
+            stepResult.KilledInInstruction = true;
         }
-    }
 
-    public class Instruction
-    {
-        public Statement Statement { get; set; }
-
-        public int? LastModifiedByProgram;
-        public int? LastModifiedStep;
-
-        public Instruction() : this(new DatStatement
-            {
-                FieldA = new NumberExpression(0),
-                ModeA = AddressingMode.Direct,
-                FieldB = new NumberExpression(0),
-                ModeB = AddressingMode.Direct
-            },
-            null)
+        public void JumpTo(int address)
         {
+            stepResult.SetNextIP = address;
         }
 
-        public Instruction(Statement statement, int? owner)
+        public void SplitAt(int address)
         {
-            Statement = statement;
-            LastModifiedByProgram = owner;
+            stepResult.SplittedInInstruction = address;
         }
-    }
-
-    public class StepResult
-    {
-        
     }
 }
