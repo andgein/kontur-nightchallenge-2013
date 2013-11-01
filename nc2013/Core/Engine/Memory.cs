@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.Game;
 
 namespace Core.Engine
 {
@@ -18,6 +19,16 @@ namespace Core.Engine
         {
             get { return memory[ModularArith.Mod(index, coresize)]; }
             set { memory[ModularArith.Mod(index, coresize)] = value; }
+        }
+
+        public CellState[] ToMemoryState()
+        {
+            return memory.Select(inst => new CellState
+            {
+                CellType = inst.Statement.CellType,
+                Instruction = inst.Statement.ToString(),
+                LastModifiedByProgram = inst.LastModifiedByProgram
+            }).ToArray();
         }
     }
 }

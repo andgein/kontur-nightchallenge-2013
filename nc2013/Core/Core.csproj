@@ -1,117 +1,120 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
- <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-   <PropertyGroup>
-     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-     <ProjectGuid>{C21FFADD-E5AE-4743-BCAC-2B8502B636D2}</ProjectGuid>
-     <OutputType>Library</OutputType>
-     <AppDesignerFolder>Properties</AppDesignerFolder>
-     <RootNamespace>Core</RootNamespace>
-     <AssemblyName>Core</AssemblyName>
-     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-     <FileAlignment>512</FileAlignment>
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-     <DebugSymbols>true</DebugSymbols>
-     <DebugType>full</DebugType>
-     <Optimize>false</Optimize>
-     <OutputPath>bin\Debug\</OutputPath>
-     <DefineConstants>DEBUG;TRACE</DefineConstants>
-     <ErrorReport>prompt</ErrorReport>
-     <WarningLevel>4</WarningLevel>
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-     <DebugType>pdbonly</DebugType>
-     <Optimize>true</Optimize>
-     <OutputPath>bin\Release\</OutputPath>
-     <DefineConstants>TRACE</DefineConstants>
-     <ErrorReport>prompt</ErrorReport>
-     <WarningLevel>4</WarningLevel>
-   </PropertyGroup>
-   <ItemGroup>
-     <Reference Include="log4net">
-       <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
-     </Reference>
-     <Reference Include="Newtonsoft.Json">
-       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-     </Reference>
-     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-       <SpecificVersion>False</SpecificVersion>
-       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-     </Reference>
-     <Reference Include="System" />
-     <Reference Include="System.Core" />
-     <Reference Include="System.Xml" />
-   </ItemGroup>
-   <ItemGroup>
-     <Compile Include="Arena\Battle.cs" />
-     <Compile Include="Arena\BattlePlayerResult.cs" />
-     <Compile Include="Arena\BattleResult.cs" />
-     <Compile Include="Arena\GamesRepo.cs" />
-     <Compile Include="Arena\RoundRobinTournament.cs" />
-     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
-     <Compile Include="Arena\TournamentPlayer.cs" />
-     <Compile Include="Engine\Engine.cs" />
-     <Compile Include="Engine\Instruction.cs" />
-     <Compile Include="Engine\Memory.cs" />
-     <Compile Include="Engine\ModularArith.cs" />
-     <Compile Include="Engine\Parameters.cs" />
-     <Compile Include="Engine\RunningQueue.cs" />
-     <Compile Include="Engine\RunningWarrior.cs" />
-     <Compile Include="Arena\ArenaPlayer.cs" />
-     <Compile Include="Arena\PlayersRepo.cs" />
-     <Compile Include="Engine\StepResult.cs" />
-     <Compile Include="Game\CellState.cs" />
-     <Compile Include="CodeAnnotations.cs" />
-     <Compile Include="Game\CellType.cs" />
-     <Compile Include="Game\Diff.cs" />
-     <Compile Include="Game\StupidGameServer.cs" />
-     <Compile Include="Game\GameState.cs" />
-     <Compile Include="Game\IGame.cs" />
-     <Compile Include="Game\IGameServer.cs" />
-     <Compile Include="Game\MarsBased\MarsGameServer.cs" />
-     <Compile Include="Game\MarsBased\MarsEngine.cs" />
-     <Compile Include="Game\MarsBased\MarsProject.cs" />
-     <Compile Include="Game\MarsBased\MarsWarriorParser.cs" />
-     <Compile Include="Game\MarsBased\MarsGame.cs" />
-     <Compile Include="Game\MemoryDiff.cs" />
-     <Compile Include="Parser\AddressingMode.cs" />
-     <Compile Include="Parser\CommandDescriber.cs" />
-     <Compile Include="Parser\CompilationException.cs" />
-     <Compile Include="Parser\Expression.cs" />
-     <Compile Include="Parser\ExpressionParser.cs" />
-     <Compile Include="Parser\Operator.cs" />
-     <Compile Include="Parser\Parser.cs" />
-     <Compile Include="Parser\ParserState.cs" />
-     <Compile Include="Parser\Statement.cs" />
-     <Compile Include="Game\ProcessStateChangeType.cs" />
-     <Compile Include="Game\ProgramStartInfo.cs" />
-     <Compile Include="Game\ProgramState.cs" />
-     <Compile Include="Game\ProgramStateDiff.cs" />
-     <Compile Include="Engine\InstructionExecutor.cs" />
-     <Compile Include="Parser\StatementFactory.cs" />
-     <Compile Include="Properties\AssemblyInfo.cs" />
-     <Compile Include="SettingsFileHelper.cs" />
-     <Compile Include="Game\StupidGame.cs" />
-     <Compile Include="Parser\Warrior.cs" />
-     <Compile Include="Parser\WarriorParser.cs" />
-   </ItemGroup>
-   <ItemGroup>
-     <None Include="packages.config" />
-   </ItemGroup>
-   <ItemGroup>
-     <ProjectReference Include="..\Mars\Mars.csproj">
-       <Project>{23012EA9-C831-428F-A89A-1AB280FEB06A}</Project>
-       <Name>Mars</Name>
-     </ProjectReference>
-   </ItemGroup>
-   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C21FFADD-E5AE-4743-BCAC-2B8502B636D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Core</RootNamespace>
+    <AssemblyName>Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.2\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arena\Battle.cs" />
+    <Compile Include="Arena\BattlePlayerResult.cs" />
+    <Compile Include="Arena\BattleResult.cs" />
+    <Compile Include="Arena\GamesRepo.cs" />
+    <Compile Include="Arena\RoundRobinTournament.cs" />
+    <Compile Include="Arena\RoundRobinTournament_Test.cs" />
+    <Compile Include="Arena\TournamentPlayer.cs" />
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Engine\Instruction.cs" />
+    <Compile Include="Engine\Memory.cs" />
+    <Compile Include="Engine\ModularArith.cs" />
+    <Compile Include="Engine\Parameters.cs" />
+    <Compile Include="Engine\RunningQueue.cs" />
+    <Compile Include="Engine\RunningWarrior.cs" />
+    <Compile Include="Arena\ArenaPlayer.cs" />
+    <Compile Include="Arena\PlayersRepo.cs" />
+    <Compile Include="Engine\StepResult.cs" />
+    <Compile Include="Engine\WarriorStartInfo.cs" />
+    <Compile Include="Game\CellState.cs" />
+    <Compile Include="CodeAnnotations.cs" />
+    <Compile Include="Game\CellType.cs" />
+    <Compile Include="Game\Diff.cs" />
+    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\GameServer.cs" />
+    <Compile Include="Game\StupidGameServer.cs" />
+    <Compile Include="Game\GameState.cs" />
+    <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\IGameServer.cs" />
+    <Compile Include="Game\MarsBased\MarsGameServer.cs" />
+    <Compile Include="Game\MarsBased\MarsEngine.cs" />
+    <Compile Include="Game\MarsBased\MarsProject.cs" />
+    <Compile Include="Game\MarsBased\MarsWarriorParser.cs" />
+    <Compile Include="Game\MarsBased\MarsGame.cs" />
+    <Compile Include="Game\MemoryDiff.cs" />
+    <Compile Include="Parser\AddressingMode.cs" />
+    <Compile Include="Parser\CommandDescriber.cs" />
+    <Compile Include="Parser\CompilationException.cs" />
+    <Compile Include="Parser\Expression.cs" />
+    <Compile Include="Parser\ExpressionParser.cs" />
+    <Compile Include="Parser\Operator.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParserState.cs" />
+    <Compile Include="Parser\Statement.cs" />
+    <Compile Include="Game\ProcessStateChangeType.cs" />
+    <Compile Include="Game\ProgramStartInfo.cs" />
+    <Compile Include="Game\ProgramState.cs" />
+    <Compile Include="Game\ProgramStateDiff.cs" />
+    <Compile Include="Engine\InstructionExecutor.cs" />
+    <Compile Include="Parser\StatementFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsFileHelper.cs" />
+    <Compile Include="Game\StupidGame.cs" />
+    <Compile Include="Parser\Warrior.cs" />
+    <Compile Include="Parser\WarriorParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mars\Mars.csproj">
+      <Project>{23012EA9-C831-428F-A89A-1AB280FEB06A}</Project>
+      <Name>Mars</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
         Other similar extension points exist, see Microsoft.Common.targets.
    <Target Name="BeforeBuild">
    </Target>
    <Target Name="AfterBuild">
    </Target>
    -->
- </Project>
+</Project>

@@ -1,26 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Core.Parser;
 
 namespace Core.Engine
 {
     public class Engine
     {
-        private readonly List<RunningWarrior> warriors;
+        private readonly List<RunningWarrior> warriors = new List<RunningWarrior>();
         public readonly Memory Memory;
-        private int currentWarrior;
-        private int currentStep;
+        public int CurrentWarrior { get; private set; }
+        public int CurrentStep { get; private set; }
         public int CurrentIp { get; private set; }
         private StepResult stepResult;
 
-        public Engine(IEnumerable<Warrior> warriors)
+        public Engine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
         {
             Memory = new Memory(Parameters.CORESIZE);
-            // TODO 0 -> loadAddress
-            this.warriors = warriors.Select((w, idx) => new RunningWarrior(w, idx, 0)).ToList();
-            PlaceWarrior(this.warriors[0], 0);
-            currentWarrior = 0;
-            currentStep = 0;
+            var idx = 0;
+            foreach (var wsi in warriorsStartInfos)
+            {
+                var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress);
+                warriors.Add(warrior);
+                PlaceWarrior(warrior, wsi.LoadAddress);
+            }
+            CurrentWarrior = 0;
+            CurrentStep = 0;
         }
 
         private void PlaceWarrior(RunningWarrior warrior, int address)
@@ -32,16 +35,16 @@ namespace Core.Engine
 
         public StepResult Step()
         {
-            if (warriors[currentWarrior].Queue.Count == 0)
+            if (warriors[CurrentWarrior].Queue.Count == 0)
             {
-                var startWarrior = currentWarrior;
-                currentWarrior = (currentWarrior + 1)%warriors.Count;
-                while (currentWarrior != startWarrior && warriors[currentWarrior].Queue.Count == 0)
-                    currentWarrior = (currentWarrior + 1)%warriors.Count;
-                if (currentWarrior == startWarrior)
+                var startWarrior = CurrentWarrior;
+                CurrentWarrior = (CurrentWarrior + 1)%warriors.Count;
+                while (CurrentWarrior != startWarrior && warriors[CurrentWarrior].Queue.Count == 0)
+                    CurrentWarrior = (CurrentWarrior + 1)%warriors.Count;
+                if (CurrentWarrior == startWarrior)
                     return new StepResult {GameFinished = true};
             }
-            CurrentIp = warriors[currentWarrior].Queue.Dequeue();
+            CurrentIp = warriors[CurrentWarrior].Queue.Dequeue();
             var instruction = Memory[CurrentIp];
 
             stepResult = new StepResult();
@@ -49,13 +52,13 @@ namespace Core.Engine
             ExecuteInstruction(instruction);
             
             if (! stepResult.KilledInInstruction)
-                warriors[currentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
+                warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
 
             if (stepResult.SplittedInInstruction.HasValue)
-                warriors[currentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
+                warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
-            currentWarrior = (currentWarrior + 1) % warriors.Count;
-            currentStep++;
+            CurrentWarrior = (CurrentWarrior + 1) % warriors.Count;
+            CurrentStep++;
 
             return stepResult;
         }
@@ -68,7 +71,8 @@ namespace Core.Engine
         public void WriteToMemory(int address, Statement statement)
         {
             Memory[address].Statement = statement;
-            Memory[address].LastModifiedByProgram = currentWarrior;
+            Memory[address].LastModifiedByProgram = CurrentWarrior;
+            stepResult.ChangeMemory(address, statement, CurrentWarrior);
         }
 
         public void KillCurrentProcess()

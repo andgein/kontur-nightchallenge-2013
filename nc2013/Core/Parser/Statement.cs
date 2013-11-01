@@ -1,4 +1,5 @@
 using System;
+using Core.Game;
 
 namespace Core.Parser
 {
@@ -18,6 +19,11 @@ namespace Core.Parser
 
         public bool ExistsFieldA { get; private set; }
         public bool ExistsFieldB { get; private set; }
+
+        public CellType CellType
+        {
+            get { return Type == StatementType.Dat ? CellType.Data : CellType.Command; }
+        }
 
         public Statement(Statement another)
         {
