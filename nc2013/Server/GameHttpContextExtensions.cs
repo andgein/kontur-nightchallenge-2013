@@ -7,11 +7,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace Server
 {
-	public static class HttpListenerContextExtensions
+	public static class GameHttpContextExtensions
 	{
-		private const string sessionIdCookieName = "sessionId";
-
-		public static Guid GetGuidParam([NotNull] this HttpListenerContext context, [NotNull] string paramName)
+		public static Guid GetGuidParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
 		{
 			var value = context.GetOptionalGuidParam(paramName);
 			if (!value.HasValue)
@@ -19,7 +17,7 @@ namespace Server
 			return value.Value;
 		}
 
-		public static Guid? GetOptionalGuidParam([NotNull] this HttpListenerContext context, [NotNull] string paramName)
+		public static Guid? GetOptionalGuidParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
 		{
 			var guidString = context.Request.QueryString[paramName];
 			if (String.IsNullOrEmpty(guidString))
@@ -30,7 +28,7 @@ namespace Server
 			return values;
 		}
 
-		public static int GetIntParam([NotNull] this HttpListenerContext context, string paramName)
+		public static int GetIntParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var result = context.GetOptionalIntParam(paramName);
 			if (!result.HasValue)
@@ -38,7 +36,7 @@ namespace Server
 			return result.Value;
 		}
 
-		public static int? GetOptionalIntParam([NotNull] this HttpListenerContext context, string paramName)
+		public static int? GetOptionalIntParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
 			if (String.IsNullOrEmpty(valueString))
@@ -49,7 +47,7 @@ namespace Server
 			return value;
 		}
 
-		public static string GetStringParam([NotNull] this HttpListenerContext context, string paramName)
+		public static string GetStringParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
 			if (String.IsNullOrEmpty(valueString))
@@ -57,13 +55,13 @@ namespace Server
 			return valueString;
 		}
 
-		public static string GetOptionalStringParam([NotNull] this HttpListenerContext context, string paramName)
+		public static string GetOptionalStringParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
 			return String.IsNullOrEmpty(valueString) ? null : valueString;
 		}
 
-		public static T GetRequest<T>([NotNull] this HttpListenerContext context)
+		public static T GetRequest<T>([NotNull] this GameHttpContext context)
 		{
 			var reader = new StreamReader(context.Request.InputStream);
 			var data = reader.ReadToEnd();
@@ -71,17 +69,23 @@ namespace Server
 			return result;
 		}
 
-		public static void SendResponse<T>([NotNull] this HttpListenerContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
+		public static void SendResponse<T>([NotNull] this GameHttpContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
 		{
-			context.Response.StatusCode = (int)statusCode;
+			context.Response.StatusCode = (int) statusCode;
 			context.Response.ContentType = "application/json; charset=utf-8";
 			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 				writer.Write(result);
-			context.Response.Close();
 		}
 
-		public static void SendResponseRaw([NotNull] this HttpListenerContext context, object value, string contentType = null)
+		public static void SendResponseString([NotNull] this GameHttpContext context, string value)
+		{
+			context.Response.ContentType = "text/plain; charset=utf-8";
+			using (var writer = new StreamWriter(context.Response.OutputStream))
+				writer.Write(value);
+		}
+
+		public static void SendResponseRaw([NotNull] this GameHttpContext context, object value, string contentType = null)
 		{
 			if (!ReferenceEquals(value, null))
 			{
@@ -90,10 +94,9 @@ namespace Server
 				using (var writer = new StreamWriter(context.Response.OutputStream))
 					writer.Write(value);
 			}
-			context.Response.Close();
 		}
 
-		public static void SendResponseRaw([NotNull] this HttpListenerContext context, [CanBeNull] byte[] value, string contentType = null)
+		public static void SendResponseRaw([NotNull] this GameHttpContext context, [CanBeNull] byte[] value, string contentType = null)
 		{
 			if (value != null)
 			{
@@ -101,41 +104,48 @@ namespace Server
 					context.Response.ContentType = contentType;
 				context.Response.OutputStream.Write(value, 0, value.Length);
 			}
-			context.Response.Close();
 		}
 
-		public static void Redirect([NotNull] this HttpListenerContext context, [NotNull] string url)
+		public static void Redirect([NotNull] this GameHttpContext context, [NotNull] string url)
 		{
 			context.Response.StatusCode = (int) HttpStatusCode.Redirect;
 			context.Response.RedirectLocation = url;
-			context.Response.Close();
 		}
 
-		public static bool IsAjax([NotNull] this HttpListenerContext context)
+		public static bool IsAjax([NotNull] this GameHttpContext context)
 		{
 			return context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 		}
 
-		public static Guid? TryGetSessionId([NotNull] this HttpListenerContext context)
+		public static void SetCookie([NotNull] this GameHttpContext context, [NotNull] string cookieName, [NotNull] string cookieValue, bool httpOnly, bool persistent)
 		{
-			var sessionIdCookie = context.Request.Cookies[sessionIdCookieName];
-			Guid sessionId;
-			if (sessionIdCookie == null || String.IsNullOrEmpty(sessionIdCookie.Value) || !Guid.TryParse(sessionIdCookie.Value, out sessionId))
+			var header = string.Format("{0}={1}; path={2}", cookieName, cookieValue, context.BasePath);
+			if (persistent)
+				header += "; expires=" + DateTime.Now.AddYears(1).ToString("R");
+			if (httpOnly)
+				header += "; httponly";
+			context.Response.AppendHeader("Set-Cookie", header);
+		}
+
+		[CanBeNull]
+		public static string TryGetCookie([NotNull] this GameHttpContext context, [NotNull] string cookieName)
+		{
+			var cookie = context.Request.Cookies[cookieName];
+			if (cookie == null || string.IsNullOrEmpty(cookie.Value))
 				return null;
-			return sessionId;
+			return cookie.Value;
 		}
 
-		public static void SetSessionId([NotNull] this HttpListenerContext context, Guid sessionId)
-		{
-			context.Response.AppendCookie(new Cookie(sessionIdCookieName, sessionId.ToString(), Program.CoreWarPrefix) {Expires = DateTime.Now.AddYears(1)});
-		}
+		public delegate bool TryParseDelegate<T>([NotNull] string source, out T result);
 
-		public static Guid GetSessionId([NotNull] this HttpListenerContext context)
+		[CanBeNull]
+		public static T? TryGetCookie<T>([NotNull] this GameHttpContext context, [NotNull] string cookieName, [NotNull] TryParseDelegate<T> tryParse) where T : struct
 		{
-			var sessionId = context.TryGetSessionId();
-			if (!sessionId.HasValue)
-				throw new InvalidOperationException(sessionIdCookieName + " cookie is not set");
-			return sessionId.Value;
+			var cookieValue = TryGetCookie(context, cookieName);
+			T result;
+			if (string.IsNullOrEmpty(cookieValue) || !tryParse(cookieValue, out result))
+				return null;
+			return result;
 		}
 
 		[CanBeNull]
@@ -150,10 +160,12 @@ namespace Server
 				return "text/css; encoding=utf-8";
 			if (Path.GetExtension(file) == ".txt")
 				return "text/plain; encoding=utf-8";
+			if (Path.GetExtension(file) == ".gif")
+				return "image/gif";
 			return null;
 		}
 
-		private static bool TryHandleStatic([NotNull] this HttpListenerContext context, [NotNull] string path)
+		private static bool TryHandleStatic([NotNull] this GameHttpContext context, [NotNull] string path)
 		{
 			if (!File.Exists(path)) return false;
 			var contentType = TryGetContentType(path);
@@ -161,12 +173,9 @@ namespace Server
 			return true;
 		}
 
-		public static void SendStaticFile([NotNull] this HttpListenerContext context, [NotNull] string localPath)
+		public static void SendStaticFile([NotNull] this GameHttpContext context, [NotNull] string localPath)
 		{
-			if (!context.TryHandleStatic("../../" + localPath)
-				&& !context.TryHandleStatic("../../StaticContent/" + localPath)
-				&& !context.TryHandleStatic(localPath)
-				&& !context.TryHandleStatic("StaticContent/" + localPath))
+			if (!context.TryHandleStatic(localPath))
 				throw new HttpException(HttpStatusCode.NotFound, String.Format("Static resource '{0}' is not found", context.Request.RawUrl));
 		}
 	}

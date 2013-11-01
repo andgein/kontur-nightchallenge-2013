@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <WarriorFiles>
+    <string>C:\projects\fun\nightchallenge2013\git\nMars-0.9.5\imp.red</string>
+    <string>C:\projects\fun\nightchallenge2013\git\nMars-0.9.5\armadillo.red</string>
+  </WarriorFiles>
+  <InactiveWarriorFiles />
+  <Rules WarriorsCount="2" Rounds="1" MaxCycles="80000" CoreSize="8000" PSpaceSize="500" EnablePSpace="true" MaxProcesses="1000" MaxLength="100" MinDistance="100" Version="93" ScoreFormula="Standard" ICWSStandard="ICWS94" />
+  <EngineOptions KOTHFormat="false" Permutate="false" SortResults="true" DumpResults="true" StatusLine="true" Brake="0" EngineMode="Match" />
+  <ParserOptions StatusLine="true" Header="false" Instructions="false" Metainfo="false" ErrorLevel="AllMessages" Offset="false" Labels="false" Comments="false" Expressions="false" XmlFormat="false" DumpExt=".dmp" DumpFiles="false" />
+  <BreakPoints />
+</Project>

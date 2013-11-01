@@ -1,112 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Core;
 using Core.Arena;
-using Core.Game;
-using JetBrains.Annotations;
+using Server.Arena;
 using log4net;
 using log4net.Config;
-using Server.Arena;
-using Server.Debugging;
-using Server.Handlers;
-using Server.Sessions;
 
 namespace Server
 {
 	public static class Program
 	{
-		public const string CoreWarPrefix = "/corewar/";
-		public const string DefaultUrl = CoreWarPrefix + "index.html";
+		private const string defaultPrefix = "http://*/corewar/";
 
-		private static readonly ILog mainLog = LogManager.GetLogger("main");
-		private static readonly ILog log = LogManager.GetLogger(typeof (Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-		public static void Main()
+		public static void Main(string[] args)
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
-		    int port;
-            try
-            {
-                port = Convert.ToUInt16(ConfigurationManager.AppSettings["Port"]);
-            }
-            catch (Exception)
-            {
-                mainLog.ErrorFormat("Invalid port: {0}", ConfigurationManager.AppSettings["Port"]);
-                return;
-            }
-
-		    var listener = new HttpListener();
-			var prefix = String.Format("http://*:{0}{1}", port, CoreWarPrefix);
-			listener.Prefixes.Add(prefix);
-			listener.Start();
-			var gameServer = new StupidGameServer();
-			var debuggerManager = new DebuggerManager(gameServer);
-			var httpSessionManager = new HttpSessionManager(new SessionManager("sessions"));
-			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
-			var handlers = new IHttpHandler[]
-			{
-				new DebuggerHandler(),
-				new DebuggerStartGameHandler(httpSessionManager, debuggerManager),
-				new DebuggerGameStateHandler(httpSessionManager, debuggerManager),
-				new DebuggerStepHandler(httpSessionManager, debuggerManager),
-				new DebuggerStepToEndHandler(httpSessionManager, debuggerManager),
-				new StaticHandler(),
-				new RankingHandler(),
-				new ArenaSubmitHandler(playersRepo),
-				new ArenaPlayerHandler(playersRepo)
-			};
-            mainLog.InfoFormat("Listening {0}", prefix);
-			Process.Start(String.Format("http://localhost:{0}{1}", port, DefaultUrl));
-			while (true)
-			{
-				var context = listener.GetContext();
-				Task.Factory.StartNew(() => HandleRequest(context, handlers));
-			}
-		}
-
-		private static void HandleRequest([NotNull] HttpListenerContext context, [NotNull] IEnumerable<IHttpHandler> handlers)
-		{
+			Runtime.Init(log);
 			try
 			{
-				try
-				{
-					log.InfoFormat("Incoming request: {0}", context.Request.RawUrl);
-					var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
-					if (handlersThatCanHandle.Length == 1)
-					{
-						log.InfoFormat("Handing request with {0}", handlersThatCanHandle[0].GetType().Name);
-						handlersThatCanHandle[0].Handle(context);
-					}
-					else if (handlersThatCanHandle.Length == 0)
-						throw new HttpException(HttpStatusCode.NotImplemented, string.Format("Method '{0}' is not implemented", context.Request.RawUrl));
-					else
-						throw new HttpException(HttpStatusCode.InternalServerError, string.Format("Method '{0}' can be handled with many handlers: {1}", context.Request.RawUrl, string.Join(", ", handlersThatCanHandle.Select(h => h.GetType().Name))));
-				}
-				catch (HttpException e)
-				{
-					context.Response.ContentType = "text/plain; charset: utf-8";
-					e.WriteToResponse(context.Response);
-				}
-				catch (Exception e)
-				{
-					log.Error("Request failed", e);
-					context.Response.ContentType = "text/plain; charset: utf-8";
-					context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-					using (var writer = new StreamWriter(context.Response.OutputStream))
-						writer.Write(e.ToString());
-					context.Response.Close();
-				}
+				RunServer(args);
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("FATAL ERROR: {0}", e);
+				log.Fatal("Unhandled exception:", e);
 			}
+		}
+
+		private static void RunServer(IEnumerable<string> args)
+		{
+			var prefix = GetPrefix(args);
+			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
+			var gamesRepo = new GamesRepo(new DirectoryInfo("games"));
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, GetStaticContentDir());
+			Runtime.SetConsoleCtrlHandler(() =>
+			{
+				log.InfoFormat("Stopping...");
+				httpServer.Stop();
+			});
+			httpServer.Run();
+			log.InfoFormat("Listening {0}", prefix);
+			Process.Start(httpServer.DefaultUrl);
+			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
+			tournamentRunner.Start();
+			httpServer.WaitForTermination();
+			log.InfoFormat("Stopped");
+		}
+
+		private static string GetPrefix(IEnumerable<string> args)
+		{
+			var prefix = args.FirstOrDefault();
+			return string.IsNullOrEmpty(prefix) ? defaultPrefix : prefix;
+		}
+
+		private static string GetStaticContentDir()
+		{
+			if (Directory.GetCurrentDirectory().EndsWith("bin\\Debug")) return "..\\..";
+			else return ".";
 		}
 	}
 }

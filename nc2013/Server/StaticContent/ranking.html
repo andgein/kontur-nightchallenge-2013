@@ -9,33 +9,32 @@
 	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<script src="common.js"></script>
+	<script src="server.js"></script>
 	<script>
-		var RankCtrl = MakeJsonController("/corewar/arena/ranking");
+		var RankCtrl = MakeJsonController(server.basePath() + "arena/ranking");
 	</script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" ng-controller="RankCtrl">
 		
 		<script>nav()</script>
 
 		<div class="page-header">
-			<h1>Current ranking</h1>
+			<h1>Текущие результаты</h1>
 		</div>
-
-		<table class="table table-condensed table-bordered ranking-table" ng-controller="RankCtrl">
+		<div>Время обновления: {{time}}</div>		
+		<table class="table table-condensed table-bordered ranking-table">
 			<tr>
 				<th>№</th>
-				<th>Warrior</th>
-				<th>Wins</th>
-				<th>Loses</th>
-				<th>Total games</th>
+				<th>Бот</th>
+				<th>Очки</th>
+				<th>Количество игр</th>
 			</tr>
-			<tr ng-repeat="p in programs">
+			<tr ng-repeat="p in places">
 				<td>{{$index+1}}</td>
 				<td><a href="player.html?name={{p.name}}">{{p.name}}</a></td>
-				<td>{{p.wins}}</td>
-				<td>{{p.loses}}</td>
-				<td>{{p.totalGames}}</td>
+				<td>{{p.score}}</td>
+				<td>{{p.games}}</td>
 			</tr>
 		</table>
 	</div>

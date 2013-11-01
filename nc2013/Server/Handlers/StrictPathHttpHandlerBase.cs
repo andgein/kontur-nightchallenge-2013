@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using JetBrains.Annotations;
 
 namespace Server.Handlers
@@ -13,11 +12,11 @@ namespace Server.Handlers
 			this.path = path;
 		}
 
-		public bool CanHandle([NotNull] HttpListenerContext context)
+		public bool CanHandle([NotNull] GameHttpContext context)
 		{
-			return context.Request.Url.AbsolutePath.Equals(Program.CoreWarPrefix + path, StringComparison.OrdinalIgnoreCase);
+			return context.Request.Url.AbsolutePath.Equals(context.BasePath + path, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public abstract void Handle([NotNull] HttpListenerContext context);
+		public abstract void Handle([NotNull] GameHttpContext context);
 	}
 }

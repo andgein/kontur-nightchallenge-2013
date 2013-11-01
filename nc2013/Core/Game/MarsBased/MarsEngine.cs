@@ -17,11 +17,11 @@ namespace Core.Game.MarsBased
 			this.project = project;
 		}
 
-		public bool Run(int turnsToMake)
+		public bool Run(int turnsToMake, out int turnsMade)
 		{
 			if (turnsToMake < 0)
 				throw new InvalidOperationException("turnsToMake must be non negative");
-			var turns = 0;
+			turnsMade = 0;
 			var finished = false;
 			BeginMatch();
 			if (turnsToMake > 0)
@@ -30,7 +30,7 @@ namespace Core.Game.MarsBased
 				do
 				{
 					stepResult = NextStep();
-				} while (++turns < turnsToMake || stepResult != StepResult.Finished);
+				} while (++turnsMade < turnsToMake && stepResult != StepResult.Finished);
 				finished = stepResult == StepResult.Finished;
 			}
 			return finished;

@@ -36,44 +36,93 @@ var Memory = Base.extend({
 	},
 	reset: function () {
 		for (var i = 0; i < this.cells.length; ++i)
-			this.cells[i].setCellState(null);
+			this.cells[i].reset();
 	}
 });
 
 var Cell = Base.extend({
-	constructor: function (address) {
+	constructor: function(address) {
 		this.address = address;
-		this.lastClass = "";
+		this.lastModifiedClass = "";
+		this.lastContentClass = "";
 		this.listingItemContent = this._calcListingItemContent();
+		this.activeInstructionPointers = {};
 	},
-	getListingItemContent: function () {
+	getListingItemContent: function() {
 		return this.listingItemContent;
 	},
-	attachMapCell: function ($mapCell) {
+	attachMapCell: function($mapCell) {
 		this.$mapCell = $mapCell;
+		var that = this;
+		this.$mapCell.click(function () {
+			that.scrollIntoView();
+			return false;
+		});
 	},
-	attachListingItem: function ($listingItem) {
+	attachListingItem: function($listingItem) {
 		this.$listingItem = $listingItem;
 	},
-	setCellState: function (cellState) {
+	setCellState: function(cellState) {
 		this.cellState = cellState;
 		this._refreshState();
 	},
+	scrollIntoView: function () {
+		if (Cell._lastScrolledInto)
+			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
+		this.$listingItem.addClass("justScrolled");
+		this.$listingItem[0].scrollIntoView();
+		Cell._lastScrolledInto = this;
+	},
+	reset: function () {
+		this.$listingItem.removeClass("justScrolled");
+		var instructionPointersToRemove = [];
+		for (var i in this.activeInstructionPointers)
+			instructionPointersToRemove.push(i);
+		for (var i = 0; i < instructionPointersToRemove.length; ++i)
+			this.removeInstructionPointer(instructionPointersToRemove[i]);
+		this.setCellState(null);
+	},
+	removeInstructionPointer: function (programIndex) {
+		delete this.activeInstructionPointers[programIndex];
+		this.$mapCell.removeClass("ip" + programIndex);
+		this.$listingItem.removeClass("ip" + programIndex);
+	},
+	setInstructionPointer: function (programIndex) {
+		this.$mapCell.addClass("ip" + programIndex);
+		this.$listingItem.addClass("ip" + programIndex);
+		this.activeInstructionPointers[programIndex] = true;
+	},
 	_refreshState: function () {
-		var newClass;
-		if (this._isEmptyState())
-			newClass = "";
+		var modifiedClass;
+		if (!this.cellState || this.cellState.lastModifiedByProgram == null)
+			modifiedClass = "";
 		else
-			newClass = "modified" + this.cellState.lastModifiedByProgram;
-		if (newClass != this.lastClass) {
-			if (this.lastClass) {
-				this.$mapCell.removeClass(this.lastClass);
-				this.$listingItem.removeClass(this.lastClass);
+			modifiedClass = "modified" + this.cellState.lastModifiedByProgram;
+		if (modifiedClass != this.lastModifiedClass) {
+			if (this.lastModifiedClass) {
+				this.$mapCell.removeClass(this.lastModifiedClass);
+				this.$listingItem.removeClass(this.lastModifiedClass);
 			}
-			this.lastClass = newClass;
-			if (this.lastClass) {
-				this.$mapCell.addClass(this.lastClass);
-				this.$listingItem.addClass(this.lastClass);
+			this.lastModifiedClass = modifiedClass;
+			if (this.lastModifiedClass) {
+				this.$mapCell.addClass(this.lastModifiedClass);
+				this.$listingItem.addClass(this.lastModifiedClass);
+			}
+		}
+		var contentClass;
+		if (!this.cellState)
+			contentClass = "Data";
+		else
+			contentClass = this.cellState.cellType;
+		if (contentClass != this.lastContentClass) {
+			if (this.lastContentClass) {
+				this.$mapCell.removeClass(this.lastContentClass);
+				this.$listingItem.removeClass(this.lastContentClass);
+			}
+			this.lastContentClass = contentClass;
+			if (this.lastContentClass) {
+				this.$mapCell.addClass(this.lastContentClass);
+				this.$listingItem.addClass(this.lastContentClass);
 			}
 		}
 		var listingItemContent = this._calcListingItemContent();
@@ -84,10 +133,9 @@ var Cell = Base.extend({
 	},
 	_calcListingItemContent: function () {
 		if (!this.cellState)
-			return this.address + " DAT 0 0";
+			return "";
 		return this.address + " " + this.cellState.instruction;
-	},
-	_isEmptyState: function () {
-		return !this.cellState || this.cellState.cellType == "Data";
 	}
+}, {
+	_lastScrolledInto: null
 });

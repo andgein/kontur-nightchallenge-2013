@@ -16,7 +16,6 @@ namespace Core.Game.MarsBased
 
 		public MarsGame([NotNull] ProgramStartInfo[] programStartInfos)
 		{
-			this.programStartInfos = programStartInfos;
 			rules = new Rules
 			{
 				WarriorsCount = programStartInfos.Length,
@@ -32,6 +31,15 @@ namespace Core.Game.MarsBased
 				ScoreFormula = ScoreFormula.Standard,
 				ICWSStandard = ICWStandard.ICWS88,
 			};
+
+			this.programStartInfos = programStartInfos;
+			var engine = CreateEngine();
+			engine.Run(0, out currentTurn);
+			this.programStartInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
+			{
+				Program = pi.Program,
+				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : (uint)engine.warriors[idx].LoadAddress,
+			}).ToArray();
 		}
 
 		[NotNull]
@@ -45,14 +53,14 @@ namespace Core.Game.MarsBased
 		{
 			currentTurn += stepCount;
 			if (currentTurn < 0)
-				throw new InvalidOperationException(string.Format("Cannot rewind game state behind 0 turn. StepCount: {0}", stepCount));
+				currentTurn = 0;
 			gameState = GetGameState(currentTurn);
 			return null; // todo !!!
 		}
 
 		public void StepToEnd()
 		{
-			var stepsToEnd = rules.MaxCycles - currentTurn;
+			var stepsToEnd = rules.MaxCycles * 2 - currentTurn;
 			if (stepsToEnd > 0)
 				Step(stepsToEnd);
 		}
@@ -61,13 +69,7 @@ namespace Core.Game.MarsBased
 		private GameState GetGameState(int turnsToMake)
 		{
 			var engine = CreateEngine();
-			var finished = engine.Run(turnsToMake);
-
-			var startInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
-			{
-				Program = pi.Program,
-				StartAddress = (uint)engine.warriors[idx].LoadAddress,
-			}).ToArray();
+			var finished = engine.Run(turnsToMake, out currentTurn);
 
 			var currentProgram = turnsToMake % engine.WarriorsCount;
 
@@ -84,7 +86,6 @@ namespace Core.Game.MarsBased
 					Instruction = instruction,
 					CellType = cellType,
 					LastModifiedByProgram = lastModifiedByProgram,
-					LastModifiedStep = null, // todo !!!
 				};
 			}
 
@@ -103,10 +104,11 @@ namespace Core.Game.MarsBased
 
 			return new GameState
 			{
-				ProgramStartInfos = startInfos,
+				ProgramStartInfos = programStartInfos,
 				CurrentStep = currentTurn,
 				CurrentProgram = currentProgram,
 				Winner = winner,
+				GameOver = finished,
 				MemoryState = memoryState,
 				ProgramStates = programStates,
 			};
@@ -125,9 +127,9 @@ namespace Core.Game.MarsBased
 		{
 			var warriorParser = new MarsWarriorParser(rules);
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
-			var warrior = warriorParser.Parse(programStartInfo.Program, implicitName);
+			var warrior = warriorParser.TryParse(programStartInfo.Program, implicitName);
 			if (warrior == null)
-				throw new InvalidOperationException(string.Format("Failed to parse warrior {0}: {1}", implicitName, programStartInfo));
+				throw new ParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
 			warrior.FileName = filename;
 			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
 			return warrior;

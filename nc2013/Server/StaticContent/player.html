@@ -9,8 +9,9 @@
 	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<script src="common.js"></script>
+	<script src="server.js"></script>
 	<script>
-		var PlayerController = MakeJsonController("/corewar/arena/player" + window.location.search);
+		var PlayerController = MakeJsonController(server.basePath() + "arena/player" + window.location.search);
 	</script>
 </head>
 <body>
@@ -21,26 +22,22 @@
 		</div>
 		<div>Авторство: {{authors}}</div>
 		<div>Время создания: {{submitTime}}</div>
-		<div>Побед: {{info.wins}}</div>
-		<div>Поражений: {{info.loses}}</div>
-		<div>Всего боев: {{info.totalGames}}</div>
+		<div>Очков: {{info.score}}</div>
+		<div>Всего боев: {{info.games}}</div>
 		<h2>Статистика боев с другими ботами</h2>
 		<table class="table table-bordered table-condensed">
 			<tr>
 				<th>Противник</th>
-				<th>Побед</th>
-				<th>Поражений</th>
-				<th>Ничьих</th>
+				<th>Очки</th>
+				<th>Очки противника</th>
 				<th>Последние игры</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
-				<td>{{enemyStats.wins}}</td>
-				<td>{{enemyStats.loses}}</td>
-				<td>{{enemyStats.draws}}</td>
+				<td>{{enemyStats.score}}</td>
+				<td>{{enemyStats.enemyScore}}</td>
 				<td>
 					тут будет список игр
-
 				</td>
 			</tr>
 		</table>

@@ -22,10 +22,15 @@ namespace Core.Game.MarsBased
 			throw new NotImplementedException();
 		}
 
-		[CanBeNull]
-		public ExtendedWarrior Parse([NotNull] string sourceText, [NotNull] string implicitName)
+		public string GetErrorMessages()
 		{
-			errCount = 0;
+			return result.Dump();
+		}
+
+		[CanBeNull]
+		public ExtendedWarrior TryParse([NotNull] string sourceText, [NotNull] string implicitName)
+		{
+			result = new ParseResult();
 			Prepare();
 			try
 			{
@@ -51,9 +56,7 @@ namespace Core.Game.MarsBased
 				SetAuthor(warrior);
 				Asserts(warrior);
 				warrior.Variables = variables;
-				if (errCount > 0)
-					return null;
-				return warrior;
+				return result.Succesfull ? warrior : null;
 			}
 			catch (ParserException)
 			{

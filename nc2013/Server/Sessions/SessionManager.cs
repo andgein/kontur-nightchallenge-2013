@@ -15,14 +15,6 @@ namespace Server.Sessions
 		}
 
 		[NotNull]
-		public ISession CreateSession()
-		{
-			var session = CreateSession(Guid.NewGuid());
-			sessions[session.SessionId] = session;
-			return session;
-		}
-
-		[NotNull]
 		public ISession GetSession(Guid sessionId)
 		{
 			return sessions.GetOrAdd(sessionId, CreateSession);

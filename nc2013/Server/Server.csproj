@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
+    <AssemblyName>corewar</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -47,39 +48,39 @@
     <Compile Include="Arena\FinishedGameInfo.cs" />
     <Compile Include="Arena\FinishedGamesWithEnemy.cs" />
     <Compile Include="Arena\PlayerInfo.cs" />
-    <Compile Include="Arena\ProgramRankInfo.cs" />
-    <Compile Include="Arena\Ranking.cs" />
-    <Compile Include="Debugging\DebuggerHandler.cs" />
+    <Compile Include="Arena\TournamentRunner.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />
+    <Compile Include="Debugging\DebuggerResetHandler.cs" />
+    <Compile Include="Debugging\DebuggerState.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
     <Compile Include="Arena\ArenaSubmitHandler.cs" />
     <Compile Include="Arena\ArenaPlayerHandler.cs" />
     <Compile Include="Debugging\IDebuggerManager.cs" />
-    <Compile Include="HttpListenerContextExtensions.cs" />
+    <Compile Include="GameHttpContext.cs" />
+    <Compile Include="GameHttpServer.cs" />
+    <Compile Include="GameHttpContextExtensions.cs" />
     <Compile Include="Arena\RankingHandler.cs" />
     <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
-    <Compile Include="Debugging\DebuggerGameStateHandler.cs" />
+    <Compile Include="Debugging\DebuggerStateHandler.cs" />
     <Compile Include="Handlers\IHttpHandler.cs" />
     <Compile Include="Handlers\StaticHandler.cs" />
     <Compile Include="Debugging\DebuggerStepHandler.cs" />
     <Compile Include="HttpException.cs" />
     <Compile Include="Debugging\IDebugger.cs" />
-    <Compile Include="Sessions\HttpSessionManager.cs" />
-    <Compile Include="Sessions\IHttpSessionManager.cs" />
+    <Compile Include="Runtime.cs" />
     <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Debugging\DebuggerStartGameHandler.cs" />
+    <Compile Include="Debugging\DebuggerStartHandler.cs" />
     <Compile Include="Sessions\ISessionItems.cs" />
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="StaticContent\fonts\glyphicons-halflings-regular.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -119,8 +120,15 @@
     <Content Include="log.config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="StaticContent\bootstrap.min.js" />
-    <Content Include="StaticContent\common.css" />
+    <None Include="StaticContent\ajax-loader.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="StaticContent\bootstrap.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StaticContent\common.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="StaticContent\json2.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

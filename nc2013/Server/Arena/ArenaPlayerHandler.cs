@@ -1,47 +1,59 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
+using System.Linq;
 
 namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
 		private readonly PlayersRepo players;
+		private readonly GamesRepo gamesRepo;
 
-		public ArenaPlayerHandler(PlayersRepo players) : base("arena/player")
+		public ArenaPlayerHandler(PlayersRepo players, GamesRepo gamesRepo) : base("arena/player")
 		{
 			this.players = players;
+			this.gamesRepo = gamesRepo;
 		}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var programName = context.GetStringParam("name");
 			var programVersion = context.GetOptionalIntParam("version");
 			var arenaPlayer = players.LoadPlayer(programName, programVersion);
-			context.SendResponse(CreateDummyPlayerInfo(arenaPlayer));
+			context.SendResponse(CreatePlayerInfo(arenaPlayer));
 		}
 
-		private static PlayerInfo CreateDummyPlayerInfo(ArenaPlayer arenaPlayer)
+		private PlayerInfo CreatePlayerInfo(ArenaPlayer arenaPlayer)
 		{
+			var ranking = gamesRepo.LoadRanking();
+			var games = gamesRepo.LoadGames(ranking.TournamentId);
+			var allGames = games.Concat(games.Select(g => g.Reverse().ToArray()));
+			var byEnemy = allGames.Where(g => g[0].Player.Name == arenaPlayer.Name && g[0].Player.Version == arenaPlayer.Version)
+								.GroupBy(g => g[1].Player).ToList();
+			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry {Games = 0, Score = 0};
 			return
 				new PlayerInfo
 				{
-					Info = new ProgramRankInfo
+					Info = new RankingEntry
 					{
 						Name = arenaPlayer.Name,
-						Loses = 10,
-						Wins = 100500,
-						TotalGames = 100510
+						Score = rankingEntry.Score,
+						Games = rankingEntry.Games
 					},
 					Authors = arenaPlayer.Authors,
 					Version = arenaPlayer.Version,
 					SubmitTime = arenaPlayer.Timestamp,
-					GamesByEnemy = new[]
-					{
-						new FinishedGamesWithEnemy {Enemy = "spaceorc", EnemyVersion = 3, Wins = 100, Loses = 20, Draws = 80, LastGames = new[] {new FinishedGameInfo()}},
-						new FinishedGamesWithEnemy {Enemy = "imp", EnemyVersion = 1, Wins = 100, Loses = 20, Draws = 80, LastGames = new[] {new FinishedGameInfo()}}
-					}
+					GamesByEnemy =
+						byEnemy.Select(
+							e => new FinishedGamesWithEnemy
+							{
+								Enemy = e.Key.Name,
+								EnemyVersion = e.Key.Version,
+								Score = e.Sum(r => r[0].Score),
+								EnemyScore = e.Sum(r => r[1].Score),
+							}).ToArray()
 				};
 		}
 	}

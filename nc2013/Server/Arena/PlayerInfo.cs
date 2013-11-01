@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Arena;
 using Newtonsoft.Json;
 
 namespace Server.Arena
@@ -8,7 +9,7 @@ namespace Server.Arena
 	{
 		[JsonProperty] public string Authors;
 		[JsonProperty] public FinishedGamesWithEnemy[] GamesByEnemy;
-		[JsonProperty] public ProgramRankInfo Info;
+		[JsonProperty] public RankingEntry Info;
 		[JsonProperty] public DateTime SubmitTime;
 		[JsonProperty] public int Version;
 	}

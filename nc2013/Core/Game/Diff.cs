@@ -13,6 +13,12 @@ namespace Core.Game
 		public int? Winner { get; set; }
 
 		[JsonProperty]
+		public bool GameOver { get; set; }
+
+		[JsonProperty]
+		public int CurrentProgram { get; set; }
+
+		[JsonProperty]
 		[CanBeNull]
 		public MemoryDiff[] MemoryDiffs { get; set; }
 

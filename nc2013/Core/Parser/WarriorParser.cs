@@ -38,7 +38,7 @@ namespace Core.Parser
             return commentPos != -1 ? line.Substring(0, commentPos) : line;
         }
 
-        private Statement ParseLine(String line)
+		public Statement ParseLine(String line)
         {
             var label = "";
             string command;

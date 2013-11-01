@@ -1,7 +1,5 @@
-using System.Net;
 using Core.Game;
 using JetBrains.Annotations;
-using Server.Sessions;
 
 namespace Server.Debugging
 {
@@ -10,15 +8,15 @@ namespace Server.Debugging
 		private const int memoryDiffsLimit = 1000;
 		private const int programStateDiffsLimit = 1000;
 
-		public DebuggerStepHandler([NotNull] IHttpSessionManager httpSessionManager, [NotNull] IDebuggerManager debuggerManager) : base("debugger/step", httpSessionManager, debuggerManager) {}
+		public DebuggerStepHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/step", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] HttpListenerContext context, [NotNull] IDebugger debugger)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
 			var diff = debugger.Play(game => game.Step(stepCount));
 			var response = new DebuggerStepResponse();
 			if (diff == null || DiffIsTooBig(diff))
-				response.GameState = debugger.GameState;
+				response.GameState = debugger.State.GameState;
 			else
 				response.Diff = diff;
 			context.SendResponse(response);

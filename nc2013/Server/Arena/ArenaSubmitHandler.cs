@@ -3,6 +3,7 @@ using System.Net;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
+using log4net;
 
 namespace Server.Arena
 {
@@ -16,7 +17,7 @@ namespace Server.Arena
 			this.players = players;
 		}
 
-		public override void Handle([NotNull] HttpListenerContext context)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			try
 			{
@@ -26,8 +27,12 @@ namespace Server.Arena
 			}
 			catch (Exception e)
 			{
+				log.Error("Submit failed!", e);
 				context.SendResponse(e.Message, HttpStatusCode.BadRequest);
 			}
 		}
+
+		private static readonly ILog log = LogManager.GetLogger(typeof (ArenaSubmitHandler));
+
 	}
 }
