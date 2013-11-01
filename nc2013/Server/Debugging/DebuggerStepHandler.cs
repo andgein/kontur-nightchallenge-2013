@@ -13,7 +13,16 @@ namespace Server.Debugging
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
-			var diff = debugger.Play(game => game.Step(stepCount));
+			var currentStep = context.GetOptionalIntParam("currentStep");
+			var diff = debugger.Play(game =>
+			{
+				if (currentStep != game.GameState.CurrentStep)
+				{
+					game.Step(stepCount);
+					return null;
+				}
+				return game.Step(stepCount);
+			});
 			var response = new DebuggerStepResponse();
 			if (diff == null || DiffIsTooBig(diff))
 				response.GameState = debugger.State.GameState;

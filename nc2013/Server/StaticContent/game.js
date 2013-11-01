@@ -39,12 +39,13 @@ var Game = Base.extend({
 	},
 	step: function (stepCount) {
 		var that = this;
-		return server.get("debugger/step", { count: stepCount })
+		return server.get("debugger/step", { count: stepCount, currentStep: this.currentStep })
 			.pipe(function (stepResponse) {
 				if (stepResponse.gameState) {
 					return that._setGameState(stepResponse.gameState);
 				}
 				else if (stepResponse.diff) {
+					that.currentStep = stepResponse.diff.currentStep;
 					that.$currentStep.text(stepResponse.diff.currentStep);
 					for (var i = 0; i < that.programs.length; ++i)
 						this.programs[i].current(stepResponse.diff.currentProgram == i);
@@ -79,6 +80,7 @@ var Game = Base.extend({
 	_setGameState: function (gameState) {
 		if (!gameState) {
 			this.$currentStep.text("");
+			this.currentStep = undefined;
 			this.memory.reset();
 			for (var i = 0; i < this.programs.length; ++i) {
 				this.programs[i].reset();
@@ -86,6 +88,7 @@ var Game = Base.extend({
 			return "reset";
 		} else {
 			this.$currentStep.text(gameState.currentStep);
+			this.currentStep = gameState.currentStep;
 			this.memory.setCellStates(gameState.memoryState);
 			for (var i = 0; i < gameState.programStates.length; ++i) {
 				this.programs[i].setProgramState(gameState.programStates[i]);
@@ -125,16 +128,17 @@ var GameRunner = Base.extend({
 
 		var that = this;
 		function nextAction(gameRunStatus) {
-			var result;
+			var result, justStarted = false;
 			if (options.requirePlaying && gameRunStatus != "playing") {
 				result = that.game.start();
+				justStarted = true;
 				that.onGameStarted && that.onGameStarted();
 			} else {
 				result = $.when(gameRunStatus);
 			}
 			if (options.action)
 				result = result.pipe(function () {
-					return options.action(that.game);
+					return options.action(that.game, justStarted);
 				});
 			return result;
 		}
@@ -165,8 +169,8 @@ var GameRunner = Base.extend({
 	},
 	step: function (stepCount) {
 		this._play({
-			action: function (game) {
-				return game.step(stepCount);
+			action: function (game, justStarted) {
+				return game.step(stepCount + (justStarted ? -1 : 0));
 			}
 		});
 	},
