@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -72,26 +73,39 @@ namespace Server
 		public static void SendResponse<T>([NotNull] this GameHttpContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
 		{
 			context.Response.StatusCode = (int) statusCode;
-			context.Response.ContentType = "application/json; charset=utf-8";
 			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
-			using (var writer = new StreamWriter(context.Response.OutputStream))
-				writer.Write(result);
+			context.SendResponseRaw(result, "application/json; charset=utf-8");
 		}
 
-		public static void SendResponseString([NotNull] this GameHttpContext context, string value)
+		[NotNull]
+		private static Stream GetOutputStream([NotNull] this GameHttpContext context)
 		{
-			context.Response.ContentType = "text/plain; charset=utf-8";
-			using (var writer = new StreamWriter(context.Response.OutputStream))
-				writer.Write(value);
+			var acceptEncoding = context.Request.Headers["Accept-Encoding"];
+			if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
+			{
+				context.Response.AppendHeader("Content-Encoding", "gzip");
+				return new GZipStream(context.Response.OutputStream, CompressionMode.Compress);
+			}
+			return context.Response.OutputStream;
 		}
 
-		public static void SendResponseRaw([NotNull] this GameHttpContext context, object value, string contentType = null)
+		public static void SendResponseString([NotNull] this GameHttpContext context, [CanBeNull] string value)
+		{
+			if (!string.IsNullOrEmpty(value))
+			{
+				context.Response.ContentType = "text/plain; charset=utf-8";
+				using (var writer = new StreamWriter(context.GetOutputStream()))
+					writer.Write(value);
+			}
+		}
+
+		public static void SendResponseRaw([NotNull] this GameHttpContext context, [CanBeNull] object value, string contentType = null)
 		{
 			if (!ReferenceEquals(value, null))
 			{
 				if (!String.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
-				using (var writer = new StreamWriter(context.Response.OutputStream))
+				using (var writer = new StreamWriter(context.GetOutputStream()))
 					writer.Write(value);
 			}
 		}
@@ -102,7 +116,8 @@ namespace Server
 			{
 				if (!String.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
-				context.Response.OutputStream.Write(value, 0, value.Length);
+				using (var outputStream = context.GetOutputStream())
+					outputStream.Write(value, 0, value.Length);
 			}
 		}
 
