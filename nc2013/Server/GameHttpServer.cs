@@ -124,6 +124,7 @@ namespace Server
 				}
 				catch (HttpException e)
 				{
+					context.Response.Headers.Clear();
 					context.Response.ContentType = "text/plain; charset: utf-8";
 					e.WriteToResponse(context.Response);
 					context.Response.Close();
@@ -131,6 +132,7 @@ namespace Server
 				catch (Exception e)
 				{
 					log.Error("Request failed", e);
+					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
 					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
