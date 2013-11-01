@@ -4,10 +4,8 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Core War Debugger</title>
-	<script src="jquery-1.7.2.js"></script>
-	<script src="angular.min.js"></script>
-	<script src="bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="jquery-1.7.2.js"></script>
 	<script src="common.js"></script>
 	<script src="base.js"></script>
 	<script src="server.js"></script>
@@ -16,22 +14,28 @@
 	<script src="program.js"></script>
 	<script type="text/javascript">
 
+		var programs;
 		var gameRunner;
+
 		$(function () {
 			$("#programsTab").click(switchToProgramsTab);
 			$("#debuggerTab").click(switchToDebuggerTab);
-
+			$("#autofocus").click(switchAutofocus);
 			$("#stepCount").keydown(function (event) {
 				if (event.which == 13)
 					step();
 			});
 
+			loadGame();
+		});
+
+		function loadGame() {
 			var memory = new Memory({
 				$map: $("#map"),
 				$listing: $("#listing"),
 				cellCount: 8000
 			});
-			var programs = [];
+			programs = [];
 			programs.push(new ProgramState({
 				memory: memory,
 				$processCount: $("#processCountA"),
@@ -62,35 +66,6 @@
 				onGameRunStatusChanged: gameRunStatusChanged
 			});
 			gameRunner.load();
-
-			$("#autofocus").click(function () {
-				for (var i = 0; i < programs.length; ++i)
-					programs[i].autofocus(!!$("#autofocus:checked").length);
-			});
-
-			$listing = $("#listing");
-			var resizeCounter = 0;
-			$(window).resize(function () {
-				var counter = ++resizeCounter;
-				setTimeout(function () {
-					if (counter == resizeCounter)
-						adjustLayout();
-				}, 100);
-			});
-			adjustLayout();
-		});
-
-		var $listing;
-		var minDebuggerHeight = 400;
-		var oldDebuggerHeight;
-		function adjustLayout() {
-			var newHeight = $(window).height() - $listing.position().top - 20;
-			if (newHeight < minDebuggerHeight)
-				newHeight = minDebuggerHeight;
-			if (oldDebuggerHeight != newHeight) {
-				oldDebuggerHeight = newHeight;
-				$listing.height(newHeight);
-			}
 		}
 
 		function gameStarted() {
@@ -115,6 +90,11 @@
 			}
 		}
 
+		function switchAutofocus() {
+			for (var i = 0; i < programs.length; ++i)
+				programs[i].autofocus(!!$("#autofocus:checked").length);
+		}
+
 		function switchToProgramsTab() {
 			$("#programsTab").addClass("active");
 			$("#programsPanel").addClass("active");
@@ -127,7 +107,6 @@
 			$("#debuggerPanel").addClass("active");
 			$("#programsTab").removeClass("active");
 			$("#programsPanel").removeClass("active");
-			adjustLayout();
 		}
 
 		var slowSpeed = 1;
@@ -140,22 +119,170 @@
 				stepCount = 1;
 			gameRunner.step(stepCount);
 		}
-
 	</script>
 	<style>
-		.debugger-programs {
+		.layout {
+			position: absolute;
+			height: 100%;
 			width: 100%;
 		}
 
-			.debugger-programs td {
-				vertical-align: top;
+		.layout-header {
+			padding-left: 20px;
+			height: 20px;
+		}
+
+		.layout-buttons {
+			border-top: 1px lightgray solid;
+			height: 20px;
+			padding-left: 20px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+
+		.layout-tabs {
+			height: 20px;
+			border-bottom: lightgrey solid 10px;
+			margin-bottom: 20px;
+		}
+
+		.debugger-tab {
+			padding: 5px 20px 5px 20px;
+			display: inline-block;
+			font-size: larger;
+			cursor: pointer;
+		}
+
+			.debugger-tab.active {
+				background-color: lightgrey;
+				cursor: default;
 			}
 
-			.debugger-programs textarea.program {
+		.layout-content {
+			vertical-align: top;
+		}
+
+			.layout-content .layout-content-panel {
+				display: none;
+				position: relative;
+				width: 100%;
+				height: 100%;
+			}
+
+				.layout-content .layout-content-panel.active {
+					display: block;
+				}
+
+		.layout-content-container {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.layout-programs-header {
+			padding-left: 20px;
+			padding-top: 10px;
+			height: 20px;
+			font-size: larger;
+		}
+
+		.layout-program-container {
+			padding-left: 20px;
+			padding-right: 20px;
+			padding-bottom: 20px;
+		}
+
+			.layout-program-container .program {
 				width: 100%;
 				font-family: monospace;
-				min-height: 300px;
+				height: 100%;
 			}
+
+		.layout-content-debugger-header {
+			padding-left: 20px;
+			padding-top: 10px;
+			padding-right: 20px;
+			height: 10px;
+			font-size: larger;
+		}
+
+		.layout-content-debugger-left {
+		}
+
+		.layout-content-debugger-right {
+			width: 300px;
+		}
+
+		.layout-content-debugger-listing-autofocus {
+			padding-left: 10px;
+			font-size: 14px;
+			font-weight: normal;
+			display: inline-block;
+			height: 10px;
+		}
+
+			.layout-content-debugger-listing-autofocus label {
+				font-weight: normal;
+				position: relative;
+				top: -1px;
+			}
+
+			.layout-content-debugger-listing-autofocus input {
+				font-weight: normal;
+				position: relative;
+				top: 1px;
+			}
+
+		.layout-content-debugger-block-container {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.layout-content-debugger-header-listing-container {
+			padding-left: 20px;
+			padding-bottom: 20px;
+			padding-right: 20px;
+		}
+		.layout-content-debugger-header-listing {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			border: solid black 1px;
+			overflow-y: scroll;
+		}
+
+		.debugger-listing {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+			.debugger-listing .listingItem {
+				font-family: monospace;
+			}
+
+				.debugger-listing .listingItem.justScrolled {
+					border: solid 3px red;
+				}
+
+				.debugger-listing .listingItem.modified0 {
+					background-color: darkorange;
+				}
+
+				.debugger-listing .listingItem.modified1 {
+					background-color: lightgreen;
+				}
+
+		.layout-content-debugger-sinlerow {
+			height: 10px;
+			padding-left: 20px;
+		}
+
+		.layout-content-debugger-map-container {
+			padding-left: 20px;
+			height: 10px;
+		}
 
 		.debugger-map .mapCell {
 			background-color: black;
@@ -171,52 +298,61 @@
 			.debugger-map .mapCell.Command.modified0 {
 				background-color: darkorange;
 			}
-			.debugger-map .mapCell.Command.modified0.ip0 {
-				background-color: darkorange;
-				border: 1px red solid;
-			}
-			.debugger-map .mapCell.Command.modified0.ip1 {
-				background-color: darkorange;
-				border: 1px green solid;
-			}
+
+				.debugger-map .mapCell.Command.modified0.ip0 {
+					background-color: darkorange;
+					border: 1px red solid;
+				}
+
+				.debugger-map .mapCell.Command.modified0.ip1 {
+					background-color: darkorange;
+					border: 1px green solid;
+				}
 
 			.debugger-map .mapCell.Data.modified0 {
 				background-color: black;
 				border: 1px darkorange solid;
 			}
-			.debugger-map .mapCell.Data.modified0.ip0 {
-				background-color: black;
-				border: 1px red solid;
-			}
-			.debugger-map .mapCell.Data.modified0.ip1 {
-				background-color: black;
-				border: 1px green solid;
-			}
+
+				.debugger-map .mapCell.Data.modified0.ip0 {
+					background-color: black;
+					border: 1px red solid;
+				}
+
+				.debugger-map .mapCell.Data.modified0.ip1 {
+					background-color: black;
+					border: 1px green solid;
+				}
 
 			.debugger-map .mapCell.Command.modified1 {
 				background-color: lightgreen;
 			}
-			.debugger-map .mapCell.Command.modified1.ip0 {
-				background-color: lightgreen;
-				border: 1px red solid;
-			}
-			.debugger-map .mapCell.Command.modified1.ip1 {
-				background-color: lightgreen;
-				border: 1px green solid;
-			}
+
+				.debugger-map .mapCell.Command.modified1.ip0 {
+					background-color: lightgreen;
+					border: 1px red solid;
+				}
+
+				.debugger-map .mapCell.Command.modified1.ip1 {
+					background-color: lightgreen;
+					border: 1px green solid;
+				}
 
 			.debugger-map .mapCell.Data.modified1 {
 				background-color: black;
 				border: 1px lightgreen solid;
 			}
-			.debugger-map .mapCell.Data.modified1.ip0 {
-				background-color: black;
-				border: 1px red solid;
-			}
-			.debugger-map .mapCell.Data.modified1.ip1 {
-				background-color: black;
-				border: 1px green solid;
-			}
+
+				.debugger-map .mapCell.Data.modified1.ip0 {
+					background-color: black;
+					border: 1px red solid;
+				}
+
+				.debugger-map .mapCell.Data.modified1.ip1 {
+					background-color: black;
+					border: 1px green solid;
+				}
+
 
 		.debugger-winnerState .winner-info {
 			display: none;
@@ -236,109 +372,15 @@
 			display: inline-block;
 		}
 
-		.listing-autofocus {
-			padding-left: 10px;
-			font-size: 14px;
-			font-weight: normal;
-			display: inline-block;
+		.layout-content-debugger-next-container {
+			padding-left: 20px;
 		}
 
-		.listing-autofocus label {
-			font-weight: normal;
+		.layout-content-debugger-next-commands-container {
 			position: relative;
-			top: -2px;
-		}
-
-		.debugger-listing {
-			overflow-y: scroll;
-		}
-
-			.debugger-listing .listingItem {
-				font-family: monospace;
-			}
-
-			.debugger-listing .listingItem.justScrolled {
-				border: solid 3px red
-			}
-
-				.debugger-listing .listingItem.modified0 {
-					background-color: darkorange;
-				}
-
-				.debugger-listing .listingItem.modified1 {
-					background-color: lightgreen;
-				}
-
-		.debugger-mapContainer {
-			padding-right: 50px;
-		}
-
-		.debugger-listingContainer {
-			border: solid black 1px;
-		}
-
-		.debugger-tabs {
-			border-bottom: lightgrey solid 10px;
-			margin-bottom: 20px;
-		}
-
-		.debugger-tab {
-			padding: 5px 15px 5px 15px;
-			display: inline-block;
-			font-size: larger;
-			cursor: pointer;
-		}
-
-			.debugger-tab.active {
-				background-color: lightgrey;
-				cursor: default;
-			}
-
-		.debugger-panel {
-			display: none;
-		}
-
-			.debugger-panel.active {
-				display: block;
-			}
-
-		.debugger-panel-layout {
 			width: 100%;
-			min-width: 600px;
-		}
-
-			.debugger-panel-layout .left {
-				vertical-align: top;
-			}
-
-			.debugger-panel-layout .right {
-				vertical-align: top;
-				width: 250px;
-			}
-
-		.debugger-section-title {
-			font-size: larger;
-			font-weight: bolder;
-		}
-
-			.debugger-section-title.second {
-				padding-top: 20px;
-			}
-
-		.debugger-section-subtitle {
-			padding-top: 10px;
-			font-weight: bolder;
-		}
-
-		.debugger-buttons {
-			padding-bottom: 20px;
-		}
-
-		.programInfoContainer .command {
-			font-family: monospace;
-		}
-		.programInfoContainer .command.current {
-			background-color: gold;
+			height: 100%;
+			border: 1px solid black;
 		}
 
 		.debugger-error {
@@ -368,6 +410,7 @@
 			display: none;
 			background-color: lightgreen;
 		}
+
 			.debugger-gameRunStatus .debugger-gameRunStatus-playing .loader {
 				background: url("ajax-loader.gif") no-repeat;
 				position: relative;
@@ -383,119 +426,156 @@
 			display: none;
 			background-color: yellow;
 		}
+
+		.programInfoContainer .command {
+			font-family: monospace;
+		}
+
+			.programInfoContainer .command.current {
+				background-color: gold;
+			}
 	</style>
 </head>
 <body>
-	<div class="container">
-		<script>nav()</script>
-		<div class="page-header">
-			<h1>
-				Debugger
-				<span class="debugger-gameRunStatus loading">
-					<span class="debugger-gameRunStatus-playing"><span class="loader"></span>playing</span>
-					<span class="debugger-gameRunStatus-gameover">game over</span>
-					<span class="debugger-gameRunStatus-loading">loading, please wait...</span>
-				</span>
-			</h1>
-		</div>
-		<div class="debugger-buttons">
-			<button title="Run to end" onclick="switchToDebuggerTab(); gameRunner.stepToEnd();">>>>|</button>
-			<button title="Run very fast (x32)" onclick="switchToDebuggerTab(); gameRunner.run(speedX32);">>>></button>
-			<button title="Run fast (x16)" onclick="switchToDebuggerTab(); gameRunner.run(speedX16);">>></button>
-			<button title="Run slow (x1)" onclick="switchToDebuggerTab(); gameRunner.run(slowSpeed);">></button>
-			<button title="Pause" onclick="switchToDebuggerTab(); gameRunner.pause();">||</button>
-			<button title="Reset" onclick="switchToDebuggerTab(); gameRunner.reset();">#</button>
-			&nbsp;
-			steps:
-			<button onclick="switchToDebuggerTab(); gameRunner.step(-1);">-1</button>
-			<button onclick="switchToDebuggerTab(); gameRunner.step(+1);">+1</button>
-			&nbsp;
-			<input type="text" value="+16" id="stepCount" />
-			<button onclick="step()">go</button>
-		</div>
-		<div class="debugger-tabs">
-			<div class="debugger-tab active" id="programsTab">Warriors</div>
-			<div class="debugger-tab" id="debuggerTab">Debuger</div>
-		</div>
-		<div id="programsPanel" class="debugger-panel active">
-			<table class="debugger-programs">
-				<thead>
-					<tr>
-						<th>Program A</th>
-						<th>Program B</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<textarea class="program" id="programA"></textarea></td>
-						<td>
-							<textarea class="program" id="programB"></textarea></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div id="debuggerPanel" class="debugger-panel">
-			<table class="debugger-panel-layout">
-				<tr>
-					<td class="left">
-						<table>
-							<col width="50%" />
-							<col width="50%" />
-							<tr>
-								<td colspan="2">
-									<div class="debugger-section-title">Memory</div>
-									<div class="debugger-mapContainer">
-										<div id="map" class="debugger-map"></div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<div class="debugger-section-title second">Overview</div>
-									<div>
-										<span>Current Step: </span><span id="currentStep"></span>
-									</div>
-									<div id="error-message" class="debugger-error hidden"></div>
-								</td>
-							</tr>
-							<tr>
-								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program A <span class="debugger-winnerState" id="programAWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></div>
-									<div>
-										<span>Processes: </span><span id="processCountA"></span>
-										<div>
-										</div>
-										<span>Last: </span><span id="lastCommandA" class="command"></span>
-										<div>
-										</div>
-										<span>Next: </span><span id="nextCommandA" class="command"></span>
-									</div>
-								</td>
-								<td class="programInfoContainer">
-									<div class="debugger-section-subtitle">Program B <span class="debugger-winnerState" id="programBWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></div>
-									<div>
-										<span>Processes: </span><span id="processCountB"></span>
-										<div>
-										</div>
-										<span>Last: </span><span id="lastCommandB" class="command"></span>
-										<div>
-										</div>
-										<span>Next: </span><span id="nextCommandB" class="command"></span>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td class="right">
-						<div class="debugger-section-title">Listing <span class="listing-autofocus"><input type="checkbox" id="autofocus" /> <label for="autofocus">autofocus</label></span></div>
-						<div class="debugger-listingContainer">
-							<div id="listing" class="debugger-listing"></div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+	<table class="layout" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="layout-header">
+				<h1>Core War Debugger
+					<span class="debugger-gameRunStatus loading">
+						<span class="debugger-gameRunStatus-playing"><span class="loader"></span>playing</span>
+						<span class="debugger-gameRunStatus-gameover">game over</span>
+						<span class="debugger-gameRunStatus-loading">loading, please wait...</span>
+					</span>
+				</h1>
+			</td>
+		</tr>
+		<tr>
+			<td class="layout-buttons">
+				<button title="Run to end" onclick="switchToDebuggerTab(); gameRunner.stepToEnd();">>>>|</button>
+				<button title="Run very fast (x32)" onclick="switchToDebuggerTab(); gameRunner.run(speedX32);">>>></button>
+				<button title="Run fast (x16)" onclick="switchToDebuggerTab(); gameRunner.run(speedX16);">>></button>
+				<button title="Run slow (x1)" onclick="switchToDebuggerTab(); gameRunner.run(slowSpeed);">></button>
+				<button title="Pause" onclick="switchToDebuggerTab(); gameRunner.pause();">||</button>
+				<button title="Reset" onclick="switchToDebuggerTab(); gameRunner.reset();">#</button>
+				&nbsp;
+				steps:
+				<button onclick="switchToDebuggerTab(); gameRunner.step(-1);">-1</button>
+				<button onclick="switchToDebuggerTab(); gameRunner.step(+1);">+1</button>
+				&nbsp;
+				<input type="text" value="+16" id="stepCount" />
+				<button onclick="step()">go</button>
+			</td>
+		</tr>
+		<tr>
+			<td class="layout-tabs">
+				<span class="debugger-tab active" id="programsTab">Warriors</span>
+				<span class="debugger-tab" id="debuggerTab">Debugger</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="layout-content">
+				<div class="layout-content-panel active" id="programsPanel">
+					<table class="layout-content-container" cellpadding="0" cellspacing="0">
+						<col width="50%" />
+						<col width="50%" />
+						<tr>
+							<th class="layout-programs-header">Program A</th>
+							<th class="layout-programs-header">Program B</th>
+						</tr>
+						<tr>
+							<td class="layout-program-container">
+								<textarea class="program" id="programA"></textarea>
+							</td>
+							<td class="layout-program-container">
+								<textarea class="program" id="programB"></textarea>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="layout-content-panel" id="debuggerPanel">
+					<table class="layout-content-container" cellpadding="0" cellspacing="0">
+						<tr>
+							<td class="layout-content-debugger-left">
+								<table cellpadding="0" cellspacing="0" class="layout-content-debugger-block-container">
+									<col width="50%" />
+									<col width="50%" />
+									<tr>
+										<th colspan="2" class="layout-content-debugger-header">Memory</th>
+									</tr>
+									<tr>
+										<td colspan="2" class="layout-content-debugger-map-container">
+											<div id="map" class="debugger-map"></div>
+										</td>
+									</tr>
+									<tr>
+										<th colspan="2" class="layout-content-debugger-header">Overview</th>
+									</tr>
+									<tr>
+										<td colspan="2" class="layout-content-debugger-sinlerow">
+											<div>
+												Current Step: <span id="currentStep"></span>
+											</div>
+											<div id="error-message" class="debugger-error hidden"></div>
+										</td>
+									</tr>
+									<tr>
+										<th class="layout-content-debugger-header">Program A <span class="debugger-winnerState" id="programAWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></th>
+										<th class="layout-content-debugger-header">Program B <span class="debugger-winnerState" id="programBWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></th>
+									</tr>
+									<tr>
+										<td class="layout-content-debugger-sinlerow">Processes: <span id="processCountA"></span></td>
+										<td class="layout-content-debugger-sinlerow">Processes: <span id="processCountB"></span></td>
+									</tr>
+									<tr>
+										<td class="layout-content-debugger-sinlerow programInfoContainer">Last: <span id="lastCommandA" class="command"></span></td>
+										<td class="layout-content-debugger-sinlerow programInfoContainer">Last: <span id="lastCommandB" class="command"></span></td>
+									</tr>
+									<tr>
+										<td class="layout-content-debugger-sinlerow programInfoContainer">Next: <span id="nextCommandA" class="command"></span></td>
+										<td class="layout-content-debugger-sinlerow programInfoContainer">Next: <span id="nextCommandB" class="command"></span></td>
+									</tr>
+									<tr>
+										<td></td>
+									</tr>
+									<!--<tr>
+										<td class="layout-content-debugger-sinlerow">Next:</td>
+										<td class="layout-content-debugger-sinlerow">Next:</td>
+									</tr>
+									<tr>
+										<td class="layout-content-debugger-next-container">
+											<div class="layout-content-debugger-next-commands-container">
+												<span id="nextCommandA" class="command"></span>
+											</div>
+										</td>
+										<td class="layout-content-debugger-next-container">
+											<div class="layout-content-debugger-next-commands-container">
+												<span id="nextCommandB" class="command"></span>
+											</div>
+										</td>
+									</tr>-->
+								</table>
+							</td>
+							<td class="layout-content-debugger-right">
+								<table cellpadding="0" cellspacing="0" class="layout-content-debugger-block-container">
+									<tr>
+										<th class="layout-content-debugger-header">Listing <span class="layout-content-debugger-listing-autofocus">
+											<input type="checkbox" id="autofocus" />
+											<label for="autofocus">autofocus</label></span></th>
+									</tr>
+									<tr>
+										<td class="layout-content-debugger-header-listing-container">
+											<div class="layout-content-debugger-header-listing">
+												<div id="listing" class="debugger-listing"></div>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
 </body>
 </html>
