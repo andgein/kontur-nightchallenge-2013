@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Core.Arena
 {
-	public class GamesRepo
+	public class GamesRepo : IGamesRepo
 	{
 		private readonly DirectoryInfo gamesDir;
 
@@ -29,6 +29,12 @@ namespace Core.Arena
 			}
 		}
 
+		public void SaveTournamentResult([NotNull] string tournamentId, [NotNull] RoundRobinTournamentResult result)
+		{
+			SaveGames(tournamentId, result.BattleResults);
+			SaveRanking(tournamentId, result.TournamentRanking);
+		}
+
 		[NotNull]
 		public List<BattleResult> LoadGames([NotNull] string tournamentId = "last")
 		{
@@ -37,12 +43,6 @@ namespace Core.Arena
 					.ReadAllLines(GetGamesFile(tournamentId))
 					.Select(JsonConvert.DeserializeObject<BattleResult>)
 					.ToList();
-		}
-
-		public void SaveTournamentResult([NotNull] string tournamentId, [NotNull] RoundRobinTournamentResult result)
-		{
-			SaveGames(tournamentId, result.BattleResults);
-			SaveRanking(tournamentId, result.TournamentRanking);
 		}
 
 		private void SaveGames([NotNull] string tournamentId, [NotNull] List<BattleResult> battleResults)
@@ -56,7 +56,7 @@ namespace Core.Arena
 		}
 
 		[CanBeNull]
-		public TournamentRanking TryLoadRanking([NotNull] string tournamentId = "last")
+		public TournamentRanking TryLoadRanking([NotNull] string tournamentId)
 		{
 			lock (gamesDir)
 			{

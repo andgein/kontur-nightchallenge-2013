@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Core.Arena
 {
-	public class PlayersRepo
+	public class PlayersRepo : IPlayersRepo
 	{
 		private const string nameValidationRegex = @"^[0-9A-Za-z_-]+$";
 		private readonly DirectoryInfo playersDir;
@@ -30,13 +30,10 @@ namespace Core.Arena
 		}
 
 		[NotNull]
-		public ArenaPlayer LoadPlayer([NotNull] string name, int? version)
+		public ArenaPlayer[] LoadPlayerVersions([NotNull] string name)
 		{
 			lock (playersDir)
-			{
-				var versions = DeserializePlayerVersions(name);
-				return GetVersion(versions, version);
-			}
+				return DeserializePlayerVersions(name);
 		}
 
 		[NotNull]
@@ -46,7 +43,7 @@ namespace Core.Arena
 			{
 				return playersDir
 					.GetFiles("*.json")
-					.Select(file => GetVersion(DeserializePlayerVersions(Path.GetFileNameWithoutExtension(file.Name))))
+					.Select(file => DeserializePlayerVersions(Path.GetFileNameWithoutExtension(file.Name)).GetLastVersion())
 					.ToArray();
 			}
 		}
@@ -68,7 +65,7 @@ namespace Core.Arena
 				versions = new[] { request };
 			else
 			{
-				var last = GetVersion(versions);
+				var last = versions.GetLastVersion();
 				if (last.Program != request.Program || !string.IsNullOrWhiteSpace(request.Authors) && request.Authors != last.Authors)
 					versions = versions.Concat(new[] { request }).ToArray();
 			}
@@ -88,7 +85,12 @@ namespace Core.Arena
 		{
 			var file = GetFile(playerName);
 			if (file.Exists)
-				return JsonConvert.DeserializeObject<ArenaPlayer[]>(File.ReadAllText(file.FullName));
+			{
+				var playerVersions = JsonConvert.DeserializeObject<ArenaPlayer[]>(File.ReadAllText(file.FullName));
+				for (var i = 0; i < playerVersions.Length; i++)
+					playerVersions[i].Version = i + 1;
+				return playerVersions;
+			}
 			return new ArenaPlayer[0];
 		}
 
@@ -96,21 +98,6 @@ namespace Core.Arena
 		private FileInfo GetFile([NotNull] string playerName)
 		{
 			return new FileInfo(Path.Combine(playersDir.FullName, playerName + ".json"));
-		}
-
-		[NotNull]
-		private static ArenaPlayer GetVersion([NotNull] ArenaPlayer[] versions, int? version = null)
-		{
-			var index = (version ?? versions.Length) - 1;
-			var result = versions[index];
-			return new ArenaPlayer
-			{
-				Authors = versions.Last(v => !string.IsNullOrWhiteSpace(v.Authors)).Authors,
-				Name = result.Name,
-				Version = index + 1,
-				Program = result.Program,
-				Timestamp = result.Timestamp,
-			};
 		}
 	}
 }

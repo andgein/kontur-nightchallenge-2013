@@ -8,7 +8,7 @@ namespace Server.Arena
 	{
 		private readonly GamesRepo gamesRepo;
 
-		public ArenaRankingHandler(GamesRepo gamesRepo)
+		public ArenaRankingHandler([NotNull] GamesRepo gamesRepo)
 			: base("arena/ranking")
 		{
 			this.gamesRepo = gamesRepo;
@@ -16,7 +16,8 @@ namespace Server.Arena
 
 		public override void Handle([NotNull] GameHttpContext context)
 		{
-			var ranking = gamesRepo.TryLoadRanking();
+			var tournamentId = context.GetOptionalStringParam("tournamentId");
+			var ranking = gamesRepo.TryLoadRanking(tournamentId ?? "last");
 			context.SendResponse(ranking);
 		}
 	}

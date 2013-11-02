@@ -18,5 +18,8 @@ namespace Server.Arena
 
 		[JsonProperty]
 		public FinishedGamesWithEnemy[] GamesByEnemy;
+
+		[JsonProperty]
+		public BotVersionInfo[] BotVersionInfos;
 	}
 }

@@ -8,31 +8,48 @@ namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
-		private readonly PlayersRepo players;
+		private readonly PlayersRepo playersRepo;
 		private readonly GamesRepo gamesRepo;
 
-		public ArenaPlayerHandler(PlayersRepo players, GamesRepo gamesRepo)
+		public ArenaPlayerHandler([NotNull] PlayersRepo playersRepo, [NotNull] GamesRepo gamesRepo)
 			: base("arena/player")
 		{
-			this.players = players;
+			this.playersRepo = playersRepo;
 			this.gamesRepo = gamesRepo;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context)
 		{
-			var programName = context.GetStringParam("name");
-			var programVersion = context.GetOptionalIntParam("version");
-			var arenaPlayer = players.LoadPlayer(programName, programVersion);
-			var playerInfo = CreatePlayerInfo(arenaPlayer);
+			var playerName = context.GetStringParam("name");
+			var version = context.GetOptionalIntParam("version");
+			var playerVersions = playersRepo.LoadPlayerVersions(playerName);
+			var botVersionInfos = playerVersions.Select(p => new BotVersionInfo
+			{
+				Name = p.Name,
+				Version = p.Version
+			}).ToArray();
+			ArenaPlayer arenaPlayer;
+			TournamentRanking ranking = null;
+			var playerInfo = new PlayerInfo();
+			if (version.HasValue)
+			{
+				arenaPlayer = playerVersions.FirstOrDefault(p => p.Version == version.Value);
+				if (arenaPlayer != null)
+					ranking = gamesRepo.TryLoadRanking(arenaPlayer.Timestamp.Ticks.ToString());
+			}
+			else
+			{
+				arenaPlayer = playerVersions.GetLastVersion();
+				ranking = gamesRepo.TryLoadRanking("last");
+			}
+			if (ranking != null)
+				playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos);
 			context.SendResponse(playerInfo);
 		}
 
 		[NotNull]
-		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer)
+		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer, [NotNull] TournamentRanking ranking, [NotNull] BotVersionInfo[] botVersionInfos)
 		{
-			var ranking = gamesRepo.TryLoadRanking();
-			if (ranking == null)
-				return new PlayerInfo();
 			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry
 			{
 				Name = arenaPlayer.Name,
@@ -62,6 +79,7 @@ namespace Server.Arena
 				Authors = arenaPlayer.Authors,
 				SubmitTimestamp = arenaPlayer.Timestamp,
 				GamesByEnemy = gamesByEnemy,
+				BotVersionInfos = botVersionInfos,
 			};
 		}
 	}

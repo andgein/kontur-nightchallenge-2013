@@ -24,14 +24,14 @@
 		<div>Время создания: {{submitTimestamp}}</div>
 		<div>Всего очков: {{rankingEntry.score}}</div>
 		<div>Всего боев: {{rankingEntry.games}}</div>
-		<h2>Статистика боев с другими ботами</h2>
+		<h3>Статистика боев с другими ботами</h3>
 		<table class="table table-bordered table-condensed">
 			<tr>
 				<th>Противник</th>
 				<th>Победы</th>
 				<th>Ничьи</th>
 				<th>Поражения</th>
-				<th>Последние игры</th>
+				<th>Последние бои</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
@@ -41,6 +41,17 @@
 				<td>
 					тут будет список игр
 				</td>
+			</tr>
+		</table>
+		<h3>История версий бота</h3>
+		<table class="table table-bordered table-condensed">
+			<tr>
+				<th>Версия</th>
+				<th></th>
+			</tr>
+			<tr ng-repeat="botVersionInfo in botVersionInfos">
+				<td>v{{botVersionInfo.version}}</td>
+				<td><a href="player.html?name={{botVersionInfo.name}}&version={{botVersionInfo.version}}">Турнирная таблица</a></td>
 			</tr>
 		</table>
 	</div>

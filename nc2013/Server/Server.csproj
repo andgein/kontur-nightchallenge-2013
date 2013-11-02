@@ -45,6 +45,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arena\BotVersionInfo.cs" />
     <Compile Include="Arena\FinishedGameInfo.cs" />
     <Compile Include="Arena\FinishedGamesWithEnemy.cs" />
     <Compile Include="Arena\PlayerInfo.cs" />
