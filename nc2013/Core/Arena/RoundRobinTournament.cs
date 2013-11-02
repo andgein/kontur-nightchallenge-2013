@@ -54,7 +54,7 @@ namespace Core.Arena
 				{
 					TournamentId = tournamentId,
 					Places = ranking.ToArray(),
-					Time = DateTime.Now,
+					Timestamp = DateTime.UtcNow,
 				});
 		}
 

@@ -51,7 +51,7 @@ namespace Core.Arena
 
 		private ArenaPlayer[] UpdatePlayer(ArenaPlayer[] versions, ArenaPlayer request)
 		{
-			request.Timestamp = DateTime.Now;
+			request.Timestamp = DateTime.UtcNow;
 			if (!Regex.IsMatch(request.Name, nameValidationRegex))
 				throw new Exception(string.Format("Имя должно быть {0}! ;-)", nameValidationRegex));
 			if (string.IsNullOrEmpty(request.Password))
