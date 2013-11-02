@@ -107,6 +107,7 @@
     <Compile Include="Game\StupidGame.cs" />
     <Compile Include="Parser\Warrior.cs" />
     <Compile Include="Parser\WarriorParser.cs" />
+    <Compile Include="StopwatchExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

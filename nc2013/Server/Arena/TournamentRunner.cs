@@ -66,10 +66,12 @@ namespace Server.Arena
 				Program = p.Program,
 				//Warrior = parser.Parse(p.Program),
 			}).ToArray();
-			var tournament = new RoundRobinTournament(battlesPerPair, lastTournamentId, tournamentPlayers);
-			var result = tournament.Run();
-			gamesRepo.SaveTournamentResult(lastTournamentId, result);
-			log.InfoFormat("Tournament {0} finished.", lastTournamentId);
+			Runtime.DoWithPerfMeasurement(string.Format("RunTournament({0})", lastTournamentId), () =>
+			{
+				var tournament = new RoundRobinTournament(battlesPerPair, lastTournamentId, tournamentPlayers);
+				var result = tournament.Run();
+				gamesRepo.SaveTournamentResult(lastTournamentId, result);
+			});
 			return true;
 		}
 	}
