@@ -22,18 +22,11 @@
 			$('form').FormCache().submit(function (e) {
 				errorAlert.hide();
 				successAlert.hide();
-				$.ajax(server.basePath() + "arena/submit", {
-					type: "POST",
-					data: $('form').asJsonString(),
-					contentType: "application/json, charset=utf-8",
-					dataType: 'json',
-					success: function () {
-						successAlert.fadeIn();
-					},
-					error: function(data) {
-						errorAlert.fadeIn();
-						$("#error-message").text(data.responseText);
-					}
+				server.post("arena/submit", $('form').asJsonString()).pipe(function() {
+					successAlert.fadeIn();
+				}, function(errorMessage) {
+					errorAlert.fadeIn();
+					$("#error-message").text(errorMessage);
 				});
 				e.preventDefault();
 			});

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using nMars.Parser.Warrior;
@@ -9,29 +8,14 @@ namespace Core.Game.MarsBased
 {
 	public class MarsGame : IGame
 	{
-		private readonly ProgramStartInfo[] programStartInfos;
 		private readonly Rules rules;
+		private readonly ProgramStartInfo[] programStartInfos;
 		private GameState gameState;
 		private int currentTurn;
 
-		public MarsGame([NotNull] ProgramStartInfo[] programStartInfos)
+		public MarsGame([NotNull] Rules rules, [NotNull] ProgramStartInfo[] programStartInfos)
 		{
-			rules = new Rules
-			{
-				WarriorsCount = programStartInfos.Length,
-				Rounds = 1,
-				MaxCycles = 80000,
-				CoreSize = 8000,
-				PSpaceSize = 500, // coreSize / 16 
-				EnablePSpace = false,
-				MaxProcesses = 1000,
-				MaxLength = 100,
-				MinDistance = 100,
-				Version = 93,
-				ScoreFormula = ScoreFormula.Standard,
-				ICWSStandard = ICWStandard.ICWS88,
-			};
-
+			this.rules = rules;
 			this.programStartInfos = programStartInfos;
 			var engine = CreateEngine();
 			engine.Run(0, out currentTurn);
@@ -129,7 +113,7 @@ namespace Core.Game.MarsBased
 			var implicitName = Path.GetFileNameWithoutExtension(filename);
 			var warrior = warriorParser.TryParse(programStartInfo.Program, implicitName);
 			if (warrior == null)
-				throw new ParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
+				throw new WarriorProgramParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
 			warrior.FileName = filename;
 			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
 			return warrior;

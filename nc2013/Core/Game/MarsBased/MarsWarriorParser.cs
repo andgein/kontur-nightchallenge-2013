@@ -71,6 +71,7 @@ namespace Core.Game.MarsBased
 				WriteError("Too many instructions");
 			}
 		}
+
 		private void SetAuthor(ExtendedWarrior warrior)
 		{
 			if (authorName != null)

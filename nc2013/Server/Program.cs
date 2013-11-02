@@ -6,6 +6,7 @@ using System.Linq;
 using Core.Arena;
 using Core.Game;
 using Core.Game.MarsBased;
+using nMars.RedCode;
 using Server.Arena;
 using log4net;
 using log4net.Config;
@@ -37,11 +38,28 @@ namespace Server
 
 		private static void RunServer(IEnumerable<string> args)
 		{
+			var baseRules = new Rules
+			{
+				WarriorsCount = 2,
+				Rounds = 1,
+				MaxCycles = 80000,
+				CoreSize = 8000,
+				PSpaceSize = 500, // coreSize / 16 
+				EnablePSpace = false,
+				MaxProcesses = 1000,
+				MaxLength = 100,
+				MinDistance = 100,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
+			};
 			var prefix = GetPrefix(args);
-			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"));
+			var warriorProgramParser = new MarsWarriorProgramParser(baseRules);
+			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
 			var sessionManager = new SessionManager("../sessions");
 			var gameServer = new GameServer();
+			//var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
 			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, GetStaticContentDir());
 			Runtime.SetConsoleCtrlHandler(() =>

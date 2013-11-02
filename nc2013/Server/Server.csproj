@@ -99,6 +99,10 @@
       <Project>{c21ffadd-e5ae-4743-bcac-2b8502b636d2}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mars\Mars.csproj">
+      <Project>{23012EA9-C831-428F-A89A-1AB280FEB06A}</Project>
+      <Name>Mars</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\debugger.html">

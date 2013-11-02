@@ -2,13 +2,14 @@ var server = {
 	basePath: function () {
 		return $.cookie('basePath');
 	},
-	post: function (url, data) {
+	post: function (url, jsonString) {
 		var that = this;
 		return $.ajax({
 			cache: false,
 			type: "POST",
 			url: this.basePath() + url,
-			data: JSON.stringify(data),
+			data: jsonString,
+			dataType: 'json',
 			contentType: 'application/json; charset=utf-8'
 		}).pipe(null, function (err) {
 			return that._getErrorMessage(err);
@@ -27,7 +28,7 @@ var server = {
 	},
 	_getErrorMessage: function (err) {
 		var errorMessage = err && err.responseText || "";
-		var userErrorMessage = errorMessage.match(/\[\[(.*)\]\]/);
+		var userErrorMessage = errorMessage.match(/\[\[([\s\S]*)\]\]/);
 		return userErrorMessage && userErrorMessage[1] || "Internal Server Error";
 	}
 }
