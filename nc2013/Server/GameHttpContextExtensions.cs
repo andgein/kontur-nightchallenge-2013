@@ -177,6 +177,8 @@ namespace Server
 				return "text/plain; encoding=utf-8";
 			if (Path.GetExtension(file) == ".gif")
 				return "image/gif";
+			if (Path.GetExtension(file) == ".zip")
+				return "application/x-zip-compressed";
 			return null;
 		}
 

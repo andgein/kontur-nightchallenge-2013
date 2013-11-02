@@ -4,9 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Core.Arena;
+using Core.Game.MarsBased;
 using Server.Arena;
 using log4net;
 using log4net.Config;
+using Server.Debugging;
+using Server.Sessions;
+using Debugger = System.Diagnostics.Debugger;
 
 namespace Server
 {
@@ -33,9 +37,12 @@ namespace Server
 		private static void RunServer(IEnumerable<string> args)
 		{
 			var prefix = GetPrefix(args);
-			var playersRepo = new PlayersRepo(new DirectoryInfo("players"));
-			var gamesRepo = new GamesRepo(new DirectoryInfo("games"));
-			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, GetStaticContentDir());
+			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"));
+			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
+			var sessionManager = new SessionManager("../sessions");
+			var gameServer = new MarsGameServer();
+			var debuggerManager = new DebuggerManager(gameServer);
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, GetStaticContentDir());
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -58,8 +65,7 @@ namespace Server
 
 		private static string GetStaticContentDir()
 		{
-			if (Directory.GetCurrentDirectory().EndsWith("bin\\Debug")) return "..\\..";
-			else return ".";
+			return Debugger.IsAttached ? "../../nc2013/Server" : ".";
 		}
 	}
 }

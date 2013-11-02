@@ -7,8 +7,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arena;
-using Core.Game.MarsBased;
-using Core.Parser;
 using JetBrains.Annotations;
 using log4net;
 using Server.Arena;
@@ -20,7 +18,7 @@ namespace Server
 {
 	public class GameHttpServer
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof (GameHttpServer));
+		private static readonly ILog log = LogManager.GetLogger(typeof(GameHttpServer));
 		private static readonly ILog httpListenerExceptionLog = LogManager.GetLogger("network");
 
 		private readonly HttpListener listener;
@@ -32,17 +30,14 @@ namespace Server
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo, string staticContentPath)
+		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo, SessionManager sessionManager, DebuggerManager debuggerManager, string staticContentPath)
 		{
+			this.sessionManager = sessionManager;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, "index.html").AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
-
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
-			sessionManager = new SessionManager("sessions");
-			var gameServer = new MarsGameServer();
-			var debuggerManager = new DebuggerManager(gameServer);
 			handlers = new IHttpHandler[]
 			{
 				new DebuggerStartHandler(debuggerManager),
@@ -70,7 +65,7 @@ namespace Server
 				while (true)
 				{
 					var asyncResult = listener.BeginGetContext(null, null);
-					if (WaitHandle.WaitAny(new[] {asyncResult.AsyncWaitHandle, stopEvent}) == 1)
+					if (WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, stopEvent }) == 1)
 						break;
 					var httpListenerContext = listener.EndGetContext(asyncResult);
 					Task.Factory.StartNew(() => HandleRequest(httpListenerContext));
@@ -134,7 +129,7 @@ namespace Server
 					log.Error("Request failed", e);
 					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+					httpListenerContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
 						writer.Write(e.ToString());
 					httpListenerContext.Response.Close();
@@ -162,18 +157,6 @@ namespace Server
 			}
 			context.Response.Close();
 			return true;
-		}
-	}
-
-	public class CommandDescribeHandler : StrictPathHttpHandlerBase
-	{
-		public CommandDescribeHandler() : base("describe") {}
-
-		public override void Handle(GameHttpContext context)
-		{
-			string cmd = context.GetOptionalStringParam("cmd");
-			var description = new CommandDescriber().Describe(cmd);
-			context.SendResponseRaw(description, "text/plain; charset=utf-8");
 		}
 	}
 }
