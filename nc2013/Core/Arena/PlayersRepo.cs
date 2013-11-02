@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Core.Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -11,10 +12,12 @@ namespace Core.Arena
 	{
 		private const string nameValidationRegex = @"^[0-9A-Za-z_-]+$";
 		private readonly DirectoryInfo playersDir;
+		private readonly IWarriorProgramParser warriorProgramParser;
 
-		public PlayersRepo([NotNull] DirectoryInfo playersDir)
+		public PlayersRepo([NotNull] DirectoryInfo playersDir, [NotNull] IWarriorProgramParser warriorProgramParser)
 		{
 			this.playersDir = playersDir;
+			this.warriorProgramParser = warriorProgramParser;
 			if (!playersDir.Exists)
 				playersDir.Create();
 		}
@@ -23,9 +26,10 @@ namespace Core.Arena
 		{
 			lock (playersDir)
 			{
-				var versions = DeserializePlayerVersions(request.Name);
-				versions = UpdatePlayer(versions, request);
-				SerializePlayerVersions(request.Name, versions);
+				var existingVersions = DeserializePlayerVersions(request.Name);
+				var versionsToPersist = TryUpdatePlayer(existingVersions, request);
+				if (versionsToPersist != null)
+					SerializePlayerVersions(request.Name, versionsToPersist);
 			}
 		}
 
@@ -48,30 +52,38 @@ namespace Core.Arena
 			}
 		}
 
-		[NotNull]
-		private static ArenaPlayer[] UpdatePlayer([NotNull] ArenaPlayer[] versions, [NotNull] ArenaPlayer request)
+		[CanBeNull]
+		private ArenaPlayer[] TryUpdatePlayer([NotNull] ArenaPlayer[] existingVersions, [NotNull] ArenaPlayer request)
 		{
 			request.Timestamp = DateTime.UtcNow;
+			request.Authors = (request.Authors ?? string.Empty).Trim();
+			request.Program = (request.Program ?? string.Empty).Trim();
 			if (!Regex.IsMatch(request.Name, nameValidationRegex))
-				throw new Exception(string.Format("Имя должно быть {0}! ;-)", nameValidationRegex));
+				throw new BadBotExcpetion(string.Format("Имя должно подходить под шаблон: {0}", nameValidationRegex));
 			if (string.IsNullOrEmpty(request.Password))
-				throw new Exception("Пароль не может быть пустым");
-			if (versions.Any(p => p.Password != request.Password || p.Name != request.Name))
-				throw new Exception("Неверный пароль");
+				throw new BadBotExcpetion("Пароль не может быть пустым");
+			if (existingVersions.Any(p => p.Password != request.Password || p.Name != request.Name))
+				throw new BadBotExcpetion("Неверный пароль");
 			if (string.IsNullOrEmpty(request.Program))
-				throw new Exception("Бот пуст?!? O_o");
-			//			new WarriorParser().Parse(request.Program);
-			if (versions.Length == 0)
-				versions = new[] { request };
+				throw new BadBotExcpetion("Бот пуст?!? O_o");
+			var parserErrors = warriorProgramParser.ValidateProgram(request.Program);
+			if (!string.IsNullOrEmpty(parserErrors))
+				throw new BadBotExcpetion(string.Format("В программе есть ошибки:\r\n{0}", parserErrors));
+			var newVersions = new[] { request };
+			ArenaPlayer[] versionsToPersist;
+			if (existingVersions.Length == 0)
+				versionsToPersist = newVersions;
 			else
 			{
-				var last = versions.GetLastVersion();
-				if (last.Program != request.Program || !string.IsNullOrWhiteSpace(request.Authors) && request.Authors != last.Authors)
-					versions = versions.Concat(new[] { request }).ToArray();
+				var last = existingVersions.GetLastVersion();
+				if (last.Program != request.Program || !string.IsNullOrEmpty(request.Authors) && request.Authors != last.Authors)
+					versionsToPersist = existingVersions.Concat(newVersions).ToArray();
+				else
+					throw new BadBotExcpetion("Бот идентичен последней версии");
 			}
-			if (versions.All(v => string.IsNullOrWhiteSpace(v.Authors)))
-				throw new Exception("Не заполнен список авторов");
-			return versions;
+			if (versionsToPersist.All(v => string.IsNullOrEmpty(v.Authors)))
+				throw new BadBotExcpetion("Не заполнен список авторов");
+			return versionsToPersist;
 		}
 
 		private void SerializePlayerVersions([NotNull] string playerName, [NotNull] ArenaPlayer[] playerVersions)

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arena\ArenaPlayerExtensions.cs" />
+    <Compile Include="Arena\BadBotExcpetion.cs" />
     <Compile Include="Arena\Battle.cs" />
     <Compile Include="Arena\BattlePlayerResult.cs" />
     <Compile Include="Arena\BattlePlayerResultType.cs" />
@@ -76,6 +77,8 @@
     <Compile Include="Game\Diff.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\GameServer.cs" />
+    <Compile Include="Game\IWarriorProgramParser.cs" />
+    <Compile Include="Game\MarsBased\MarsWarriorProgramParser.cs" />
     <Compile Include="Game\StupidGameServer.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\IGame.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="Game\MarsBased\MarsGame.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
     <Compile Include="Game\StupidGame_Test.cs" />
+    <Compile Include="Game\WarriorProgramParserException.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CommandDescriber.cs" />

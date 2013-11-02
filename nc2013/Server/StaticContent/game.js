@@ -25,7 +25,7 @@ var Game = Base.extend({
 			programStartInfos.push(programStartInfo);
 		}
 		var that = this;
-		return server.post("debugger/start", programStartInfos)
+		return server.post("debugger/start", JSON.stringify(programStartInfos))
 			.pipe(function (gameState) {
 				return that._setGameState(gameState);
 			});

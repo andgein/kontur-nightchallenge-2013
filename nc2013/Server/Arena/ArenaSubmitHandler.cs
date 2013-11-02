@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Core;
 using Core.Arena;
 using JetBrains.Annotations;
@@ -19,16 +18,16 @@ namespace Server.Arena
 
 		public override void Handle([NotNull] GameHttpContext context)
 		{
+			var arenaPlayer = context.GetRequest<ArenaPlayer>();
 			try
 			{
-				var request = context.GetRequest<ArenaPlayer>();
-				playersRepo.CreateOrUpdate(request);
-				context.SendResponse("OK");
+				playersRepo.CreateOrUpdate(arenaPlayer);
+				Log.For(this).Warn(string.Format("Bot submitted: {0}", arenaPlayer));
 			}
-			catch (Exception e)
+			catch (BadBotExcpetion e)
 			{
-				Log.For(this).Error("Submit failed!", e);
-				context.SendResponse(e.Message, HttpStatusCode.BadRequest);
+				Log.For(this).Warn(string.Format("Bot submission failed: {0}", arenaPlayer), e);
+				throw new HttpException(HttpStatusCode.BadRequest, e.Message, e);
 			}
 		}
 	}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
+using nMars.RedCode;
 
 namespace Core.Arena
 {
@@ -86,9 +87,7 @@ namespace Core.Arena
 		{
 			try
 			{
-				var marsGame = new MarsGame(battle.GetProgramStartInfos());
-				marsGame.StepToEnd();
-				var winner = marsGame.GameState.Winner;
+				var winner = GetWinner(battle);
 				//TODO: set StartAddress after our Engine replace MarsEngine
 				return new BattleResult
 				{
@@ -112,6 +111,28 @@ namespace Core.Arena
 				Log.For(this).Error(string.Format("Battle failed: {0}", battle), e);
 				return new BattleResult { RunToCompletion = false };
 			}
+		}
+
+		private static int? GetWinner([NotNull] Battle battle)
+		{
+			var rules = new Rules
+			{
+				WarriorsCount = 2,
+				Rounds = 1,
+				MaxCycles = 80000,
+				CoreSize = 8000,
+				PSpaceSize = 500, // coreSize / 16 
+				EnablePSpace = false,
+				MaxProcesses = 1000,
+				MaxLength = 100,
+				MinDistance = 100,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
+			};
+			var marsGame = new MarsGame(rules, battle.GetProgramStartInfos());
+			marsGame.StepToEnd();
+			return marsGame.GameState.Winner;
 		}
 	}
 }
