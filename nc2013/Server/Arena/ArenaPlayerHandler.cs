@@ -47,9 +47,9 @@ namespace Server.Arena
 				{
 					Enemy = g.Key.Name,
 					EnemyVersion = g.Key.Version,
-					Wins = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Win),
-					Draws = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Draw),
-					Losses = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Loss),
+					Wins = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Win),
+					Draws = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Draw),
+					Losses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
 					GameInfos = null,
 				})
 				.ToArray();
