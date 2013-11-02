@@ -52,6 +52,7 @@
     <Compile Include="Arena\GamesRepo.cs" />
     <Compile Include="Arena\RankingEntry.cs" />
     <Compile Include="Arena\RoundRobinTournament.cs" />
+    <Compile Include="Arena\RoundRobinTournamentResult.cs" />
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
     <Compile Include="Arena\TournamentPlayer.cs" />
     <Compile Include="Arena\TournamentRanking.cs" />

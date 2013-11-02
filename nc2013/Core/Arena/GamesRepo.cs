@@ -13,9 +13,23 @@ namespace Core.Arena
 		public GamesRepo([NotNull] DirectoryInfo gamesDir)
 		{
 			this.gamesDir = gamesDir;
-			if (!gamesDir.Exists) gamesDir.Create();
+			if (!gamesDir.Exists)
+				gamesDir.Create();
 		}
 
+		public bool TryStartTournament([NotNull] string tournamentId)
+		{
+			lock (gamesDir)
+			{
+				var gamesFile = GetGamesFile(tournamentId);
+				if (File.Exists(gamesFile))
+					return false;
+				File.WriteAllText(gamesFile, string.Empty);
+				return true;
+			}
+		}
+
+		[NotNull]
 		public List<BattleResult> LoadGames([NotNull] string tournamentId = "last")
 		{
 			lock (gamesDir)
@@ -25,7 +39,13 @@ namespace Core.Arena
 					.ToList();
 		}
 
-		public void SaveGames([NotNull] string tournamentId, [NotNull] List<BattleResult> battleResults)
+		public void SaveTournamentResult([NotNull] string tournamentId, [NotNull] RoundRobinTournamentResult result)
+		{
+			SaveGames(tournamentId, result.BattleResults);
+			SaveRanking(tournamentId, result.TournamentRanking);
+		}
+
+		private void SaveGames([NotNull] string tournamentId, [NotNull] List<BattleResult> battleResults)
 		{
 			lock (gamesDir)
 			{
@@ -35,31 +55,38 @@ namespace Core.Arena
 			}
 		}
 
-		public TournamentRanking LoadRanking([NotNull] string tournamentId = "last")
-		{
-			lock (gamesDir)
-				return JsonConvert.DeserializeObject<TournamentRanking>(File.ReadAllText(GetRankingFile(tournamentId)));
-		}
-
-		public void SaveRanking([NotNull] TournamentRanking ranking)
+		[CanBeNull]
+		public TournamentRanking TryLoadRanking([NotNull] string tournamentId = "last")
 		{
 			lock (gamesDir)
 			{
-				var rankingFile = GetRankingFile(ranking.TournamentId);
+				var rankingFile = GetRankingFile(tournamentId);
+				if (!File.Exists(rankingFile))
+					return null;
+				return JsonConvert.DeserializeObject<TournamentRanking>(File.ReadAllText(rankingFile));
+			}
+		}
+
+		private void SaveRanking([NotNull] string tournamentId, [NotNull] TournamentRanking ranking)
+		{
+			lock (gamesDir)
+			{
+				var rankingFile = GetRankingFile(tournamentId);
 				File.WriteAllText(rankingFile, JsonConvert.SerializeObject(ranking, Formatting.Indented));
 				File.Copy(rankingFile, GetRankingFile("last"), true);
 			}
 		}
 
-		private string GetGamesFile(string tournamentId)
+		[NotNull]
+		private string GetGamesFile([NotNull] string tournamentId)
 		{
 			return Path.Combine(gamesDir.FullName, "games-" + tournamentId + ".json");
 		}
 
-		private string GetRankingFile(string tournamentId)
+		[NotNull]
+		private string GetRankingFile([NotNull] string tournamentId)
 		{
 			return Path.Combine(gamesDir.FullName, "ranking-" + tournamentId + ".json");
 		}
-
 	}
 }

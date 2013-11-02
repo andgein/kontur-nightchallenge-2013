@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Arena
@@ -11,14 +12,14 @@ namespace Core.Arena
 		private const string nameValidationRegex = @"^[0-9A-Za-z_-]+$";
 		private readonly DirectoryInfo playersDir;
 
-		public PlayersRepo(DirectoryInfo playersDir)
+		public PlayersRepo([NotNull] DirectoryInfo playersDir)
 		{
 			this.playersDir = playersDir;
 			if (!playersDir.Exists)
 				playersDir.Create();
 		}
 
-		public void CreateOrUpdate(ArenaPlayer request)
+		public void CreateOrUpdate([NotNull] ArenaPlayer request)
 		{
 			lock (playersDir)
 			{
@@ -28,7 +29,8 @@ namespace Core.Arena
 			}
 		}
 
-		public ArenaPlayer LoadPlayer(string name, int? version)
+		[NotNull]
+		public ArenaPlayer LoadPlayer([NotNull] string name, int? version)
 		{
 			lock (playersDir)
 			{
@@ -37,6 +39,7 @@ namespace Core.Arena
 			}
 		}
 
+		[NotNull]
 		public ArenaPlayer[] LoadLastVersions()
 		{
 			lock (playersDir)
@@ -48,7 +51,8 @@ namespace Core.Arena
 			}
 		}
 
-		private ArenaPlayer[] UpdatePlayer(ArenaPlayer[] versions, ArenaPlayer request)
+		[NotNull]
+		private static ArenaPlayer[] UpdatePlayer([NotNull] ArenaPlayer[] versions, [NotNull] ArenaPlayer request)
 		{
 			request.Timestamp = DateTime.UtcNow;
 			if (!Regex.IsMatch(request.Name, nameValidationRegex))
@@ -73,13 +77,14 @@ namespace Core.Arena
 			return versions;
 		}
 
-		private void SerializePlayerVersions(string playerName, ArenaPlayer[] playerVersions)
+		private void SerializePlayerVersions([NotNull] string playerName, [NotNull] ArenaPlayer[] playerVersions)
 		{
 			var file = GetFile(playerName);
 			File.WriteAllText(file.FullName, JsonConvert.SerializeObject(playerVersions, Formatting.Indented));
 		}
 
-		private ArenaPlayer[] DeserializePlayerVersions(string playerName)
+		[NotNull]
+		private ArenaPlayer[] DeserializePlayerVersions([NotNull] string playerName)
 		{
 			var file = GetFile(playerName);
 			if (file.Exists)
@@ -87,12 +92,14 @@ namespace Core.Arena
 			return new ArenaPlayer[0];
 		}
 
-		private FileInfo GetFile(string playerName)
+		[NotNull]
+		private FileInfo GetFile([NotNull] string playerName)
 		{
 			return new FileInfo(Path.Combine(playersDir.FullName, playerName + ".json"));
 		}
 
-		private static ArenaPlayer GetVersion(ArenaPlayer[] versions, int? version = null)
+		[NotNull]
+		private static ArenaPlayer GetVersion([NotNull] ArenaPlayer[] versions, int? version = null)
 		{
 			var index = (version ?? versions.Length) - 1;
 			var result = versions[index];

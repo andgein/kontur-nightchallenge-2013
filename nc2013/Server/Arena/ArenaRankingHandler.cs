@@ -16,7 +16,8 @@ namespace Server.Arena
 
 		public override void Handle([NotNull] GameHttpContext context)
 		{
-			context.SendResponse(gamesRepo.LoadRanking());
+			var ranking = gamesRepo.TryLoadRanking();
+			context.SendResponse(ranking);
 		}
 	}
 }

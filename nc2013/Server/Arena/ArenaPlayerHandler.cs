@@ -30,7 +30,9 @@ namespace Server.Arena
 		[NotNull]
 		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer)
 		{
-			var ranking = gamesRepo.LoadRanking();
+			var ranking = gamesRepo.TryLoadRanking();
+			if (ranking == null)
+				return new PlayerInfo();
 			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry
 			{
 				Name = arenaPlayer.Name,
@@ -52,6 +54,7 @@ namespace Server.Arena
 					Losses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
 					GameInfos = null,
 				})
+				.OrderByDescending(x => x.Wins)
 				.ToArray();
 			return new PlayerInfo
 			{

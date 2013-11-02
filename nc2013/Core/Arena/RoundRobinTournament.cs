@@ -11,23 +11,26 @@ namespace Core.Arena
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(RoundRobinTournament));
 		private readonly int battlesPerPair;
-		private readonly GamesRepo gamesRepo;
 		private readonly TournamentPlayer[] players;
 		private readonly string tournamentId;
 
-		public RoundRobinTournament(int battlesPerPair, string tournamentId, GamesRepo gamesRepo, TournamentPlayer[] players)
+		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players)
 		{
 			this.battlesPerPair = battlesPerPair;
 			this.tournamentId = tournamentId;
-			this.gamesRepo = gamesRepo;
 			this.players = players;
 		}
 
-		public void Run()
+		[NotNull]
+		public RoundRobinTournamentResult Run()
 		{
 			var battleResults = RunTournament(GenerateAllPairs()).ToList();
-			gamesRepo.SaveGames(tournamentId, battleResults);
-			MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
+			var ranking = MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
+			return new RoundRobinTournamentResult
+			{
+				BattleResults = battleResults,
+				TournamentRanking = ranking,
+			};
 		}
 
 		[NotNull]
@@ -40,7 +43,8 @@ namespace Core.Arena
 			return result;
 		}
 
-		private void MakeRankingTable([NotNull] List<BattlePlayerResult> results)
+		[NotNull]
+		private TournamentRanking MakeRankingTable([NotNull] List<BattlePlayerResult> results)
 		{
 			var rankingEntries = results
 				.GroupBy(g => g.Player)
@@ -59,7 +63,7 @@ namespace Core.Arena
 				Timestamp = DateTime.UtcNow,
 				Places = rankingEntries,
 			};
-			gamesRepo.SaveRanking(ranking);
+			return ranking;
 		}
 
 		[NotNull]

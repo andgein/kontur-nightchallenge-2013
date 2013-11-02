@@ -12,12 +12,13 @@ namespace Core.Arena
 		[Test]
 		public void Test()
 		{
+			const string tournamentId = "id";
 			var gamesLog = new FileInfo("log.txt");
 			var rankingResultFile = new FileInfo("ranking.txt");
-			var tournament = new RoundRobinTournament(10,
-				"id", new GamesRepo(new DirectoryInfo("test-games")), 
-				CreateDummyPlayers().Take(20).ToArray());
-			tournament.Run();
+			var gamesRepo = new GamesRepo(new DirectoryInfo("test-games"));
+			var tournament = new RoundRobinTournament(10, tournamentId, CreateDummyPlayers().Take(20).ToArray());
+			var result = tournament.Run();
+			gamesRepo.SaveTournamentResult(tournamentId, result);
 			Console.WriteLine(File.ReadAllText(rankingResultFile.FullName));
 			Console.WriteLine();
 			Console.WriteLine(File.ReadAllText(gamesLog.FullName));

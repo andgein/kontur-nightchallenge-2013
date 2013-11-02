@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Core.Arena;
@@ -33,50 +32,45 @@ namespace Server.Arena
 
 		private void TournamentCycle()
 		{
-			int i = 0;
-			int lastPlayersHash = 0;
 			while (true)
 			{
+				var tournamentWasRun = false;
 				try
 				{
-					var newPlayersHash = RunTournament(lastPlayersHash, i);
-					if (newPlayersHash != lastPlayersHash)
-					{
-						lastPlayersHash = newPlayersHash;
-						i++;
-					}
+					tournamentWasRun = TryRunTournament();
 				}
 				catch (Exception e)
 				{
 					log.Error("Tournament failed!", e);
 				}
-				Thread.Sleep(TimeSpan.FromSeconds(1));
+				if (!tournamentWasRun)
+					Thread.Sleep(TimeSpan.FromSeconds(1));
 			}
 		}
 
-		private int RunTournament(int lastPlayersHash, int i)
+		private bool TryRunTournament()
 		{
 			var players = playersRepo.LoadLastVersions();
-			var playersHash = string.Join(" ", players.Select(p => p.Name + " " + p.Version)).GetHashCode();
-			if (playersHash != lastPlayersHash)
+			var mostRecentPlayer = players.OrderByDescending(p => p.Timestamp).FirstOrDefault();
+			if (mostRecentPlayer == null)
+				return false;
+			var lastTournamentId = mostRecentPlayer.Timestamp.Ticks.ToString();
+			if (!gamesRepo.TryStartTournament(lastTournamentId))
+				return false;
+
+			log.InfoFormat("Warriors changed! Tournament {0}: {1} warriors", lastTournamentId, players.Length);
+			var tournamentPlayers = players.Select(p => new TournamentPlayer
 			{
-				log.InfoFormat("Warriors changed! Tournament {0}. {1} warriors", i, players.Length);
-				var tournament = new RoundRobinTournament(
-					battlesPerPair,
-					i.ToString(),
-					gamesRepo,
-					players.Select(p => new TournamentPlayer
-					{
-						Name = p.Name,
-						Version = p.Version,
-						Program = p.Program,
-						//Warrior = parser.Parse(p.Program),
-					}).ToArray()
-					);
-				tournament.Run();
-				log.InfoFormat("Tournament {0} finished.", i);
-			}
-			return playersHash;
+				Name = p.Name,
+				Version = p.Version,
+				Program = p.Program,
+				//Warrior = parser.Parse(p.Program),
+			}).ToArray();
+			var tournament = new RoundRobinTournament(battlesPerPair, lastTournamentId, tournamentPlayers);
+			var result = tournament.Run();
+			gamesRepo.SaveTournamentResult(lastTournamentId, result);
+			log.InfoFormat("Tournament {0} finished.", lastTournamentId);
+			return true;
 		}
 	}
 }
