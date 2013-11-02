@@ -23,5 +23,10 @@ namespace Core.Arena
 
 		[JsonIgnore]
 		public int Version;
+
+		public override string ToString()
+		{
+			return string.Format("Name: {0}, Version: {1}, Timestamp: {2}, Program: {3}", Name, Version, Timestamp, Program);
+		}
 	}
 }

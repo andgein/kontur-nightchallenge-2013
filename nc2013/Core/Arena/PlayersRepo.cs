@@ -22,7 +22,7 @@ namespace Core.Arena
 				playersDir.Create();
 		}
 
-		public void CreateOrUpdate([NotNull] ArenaPlayer request)
+		public bool CreateOrUpdate([NotNull] ArenaPlayer request)
 		{
 			lock (playersDir)
 			{
@@ -30,6 +30,7 @@ namespace Core.Arena
 				var versionsToPersist = TryUpdatePlayer(existingVersions, request);
 				if (versionsToPersist != null)
 					SerializePlayerVersions(request.Name, versionsToPersist);
+				return versionsToPersist != null;
 			}
 		}
 
@@ -59,16 +60,16 @@ namespace Core.Arena
 			request.Authors = (request.Authors ?? string.Empty).Trim();
 			request.Program = (request.Program ?? string.Empty).Trim();
 			if (!Regex.IsMatch(request.Name, nameValidationRegex))
-				throw new BadBotExcpetion(string.Format("Имя должно подходить под шаблон: {0}", nameValidationRegex));
+				throw new BadBotException(string.Format("Имя должно подходить под шаблон: {0}", nameValidationRegex));
 			if (string.IsNullOrEmpty(request.Password))
-				throw new BadBotExcpetion("Пароль не может быть пустым");
+				throw new BadBotException("Пароль не может быть пустым");
 			if (existingVersions.Any(p => p.Password != request.Password || p.Name != request.Name))
-				throw new BadBotExcpetion("Неверный пароль");
+				throw new BadBotException("Неверный пароль");
 			if (string.IsNullOrEmpty(request.Program))
-				throw new BadBotExcpetion("Бот пуст?!? O_o");
+				throw new BadBotException("Бот пуст?!? O_o");
 			var parserErrors = warriorProgramParser.ValidateProgram(request.Program);
 			if (!string.IsNullOrEmpty(parserErrors))
-				throw new BadBotExcpetion(string.Format("В программе есть ошибки:\r\n{0}", parserErrors));
+				throw new BadBotException(string.Format("В программе есть ошибки:\r\n{0}", parserErrors));
 			var newVersions = new[] { request };
 			ArenaPlayer[] versionsToPersist;
 			if (existingVersions.Length == 0)
@@ -79,10 +80,10 @@ namespace Core.Arena
 				if (last.Program != request.Program || !string.IsNullOrEmpty(request.Authors) && request.Authors != last.Authors)
 					versionsToPersist = existingVersions.Concat(newVersions).ToArray();
 				else
-					throw new BadBotExcpetion("Бот идентичен последней версии");
+					throw new BadBotException("Бот идентичен последней версии");
 			}
 			if (versionsToPersist.All(v => string.IsNullOrEmpty(v.Authors)))
-				throw new BadBotExcpetion("Не заполнен список авторов");
+				throw new BadBotException("Не заполнен список авторов");
 			return versionsToPersist;
 		}
 

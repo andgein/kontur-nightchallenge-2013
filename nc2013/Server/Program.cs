@@ -61,18 +61,20 @@ namespace Server
 			var gameServer = new GameServer();
 			//var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
-			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, GetStaticContentDir());
+			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, GetStaticContentDir());
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
 				httpServer.Stop();
+				tournamentRunner.Stop();
 			});
+			tournamentRunner.Start();
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
 			Process.Start(httpServer.DefaultUrl);
-			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
-			tournamentRunner.Start();
 			httpServer.WaitForTermination();
+			tournamentRunner.WaitForTermination();
 			log.InfoFormat("Stopped");
 		}
 

@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arena\ArenaPlayerExtensions.cs" />
-    <Compile Include="Arena\BadBotExcpetion.cs" />
+    <Compile Include="Arena\BadBotException.cs" />
     <Compile Include="Arena\Battle.cs" />
     <Compile Include="Arena\BattlePlayerResult.cs" />
     <Compile Include="Arena\BattlePlayerResultType.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="Engine\InstructionExecutor.cs" />
     <Compile Include="Parser\StatementFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomExtensions.cs" />
     <Compile Include="SettingsFileHelper.cs" />
     <Compile Include="Game\StupidGame.cs" />
     <Compile Include="Parser\Warrior.cs" />
