@@ -16,7 +16,7 @@ namespace Core.Arena
 			var gamesLog = new FileInfo("log.txt");
 			var rankingResultFile = new FileInfo("ranking.txt");
 			var gamesRepo = new GamesRepo(new DirectoryInfo("test-games"));
-			var tournament = new RoundRobinTournament(10, tournamentId, CreateDummyPlayers().Take(20).ToArray());
+			var tournament = new RoundRobinTournament(10, tournamentId, CreateDummyPlayers().Take(20).ToArray(), null);
 			var result = tournament.Run();
 			gamesRepo.SaveTournamentResult(tournamentId, result);
 			Console.WriteLine(File.ReadAllText(rankingResultFile.FullName));

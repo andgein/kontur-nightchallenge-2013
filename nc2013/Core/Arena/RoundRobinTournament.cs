@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using nMars.RedCode;
@@ -10,14 +11,17 @@ namespace Core.Arena
 	public class RoundRobinTournament
 	{
 		private readonly int battlesPerPair;
-		private readonly TournamentPlayer[] players;
 		private readonly string tournamentId;
+		private readonly TournamentPlayer[] players;
+		private readonly AutoResetEvent botSubmissionSignal;
+		private readonly Random rnd = new Random();
 
-		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players)
+		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal)
 		{
 			this.battlesPerPair = battlesPerPair;
 			this.tournamentId = tournamentId;
 			this.players = players;
+			this.botSubmissionSignal = botSubmissionSignal;
 		}
 
 		[NotNull]
@@ -69,6 +73,8 @@ namespace Core.Arena
 		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
 			for (var i = 0; i < battlesPerPair; i++)
+			{
+				rnd.Shuffle(pairs);
 				foreach (var pair in pairs)
 				{
 					var battle = new Battle
@@ -79,7 +85,9 @@ namespace Core.Arena
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
-				}
+					if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0))
+						yield break;
+				}}
 		}
 
 		[NotNull]

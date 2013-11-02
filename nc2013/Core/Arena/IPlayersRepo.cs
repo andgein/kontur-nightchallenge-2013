@@ -4,7 +4,7 @@ namespace Core.Arena
 {
 	public interface IPlayersRepo
 	{
-		void CreateOrUpdate([NotNull] ArenaPlayer request);
+		bool CreateOrUpdate([NotNull] ArenaPlayer request);
 
 		[NotNull]
 		ArenaPlayer[] LoadPlayerVersions([NotNull] string name);

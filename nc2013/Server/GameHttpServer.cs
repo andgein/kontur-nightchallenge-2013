@@ -27,7 +27,7 @@ namespace Server
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] string staticContentPath)
+		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, [NotNull] string staticContentPath)
 		{
 			this.sessionManager = sessionManager;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
@@ -45,7 +45,7 @@ namespace Server
 				new StaticHandler(staticContentPath),
 				new CommandDescribeHandler(),
 				new ArenaRankingHandler(gamesRepo),
-				new ArenaSubmitHandler(playersRepo),
+				new ArenaSubmitHandler(playersRepo, tournamentRunner),
 				new ArenaPlayerHandler(playersRepo, gamesRepo)
 			};
 			stopEvent = new ManualResetEvent(false);
