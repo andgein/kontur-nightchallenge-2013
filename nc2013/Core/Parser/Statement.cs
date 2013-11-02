@@ -5,30 +5,53 @@ namespace Core.Parser
 {
     public class Statement
     {
+		private readonly Warrior warrior;
+
         private AddressingMode modeA;
         private Expression fieldA;
         private AddressingMode modeB;
         private Expression fieldB;
         
         public string Label;
-        public readonly StatementType Type;
+    	public readonly StatementType Type;
         public AddressingMode ModeA { get { return modeA; } set { ExistsFieldA = true; modeA = value; } }
-        public Expression FieldA { get { return fieldA; } set { ExistsFieldA = true; fieldA = value; } }
+		public Expression FieldA
+		{
+			get { return fieldA; }
+			set {
+					ExistsFieldA = true;
+					fieldA = value;
+				}
+		}
         public AddressingMode ModeB { get { return modeB; } set { ExistsFieldB = true; modeB = value; } }
-        public Expression FieldB { get { return fieldB; } set { ExistsFieldB = true; fieldB = value; } }
+    	public Expression FieldB
+    	{
+    		get { return fieldB; }
+			set
+			{
+				ExistsFieldB = true;
+				fieldB = value;
+			}
+    	}
 
         public bool ExistsFieldA { get; private set; }
         public bool ExistsFieldB { get; private set; }
 
-    	private static StatementFactory statementFactory = new StatementFactory();
+    	private static readonly StatementFactory statementFactory = new StatementFactory();
 
         public CellType CellType
         {
             get { return Type == StatementType.Dat ? CellType.Data : CellType.Command; }
         }
 
-        public Statement(Statement another)
-        {
+    	public bool HasLabel
+    	{
+    		get { return Label != ""; }
+    	}
+
+		public Statement(Statement another)
+		{
+			warrior = another.warrior;
             Type = another.Type;
             ModeA = another.ModeA;
             FieldA = another.FieldA;
@@ -38,8 +61,9 @@ namespace Core.Parser
             ExistsFieldB = another.ExistsFieldB;
         }
 
-        public Statement(StatementType type = StatementType.Dat)
+        public Statement(Warrior warrior = null, StatementType type = StatementType.Dat)
         {
+        	this.warrior = warrior;
         	Type = type;
             ModeA = AddressingMode.Direct;
             FieldA = new NumberExpression(0);
@@ -47,13 +71,8 @@ namespace Core.Parser
             FieldB = new NumberExpression(0);
             ExistsFieldA = ExistsFieldB = false;
         }
-
-        public bool HasLabel()
-        {
-            return Label != "";
-        }
-
-        public static bool operator==(Statement left, Statement right)
+		
+    	public static bool operator==(Statement left, Statement right)
         {
             if (ReferenceEquals(left, right))
                 return true;

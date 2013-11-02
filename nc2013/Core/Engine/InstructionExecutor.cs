@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Core.Engine;
+using Core.Parser;
 
-namespace Core.Parser
+namespace Core.Engine
 {
     public class InstructionExecutor
     {
         private readonly Instruction instruction;
-        private readonly Dictionary<StatementType, Action<Engine.Engine>> executers;
+        private readonly Dictionary<StatementType, Action<Engine>> executers;
         private Statement Statement
         {
             get { return instruction.Statement;  }
@@ -16,28 +16,30 @@ namespace Core.Parser
         public InstructionExecutor(Instruction instruction)
         {
             this.instruction = instruction;
-            executers = new Dictionary<StatementType, Action<Engine.Engine>>
+            executers = new Dictionary<StatementType, Action<Engine>>
             {
                 {StatementType.Mov, Mov},
                 {StatementType.Add, Add},
                 {StatementType.Sub, Sub},
-                {StatementType.Jmp, Jmp},
-                {StatementType.Jmz, Jmz},
-                {StatementType.Jmn, Jmn},
                 {StatementType.Cmp, Cmp},
                 {StatementType.Slt, Slt},
+				{StatementType.Jmp, Jmp},
+                {StatementType.Jmz, Jmz},
+                {StatementType.Jmn, Jmn},
+				{StatementType.Djn, Djn},
+				{StatementType.Spl, Spl},
 
                 {StatementType.Dat, Dat},
             };
         }
-
-        public void Execute(Engine.Engine engine)
+		
+    	public void Execute(Engine engine)
         {
             var method = GetExecuteMethod();
             method.Invoke(engine);
         }
 
-        private Action<Engine.Engine> GetExecuteMethod()
+        private Action<Engine> GetExecuteMethod()
         {
             var statementType = Statement.Type;
             if (! executers.ContainsKey(statementType))
@@ -45,7 +47,7 @@ namespace Core.Parser
             return executers[statementType];
         }
 
-        private static int CalcAddress(Engine.Engine engine, AddressingMode mode, Expression expression)
+        private static int CalcAddress(Engine engine, AddressingMode mode, Expression expression)
         {
             int address;
             switch (mode)
@@ -69,7 +71,7 @@ namespace Core.Parser
             throw new InvalidOperationException("Internal error. Unknown addressing mode");
         }
 
-        private void Mov(Engine.Engine engine)
+        private void Mov(Engine engine)
         {
             if (Statement.ModeA == AddressingMode.Immediate)
             {
@@ -88,16 +90,9 @@ namespace Core.Parser
             }
         }
 
-        private void Add(Engine.Engine engine)
+        private void Add(Engine engine)
         {
-            if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
-            {
-                engine.WriteToMemory(instruction.Address, new Statement(Statement)
-                {
-                    FieldB = new NumberExpression(Statement.FieldA.Calculate() + Statement.FieldB.Calculate())
-                });
-            }
-            else if (Statement.ModeA == AddressingMode.Immediate)
+            if (Statement.ModeA == AddressingMode.Immediate)
             {
                 var addressB = CalcAddress(engine, Statement.ModeB, Statement.FieldB);
                 var oldStatement = engine.Memory[addressB].Statement;
@@ -120,16 +115,9 @@ namespace Core.Parser
             }
         }
 
-        private void Sub(Engine.Engine engine)
+        private void Sub(Engine engine)
         {
-            if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
-            {
-                engine.WriteToMemory(instruction.Address, new Statement(Statement)
-                {
-                    FieldB = new NumberExpression(Statement.FieldB.Calculate() - Statement.FieldA.Calculate())
-                });
-            }
-            else if (Statement.ModeA == AddressingMode.Immediate)
+            if (Statement.ModeA == AddressingMode.Immediate)
             {
                 var addressB = CalcAddress(engine, Statement.ModeB, Statement.FieldB);
                 var oldStatement = engine.Memory[addressB].Statement;
@@ -152,14 +140,14 @@ namespace Core.Parser
             }
         }
 
-        private void Jmp(Engine.Engine engine)
+        private void Jmp(Engine engine)
         {
             var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
             CalcAddress(engine, Statement.ModeB, Statement.FieldB);
             engine.JumpTo(addressA);
         }
 
-        private void Jmz(Engine.Engine engine)
+        private void Jmz(Engine engine)
         {
             bool isJump;
             if (Statement.ModeB == AddressingMode.Immediate)
@@ -174,7 +162,7 @@ namespace Core.Parser
                 engine.JumpTo(addressA);
         }
 
-        private void Jmn(Engine.Engine engine)
+        private void Jmn(Engine engine)
         {
             bool isJump;
             if (Statement.ModeB == AddressingMode.Immediate)
@@ -189,7 +177,7 @@ namespace Core.Parser
                 engine.JumpTo(addressA);
         }
 
-        private void Cmp(Engine.Engine engine)
+        private void Cmp(Engine engine)
         {
             bool isJump;
             if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
@@ -211,7 +199,7 @@ namespace Core.Parser
                 engine.JumpTo(engine.CurrentIp + 2);
         }
 
-        private void Slt(Engine.Engine engine)
+        private void Slt(Engine engine)
         {
             bool isJump;
             if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
@@ -233,17 +221,28 @@ namespace Core.Parser
                 engine.JumpTo(engine.CurrentIp + 2);
         }
 
-        private void Spl(Engine.Engine engine)
+        private void Spl(Engine engine)
         {
             var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
             CalcAddress(engine, Statement.ModeB, Statement.FieldB);
             engine.SplitAt(addressA);
         }
 
-        private void Dat(Engine.Engine engine)
+		private void Djn(Engine engine)
+		{
+			CalcAddress(engine, Statement.ModeB, Statement.FieldB);
+			Statement.FieldB = Statement.FieldB.Decremented();
+			var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
+			if (Statement.FieldB.Calculate() != 0)
+				engine.JumpTo(addressA);
+		}
+
+        private void Dat(Engine engine)
         {
-            CalcAddress(engine, Statement.ModeA, Statement.FieldA);
-            CalcAddress(engine, Statement.ModeB, Statement.FieldB);
+			if (Statement.ModeA != AddressingMode.Immediate)
+				CalcAddress(engine, Statement.ModeA, Statement.FieldA);
+			if (Statement.ModeB != AddressingMode.Immediate)
+				CalcAddress(engine, Statement.ModeB, Statement.FieldB);
             engine.KillCurrentProcess();
         }
     }

@@ -5,7 +5,7 @@ namespace Core.Parser
 {
     public abstract class Expression
     {
-        public abstract int Calculate();
+    	public abstract int Calculate(Warrior warrior = null, int address = 0);
 
         public Expression Decremented()
         {
@@ -26,22 +26,22 @@ namespace Core.Parser
             Right = right;
         }
 
-        public override int Calculate()
+		public override int Calculate(Warrior warrior = null, int address = 0)
         {
             int answer;
             switch (Op)
             {
                 case BinaryOperation.Sum:
-                    answer = Left.Calculate() + Right.Calculate();
+                    answer = Left.Calculate(warrior, address) + Right.Calculate(warrior, address);
                     break;
                 case BinaryOperation.Sub:
-                    answer = Left.Calculate() - Right.Calculate();
+					answer = Left.Calculate(warrior, address) - Right.Calculate(warrior, address);
                     break;
                 case BinaryOperation.Mul:
-                    answer = Left.Calculate() * Right.Calculate();
+					answer = Left.Calculate(warrior, address) * Right.Calculate(warrior, address);
                     break;
                 case BinaryOperation.Div:
-                    answer = Left.Calculate() / Right.Calculate();
+					answer = Left.Calculate(warrior, address) / Right.Calculate(warrior, address);
                     break;
                 default:
                     throw new InvalidOperationException("Invalid operation to calculate: " + Op);
@@ -50,7 +50,7 @@ namespace Core.Parser
         }
     }
 
-    class UnaryExpression : Expression
+    public class UnaryExpression : Expression
     {
         public UnaryOperation Op { get; private set; }
         public Expression Sub { get; private set; }
@@ -61,12 +61,14 @@ namespace Core.Parser
             Sub = sub;
         }
 
-        public override int Calculate()
+		public override int Calculate(Warrior warrior = null, int address = 0)
         {
             switch (Op)
             {
                 case UnaryOperation.Negate:
-                    return -Sub.Calculate();
+					return -Sub.Calculate(warrior, address);
+				case UnaryOperation.Positive:
+            		return Sub.Calculate(warrior, address);
             }
             throw new InvalidOperationException("Internal error. Unknown unary operation.");
         }
@@ -81,7 +83,7 @@ namespace Core.Parser
             Value = ModularArith.Mod(value);
         }
 
-        public override int Calculate()
+		public override int Calculate(Warrior warrior = null, int address = 0)
         {
             return Value;
         }
@@ -96,9 +98,24 @@ namespace Core.Parser
             Name = name;
         }
 
-        public override int Calculate()
+		public override int Calculate(Warrior warrior = null, int address = 0)
         {
-            throw new System.NotImplementedException();
+			if (warrior == null)
+				throw new InvalidOperationException("Internal error: can't calculate expression without labels and constants lists");
+			if (! warrior.Labels.ContainsKey(Name) && ! warrior.Constants.ContainsKey(Name))
+				throw new CompilationException("Unknown label or constant '" + Name + "'");
+			if (warrior.Constants.ContainsKey(Name))
+			{
+				if (warrior.EvaluatingConstants.Contains(Name))
+					throw new CompilationException("Cyclic dependency found for '" + Name + "'");
+
+				warrior.EvaluatingConstants.Add(Name);
+				var value = warrior.Constants[Name].Calculate(warrior);
+				warrior.Constants[Name] = new NumberExpression(value);
+				warrior.EvaluatingConstants.Remove(Name);
+				return value;
+			}
+			return warrior.Labels[Name] - address;
         }
     }
 }

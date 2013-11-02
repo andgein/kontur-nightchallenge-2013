@@ -116,5 +116,21 @@ namespace Tests.Core.Parser
             var expr = parser.Parse("       1 \t + \t\t\t    2  \t");
             Assert.AreEqual(expr.GetType(), typeof(BinaryExpression));
         }
+
+		[Test]
+		public void TestUnaryMinus()
+		{
+			var expr = parser.Parse("-1");
+			Assert.AreEqual(expr.GetType(), typeof(UnaryExpression));
+			Assert.AreEqual(expr.Calculate(), -1);
+		}
+
+		[Test]
+		public void TestUnaryPlus()
+		{
+			var expr = parser.Parse("+2");
+			Assert.AreEqual(expr.GetType(), typeof(UnaryExpression));
+			Assert.AreEqual(expr.Calculate(), 2);
+		}
     }
 }

@@ -14,6 +14,8 @@ namespace Core.Engine
         public bool GameOver { get; private set; }
         public int? Winner { get; private set; }
 
+    	private int CountLivedWarriors;
+
         private StepResult stepResult;
 
         public Engine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
@@ -29,6 +31,7 @@ namespace Core.Engine
             }
             CurrentWarrior = 0;
             CurrentStep = 0;
+        	CountLivedWarriors = Warriors.Count;
         }
 
         private void PlaceWarrior(RunningWarrior warrior, int address)
@@ -54,18 +57,22 @@ namespace Core.Engine
             stepResult = new StepResult();
 
             ExecuteInstruction(instruction);
-            
-            if (! stepResult.KilledInInstruction)
-                Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1));
+
+			if (!stepResult.KilledInInstruction)
+				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1));
+			else
+				if (Warriors[CurrentWarrior].Queue.Count == 0)
+					CountLivedWarriors--;
 
             if (stepResult.SplittedInInstruction.HasValue)
                 Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
             var nextWarrior = GetNextWarrior(CurrentWarrior);
-            if (! nextWarrior.HasValue)
+            if (Warriors.Count > 1 && CountLivedWarriors == 1 ||
+				Warriors.Count == 1 && CountLivedWarriors == 0)
             {
                 GameOver = true;
-                Winner = CurrentWarrior;
+                Winner = nextWarrior;
                 return stepResult;
             }
             CurrentWarrior = nextWarrior.GetValueOrDefault();

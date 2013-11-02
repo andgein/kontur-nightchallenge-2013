@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Core.Engine;
 using Core.Parser;
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace Tests.Core.Parser
         {
             var warrior = parser.Parse(imp);
             Assert.AreEqual(1, warrior.Statements.Count);
-            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel);
             Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
@@ -31,7 +32,7 @@ namespace Tests.Core.Parser
         {
             var warrior = parser.Parse(imp + "     ; any comment here");
             Assert.AreEqual(1, warrior.Statements.Count);
-            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel);
             Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
@@ -40,7 +41,7 @@ namespace Tests.Core.Parser
         {
             var warrior = parser.Parse("  ; comment 1\n   \n" + imp + "     ; any comment here\n\t  \t\n;comment 2");
             Assert.AreEqual(1, warrior.Statements.Count);
-            Assert.AreEqual(false, warrior.Statements[0].HasLabel());
+            Assert.AreEqual(false, warrior.Statements[0].HasLabel);
             Assert.AreEqual(StatementType.Mov, warrior.Statements[0].Type);
         }
 
@@ -54,7 +55,7 @@ namespace Tests.Core.Parser
             Assert.AreEqual(count, warrior.Statements.Count);
             for (var i = 0; i < count; ++i)
             {
-                Assert.AreEqual(false, warrior.Statements[i].HasLabel());
+                Assert.AreEqual(false, warrior.Statements[i].HasLabel);
                 Assert.AreEqual(StatementType.Mov, warrior.Statements[i].Type);
             }
         }
@@ -70,7 +71,7 @@ namespace Tests.Core.Parser
             Assert.AreEqual(3, warrior.Statements.Count);
             for (var i = 0; i < 3; ++i)
             {
-                Assert.AreEqual(true, warrior.Statements[i].HasLabel());
+                Assert.AreEqual(true, warrior.Statements[i].HasLabel);
                 Assert.AreEqual(String.Format("label{0}", i + 1), warrior.Statements[i].Label);
                 Assert.AreEqual(StatementType.Mov, warrior.Statements[i].Type);
             }
@@ -131,5 +132,59 @@ namespace Tests.Core.Parser
             Assert.AreEqual(2, warrior.Statements.Count);
             Assert.AreEqual(1, warrior.StartAddress);
         }
+
+		[Test]
+		public void TestEndWithLabel()
+		{
+			var warrior = parser.Parse(imp + "\nstart " + imp + "\n" + "END start\nline will be ignored");
+			Assert.AreEqual(2, warrior.Statements.Count);
+			Assert.AreEqual(1, warrior.StartAddress);
+		}
+
+		[Test]
+		public void TestEndWithConstant()
+		{
+			var warrior = parser.Parse("a EQU -1\n" + imp + "\n" + imp + "\n" + "END a\nline will be ignored");
+			Assert.AreEqual(2, warrior.Statements.Count);
+			Assert.AreEqual(1, warrior.StartAddress);
+		}
+
+		[Test]
+		public void TestLabels()
+		{
+			var warrior = parser.Parse("imp " + imp + "\nJMP imp");
+			Assert.AreEqual(2, warrior.Statements.Count);
+			Assert.AreEqual(typeof(NumberExpression), warrior.Statements[1].FieldA.GetType());
+			Assert.AreEqual(ModularArith.Mod(-1), warrior.Statements[1].FieldA.Calculate());
+		}
+
+		[Test]
+		public void TestConstants()
+		{
+			var warrior = parser.Parse("a EQU b\nb EQU c + 10\nc EQU d + 2 * 4\nd EQU link - 1\nlink " + imp);
+			Assert.AreEqual(4, warrior.Constants.Count);
+			Assert.AreEqual(typeof(NumberExpression), warrior.Constants["a"].GetType());
+			Assert.AreEqual(typeof(NumberExpression), warrior.Constants["b"].GetType());
+			Assert.AreEqual(typeof(NumberExpression), warrior.Constants["c"].GetType());
+			Assert.AreEqual(typeof(NumberExpression), warrior.Constants["d"].GetType());
+			Assert.AreEqual(17, warrior.Constants["a"].Calculate());
+			Assert.AreEqual(17, warrior.Constants["b"].Calculate());
+			Assert.AreEqual(7, warrior.Constants["c"].Calculate());
+			Assert.AreEqual(ModularArith.Mod(-1), warrior.Constants["d"].Calculate());
+		}
+
+		[Test]
+		public void TestExpressionWithMultipleLabels()
+		{
+			var warrior = parser.Parse(imp + "\nl1 " + imp + "\nl2 " + imp + "\nl3 MOV l1, l1 + l2");
+			Assert.AreEqual(ModularArith.Mod(-3), warrior.Statements[3].FieldB.Calculate());
+		}
+
+		[Test]
+		[ExpectedException(typeof(CompilationException))]
+		public void TestCyclicConstants()
+		{
+			parser.Parse("a EQU b + 10\nb EQU 10 + c\nc EQU a - 20\n" + imp);
+		}
     }
 }

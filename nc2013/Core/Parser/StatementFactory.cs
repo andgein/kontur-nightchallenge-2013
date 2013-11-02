@@ -29,12 +29,12 @@ namespace Core.Parser
             };
         }
 
-        public Statement Create(string command)
+        public Statement Create(Warrior warrior, string command)
         {
             if (! Commands.ContainsKey(command.ToUpper()))
                 throw new Exception(String.Format("Internal error: can't create statement from command {0}", command));
 
-        	return new Statement(Commands[command.ToUpper()]);
+        	return new Statement(warrior, Commands[command.ToUpper()]);
         }
 
 		public String GetStatementMnemonic(StatementType type)

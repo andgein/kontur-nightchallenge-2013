@@ -1,6 +1,6 @@
 ﻿namespace Core.Engine
 {
-    static class Parameters
+	public static class Parameters
     {
         public const int CORESIZE = 8000;
 

@@ -16,17 +16,26 @@ namespace Core.Parser
 				var stLine = TrimComment(line);
 				if (stLine.All(Char.IsWhiteSpace))
 					continue;
-				var statement = TryParseLine(stLine);
+				var statement = TryParseLine(warrior, stLine);
 				if (statement.Type == StatementType.End)
 				{
+					if (statement.HasLabel)
+						warrior.Labels[statement.Label] = warrior.Statements.Count;
 					if (statement.ExistsFieldA)
-						warrior.StartAddress = warrior.Statements.Count + statement.FieldA.Calculate();
+						warrior.StartAddressExpression = statement.FieldA;
 					break;
+				}
+				if (statement.Type == StatementType.Equ)
+				{
+					if (!statement.HasLabel)
+						throw new CompilationException("EQU operator should have name");
+					warrior.Constants[statement.Label] = statement.FieldA;
+					continue;
 				}
 				warrior.AddStatement(statement);
 			}
 
-			// TODO warrior.EvaluateAllExpressions()
+			warrior.EvaluateAllExpressions();
 			return warrior;
 		}
 
@@ -36,11 +45,11 @@ namespace Core.Parser
 			return commentPos != -1 ? line.Substring(0, commentPos) : line;
 		}
 
-		private Statement TryParseLine(string line)
+		private Statement TryParseLine(Warrior warrior, string line)
 		{
 			try
 			{
-				return ParseLine(line);
+				return ParseLine(warrior, line);
 			}
 			catch (Exception e)
 			{
@@ -48,7 +57,7 @@ namespace Core.Parser
 			}
 		}
 
-		public Statement ParseLine(String line)
+		public Statement ParseLine(Warrior warrior, String line)
 		{
 			var label = "";
 			string command;
@@ -68,7 +77,7 @@ namespace Core.Parser
 			if (!IsCommandToken(command))
 				throw new CompilationException(String.Format("Expected command, but found '{0} {1}'", label, command));
 
-			var statement = statementFactory.Create(command);
+			var statement = statementFactory.Create(warrior, command);
 			statement.Label = label;
 
 			if (!RestOnlyWhitespaces())

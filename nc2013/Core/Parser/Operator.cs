@@ -7,6 +7,7 @@
 
     public enum UnaryOperation
     {
-        Negate
+        Negate,
+		Positive
     }
 }

@@ -9,7 +9,7 @@ namespace Core.Parser
 
 		public string Describe(string cmd)
 		{
-			var statement = warriorParser.ParseLine(cmd);
+			var statement = warriorParser.ParseLine(new Warrior(), cmd);
 			var addrA = DescribeField(statement.FieldA, statement.ModeA);
 			var addrB = DescribeField(statement.FieldB, statement.ModeB);
 			switch (statement.Type)
@@ -21,7 +21,7 @@ namespace Core.Parser
 			    case StatementType.Sub:
 			        return addrB + " -= " + addrA;
 			    case StatementType.Cmp:
-			        return string.Format("if ({0} == {1}) goto 2", addrB, addrA);
+			        return string.Format("if ({0} == {1}) goto +2", addrB, addrA);
 			    case StatementType.Jmp:
 			        return string.Format("goto {0}", addrA);
 			    case StatementType.Jmz:
@@ -29,7 +29,7 @@ namespace Core.Parser
 			    case StatementType.Jmn:
 			        return string.Format("if ({0} != 0) goto {1}", addrB, addrA);
 			    case StatementType.Slt:
-			        return string.Format("if ({0} < {1}) goto 2", addrA, addrB);
+			        return string.Format("if ({0} < {1}) goto +2", addrA, addrB);
 			    case StatementType.Djn:
 			        return string.Format("if (--{0} != 0) goto {1}", addrB, addrA);
 			    case StatementType.Spl:
