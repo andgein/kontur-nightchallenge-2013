@@ -5,9 +5,8 @@ namespace Core.Parser
 {
 	public class WarriorParser : Parser
 	{
-		private StatementFactory statementFactory = new StatementFactory();
-		private readonly 
-			ExpressionParser expressionParser = new ExpressionParser();
+		private readonly StatementFactory statementFactory = new StatementFactory();
+		private readonly ExpressionParser expressionParser = new ExpressionParser();
 
 		public Warrior Parse(String text)
 		{

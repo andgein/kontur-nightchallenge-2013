@@ -43,7 +43,7 @@ namespace Core.Game
                     MemoryState = engine.Memory.ToMemoryState(),
                     ProgramStates = engine.Warriors.Select(w => new ProgramState
                     {
-                        LastPointer = (uint) w.Queue.Peek(),
+                        LastPointer = w.Queue.Count > 0 ? (uint) w.Queue.Peek() : 0,
                         ProcessPointers = w.Queue.ToArray().Select(x => (uint) x).ToArray()
                     }).ToArray(),
                 };
@@ -87,7 +87,7 @@ namespace Core.Game
                 }).ToArray(),
                 ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
                 {
-                    NextPointer = (uint)w.Queue.Peek(),
+                    NextPointer = w.Queue.Count > 0 ? (uint)w.Queue.Peek() : 0,
                     Program = w.Index,
                     ChangeType = ProcessStateChangeType.Executed
                 }).ToArray()
