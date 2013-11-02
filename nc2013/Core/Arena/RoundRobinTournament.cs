@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
-using log4net;
 
 namespace Core.Arena
 {
 	public class RoundRobinTournament
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(RoundRobinTournament));
 		private readonly int battlesPerPair;
 		private readonly TournamentPlayer[] players;
 		private readonly string tournamentId;
@@ -111,7 +109,7 @@ namespace Core.Arena
 			}
 			catch (Exception e)
 			{
-				log.Error(string.Format("Battle failed: {0}", battle), e);
+				Log.For(this).Error(string.Format("Battle failed: {0}", battle), e);
 				return new BattleResult { RunToCompletion = false };
 			}
 		}

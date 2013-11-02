@@ -76,7 +76,7 @@
 		<appender-ref ref="errors-file" />
 	</root>
 
-	<logger name="network" additivity="false">
+	<logger name="Network" additivity="false">
 		<appender-ref ref="network-file" />
 	</logger>
 </log4net>

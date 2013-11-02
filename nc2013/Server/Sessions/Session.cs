@@ -3,8 +3,8 @@ using System.Collections;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Core;
 using JetBrains.Annotations;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -16,7 +16,6 @@ namespace Server.Sessions
 		private readonly Hashtable items = new Hashtable();
 		private int saveCounter;
 		private readonly object locker = new object();
-		private readonly ILog log = LogManager.GetLogger(typeof (Session));
 
 		public Session(Guid sessionId, [NotNull] string sessionStorageFolder)
 		{
@@ -61,7 +60,7 @@ namespace Server.Sessions
 			}
 			catch (Exception e)
 			{
-				log.Error(string.Format("Failed to deserialize session key {0} from file {1}", key, filename), e);
+				Log.For(this).Error(string.Format("Failed to deserialize session key {0} from file {1}", key, filename), e);
 				return default(T);
 			}
 		}

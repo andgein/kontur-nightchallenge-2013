@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Core;
 using Core.Arena;
 using Core.Parser;
-using log4net;
+using JetBrains.Annotations;
 
 namespace Server.Arena
 {
 	public class TournamentRunner
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(TournamentRunner));
-		private readonly PlayersRepo playersRepo;
-		private readonly GamesRepo gamesRepo;
+		private readonly IPlayersRepo playersRepo;
+		private readonly IGamesRepo gamesRepo;
 		private readonly int battlesPerPair;
 		private readonly WarriorParser parser = new WarriorParser();
 
-		public TournamentRunner(PlayersRepo playersRepo, GamesRepo gamesRepo, int battlesPerPair)
+		public TournamentRunner([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, int battlesPerPair)
 		{
 			this.playersRepo = playersRepo;
 			this.gamesRepo = gamesRepo;
@@ -41,7 +41,7 @@ namespace Server.Arena
 				}
 				catch (Exception e)
 				{
-					log.Error("Tournament failed!", e);
+					Log.For(this).Error("Tournament failed!", e);
 				}
 				if (!tournamentWasRun)
 					Thread.Sleep(TimeSpan.FromSeconds(1));
@@ -58,7 +58,7 @@ namespace Server.Arena
 			if (!gamesRepo.TryStartTournament(lastTournamentId))
 				return false;
 
-			log.InfoFormat("Warriors changed! Tournament {0}: {1} warriors", lastTournamentId, players.Length);
+			Log.For(this).InfoFormat("Warriors changed! Tournament {0}: {1} warriors", lastTournamentId, players.Length);
 			var tournamentPlayers = players.Select(p => new TournamentPlayer
 			{
 				Name = p.Name,

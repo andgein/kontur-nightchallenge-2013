@@ -8,10 +8,10 @@ namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
-		private readonly PlayersRepo playersRepo;
-		private readonly GamesRepo gamesRepo;
+		private readonly IPlayersRepo playersRepo;
+		private readonly IGamesRepo gamesRepo;
 
-		public ArenaPlayerHandler([NotNull] PlayersRepo playersRepo, [NotNull] GamesRepo gamesRepo)
+		public ArenaPlayerHandler([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo)
 			: base("arena/player")
 		{
 			this.playersRepo = playersRepo;

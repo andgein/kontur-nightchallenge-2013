@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Net;
+using Core;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
-using log4net;
 
 namespace Server.Arena
 {
 	public class ArenaSubmitHandler : StrictPathHttpHandlerBase
 	{
-		private readonly PlayersRepo players;
+		private readonly IPlayersRepo playersRepo;
 
-		public ArenaSubmitHandler(PlayersRepo players)
+		public ArenaSubmitHandler([NotNull] IPlayersRepo playersRepo)
 			: base("arena/submit")
 		{
-			this.players = players;
+			this.playersRepo = playersRepo;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context)
@@ -22,17 +22,14 @@ namespace Server.Arena
 			try
 			{
 				var request = context.GetRequest<ArenaPlayer>();
-				players.CreateOrUpdate(request);
+				playersRepo.CreateOrUpdate(request);
 				context.SendResponse("OK");
 			}
 			catch (Exception e)
 			{
-				log.Error("Submit failed!", e);
+				Log.For(this).Error("Submit failed!", e);
 				context.SendResponse(e.Message, HttpStatusCode.BadRequest);
 			}
 		}
-
-		private static readonly ILog log = LogManager.GetLogger(typeof (ArenaSubmitHandler));
-
 	}
 }

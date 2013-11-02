@@ -6,9 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Core;
 using Core.Arena;
 using JetBrains.Annotations;
-using log4net;
 using Server.Arena;
 using Server.Debugging;
 using Server.Handlers;
@@ -18,9 +18,6 @@ namespace Server
 {
 	public class GameHttpServer
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(GameHttpServer));
-		private static readonly ILog httpListenerExceptionLog = LogManager.GetLogger("network");
-
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
 		private Task listenerTask;
@@ -30,7 +27,7 @@ namespace Server
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, PlayersRepo playersRepo, GamesRepo gamesRepo, SessionManager sessionManager, DebuggerManager debuggerManager, string staticContentPath)
+		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] string staticContentPath)
 		{
 			this.sessionManager = sessionManager;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
@@ -89,7 +86,7 @@ namespace Server
 			try
 			{
 				var requestUrl = httpListenerContext.Request.RawUrl;
-				log.DebugFormat("Incoming request: {0}", requestUrl);
+				Log.For(this).DebugFormat("Incoming request: {0}", requestUrl);
 				var handleTime = Stopwatch.StartNew();
 				activeRequests[currentRequestId] = Tuple.Create(requestUrl, handleTime);
 				var context = new GameHttpContext(httpListenerContext, basePath, sessionManager);
@@ -102,10 +99,10 @@ namespace Server
 						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 						if (handlersThatCanHandle.Length == 1)
 						{
-							log.DebugFormat("Handling request with {0}: {1}", handlersThatCanHandle[0].GetType().Name, requestUrl);
+							Log.For(this).DebugFormat("Handling request with {0}: {1}", handlersThatCanHandle[0].GetType().Name, requestUrl);
 							handlersThatCanHandle[0].Handle(context);
 							context.Response.Close();
-							log.DebugFormat("Request handled in {0} ms: {1}", handleTime.ElapsedMilliseconds, requestUrl);
+							Log.For(this).DebugFormat("Request handled in {0} ms: {1}", handleTime.ElapsedMilliseconds, requestUrl);
 						}
 						else if (handlersThatCanHandle.Length == 0)
 							throw new HttpException(HttpStatusCode.NotImplemented, string.Format("Method '{0}' is not implemented", requestUrl));
@@ -126,7 +123,7 @@ namespace Server
 				}
 				catch (Exception e)
 				{
-					log.Error("Request failed", e);
+					Log.For(this).Error("Request failed", e);
 					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
 					httpListenerContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -137,7 +134,7 @@ namespace Server
 			}
 			catch (HttpListenerException e)
 			{
-				httpListenerExceptionLog.Debug("HttpListener failure", e);
+				Log.Network.Debug("HttpListener failure", e);
 			}
 			finally
 			{

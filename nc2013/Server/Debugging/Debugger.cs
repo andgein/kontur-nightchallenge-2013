@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Core;
 using Core.Game;
 using JetBrains.Annotations;
 using log4net;
@@ -14,7 +15,6 @@ namespace Server.Debugging
 		private readonly ISession session;
 		private IGame game;
 
-		private static readonly ILog log = LogManager.GetLogger(typeof(Debugger));
 		private ProgramStartInfo[] lastProgramStartInfos;
 		private readonly ProgramStartInfo[] defaultProgramStartInfos =
 		{
@@ -43,7 +43,7 @@ DAT #0, #0"}
 					}
 					catch (Exception e)
 					{
-						log.Error("Resume game failed", e);
+						Log.For(this).Error("Resume game failed", e);
 					}
 			}
 			if (lastProgramStartInfos == null)

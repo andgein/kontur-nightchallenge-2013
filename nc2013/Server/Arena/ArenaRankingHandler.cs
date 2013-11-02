@@ -6,9 +6,9 @@ namespace Server.Arena
 {
 	public class ArenaRankingHandler : StrictPathHttpHandlerBase
 	{
-		private readonly GamesRepo gamesRepo;
+		private readonly IGamesRepo gamesRepo;
 
-		public ArenaRankingHandler([NotNull] GamesRepo gamesRepo)
+		public ArenaRankingHandler([NotNull] IGamesRepo gamesRepo)
 			: base("arena/ranking")
 		{
 			this.gamesRepo = gamesRepo;

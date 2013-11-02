@@ -10,7 +10,6 @@ namespace Server
 {
 	public static class Runtime
 	{
-		private static readonly ILog perfLog = LogManager.GetLogger("Perf");
 		private static WinApi.HandlerRoutine onCtrlBreak;
 
 		public static void Init([NotNull] ILog log)
@@ -28,7 +27,7 @@ namespace Server
 			}
 			finally
 			{
-				perfLog.InfoFormat("{0} took {1}", actionName, sw.FormatElapsedTime());
+				Log.Perf.InfoFormat("{0} took {1}", actionName, sw.FormatElapsedTime());
 			}
 		}
 
