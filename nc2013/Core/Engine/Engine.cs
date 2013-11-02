@@ -51,7 +51,7 @@ namespace Core.Engine
             ExecuteInstruction(instruction);
             
             if (! stepResult.KilledInInstruction)
-                Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
+                Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1));
 
             if (stepResult.SplittedInInstruction.HasValue)
                 Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Core.Arena;
+using Core.Game;
 using Core.Game.MarsBased;
 using Server.Arena;
 using log4net;
@@ -40,7 +41,7 @@ namespace Server
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"));
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
 			var sessionManager = new SessionManager("../sessions");
-			var gameServer = new MarsGameServer();
+			var gameServer = new GameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
 			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, GetStaticContentDir());
 			Runtime.SetConsoleCtrlHandler(() =>

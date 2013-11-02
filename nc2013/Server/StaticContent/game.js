@@ -48,7 +48,7 @@ var Game = Base.extend({
 					that.currentStep = stepResponse.diff.currentStep;
 					that.$currentStep.text(stepResponse.diff.currentStep);
 					for (var i = 0; i < that.programs.length; ++i)
-						this.programs[i].current(stepResponse.diff.currentProgram == i);
+						that.programs[i].current(stepResponse.diff.currentProgram == i);
 					if (stepResponse.diff.memoryDiffs)
 						that.memory.applyDiffs(stepResponse.diff.memoryDiffs);
 					if (stepResponse.diff.programStateDiffs)

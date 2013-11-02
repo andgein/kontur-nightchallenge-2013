@@ -67,20 +67,20 @@ namespace Core.Game
                     }).ToArray()
                 };
             var memoryDiffs = new Dictionary<int, CellState>();
-            StepResult stepResult = null;
-            for (var i = 0; i < stepCount; ++i)
+        	for (var i = 0; i < stepCount; ++i)
             {
-                stepResult = engine.Step();
-                memoryDiffs = memoryDiffs.Concat(stepResult.MemoryDiff).ToDictionary(pair => pair.Key, pair => pair.Value);
+            	var stepResult = engine.Step();
+            	foreach (var md in stepResult.MemoryDiff)
+					memoryDiffs[md.Key] = md.Value;
             }
-            
-            return new Diff
+
+        	return new Diff
             {
                 CurrentProgram = engine.CurrentWarrior,
                 CurrentStep = engine.CurrentStep,
                 GameOver = engine.GameOver,
                 Winner = engine.Winner,
-                MemoryDiffs = stepResult.MemoryDiff.Select(md => new MemoryDiff
+                MemoryDiffs = memoryDiffs.Select(md => new MemoryDiff
                 {
                     Address = (uint) md.Key,
                     CellState = md.Value

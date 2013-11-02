@@ -11,7 +11,7 @@ namespace Core.Parser
         private Expression fieldB;
         
         public string Label;
-        public StatementType Type;
+        public readonly StatementType Type;
         public AddressingMode ModeA { get { return modeA; } set { ExistsFieldA = true; modeA = value; } }
         public Expression FieldA { get { return fieldA; } set { ExistsFieldA = true; fieldA = value; } }
         public AddressingMode ModeB { get { return modeB; } set { ExistsFieldB = true; modeB = value; } }
@@ -19,6 +19,8 @@ namespace Core.Parser
 
         public bool ExistsFieldA { get; private set; }
         public bool ExistsFieldB { get; private set; }
+
+    	private static StatementFactory statementFactory = new StatementFactory();
 
         public CellType CellType
         {
@@ -36,9 +38,9 @@ namespace Core.Parser
             ExistsFieldB = another.ExistsFieldB;
         }
 
-        public Statement()
+        public Statement(StatementType type = StatementType.Dat)
         {
-            Type = StatementType.Dat;
+        	Type = type;
             ModeA = AddressingMode.Direct;
             FieldA = new NumberExpression(0);
             ModeB = AddressingMode.Direct;
@@ -80,13 +82,21 @@ namespace Core.Parser
             return this == (Statement) obj;
         }
 
-        // override object.GetHashCode
         public override int GetHashCode()
         {
-            // TODO: write your implementation of GetHashCode() here
-            throw new NotImplementedException();
-            return base.GetHashCode();
+        	return Type.GetHashCode() ^ ModeA.GetHashCode() ^ FieldA.Calculate().GetHashCode() ^
+        	       ModeB.GetHashCode() ^ FieldB.Calculate().GetHashCode();
         }
+
+		public override string ToString()
+		{
+			return String.Format("{0} {1}{2} {3}{4}",
+				statementFactory.GetStatementMnemonic(Type),
+				(char) ModeA,
+				FieldA.Calculate(),
+				(char) ModeB,
+				FieldB.Calculate());
+		}
     }
 
     public enum StatementType

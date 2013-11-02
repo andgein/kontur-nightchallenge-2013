@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Parser
 {
@@ -33,10 +34,12 @@ namespace Core.Parser
             if (! Commands.ContainsKey(command.ToUpper()))
                 throw new Exception(String.Format("Internal error: can't create statement from command {0}", command));
 
-            return new Statement
-            {
-                Type = Commands[command.ToUpper()]
-            };
+        	return new Statement(Commands[command.ToUpper()]);
         }
+
+		public String GetStatementMnemonic(StatementType type)
+		{
+			return Commands.FirstOrDefault(kvp => kvp.Value == type).Key;
+		}
     }
 }

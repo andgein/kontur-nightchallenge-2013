@@ -21,7 +21,7 @@ namespace Core.Engine
 
         public void ChangeMemory(int address, Statement statement, int modifiedBy)
         {
-            MemoryDiff[address] = new CellState
+            MemoryDiff[ModularArith.Mod(address)] = new CellState
             {
                 CellType = statement.CellType,
                 Instruction = statement.ToString(),
