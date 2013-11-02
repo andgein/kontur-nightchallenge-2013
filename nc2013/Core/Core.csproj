@@ -49,9 +49,11 @@
     <Compile Include="Arena\BattlePlayerResult.cs" />
     <Compile Include="Arena\BattleResult.cs" />
     <Compile Include="Arena\GamesRepo.cs" />
+    <Compile Include="Arena\RankingEntry.cs" />
     <Compile Include="Arena\RoundRobinTournament.cs" />
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
     <Compile Include="Arena\TournamentPlayer.cs" />
+    <Compile Include="Arena\TournamentRanking.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Engine\Instruction.cs" />
     <Compile Include="Engine\Memory.cs" />

@@ -1,26 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
 namespace Core.Arena
 {
-	public class TournamentRanking
-	{
-		public string TournamentId;
-		public DateTime Time;
-		public RankingEntry[] Places;
-	}
-
-	public class RankingEntry
-	{
-		public string Name;
-		public int Version;
-		public int Score;
-		public int Games;
-	}
-
 	public class GamesRepo
 	{
 		private readonly DirectoryInfo gamesDir;
