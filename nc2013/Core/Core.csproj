@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Arena\Battle.cs" />
     <Compile Include="Arena\BattlePlayerResult.cs" />
+    <Compile Include="Arena\BattlePlayerResultType.cs" />
     <Compile Include="Arena\BattleResult.cs" />
     <Compile Include="Arena\GamesRepo.cs" />
     <Compile Include="Arena\RankingEntry.cs" />

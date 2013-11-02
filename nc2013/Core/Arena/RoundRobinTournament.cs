@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Game;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using log4net;
@@ -26,41 +25,47 @@ namespace Core.Arena
 
 		public void Run()
 		{
-			var res = RunTournament(GenerateAllPairs()).ToList();
-			gamesRepo.SaveGames(tournamentId, res);
-			MakeRankingTable(res.SelectMany(r => r).ToList());
+			var battleResults = RunTournament(GenerateAllPairs()).ToList();
+			gamesRepo.SaveGames(tournamentId, battleResults);
+			MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
 		}
 
-		private IEnumerable<Tuple<TournamentPlayer, TournamentPlayer>> GenerateAllPairs()
+		[NotNull]
+		private List<Tuple<TournamentPlayer, TournamentPlayer>> GenerateAllPairs()
 		{
-			return players.Join(players, p => 1, p => 1, Tuple.Create).Where(t => t.Item1 != t.Item2);
+			var result = new List<Tuple<TournamentPlayer, TournamentPlayer>>();
+			for (var i = 0; i < players.Length; i++)
+				for (var j = i + 1; j < players.Length; j++)
+					result.Add(Tuple.Create(players[i], players[j]));
+			return result;
 		}
 
-		private void MakeRankingTable(List<BattlePlayerResult> res)
+		private void MakeRankingTable([NotNull] List<BattlePlayerResult> results)
 		{
-			var ranking = res
+			var rankingEntries = results
 				.GroupBy(g => g.Player)
-				.Select(
-					g => new RankingEntry
-					{
-						Name = g.Key.Name,
-						Version = g.Key.Version,
-						Score = g.Sum(r => r.Score),
-						Games = g.Count()
-					}
-				).OrderByDescending(t => t.Score);
-			gamesRepo.SaveRanking(
-				new TournamentRanking
+				.Select(g => new RankingEntry
 				{
-					TournamentId = tournamentId,
-					Places = ranking.ToArray(),
-					Timestamp = DateTime.UtcNow,
-				});
+					Name = g.Key.Name,
+					Version = g.Key.Version,
+					Score = g.Sum(r => r.Score()),
+					Games = g.Count(),
+				})
+				.OrderByDescending(t => t.Score)
+				.ToArray();
+			var ranking = new TournamentRanking
+			{
+				TournamentId = tournamentId,
+				Timestamp = DateTime.UtcNow,
+				Places = rankingEntries,
+			};
+			gamesRepo.SaveRanking(ranking);
 		}
 
-		private IEnumerable<BattlePlayerResult[]> RunTournament(IEnumerable<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
+		[NotNull]
+		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
-			for (int i = 0; i < battlesPerPair; i++)
+			for (var i = 0; i < battlesPerPair; i++)
 				foreach (var pair in pairs)
 				{
 					var battle = new Battle
@@ -70,10 +75,11 @@ namespace Core.Arena
 					};
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
-						yield return battleResult.Results;
+						yield return battleResult;
 				}
 		}
 
+		[NotNull]
 		private BattleResult RunBattle([NotNull] Battle battle)
 		{
 			try
@@ -85,8 +91,18 @@ namespace Core.Arena
 				return new BattleResult
 				{
 					RunToCompletion = true,
-					Player1Result = new BattlePlayerResult { Player = battle.Player1, Score = GetScore(0, winner), StartAddress = 42 },
-					Player2Result = new BattlePlayerResult { Player = battle.Player2, Score = GetScore(1, winner), StartAddress = 42 },
+					Player1Result = new BattlePlayerResult
+					{
+						Player = battle.Player1,
+						StartAddress = 42,
+						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 0 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
+					},
+					Player2Result = new BattlePlayerResult
+					{
+						Player = battle.Player2,
+						StartAddress = 42,
+						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 1 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
+					},
 				};
 			}
 			catch (Exception e)
@@ -94,13 +110,6 @@ namespace Core.Arena
 				log.Error(string.Format("Battle failed: {0}", battle), e);
 				return new BattleResult { RunToCompletion = false };
 			}
-		}
-
-		private static int GetScore(int player, int? winner)
-		{
-			return !winner.HasValue
-				? 1
-				: player == winner.Value ? 3 : 0;
 		}
 	}
 }

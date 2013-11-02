@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
-using System.Linq;
 
 namespace Server.Arena
 {
@@ -11,7 +11,8 @@ namespace Server.Arena
 		private readonly PlayersRepo players;
 		private readonly GamesRepo gamesRepo;
 
-		public ArenaPlayerHandler(PlayersRepo players, GamesRepo gamesRepo) : base("arena/player")
+		public ArenaPlayerHandler(PlayersRepo players, GamesRepo gamesRepo)
+			: base("arena/player")
 		{
 			this.players = players;
 			this.gamesRepo = gamesRepo;
@@ -22,39 +23,43 @@ namespace Server.Arena
 			var programName = context.GetStringParam("name");
 			var programVersion = context.GetOptionalIntParam("version");
 			var arenaPlayer = players.LoadPlayer(programName, programVersion);
-			context.SendResponse(CreatePlayerInfo(arenaPlayer));
+			var playerInfo = CreatePlayerInfo(arenaPlayer);
+			context.SendResponse(playerInfo);
 		}
 
-		private PlayerInfo CreatePlayerInfo(ArenaPlayer arenaPlayer)
+		[NotNull]
+		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer)
 		{
 			var ranking = gamesRepo.LoadRanking();
+			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry
+			{
+				Name = arenaPlayer.Name,
+				Version = arenaPlayer.Version,
+				Games = 0,
+				Score = 0,
+			};
 			var games = gamesRepo.LoadGames(ranking.TournamentId);
-			var allGames = games.Concat(games.Select(g => g.Reverse().ToArray()));
-			var byEnemy = allGames.Where(g => g[0].Player.Name == arenaPlayer.Name && g[0].Player.Version == arenaPlayer.Version)
-								.GroupBy(g => g[1].Player).ToList();
-			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry {Games = 0, Score = 0};
-			return
-				new PlayerInfo
+			var gamesByEnemy = games
+				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result)))
+				.Where(x => x.Item1.Player.Name == arenaPlayer.Name && x.Item1.Player.Version == arenaPlayer.Version)
+				.GroupBy(x => x.Item2.Player)
+				.Select(g => new FinishedGamesWithEnemy
 				{
-					Info = new RankingEntry
-					{
-						Name = arenaPlayer.Name,
-						Score = rankingEntry.Score,
-						Games = rankingEntry.Games
-					},
-					Authors = arenaPlayer.Authors,
-					Version = arenaPlayer.Version,
-					SubmitTime = arenaPlayer.Timestamp,
-					GamesByEnemy =
-						byEnemy.Select(
-							e => new FinishedGamesWithEnemy
-							{
-								Enemy = e.Key.Name,
-								EnemyVersion = e.Key.Version,
-								Score = e.Sum(r => r[0].Score),
-								EnemyScore = e.Sum(r => r[1].Score),
-							}).ToArray()
-				};
+					Enemy = g.Key.Name,
+					EnemyVersion = g.Key.Version,
+					Wins = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Win),
+					Draws = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Draw),
+					Losses = g.Count(x => x.Item2.ResultType == BattlePlayerResultType.Loss),
+					GameInfos = null,
+				})
+				.ToArray();
+			return new PlayerInfo
+			{
+				RankingEntry = rankingEntry,
+				Authors = arenaPlayer.Authors,
+				SubmitTimestamp = arenaPlayer.Timestamp,
+				GamesByEnemy = gamesByEnemy,
+			};
 		}
 	}
 }

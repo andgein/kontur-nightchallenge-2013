@@ -7,10 +7,16 @@ namespace Server.Arena
 	[JsonObject]
 	public class PlayerInfo
 	{
-		[JsonProperty] public string Authors;
-		[JsonProperty] public FinishedGamesWithEnemy[] GamesByEnemy;
-		[JsonProperty] public RankingEntry Info;
-		[JsonProperty] public DateTime SubmitTime;
-		[JsonProperty] public int Version;
+		[JsonProperty]
+		public RankingEntry RankingEntry;
+
+		[JsonProperty]
+		public string Authors;
+
+		[JsonProperty]
+		public DateTime SubmitTimestamp;
+
+		[JsonProperty]
+		public FinishedGamesWithEnemy[] GamesByEnemy;
 	}
 }

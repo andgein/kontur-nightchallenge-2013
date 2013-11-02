@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Arena
@@ -9,38 +10,38 @@ namespace Core.Arena
 	{
 		private readonly DirectoryInfo gamesDir;
 
-		public GamesRepo(DirectoryInfo gamesDir)
+		public GamesRepo([NotNull] DirectoryInfo gamesDir)
 		{
 			this.gamesDir = gamesDir;
 			if (!gamesDir.Exists) gamesDir.Create();
 		}
 
-		public List<BattlePlayerResult[]> LoadGames(string tournamentId = "last")
+		public List<BattleResult> LoadGames([NotNull] string tournamentId = "last")
 		{
 			lock (gamesDir)
 				return File
 					.ReadAllLines(GetGamesFile(tournamentId))
-					.Select(JsonConvert.DeserializeObject<BattlePlayerResult[]>)
+					.Select(JsonConvert.DeserializeObject<BattleResult>)
 					.ToList();
 		}
 
-		public void SaveGames(string tournamentId, List<BattlePlayerResult[]> games)
+		public void SaveGames([NotNull] string tournamentId, [NotNull] List<BattleResult> battleResults)
 		{
 			lock (gamesDir)
 			{
 				var gamesFile = GetGamesFile(tournamentId);
-				File.WriteAllLines(gamesFile, games.Select(JsonConvert.SerializeObject));
+				File.WriteAllLines(gamesFile, battleResults.Select(JsonConvert.SerializeObject));
 				File.Copy(gamesFile, GetGamesFile("last"), true);
 			}
 		}
 
-		public TournamentRanking LoadRanking(string tournamentId = "last")
+		public TournamentRanking LoadRanking([NotNull] string tournamentId = "last")
 		{
 			lock (gamesDir)
 				return JsonConvert.DeserializeObject<TournamentRanking>(File.ReadAllText(GetRankingFile(tournamentId)));
 		}
 
-		public void SaveRanking(TournamentRanking ranking)
+		public void SaveRanking([NotNull] TournamentRanking ranking)
 		{
 			lock (gamesDir)
 			{

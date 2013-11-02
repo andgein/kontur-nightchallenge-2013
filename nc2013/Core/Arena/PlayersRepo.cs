@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Core.Parser;
 using Newtonsoft.Json;
 
 namespace Core.Arena
@@ -23,7 +22,7 @@ namespace Core.Arena
 		{
 			lock (playersDir)
 			{
-				ArenaPlayer[] versions = DeserializePlayerVersions(request.Name);
+				var versions = DeserializePlayerVersions(request.Name);
 				versions = UpdatePlayer(versions, request);
 				SerializePlayerVersions(request.Name, versions);
 			}
@@ -33,7 +32,7 @@ namespace Core.Arena
 		{
 			lock (playersDir)
 			{
-				ArenaPlayer[] versions = DeserializePlayerVersions(name);
+				var versions = DeserializePlayerVersions(name);
 				return GetVersion(versions, version);
 			}
 		}
@@ -60,14 +59,14 @@ namespace Core.Arena
 				throw new Exception("Неверный пароль");
 			if (string.IsNullOrEmpty(request.Program))
 				throw new Exception("Бот пуст?!? O_o");
-//			new WarriorParser().Parse(request.Program);
+			//			new WarriorParser().Parse(request.Program);
 			if (versions.Length == 0)
-				versions = new[] {request};
+				versions = new[] { request };
 			else
 			{
-				ArenaPlayer last = GetVersion(versions);
+				var last = GetVersion(versions);
 				if (last.Program != request.Program || !string.IsNullOrWhiteSpace(request.Authors) && request.Authors != last.Authors)
-					versions = versions.Concat(new[] {request}).ToArray();
+					versions = versions.Concat(new[] { request }).ToArray();
 			}
 			if (versions.All(v => string.IsNullOrWhiteSpace(v.Authors)))
 				throw new Exception("Не заполнен список авторов");
@@ -76,13 +75,13 @@ namespace Core.Arena
 
 		private void SerializePlayerVersions(string playerName, ArenaPlayer[] playerVersions)
 		{
-			FileInfo file = GetFile(playerName);
+			var file = GetFile(playerName);
 			File.WriteAllText(file.FullName, JsonConvert.SerializeObject(playerVersions, Formatting.Indented));
 		}
 
 		private ArenaPlayer[] DeserializePlayerVersions(string playerName)
 		{
-			FileInfo file = GetFile(playerName);
+			var file = GetFile(playerName);
 			if (file.Exists)
 				return JsonConvert.DeserializeObject<ArenaPlayer[]>(File.ReadAllText(file.FullName));
 			return new ArenaPlayer[0];
@@ -95,17 +94,16 @@ namespace Core.Arena
 
 		private static ArenaPlayer GetVersion(ArenaPlayer[] versions, int? version = null)
 		{
-			int index = (version ?? versions.Length) - 1;
-			ArenaPlayer result = versions[index];
-			return
-				new ArenaPlayer
-				{
-					Authors = versions.Last(v => !string.IsNullOrWhiteSpace(v.Authors)).Authors,
-					Name = result.Name,
-					Program = result.Program,
-					Timestamp = result.Timestamp,
-					Version = index + 1
-				};
+			var index = (version ?? versions.Length) - 1;
+			var result = versions[index];
+			return new ArenaPlayer
+			{
+				Authors = versions.Last(v => !string.IsNullOrWhiteSpace(v.Authors)).Authors,
+				Name = result.Name,
+				Version = index + 1,
+				Program = result.Program,
+				Timestamp = result.Timestamp,
+			};
 		}
 	}
 }

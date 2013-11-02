@@ -18,24 +18,26 @@
 	<div class="container" ng-controller="PlayerController">
 		<script>nav()</script>
 		<div class="page-header">
-			<h1>Игрок {{info.name}} v{{version}}</h1>
+			<h1>Игрок {{rankingEntry.name}} v{{rankingEntry.version}}</h1>
 		</div>
 		<div>Авторство: {{authors}}</div>
-		<div>Время создания: {{submitTime}}</div>
-		<div>Очков: {{info.score}}</div>
-		<div>Всего боев: {{info.games}}</div>
+		<div>Время создания: {{submitTimestamp}}</div>
+		<div>Всего очков: {{rankingEntry.score}}</div>
+		<div>Всего боев: {{rankingEntry.games}}</div>
 		<h2>Статистика боев с другими ботами</h2>
 		<table class="table table-bordered table-condensed">
 			<tr>
 				<th>Противник</th>
-				<th>Очки</th>
-				<th>Очки противника</th>
+				<th>Победы</th>
+				<th>Ничьи</th>
+				<th>Поражения</th>
 				<th>Последние игры</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
-				<td>{{enemyStats.score}}</td>
-				<td>{{enemyStats.enemyScore}}</td>
+				<td>{{enemyStats.wins}}</td>
+				<td>{{enemyStats.draws}}</td>
+				<td>{{enemyStats.losses}}</td>
 				<td>
 					тут будет список игр
 				</td>
