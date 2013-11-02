@@ -62,7 +62,7 @@
     <Compile Include="GameHttpContext.cs" />
     <Compile Include="GameHttpServer.cs" />
     <Compile Include="GameHttpContextExtensions.cs" />
-    <Compile Include="Arena\RankingHandler.cs" />
+    <Compile Include="Arena\ArenaRankingHandler.cs" />
     <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerStateHandler.cs" />

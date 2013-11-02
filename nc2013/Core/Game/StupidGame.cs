@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
-using NUnit.Framework;
 
 namespace Core.Game
 {
@@ -78,22 +77,6 @@ namespace Core.Game
 				CellType = r.Next() % 2 == 0 ? CellType.Data : CellType.Command,
 				LastModifiedByProgram = r.Next(gameState.ProgramStates.Length),
 			};
-		}
-	}
-
-	[TestFixture]
-	public class StupidGame_Test
-	{
-		[Test]
-		public void Test()
-		{
-			var game = new StupidGame(new[] {new ProgramStartInfo {Program = "JMP 0 0", StartAddress = 0}});
-			game.Step(1);
-			game.Step(-1);
-			game.Step(2);
-			game.Step(-2);
-			game.Step(80000);
-			game.Step(-80000);
 		}
 	}
 }

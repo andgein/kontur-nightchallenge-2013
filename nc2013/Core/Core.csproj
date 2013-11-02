@@ -81,6 +81,7 @@
     <Compile Include="Game\MarsBased\MarsWarriorParser.cs" />
     <Compile Include="Game\MarsBased\MarsGame.cs" />
     <Compile Include="Game\MemoryDiff.cs" />
+    <Compile Include="Game\StupidGame_Test.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
     <Compile Include="Parser\CommandDescriber.cs" />
     <Compile Include="Parser\CompilationException.cs" />
