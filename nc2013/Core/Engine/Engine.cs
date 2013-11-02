@@ -42,6 +42,11 @@ namespace Core.Engine
         {
             if (GameOver)
                 return new StepResult();
+			if (CurrentStep >= Parameters.MaxSteps)
+			{
+				GameOver = true;
+				return new StepResult();
+			}
 
             CurrentIp = Warriors[CurrentWarrior].Queue.Dequeue();
             var instruction = Memory[CurrentIp];

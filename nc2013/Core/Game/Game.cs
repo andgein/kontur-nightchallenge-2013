@@ -96,7 +96,8 @@ namespace Core.Game
 
         public void StepToEnd()
         {
-            throw new System.NotImplementedException();
+			while (!engine.GameOver)
+				Step(1);
         }
     }
 }
