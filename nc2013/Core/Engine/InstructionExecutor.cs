@@ -235,10 +235,10 @@ namespace Core.Engine
 
 		private void Djn(GameEngine engine)
 		{
+			var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
 			var addressB = CalcAddress(engine, Statement.ModeB, Statement.FieldB);
 			DecrementB(engine, addressB);
 			var condition = engine.Memory[addressB].Statement.FieldB.Calculate();
-			var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
 			if (condition != 0)
 				engine.JumpTo(addressA);
 		}
