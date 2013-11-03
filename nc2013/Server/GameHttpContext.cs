@@ -7,8 +7,6 @@ namespace Server
 {
 	public class GameHttpContext
 	{
-		public const string GodModeSecretCookieName = "godModeSecret";
-		public const string GodModeCookieName = "godMode";
 		private const string sessionIdCookieName = "coreWarSessionId";
 		private const string basePathCookieName = "basePath";
 		private readonly HttpListenerContext httpListenerContext;

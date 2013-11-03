@@ -75,7 +75,7 @@ namespace Server
 			tournamentRunner.Start();
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
-			Process.Start(httpServer.DefaultUrl + "?" + GameHttpContext.GodModeSecretCookieName + "=" + godModeSecret);
+			Process.Start(httpServer.DefaultUrl);
 			httpServer.WaitForTermination();
 			tournamentRunner.WaitForTermination();
 			log.InfoFormat("Stopped");

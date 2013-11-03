@@ -18,6 +18,8 @@ namespace Server
 {
 	public class GameHttpServer
 	{
+		private const string godModeSecretCookieName = "godModeSecret";
+		private const string godModeCookieName = "godMode";
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
 		private Task listenerTask;
@@ -104,12 +106,12 @@ namespace Server
 					lock (context.Session)
 					{
 						var godMode = false;
-						var secretValue = context.GetOptionalGuidParam(GameHttpContext.GodModeSecretCookieName);
+						var secretValue = context.GetOptionalGuidParam(godModeSecretCookieName);
 						if (secretValue == godModeSecret
-							|| context.TryGetCookie<Guid>(GameHttpContext.GodModeSecretCookieName, Guid.TryParse) == godModeSecret)
+							|| context.TryGetCookie<Guid>(godModeSecretCookieName, Guid.TryParse) == godModeSecret)
 						{
-							context.SetCookie(GameHttpContext.GodModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: true);
-							context.SetCookie(GameHttpContext.GodModeCookieName, "true", persistent: false, httpOnly: false);
+							context.SetCookie(godModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: true);
+							context.SetCookie(godModeCookieName, "true", persistent: false, httpOnly: false);
 							godMode = true;
 						}
 
