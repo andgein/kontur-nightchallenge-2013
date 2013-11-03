@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Core.Game;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using nMars.RedCode;
@@ -100,21 +101,21 @@ namespace Core.Arena
 		{
 			try
 			{
-				var winner = GetWinner(battle);
-				//TODO: set StartAddress after our Engine replace MarsEngine
+				var gameState = GetFinalGameStateForBattle(battle);
+				var winner = gameState.Winner;
 				return new BattleResult
 				{
 					RunToCompletion = true,
 					Player1Result = new BattlePlayerResult
 					{
 						Player = battle.Player1,
-						StartAddress = 42,
+						StartAddress = (int)gameState.ProgramStartInfos[0].StartAddress,
 						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 0 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
 					},
 					Player2Result = new BattlePlayerResult
 					{
 						Player = battle.Player2,
-						StartAddress = 42,
+						StartAddress = (int)gameState.ProgramStartInfos[1].StartAddress,
 						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 1 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
 					},
 				};
@@ -126,7 +127,8 @@ namespace Core.Arena
 			}
 		}
 
-		private static int? GetWinner([NotNull] Battle battle)
+		[NotNull]
+		private static GameState GetFinalGameStateForBattle([NotNull] Battle battle)
 		{
 			var rules = new Rules
 			{
@@ -143,9 +145,9 @@ namespace Core.Arena
 				ScoreFormula = ScoreFormula.Standard,
 				ICWSStandard = ICWStandard.ICWS88,
 			};
-			var marsGame = new MarsGame(rules, battle.GetProgramStartInfos());
-			marsGame.StepToEnd();
-			return marsGame.GameState.Winner;
+			var game = new MarsGame(rules, battle.GetProgramStartInfos());
+			game.StepToEnd();
+			return game.GameState;
 		}
 	}
 }

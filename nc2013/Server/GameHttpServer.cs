@@ -32,7 +32,7 @@ namespace Server
 		{
 			this.sessionManager = sessionManager;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
-			DefaultUrl = new Uri(baseUri, "index.html").AbsoluteUri;
+			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", godModeSecret)).AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
