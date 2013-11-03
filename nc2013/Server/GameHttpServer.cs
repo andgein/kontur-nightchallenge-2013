@@ -18,6 +18,7 @@ namespace Server
 {
 	public class GameHttpServer
 	{
+		private readonly Guid godModeSecret = Guid.NewGuid();
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
 		private Task listenerTask;
@@ -42,13 +43,15 @@ namespace Server
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
-				new StaticHandler(staticContentPath),
+				new DebuggerLoadGameHandler(debuggerManager, playersRepo, godModeSecret),
+				new StaticHandler(staticContentPath, godModeSecret),
 				new CommandDescribeHandler(),
 				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo, tournamentRunner),
-				new ArenaPlayerHandler(playersRepo, gamesRepo)
+				new ArenaPlayerHandler(playersRepo, gamesRepo, godModeSecret)
 			};
 			stopEvent = new ManualResetEvent(false);
+			Log.For(this).Warn(string.Format("GodModeSecret: {0}", godModeSecret));
 		}
 
 		[NotNull]

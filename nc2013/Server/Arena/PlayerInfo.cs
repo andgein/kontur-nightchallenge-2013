@@ -21,5 +21,8 @@ namespace Server.Arena
 
 		[JsonProperty]
 		public BotVersionInfo[] BotVersionInfos;
+
+		[JsonProperty]
+		public bool GodMode;
 	}
 }
