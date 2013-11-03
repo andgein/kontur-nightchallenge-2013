@@ -51,7 +51,7 @@ namespace Core.Parser
 			{
 				return ParseLine(warrior, line);
 			}
-			catch (CompilationException e)
+			catch (CompilationException)
 			{
 				throw;
 			}
