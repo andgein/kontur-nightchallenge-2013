@@ -52,7 +52,6 @@ namespace Server.Arena
 		{
 			while (!stopSignal.WaitOne(TimeSpan.FromSeconds(1)))
 			{
-				botSubmissionSignal.WaitOne(0);
 				try
 				{
 					string tournamentId;

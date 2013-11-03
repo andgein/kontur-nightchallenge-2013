@@ -75,6 +75,7 @@ namespace Core.Arena
 		[NotNull]
 		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
+			botSubmissionSignal.WaitOne(0);
 			for (var i = 0; i < battlesPerPair; i++)
 			{
 				rnd.Shuffle(pairs);
@@ -88,7 +89,10 @@ namespace Core.Arena
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
-				}}
+				}
+				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0))
+					yield break;
+			}
 		}
 
 		[NotNull]
