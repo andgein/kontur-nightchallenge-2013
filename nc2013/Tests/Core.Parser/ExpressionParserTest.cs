@@ -1,4 +1,5 @@
-﻿using Core.Parser;
+﻿using Core.Engine;
+using Core.Parser;
 using NUnit.Framework;
 
 namespace Tests.Core.Parser
@@ -131,6 +132,23 @@ namespace Tests.Core.Parser
 			var expr = parser.Parse("+2");
 			Assert.AreEqual(expr.GetType(), typeof(UnaryExpression));
 			Assert.AreEqual(expr.Calculate(), 2);
+		}
+
+		[TestCase("1", 1)]
+		[TestCase("1+2", 3)]
+		[TestCase("1+-1", 0)]
+		[TestCase("-1-1", -2)]
+		[TestCase("-1-(1)", -2)]
+		[TestCase("-1-(2+1)", -4)]
+		[TestCase("-1-(2*2+1)", -6)]
+		[TestCase("-1-1-(2*2+1)", -7)]
+		[TestCase("-1*-1", 1)]
+		[TestCase("-(1+1)", -2)]
+		[TestCase("-(3*2)", -6)]
+		public void Eval(string text, int expectedResult)
+		{
+			var expr = parser.Parse(text);
+			Assert.AreEqual(ModularArith.Mod(expectedResult), ModularArith.Mod(expr.Calculate()));
 		}
 
 	    [Test]

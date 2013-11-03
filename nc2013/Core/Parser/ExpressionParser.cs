@@ -65,13 +65,13 @@ namespace Core.Parser
             if (currentLexem.Type == LexemType.Minus)
             {
                 NextLexem();
-                var expr = ParseExpression();
+                var expr = ParseFactor();
                 return new UnaryExpression(UnaryOperation.Negate, expr);
             }
 			if (currentLexem.Type == LexemType.Plus)
 			{
 				NextLexem();
-				var expr = ParseExpression();
+				var expr = ParseFactor();
 				return new UnaryExpression(UnaryOperation.Positive, expr);
 			}
 			if (currentLexem.Type == LexemType.OpenBracket)
