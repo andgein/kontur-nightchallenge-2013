@@ -17,7 +17,7 @@ namespace Tests.Core.Engine
 	[TestFixture]
 	public class CompareEngines_Test
 	{
-		public string[] Bots = TestWarriors.GetBotFiles("warriors-ok").ToArray();
+		public string[] Bots = TestWarriors.GetBotFiles("warriors-bad").ToArray();
 
 		[Test]
 		[TestCaseSource("Bots")]
@@ -50,7 +50,7 @@ namespace Tests.Core.Engine
 			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
 			var ourGame = new Game(programStartInfos);
 			var marsGame = new MarsGame(new Rules() {WarriorsCount = 1}, programStartInfos);
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < 30; i++)
 			{
 				ourGame.Step(1);
 				marsGame.Step(1);
