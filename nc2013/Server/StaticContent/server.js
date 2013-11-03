@@ -2,10 +2,14 @@ var server = {
 	basePath: function () {
 		return $.cookie('basePath');
 	},
-	post: function (url, jsonString) {
+	post: function (url, jsonString, asyncOption) {
 		var that = this;
+		var async = true;
+		if (asyncOption != undefined)
+			async = asyncOption;
 		return $.ajax({
 			cache: false,
+			async: async,
 			type: "POST",
 			url: this.basePath() + url,
 			data: jsonString,

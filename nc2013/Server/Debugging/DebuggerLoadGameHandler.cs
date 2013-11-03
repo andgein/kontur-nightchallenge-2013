@@ -3,6 +3,7 @@ using System.Net;
 using Core.Arena;
 using Core.Game;
 using JetBrains.Annotations;
+using Server.Arena;
 
 namespace Server.Debugging
 {
@@ -21,29 +22,22 @@ namespace Server.Debugging
 			if (!godMode)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
-			var name1 = context.GetStringParam("name1");
-			var version1 = context.GetIntParam("version1");
-			var address1 = context.GetIntParam("address1");
-			var program1 = GetBotProgram(name1, version1);
-
-			var name2 = context.GetStringParam("name2");
-			var version2 = context.GetIntParam("version2");
-			var address2 = context.GetIntParam("address2");
-			var program2 = GetBotProgram(name2, version2);
-
+			var gameInfo = context.GetRequest<FinishedGameInfo>();
+			var program1 = GetBotProgram(gameInfo.Player1Result.Player);
+			var program2 = GetBotProgram(gameInfo.Player2Result.Player);
 			var programStartInfos = new[]
 			{
-				new ProgramStartInfo{ Program = program1, StartAddress = (uint)address1, },
-				new ProgramStartInfo{ Program = program2, StartAddress = (uint)address2, },
+				new ProgramStartInfo{ Program = program1, StartAddress = (uint)gameInfo.Player1Result.StartAddress, },
+				new ProgramStartInfo{ Program = program2, StartAddress = (uint)gameInfo.Player2Result.StartAddress, }
 			};
 
 			debugger.StartNewGame(programStartInfos);
 		}
 
 		[NotNull]
-		private string GetBotProgram([NotNull] string name, int version)
+		private string GetBotProgram([NotNull] TournamentPlayer player)
 		{
-			return playersRepo.LoadPlayerVersions(name).Single(p => p.Version == version).Program;
+			return playersRepo.LoadPlayerVersions(player.Name).Single(p => p.Version == player.Version).Program;
 		}
 	}
 }
