@@ -106,11 +106,10 @@ namespace Server
 					lock (context.Session)
 					{
 						var godMode = false;
-						var secretValue = context.GetOptionalGuidParam(godModeSecretCookieName);
-						if (secretValue == godModeSecret
-							|| context.TryGetCookie<Guid>(godModeSecretCookieName, Guid.TryParse) == godModeSecret)
+						var secretValue = context.GetOptionalGuidParam(godModeSecretCookieName) ?? context.TryGetCookie<Guid>(godModeSecretCookieName, Guid.TryParse);
+						if (secretValue == godModeSecret)
 						{
-							context.SetCookie(godModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: true);
+							context.SetCookie(godModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: false);
 							context.SetCookie(godModeCookieName, "true", persistent: false, httpOnly: false);
 							godMode = true;
 						}
