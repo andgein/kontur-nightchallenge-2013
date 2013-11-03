@@ -85,8 +85,6 @@ namespace Core.Arena
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
-					if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0))
-						yield break;
 				}}
 		}
 
