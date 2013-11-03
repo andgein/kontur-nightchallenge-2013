@@ -49,7 +49,7 @@
 				<!--TODO: <td ng-show="{{godMode}}">-->
 				<td>
 					<span ng-repeat="gameInfo in enemyStats.gameInfos">
-						<a href="debugger/load?name1={{gameInfo.player1Result.player.name}}&version1={{gameInfo.player1Result.player.version}}&address1={{gameInfo.player1Result.startAddress}}&name2={{gameInfo.player2Result.player.name}}&version2={{gameInfo.player2Result.player.version}}&address2={{gameInfo.player2Result.startAddress}}">{{$index+1}}</a>
+						<a href="debugger/load?name1={{gameInfo.player1Result.player.name}}&version1={{gameInfo.player1Result.player.version}}&address1={{gameInfo.player1Result.startAddress}}&name2={{gameInfo.player2Result.player.name}}&version2={{gameInfo.player2Result.player.version}}&address2={{gameInfo.player2Result.startAddress}}">{{gameInfo.player1Result.resultType}}</a>
 					</span>
 				</td>
 			</tr>

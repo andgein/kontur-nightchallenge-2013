@@ -3,7 +3,6 @@ using System.Net;
 using Core;
 using Core.Game;
 using JetBrains.Annotations;
-using log4net;
 using Server.Sessions;
 
 namespace Server.Debugging

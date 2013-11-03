@@ -43,6 +43,7 @@
 				$next: $("#nextCommandA"),
 				$win: $("#programAWinner"),
 				$source: $("#programA"),
+				$startAddress: $("#startAddressA"),
 				programIndex: 0
 			}));
 			programs.push(new ProgramState({
@@ -52,6 +53,7 @@
 				$next: $("#nextCommandB"),
 				$win: $("#programBWinner"),
 				$source: $("#programB"),
+				$startAddress: $("#startAddressB"),
 				programIndex: 1
 			}));
 			var game = new Game({
@@ -479,8 +481,8 @@
 						<col width="50%" />
 						<col width="50%" />
 						<tr>
-							<th class="layout-programs-header">Program A</th>
-							<th class="layout-programs-header">Program B</th>
+							<th class="layout-programs-header">Program A @<input type="text" class="startAddress" id="startAddressA"></input></th>
+							<th class="layout-programs-header">Program B @<input type="text" class="startAddress" id="startAddressB"></input></th>
 						</tr>
 						<tr>
 							<td class="layout-program-container">

@@ -5,6 +5,7 @@ var ProgramState = Base.extend({
 		this.$next = options.$next;
 		this.$win = options.$win;
 		this.$source = options.$source;
+		this.$startAddress = options.$startAddress;
 		this.memory = options.memory;
 		this.programIndex = options.programIndex;
 		var that = this;
@@ -74,10 +75,15 @@ var ProgramState = Base.extend({
 	},
 	setProgramStartInfo: function (programStartInfo) {
 		this.$source.val(programStartInfo && programStartInfo.program || "");
+		var startAddress = "";
+		if (programStartInfo && programStartInfo.startAddress != undefined)
+			startAddress = programStartInfo.startAddress;
+		this.$startAddress.val(startAddress);
 	},
 	getProgramStartInfo: function () {
 		var source = this.$source.val();
-		return source && { program: source };
+		var startAddress = this.$startAddress.val();
+		return source && { program: source, startAddress: startAddress };
 	},
 	_removeInstructionPointers: function () {
 		if (!this.programState || !this.programState.processPointers)
