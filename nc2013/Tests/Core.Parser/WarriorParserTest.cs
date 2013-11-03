@@ -186,5 +186,17 @@ namespace Tests.Core.Parser
 		{
 			parser.Parse("a EQU b + 10\nb EQU 10 + c\nc EQU a - 20\n" + imp);
 		}
+
+	    [Test]
+	    public void TestComplexEqu()
+	    {
+		    parser.Parse(
+@"
+CORESIZE equ 8000
+gap1st	equ	100
+gap1	equ 10
+multipl equ ((CORESIZE-gap1st)-((CORESIZE-gap1st)/gap1))
+MOV 0, multipl");
+	    }
     }
 }

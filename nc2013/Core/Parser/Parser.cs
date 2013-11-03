@@ -11,7 +11,7 @@ namespace Core.Parser
             SkipWhitespaces();
 
             if (State.Pos >= State.Str.Length)
-                throw new CompilationException(String.Format("Can't parse token at position {0}: end of line", State.Pos));
+                throw new CompilationException("Unexpected end of line", State);
 
             var startPos = State.Pos;
             while (! State.Finished() && tokenValidator(State.Current))

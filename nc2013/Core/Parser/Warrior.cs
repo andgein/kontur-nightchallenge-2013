@@ -28,12 +28,12 @@ namespace Core.Parser
         {
         }
 
-        public void AddStatement(Statement statement)
+        public void AddStatement(Statement statement, ParserState state)
         {
             if (statement.HasLabel && Labels.ContainsKey(statement.Label))
-                throw new CompilationException(String.Format("Statement with same label '{0}' already exists", statement.Label));
+                throw new CompilationException("Statement with same label already exists", state);
 			if (statement.HasLabel && Constants.ContainsKey(statement.Label))
-				throw new CompilationException(String.Format("Constant with same label '{0}' already exists", statement.Label));
+				throw new CompilationException("Constant with same label already exists", state);
 
             Statements.Add(statement);
 

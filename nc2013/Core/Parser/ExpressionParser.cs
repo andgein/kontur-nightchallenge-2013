@@ -79,11 +79,11 @@ namespace Core.Parser
                 NextLexem();
                 var expr = ParseExpression();
                 if (currentLexem.Type != LexemType.CloseBracket)
-                    throw new CompilationException(String.Format("Can't find close bracket"));
+                    throw new CompilationException("Can't find close bracket", State);
                 NextLexem();
                 return expr;
             }
-            throw new CompilationException(String.Format("Invalid token in expression: '{0}'", currentLexem));
+            throw new CompilationException("Invalid token in expression", State);
         }
 
         private void NextLexem()

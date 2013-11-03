@@ -132,5 +132,11 @@ namespace Tests.Core.Parser
 			Assert.AreEqual(expr.GetType(), typeof(UnaryExpression));
 			Assert.AreEqual(expr.Calculate(), 2);
 		}
+
+	    [Test]
+	    public void TestComplexExpression()
+	    {
+		    parser.Parse("multipl equ ((CORESIZE-gap1st)-((CORESIZE-gap1st)%gap1))");
+	    }
     }
 }

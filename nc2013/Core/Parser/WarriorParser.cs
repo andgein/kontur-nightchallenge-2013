@@ -28,11 +28,11 @@ namespace Core.Parser
 				if (statement.Type == StatementType.Equ)
 				{
 					if (!statement.HasLabel)
-						throw new CompilationException("EQU operator should have name");
+						throw new CompilationException("EQU operator should have name", State);
 					warrior.Constants[statement.Label] = statement.FieldA;
 					continue;
 				}
-				warrior.AddStatement(statement);
+				warrior.AddStatement(statement, State);
 			}
 
 			warrior.EvaluateAllExpressions();
@@ -51,9 +51,13 @@ namespace Core.Parser
 			{
 				return ParseLine(warrior, line);
 			}
+			catch (CompilationException e)
+			{
+				throw;
+			}
 			catch (Exception e)
 			{
-				throw new CompilationException(string.Format("Line [{0}]. Error: {1}", line, e.Message), e);
+				throw new CompilationException(e.Message, State);
 			}
 		}
 
@@ -75,7 +79,7 @@ namespace Core.Parser
 			}
 
 			if (!IsCommandToken(command))
-				throw new CompilationException(String.Format("Expected command, but found '{0} {1}'", label, command));
+				throw new CompilationException("Not a command", State);
 
 			var statement = statementFactory.Create(warrior, command);
 			statement.Label = label;
@@ -100,7 +104,7 @@ namespace Core.Parser
 		{
 			SkipWhitespaces();
 			if (State.Finished() || State.Current != ',')
-				throw new CompilationException("Expected comma");
+				throw new CompilationException("Expected comma", State);
 			State.Next();
 		}
 

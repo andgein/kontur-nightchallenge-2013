@@ -10,7 +10,7 @@ namespace Tests.Core.Parser
 	[TestFixture]
 	public class WarriorParser_BigTest
 	{
-		private readonly List<string> exceptions = new List<string>();
+		private readonly List<Tuple<string, string>> exceptions = new List<Tuple<string, string>>();
 
 		[Test]
 		[TestCaseSource("hill88Bots")]
@@ -22,9 +22,14 @@ namespace Tests.Core.Parser
 			{
 				new WarriorParser().Parse(bot);
 			}
+			catch (CompilationException e)
+			{
+				exceptions.Add(Tuple.Create(e.Error, e.Line));
+				throw;
+			}
 			catch (Exception e)
 			{
-				exceptions.Add(e.Message);
+				exceptions.Add(Tuple.Create(e.Message, ""));
 				throw;
 			}
 		}
@@ -40,9 +45,9 @@ namespace Tests.Core.Parser
 		public void TearDown()
 		{
 			Console.WriteLine("Exception statistics:");
-			foreach (var ex in exceptions.GroupBy(e => e, (exception, group) => new {exception, count = group.Count()}).OrderByDescending(p => p.count))
+			foreach (var ex in exceptions.GroupBy(e => e.Item1, (exception, group) => new {exception, sampleLine = group.First().Item2, count = group.Count()}).OrderByDescending(p => p.count))
 			{
-				Console.WriteLine(ex.count.ToString().PadLeft(10) + "  " + ex.exception);
+				Console.WriteLine(ex.count.ToString().PadLeft(10) + "  " + ex.exception + "  " + ex.sampleLine);
 			}
 		}
 

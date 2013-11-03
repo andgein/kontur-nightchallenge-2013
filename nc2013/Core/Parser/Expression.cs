@@ -103,11 +103,11 @@ namespace Core.Parser
 			if (warrior == null)
 				throw new InvalidOperationException("Internal error: can't calculate expression without labels and constants lists");
 			if (! warrior.Labels.ContainsKey(Name) && ! warrior.Constants.ContainsKey(Name))
-				throw new CompilationException("Unknown label or constant '" + Name + "'");
+				throw new CompilationException("Unknown label or constant '" + Name + "'", null, -1);
 			if (warrior.Constants.ContainsKey(Name))
 			{
 				if (warrior.EvaluatingConstants.Contains(Name))
-					throw new CompilationException("Cyclic dependency found for '" + Name + "'");
+					throw new CompilationException("Cyclic dependency found for '" + Name + "'", null, -1);
 
 				warrior.EvaluatingConstants.Add(Name);
 				var value = warrior.Constants[Name].Calculate(warrior);
