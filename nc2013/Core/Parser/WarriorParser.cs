@@ -83,21 +83,38 @@ namespace Core.Parser
 
 			var statement = statementFactory.Create(warrior, command);
 			statement.Label = label;
-
+			Tuple<AddressingMode, Expression> a = null, b = null;
 			if (!RestOnlyWhitespaces())
-			{
-				statement.ModeA = ParseAddressingMode();
-				statement.FieldA = expressionParser.Parse(State);
-			}
+				a = ReadModeAndField();
+			else if (statement.Type != StatementType.End)
+				throw new CompilationException("A-Field expected " + command, State);
 
 			if (!RestOnlyWhitespaces())
 			{
 				ParseComma();
-				statement.ModeB = ParseAddressingMode();
-				statement.FieldB = expressionParser.Parse(State);
+				b = ReadModeAndField();
 			}
-
+			else if (statement.Type != StatementType.Equ 
+				&& statement.Type != StatementType.End 
+//				&& statement.Type != StatementType.Dat
+				&& statement.Type != StatementType.Spl
+				&& statement.Type != StatementType.Jmp
+				)
+				throw new CompilationException("B-Field Expected " + command, State);
+//			see http://corewar.co.uk/icws94.htm#2.4
+//			if (statement.Type == StatementType.Dat && b == null)
+//				statement.SetFields(Tuple.Create(AddressingMode.Immediate, (Expression)new NumberExpression(0)), a);
+//			else
+//				statement.SetFields(a, b);
+			statement.SetFields(a, b);
 			return statement;
+		}
+		
+		private Tuple<AddressingMode, Expression> ReadModeAndField()
+		{
+			var mode = ParseAddressingMode();
+			var field = expressionParser.Parse(State);
+			return Tuple.Create(mode, field);
 		}
 
 		private void ParseComma()

@@ -10,45 +10,38 @@ namespace Tests.Core.Parser
 	[TestFixture]
 	public class WarriorParser_BigTest
 	{
-		private readonly List<Tuple<string, string>> exceptions = new List<Tuple<string, string>>();
-		private int botIndex = 0;
+		const string warriorsOk = basePath + "warriors-ok\\";
 		[Test]
-		//[TestCaseSource("hill88Bots")]
-		[TestCaseSource("allBots")]
-		public void Try_parse_all_hill88_bots(string botFile)
+		public void Try_parse_all_hill88_bots()
 		{
+			if (Directory.Exists(warriorsOk))
+				Directory.Delete(warriorsOk, true);
+			Directory.CreateDirectory(warriorsOk);
 
-			var bot = File.ReadAllText(botFile);
-			Console.WriteLine(bot);
-			try
+			var exceptions = new List<Tuple<string, string>>();
+			int botIndex = 0;
+			foreach (var botFile in allBots)
 			{
-				new WarriorParser().Parse(bot);
+				var bot = File.ReadAllText(botFile);
+				try
+				{
+					new WarriorParser().Parse(bot);
+					Console.WriteLine(botIndex + "  " + Path.GetFileName(botFile));
+					File.Copy(botFile, warriorsOk + (botIndex++).ToString("0000") + "-" + Path.GetFileName(botFile), true);
+				}
+				catch (CompilationException e)
+				{
+//					Console.WriteLine(e.Message);
+					exceptions.Add(Tuple.Create(e.Error, e.Line));
+				}
+				catch (Exception e)
+				{
+//					Console.WriteLine(e.Message);
+					exceptions.Add(Tuple.Create(e.Message, ""));
+				}
 			}
-			catch (CompilationException e)
-			{
-				exceptions.Add(Tuple.Create(e.Error, e.Line));
-				throw;
-			}
-			catch (Exception e)
-			{
-				exceptions.Add(Tuple.Create(e.Message, ""));
-				throw;
-			}
-			File.Copy(botFile, basePath + "warriors-ok\\" + (botIndex++).ToString("0000") + "-" + Path.GetFileName(botFile), true);
-		}
-
-		[TestFixtureSetUp]
-		public void SetUp()
-		{
-			Console.WriteLine("Exception statistics will be shown in the last test output");
-			exceptions.Clear();
-		}
-
-		[TestFixtureTearDown]
-		public void TearDown()
-		{
 			Console.WriteLine("Exception statistics:");
-			foreach (var ex in exceptions.GroupBy(e => e.Item1, (exception, group) => new {exception, sampleLine = group.First().Item2, count = group.Count()}).OrderByDescending(p => p.count))
+			foreach (var ex in exceptions.GroupBy(e => e.Item1, (exception, group) => new { exception, sampleLine = group.First().Item2, count = group.Count() }).OrderByDescending(p => p.count))
 			{
 				Console.WriteLine(ex.count.ToString().PadLeft(10) + "  " + ex.exception + "  " + ex.sampleLine);
 			}

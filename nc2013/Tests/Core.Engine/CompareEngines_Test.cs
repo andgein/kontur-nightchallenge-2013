@@ -27,10 +27,10 @@ namespace Tests.Core.Engine
 		}
 
 		[Test]
-		[TestCase("0002-imp")]
-		[TestCase("0001-dwarf")]
-		[TestCase("0828-NULL")]
-		[TestCase("0646-elf")]
+//		[TestCase("0002-imp")]
+//		[TestCase("0001-dwarf")]
+//		[TestCase("0828-NULL")]
+//		[TestCase("0646-elf")]
 		[TestCase("0009-alien22")]
 		public void TestOne(string name)
 		{
