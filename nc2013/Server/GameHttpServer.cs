@@ -18,19 +18,23 @@ namespace Server
 {
 	public class GameHttpServer
 	{
-		private readonly Guid godModeSecret = Guid.NewGuid();
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
 		private Task listenerTask;
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
 		private readonly SessionManager sessionManager;
+		private readonly Guid godModeSecret;
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, [NotNull] string staticContentPath)
+		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, 
+			[NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, 
+			[NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, 
+			[NotNull] string staticContentPath, Guid godModeSecret)
 		{
 			this.sessionManager = sessionManager;
+			this.godModeSecret = godModeSecret;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", godModeSecret)).AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
@@ -43,12 +47,12 @@ namespace Server
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
-				new DebuggerLoadGameHandler(debuggerManager, playersRepo, godModeSecret),
-				new StaticHandler(staticContentPath, godModeSecret),
+				new DebuggerLoadGameHandler(debuggerManager, playersRepo),
+				new StaticHandler(staticContentPath),
 				new CommandDescribeHandler(),
 				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo, tournamentRunner),
-				new ArenaPlayerHandler(playersRepo, gamesRepo, godModeSecret)
+				new ArenaPlayerHandler(playersRepo, gamesRepo)
 			};
 			stopEvent = new ManualResetEvent(false);
 			Log.For(this).Warn(string.Format("GodModeSecret: {0}", godModeSecret));
@@ -99,11 +103,21 @@ namespace Server
 				{
 					lock (context.Session)
 					{
+						var godMode = false;
+						var secretValue = context.GetOptionalGuidParam(GameHttpContext.GodModeSecretCookieName);
+						if (secretValue == godModeSecret
+							|| context.TryGetCookie<Guid>(GameHttpContext.GodModeSecretCookieName, Guid.TryParse) == godModeSecret)
+						{
+							context.SetCookie(GameHttpContext.GodModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: true);
+							context.SetCookie(GameHttpContext.GodModeCookieName, "true", persistent: false, httpOnly: false);
+							godMode = true;
+						}
+
 						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 						if (handlersThatCanHandle.Length == 1)
 						{
 							Log.For(this).DebugFormat("Handling request with {0}: {1}", handlersThatCanHandle[0].GetType().Name, requestUrl);
-							handlersThatCanHandle[0].Handle(context);
+							handlersThatCanHandle[0].Handle(context, godMode);
 							context.Response.Close();
 							Log.For(this).DebugFormat("Request handled in {0} ms: {1}", handleTime.ElapsedMilliseconds, requestUrl);
 						}

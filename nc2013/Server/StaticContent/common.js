@@ -30,7 +30,7 @@ var qs = (function (a) {
 })(window.location.search.substr(1).split('&'));
 
 (function($) {
-	$.fn.FormCache = function(options) {
+		$.fn.FormCache = function(options) {
 		var settings = $.extend({
 			
 		}, options);
@@ -126,4 +126,12 @@ $.cookie = function(name) {
 		}
 	}
 	return setStr;
-}
+};
+
+var godMode;
+$(function() {
+	godMode = $.cookie("godMode") != undefined;
+	if (godMode) {
+		$("#home").text("You are in God Mode");
+	}
+})

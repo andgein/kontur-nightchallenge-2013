@@ -7,7 +7,7 @@ namespace Server
 	{
 		public CommandDescribeHandler() : base("describe") { }
 
-		public override void Handle(GameHttpContext context)
+		public override void Handle(GameHttpContext context, bool godMode)
 		{
 			var cmd = context.GetOptionalStringParam("cmd");
 			var description = new CommandDescriber().Describe(cmd);

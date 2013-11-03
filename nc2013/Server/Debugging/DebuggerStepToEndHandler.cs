@@ -6,7 +6,7 @@ namespace Server.Debugging
 	{
 		public DebuggerStepToEndHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/step/end", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
 			debugger.Play(game => game.StepToEnd());
 			context.SendResponse(debugger.State.GameState);

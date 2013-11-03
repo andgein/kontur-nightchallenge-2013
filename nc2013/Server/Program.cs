@@ -54,6 +54,7 @@ namespace Server
 				ICWSStandard = ICWStandard.ICWS88,
 			};
 			var prefix = GetPrefix(args);
+			var godModeSecret = Guid.NewGuid();
 			var warriorProgramParser = new MarsWarriorProgramParser(baseRules);
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
@@ -62,7 +63,9 @@ namespace Server
 			//var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
 			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
-			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, GetStaticContentDir());
+			var httpServer = new GameHttpServer(
+				prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, 
+				GetStaticContentDir(), godModeSecret);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -72,7 +75,7 @@ namespace Server
 			tournamentRunner.Start();
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
-			Process.Start(httpServer.DefaultUrl);
+			Process.Start(httpServer.DefaultUrl + "?" + GameHttpContext.GodModeSecretCookieName + "=" + godModeSecret);
 			httpServer.WaitForTermination();
 			tournamentRunner.WaitForTermination();
 			log.InfoFormat("Stopped");

@@ -14,7 +14,7 @@ namespace Server.Arena
 			this.gamesRepo = gamesRepo;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context)
+		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
 			var tournamentId = context.GetOptionalStringParam("tournamentId");
 			var ranking = gamesRepo.TryLoadRanking(tournamentId ?? "last");

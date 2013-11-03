@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using Core.Arena;
 using Core.Game;
@@ -10,18 +9,16 @@ namespace Server.Debugging
 	public class DebuggerLoadGameHandler : DebuggerHandlerBase
 	{
 		private readonly IPlayersRepo playersRepo;
-		private readonly Guid godModeSecret;
 
-		public DebuggerLoadGameHandler([NotNull] IDebuggerManager debuggerManager, [NotNull] IPlayersRepo playersRepo, Guid godModeSecret)
+		public DebuggerLoadGameHandler([NotNull] IDebuggerManager debuggerManager, [NotNull] IPlayersRepo playersRepo)
 			: base("debugger/load", debuggerManager)
 		{
 			this.playersRepo = playersRepo;
-			this.godModeSecret = godModeSecret;
 		}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
-			if (context.TryGetCookie<Guid>(GameHttpContext.GodModeSecretCookieName, Guid.TryParse) != godModeSecret)
+			if (!godMode)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
 			var name1 = context.GetStringParam("name1");

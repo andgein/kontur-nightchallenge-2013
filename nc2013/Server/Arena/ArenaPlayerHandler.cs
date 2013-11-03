@@ -11,17 +11,15 @@ namespace Server.Arena
 	{
 		private readonly IPlayersRepo playersRepo;
 		private readonly IGamesRepo gamesRepo;
-		private readonly Guid godModeSecret;
 
-		public ArenaPlayerHandler([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, Guid godModeSecret)
+		public ArenaPlayerHandler([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo)
 			: base("arena/player")
 		{
 			this.playersRepo = playersRepo;
 			this.gamesRepo = gamesRepo;
-			this.godModeSecret = godModeSecret;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context)
+		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
 			var playerName = context.GetStringParam("name");
 			var version = context.GetOptionalIntParam("version");
@@ -46,10 +44,7 @@ namespace Server.Arena
 				ranking = gamesRepo.TryLoadRanking("last");
 			}
 			if (ranking != null)
-			{
-				var godMode = context.TryGetCookie<Guid>(GameHttpContext.GodModeSecretCookieName, Guid.TryParse) == godModeSecret;
 				playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, godMode);
-			}
 			context.SendResponse(playerInfo);
 		}
 

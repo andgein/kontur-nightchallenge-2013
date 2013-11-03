@@ -18,7 +18,7 @@ namespace Server.Arena
 			this.tournamentRunner = tournamentRunner;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context)
+		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
 			var arenaPlayer = context.GetRequest<ArenaPlayer>();
 			try
