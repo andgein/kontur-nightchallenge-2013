@@ -4,7 +4,7 @@ using Core.Parser;
 
 namespace Core.Engine
 {
-    public class Engine
+    public class GameEngine
     {
         public List<RunningWarrior> Warriors { get; private set; }
         public readonly Memory Memory;
@@ -18,7 +18,7 @@ namespace Core.Engine
 
         private StepResult stepResult;
 
-        public Engine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
+        public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
         {
             Memory = new Memory(Parameters.CORESIZE);
             Warriors = new List<RunningWarrior>();

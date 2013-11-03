@@ -81,7 +81,7 @@ namespace Core.Game.MarsBased
 				var processPointers = w.Tasks.Select(ip => (uint)ip).ToArray();
 				programStates[idx] = new ProgramState
 				{
-					LastPointer = lastPointer,
+					LastPointer = lastPointer+1,
 					ProcessPointers = processPointers,
 				};
 			}

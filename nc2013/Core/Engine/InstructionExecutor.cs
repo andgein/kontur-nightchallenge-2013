@@ -7,7 +7,7 @@ namespace Core.Engine
     public class InstructionExecutor
     {
         private readonly Instruction instruction;
-        private readonly Dictionary<StatementType, Action<Engine>> executers;
+        private readonly Dictionary<StatementType, Action<GameEngine>> executers;
         private Statement Statement
         {
             get { return instruction.Statement;  }
@@ -16,7 +16,7 @@ namespace Core.Engine
         public InstructionExecutor(Instruction instruction)
         {
             this.instruction = instruction;
-            executers = new Dictionary<StatementType, Action<Engine>>
+            executers = new Dictionary<StatementType, Action<GameEngine>>
             {
                 {StatementType.Mov, Mov},
                 {StatementType.Add, Add},
@@ -33,13 +33,13 @@ namespace Core.Engine
             };
         }
 		
-    	public void Execute(Engine engine)
+    	public void Execute(GameEngine engine)
         {
             var method = GetExecuteMethod();
             method.Invoke(engine);
         }
 
-        private Action<Engine> GetExecuteMethod()
+        private Action<GameEngine> GetExecuteMethod()
         {
             var statementType = Statement.Type;
             if (! executers.ContainsKey(statementType))
@@ -47,7 +47,7 @@ namespace Core.Engine
             return executers[statementType];
         }
 
-        private static int CalcAddress(Engine engine, AddressingMode mode, Expression expression)
+        private static int CalcAddress(GameEngine engine, AddressingMode mode, Expression expression)
         {
             int address;
             switch (mode)
@@ -71,7 +71,7 @@ namespace Core.Engine
             throw new InvalidOperationException("Internal error. Unknown addressing mode");
         }
 
-        private void Mov(Engine engine)
+        private void Mov(GameEngine engine)
         {
             if (Statement.ModeA == AddressingMode.Immediate)
             {
@@ -90,7 +90,7 @@ namespace Core.Engine
             }
         }
 
-        private void Add(Engine engine)
+        private void Add(GameEngine engine)
         {
             if (Statement.ModeA == AddressingMode.Immediate)
             {
@@ -115,7 +115,7 @@ namespace Core.Engine
             }
         }
 
-        private void Sub(Engine engine)
+        private void Sub(GameEngine engine)
         {
             if (Statement.ModeA == AddressingMode.Immediate)
             {
@@ -140,14 +140,14 @@ namespace Core.Engine
             }
         }
 
-        private void Jmp(Engine engine)
+        private void Jmp(GameEngine engine)
         {
             var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
             CalcAddress(engine, Statement.ModeB, Statement.FieldB);
             engine.JumpTo(addressA);
         }
 
-        private void Jmz(Engine engine)
+        private void Jmz(GameEngine engine)
         {
             bool isJump;
             if (Statement.ModeB == AddressingMode.Immediate)
@@ -162,7 +162,7 @@ namespace Core.Engine
                 engine.JumpTo(addressA);
         }
 
-        private void Jmn(Engine engine)
+        private void Jmn(GameEngine engine)
         {
             bool isJump;
             if (Statement.ModeB == AddressingMode.Immediate)
@@ -177,7 +177,7 @@ namespace Core.Engine
                 engine.JumpTo(addressA);
         }
 
-        private void Cmp(Engine engine)
+        private void Cmp(GameEngine engine)
         {
             bool isJump;
             if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
@@ -199,7 +199,7 @@ namespace Core.Engine
                 engine.JumpTo(engine.CurrentIp + 2);
         }
 
-        private void Slt(Engine engine)
+        private void Slt(GameEngine engine)
         {
             bool isJump;
             if (Statement.ModeA == AddressingMode.Immediate && Statement.ModeB == AddressingMode.Immediate)
@@ -221,14 +221,14 @@ namespace Core.Engine
                 engine.JumpTo(engine.CurrentIp + 2);
         }
 
-        private void Spl(Engine engine)
+        private void Spl(GameEngine engine)
         {
             var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
             CalcAddress(engine, Statement.ModeB, Statement.FieldB);
             engine.SplitAt(addressA);
         }
 
-		private void Djn(Engine engine)
+		private void Djn(GameEngine engine)
 		{
 			CalcAddress(engine, Statement.ModeB, Statement.FieldB);
 			Statement.FieldB = Statement.FieldB.Decremented();
@@ -237,7 +237,7 @@ namespace Core.Engine
 				engine.JumpTo(addressA);
 		}
 
-        private void Dat(Engine engine)
+        private void Dat(GameEngine engine)
         {
 			if (Statement.ModeA != AddressingMode.Immediate)
 				CalcAddress(engine, Statement.ModeA, Statement.FieldA);

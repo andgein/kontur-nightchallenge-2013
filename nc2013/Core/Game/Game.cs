@@ -6,9 +6,9 @@ using Core.Parser;
 
 namespace Core.Game
 {
-    class Game : IGame
+	public class Game : IGame
     {
-        private readonly Engine.Engine engine;
+        private readonly Engine.GameEngine engine;
         private readonly ProgramStartInfo[] programStartInfos = new ProgramStartInfo[0];
 
         public Game(ProgramStartInfo[] programStartInfos)
@@ -24,7 +24,7 @@ namespace Core.Game
                     parser.Parse(psi.Program),
                     psi.StartAddress.HasValue ? (int) psi.StartAddress : r.Next(Parameters.CORESIZE)
                     ));
-            engine = new Engine.Engine(warriors);
+            engine = new Engine.GameEngine(warriors);
         }
 
         public GameState GameState
