@@ -55,7 +55,10 @@ namespace Core.Arena
 				{
 					Name = g.Key.Name,
 					Version = g.Key.Version,
-					Score = g.Sum(r => r.Score()),
+					Score = g.Sum(res => res.Score()),
+					Wins = g.Count(res => res.ResultType == BattlePlayerResultType.Win),
+					Loses = g.Count(res => res.ResultType == BattlePlayerResultType.Loss),
+					Draws = g.Count(res => res.ResultType == BattlePlayerResultType.Draw),
 					Games = g.Count(),
 				})
 				.OrderByDescending(t => t.Score)

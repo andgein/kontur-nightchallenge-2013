@@ -75,10 +75,8 @@ namespace Server.Arena
 		{
 			tournamentId = null;
 			var players = playersRepo.LoadLastVersions();
-			var mostRecentPlayer = players.OrderByDescending(p => p.Timestamp).FirstOrDefault();
-			if (mostRecentPlayer == null)
-				return null;
-			tournamentId = mostRecentPlayer.Timestamp.Ticks.ToString();
+			if (players.Length == 0) return null;
+			tournamentId = players.Select(p => p.Timestamp).Max().Ticks.ToString();
 			if (!gamesRepo.TryStartTournament(tournamentId))
 				return null;
 			return players;

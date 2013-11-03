@@ -54,8 +54,6 @@ namespace Server.Arena
 			{
 				Name = arenaPlayer.Name,
 				Version = arenaPlayer.Version,
-				Games = 0,
-				Score = 0,
 			};
 			var games = gamesRepo.LoadGames(ranking.TournamentId);
 			var gamesByEnemy = games

@@ -13,6 +13,12 @@
 	<script>
 		var RankCtrl = MakeJsonController(server.basePath() + "arena/ranking");
 	</script>
+	<style>
+		.ranking-table th {
+			text-align: center;
+		}
+	</style>
+	<link rel="stylesheet" href="common.css" />
 </head>
 <body>
 	<div class="container" ng-controller="RankCtrl">
@@ -25,15 +31,25 @@
 		<div>Время обновления: {{timestamp}}</div>
 		<table class="table table-condensed table-bordered ranking-table">
 			<tr>
-				<th>Место</th>
+				<th>№</th>
 				<th>Бот</th>
-				<th>Очки</th>
-				<th>Число боев</th>
+				<th colspan="2">Очки</th>
+				<th colspan="2">Побед</th>
+				<th colspan="2">Ничьих</th>
+				<th colspan="2">Поражений</th>
+				<th>Всего боев</th>
 			</tr>
 			<tr ng-repeat="p in places">
 				<td>{{$index+1}}</td>
 				<td><a href="player.html?name={{p.name}}">{{p.name}}</a></td>
 				<td>{{p.score}}</td>
+				<td class="small">{{p.score / p.games | number:1}} за бой</td>
+				<td>{{p.wins}}</td>
+				<td class="small">{{100*p.wins / p.games | number:0}}%</td>
+				<td>{{p.draws}}</td>
+				<td class="small">{{100*p.draws / p.games | number:0}}%</td>
+				<td>{{p.loses}}</td>
+				<td class="small">{{100*p.loses / p.games | number:0}}%</td>
 				<td>{{p.games}}</td>
 			</tr>
 		</table>
