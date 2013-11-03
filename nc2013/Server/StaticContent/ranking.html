@@ -11,7 +11,7 @@
 	<script src="common.js"></script>
 	<script src="server.js"></script>
 	<script>
-		var RankCtrl = MakeJsonController(server.basePath() + "arena/ranking");
+		var RankCtrl = MakeJsonController(server.basePath() + "arena/ranking" + window.location.search);
 	</script>
 	<style>
 		.ranking-table th {
@@ -26,9 +26,10 @@
 		<script>nav()</script>
 
 		<div class="page-header">
-			<h1>Текущие результаты</h1>
+			<h1>Турнирная таблица</h1>
 		</div>
-		<div>Время обновления: {{timestamp}}</div>
+
+		<div>Время завершения турнира: {{ranking.timestamp}}</div>
 		<table class="table table-condensed table-bordered ranking-table">
 			<tr>
 				<th>№</th>
@@ -39,7 +40,7 @@
 				<th colspan="2">Поражений</th>
 				<th>Всего боев</th>
 			</tr>
-			<tr ng-repeat="p in places">
+			<tr ng-repeat="p in ranking.places">
 				<td>{{$index+1}}</td>
 				<td><a href="player.html?name={{p.name}}">{{p.name}}</a></td>
 				<td>{{p.score}}</td>
@@ -53,6 +54,11 @@
 				<td>{{p.games}}</td>
 			</tr>
 		</table>
+		
+		<h3>История турниров</h3>
+		<ul>
+			<li ng-repeat="historyItem in historyItems"><a href="ranking.html?tournamentId={{historyItem.tournamentId}}">Время начала: {{historyItem.creationTimestamp}}</a></li>
+		</ul>
 	</div>
 </body>
 </html>

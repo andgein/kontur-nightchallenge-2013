@@ -1,4 +1,7 @@
-﻿using Core.Arena;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;
 
@@ -18,7 +21,17 @@ namespace Server.Arena
 		{
 			var tournamentId = context.GetOptionalStringParam("tournamentId");
 			var ranking = gamesRepo.TryLoadRanking(tournamentId ?? "last");
-			context.SendResponse(ranking);
+			var tournamentHistoryItems = gamesRepo.GetAllTournamentIds().Select(id => new TournamentHistoryItem
+			{
+				TournamentId = id,
+				CreationTimestamp = new DateTime(long.Parse(id), DateTimeKind.Utc),
+			}).OrderByDescending(x => x.CreationTimestamp).ToArray();
+			var response = new ArenaRankingResponse
+			{
+				Ranking = ranking,
+				HistoryItems = tournamentHistoryItems,
+			};
+			context.SendResponse(response);
 		}
 	}
 }

@@ -14,5 +14,8 @@ namespace Core.Arena
 
 		[CanBeNull]
 		TournamentRanking TryLoadRanking([NotNull] string tournamentId);
+
+		[NotNull]
+		string[] GetAllTournamentIds();
 	}
 }

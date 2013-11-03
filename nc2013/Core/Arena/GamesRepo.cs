@@ -67,6 +67,19 @@ namespace Core.Arena
 			}
 		}
 
+		[NotNull]
+		public string[] GetAllTournamentIds()
+		{
+			lock (gamesDir)
+			{
+				return gamesDir
+					.GetFiles("ranking-*.json")
+					.Select(file => Path.GetFileNameWithoutExtension(file.Name).Split('-')[1])
+					.Where(id => id != "last")
+					.ToArray();
+			}
+		}
+
 		private void SaveRanking([NotNull] string tournamentId, [NotNull] TournamentRanking ranking)
 		{
 			lock (gamesDir)
