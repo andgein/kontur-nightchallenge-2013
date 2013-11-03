@@ -63,7 +63,14 @@ namespace Core.Parser
 			if (StartAddressExpression == null)
 				StartAddress = 0;
 			else
-				StartAddress = ModularArith.Mod(Statements.Count + StartAddressExpression.Calculate(this, Statements.Count));
+			{
+				if (StartAddressExpression.GetType() == typeof(VariableExpression))
+					StartAddress = ModularArith.Mod(Statements.Count + StartAddressExpression.Calculate(this, Statements.Count));
+				else if (StartAddressExpression.GetType() == typeof(NumberExpression))
+					StartAddress = StartAddressExpression.Calculate(this, Statements.Count);
+				else
+					throw new CompilationException("END argument must be label or number", StartAddressExpression.ToString(), 0);
+			}
 		}
     }
 }

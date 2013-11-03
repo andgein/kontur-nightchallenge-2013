@@ -128,7 +128,7 @@ namespace Tests.Core.Parser
         [Test]
         public void TestEnd()
         {
-            var warrior = parser.Parse(imp + "\n" + imp + "\n" + "END -1\nline will be ignored");
+            var warrior = parser.Parse(imp + "\n" + imp + "\n" + "END 1\nline will be ignored");
             Assert.AreEqual(2, warrior.Statements.Count);
             Assert.AreEqual(1, warrior.StartAddress);
         }
