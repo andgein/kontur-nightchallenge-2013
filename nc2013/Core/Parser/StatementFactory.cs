@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Core.Parser
 {
-    class StatementFactory
+	public class StatementFactory
     {
         public Dictionary<string, StatementType> Commands { get; private set; }
 

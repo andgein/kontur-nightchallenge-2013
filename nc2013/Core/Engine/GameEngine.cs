@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Core.Parser;
 using nMars.RedCode;
 
@@ -15,11 +14,10 @@ namespace Core.Engine
 		public bool GameOver { get; private set; }
 		public int? Winner { get; private set; }
 
-		private int CountLivedWarriors;
+		private int countLivedWarriors;
 
 		private StepResult stepResult;
-
-		private Rules rules = new Rules();
+		private readonly InstructionExecutor instructionExecutor = new InstructionExecutor();
 
 		public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
 		{
@@ -28,13 +26,13 @@ namespace Core.Engine
 			var idx = 0;
 			foreach (var wsi in warriorsStartInfos)
 			{
-				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, rules.CoreSize);
+				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, Parameters.CORESIZE);
 				Warriors.Add(warrior);
 				PlaceWarrior(warrior, wsi.LoadAddress);
 			}
 			CurrentWarrior = 0;
 			CurrentStep = 0;
-			CountLivedWarriors = Warriors.Count;
+			countLivedWarriors = Warriors.Count;
 		}
 
 		private void PlaceWarrior(RunningWarrior warrior, int address)
@@ -65,14 +63,14 @@ namespace Core.Engine
 				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1));
 			else
 				if (Warriors[CurrentWarrior].Queue.Count == 0)
-					CountLivedWarriors--;
+					countLivedWarriors--;
 
 			if (stepResult.SplittedInInstruction.HasValue)
 				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
-			if (Warriors.Count > 1 && CountLivedWarriors == 1 ||
-				Warriors.Count == 1 && CountLivedWarriors == 0)
+			if (Warriors.Count > 1 && countLivedWarriors == 1 ||
+				Warriors.Count == 1 && countLivedWarriors == 0)
 			{
 				GameOver = true;
 				Winner = nextWarrior;
@@ -100,7 +98,7 @@ namespace Core.Engine
 
 		private void ExecuteInstruction(Instruction instruction)
 		{
-			new InstructionExecutor(instruction).Execute(this);
+			instructionExecutor.Execute(this, instruction);
 		}
 
 		public void WriteToMemory(int address, Statement statement)

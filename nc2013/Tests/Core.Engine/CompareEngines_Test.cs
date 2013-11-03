@@ -17,11 +17,19 @@ namespace Tests.Core.Engine
 	[TestFixture]
 	public class CompareEngines_Test
 	{
-		public string[] Bots = TestWarriors.GetBotFiles("warriors-bad").ToArray();
+		public string[] BotsOk = TestWarriors.GetBotFiles("warriors-ok").ToArray();
+		public string[] BotsBad = TestWarriors.GetBotFiles("warriors-bad").ToArray();
 
 		[Test]
-		[TestCaseSource("Bots")]
-		public void Test(string bot)
+		[TestCaseSource("BotsOk")]
+		public void TestOk(string bot)
+		{
+			Compare(File.ReadAllText(bot));
+		}
+
+		[Test]
+		[TestCaseSource("BotsBad")]
+		public void TestBad(string bot)
 		{
 			Compare(File.ReadAllText(bot));
 		}
