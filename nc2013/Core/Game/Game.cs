@@ -41,7 +41,7 @@ namespace Core.Game
                     MemoryState = engine.Memory.ToMemoryState(),
                     ProgramStates = engine.Warriors.Select(w => new ProgramState
                     {
-                        LastPointer = w.Queue.Count > 0 ? (uint) w.Queue.Peek() : 0,
+                        LastPointer = (uint)engine.CurrentIp,
                         ProcessPointers = w.Queue.ToArray().Select(x => (uint) x).ToArray()
                     }).ToArray(),
                 };

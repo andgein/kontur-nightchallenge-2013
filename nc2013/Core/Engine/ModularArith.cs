@@ -1,4 +1,6 @@
-﻿namespace Core.Engine
+﻿using System.Diagnostics;
+
+namespace Core.Engine
 {
     public static class ModularArith
     {
@@ -7,6 +9,8 @@
             var result = a % b;
             if (result < 0)
                 result += b;
+			Debug.Assert(result >= 0);
+			Debug.Assert(result < b);
             return result;
         }
     }

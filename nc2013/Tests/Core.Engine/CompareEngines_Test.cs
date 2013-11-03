@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Core.Game;
 using Core.Game.MarsBased;
 using Core.Parser;
@@ -22,7 +23,7 @@ namespace Tests.Core.Engine
 		[TestCaseSource("Bots")]
 		public void Test(string bot)
 		{
-			Compare(bot);
+			Compare(File.ReadAllText(bot));
 		}
 
 		[Test]
@@ -30,14 +31,23 @@ namespace Tests.Core.Engine
 		[TestCase("0001-dwarf")]
 		[TestCase("0828-NULL")]
 		[TestCase("0646-elf")]
+		[TestCase("0009-alien22")]
 		public void TestOne(string name)
 		{
-			Compare(TestWarriors.GetBotFile(@"warriors-ok\" + name + ".red"));
+			var program = File.ReadAllText(TestWarriors.GetBotFile(@"warriors-ok\" + name + ".red"));
+			Compare(program);
 		}
 
-		public void Compare(string botFile)
+		[Test]
+		public void TestDJN()
 		{
-			var programStartInfos = new[] {new ProgramStartInfo {Program = File.ReadAllText(botFile), StartAddress = 0}};
+			Compare("DJN 0, 1");
+		}
+
+		public void Compare(string program)
+		{
+			Console.WriteLine(program);
+			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
 			var ourGame = new Game(programStartInfos);
 			var marsGame = new MarsGame(new Rules() {WarriorsCount = 1}, programStartInfos);
 			for (int i = 0; i < 20; i++)
@@ -46,22 +56,24 @@ namespace Tests.Core.Engine
 				marsGame.Step(1);
 				CompareStates(ourGame.GameState, marsGame.GameState, i);
 			}
-			ourGame.Step(1000);
-			marsGame.Step(1000);
-			CompareStates(ourGame.GameState, marsGame.GameState, 1000);
+//			ourGame.Step(100);
+//			marsGame.Step(100);
+			CompareStates(ourGame.GameState, marsGame.GameState, 100);
 		}
 
-		private void CompareStates(GameState ourState, GameState marsState, int i)
+		private void CompareStates(GameState our, GameState mars, int i)
 		{
-			var our = JsonConvert.SerializeObject(ourState);
-			var mars = JsonConvert.SerializeObject(marsState);
-			Assert.AreEqual(Normalize(mars), Normalize(our), "Step: " + i);
+			var m = Normalize(mars);
+			var o = Normalize(our);
+			Assert.AreEqual(m, o, "Step: " + i);
 		}
 
-		private string Normalize(string s)
+		private string Normalize(GameState gs)
 		{
+			var s = JsonConvert.SerializeObject(gs);
 			foreach (var x in new[] {".AB", ".A", ".B", ".I", ".F", ".X", " ", "\t", ","})
 				s = s.Replace(x, "");
+			s = Regex.Replace(s, "LastModifiedByProgram\":.*\\}", "}");
 			return s;
 		}
 	}

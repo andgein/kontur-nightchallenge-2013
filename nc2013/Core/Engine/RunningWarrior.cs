@@ -10,11 +10,11 @@ namespace Core.Engine
 
         public readonly RunningQueue Queue;
 
-        public RunningWarrior(Warrior warrior, int index, int loadAddress)
+        public RunningWarrior(Warrior warrior, int index, int loadAddress, int coresize)
         {
             Warrior = warrior;
             Index = index;
-            Queue = new RunningQueue();
+            Queue = new RunningQueue(coresize);
             Queue.Enqueue(loadAddress + warrior.StartAddress);
         }
     }

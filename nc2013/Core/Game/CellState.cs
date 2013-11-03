@@ -1,9 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Game
 {
 	[JsonObject]
+	[DebuggerDisplay("{Instruction}")]
 	public class CellState
 	{
 		[NotNull]
@@ -15,5 +17,6 @@ namespace Core.Game
 
 		[JsonProperty]
 		public int? LastModifiedByProgram { get; set; }
+
 	}
 }

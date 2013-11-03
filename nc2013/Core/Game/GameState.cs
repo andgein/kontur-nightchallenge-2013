@@ -1,9 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Game
 {
 	[JsonObject]
+	[DebuggerDisplay("CurStep={CurrentStep} CurProg={CurrentProgram} Instr={CurrentInstruction}")]
 	public class GameState
 	{
 		[NotNull]
@@ -29,5 +31,17 @@ namespace Core.Game
 		[JsonProperty]
 		[NotNull]
 		public ProgramState[] ProgramStates { get; set; }
+
+		public string CurrentInstruction
+		{
+			get
+			{
+				uint? pointer = ProgramStates[CurrentProgram].LastPointer;
+				if (pointer.HasValue)
+					return pointer.Value + ": " + MemoryState[pointer.Value].Instruction;
+				else
+					return "";
+			}
+		}
 	}
 }

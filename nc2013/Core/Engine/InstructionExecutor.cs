@@ -53,7 +53,7 @@ namespace Core.Engine
             switch (mode)
             {
                 case AddressingMode.Immediate:
-                    throw new InvalidOperationException();
+		            return 0;
                 case AddressingMode.Direct:
                     return engine.CurrentIp + expression.Calculate();
                 case AddressingMode.Indirect:
@@ -61,17 +61,22 @@ namespace Core.Engine
                     return address + engine.Memory[address].Statement.FieldB.Calculate();
                 case AddressingMode.PredecrementIndirect:
                     address = engine.CurrentIp + expression.Calculate();
-                    var oldStatement = engine.Memory[address].Statement;
-                    engine.WriteToMemory(address, new Statement(oldStatement)
-                    {
-                        FieldB = oldStatement.FieldB.Decremented()
-                    });
-                    return address + engine.Memory[address].Statement.FieldB.Calculate();
+                    DecrementB(engine, address);
+		            return address + engine.Memory[address].Statement.FieldB.Calculate();
             }
             throw new InvalidOperationException("Internal error. Unknown addressing mode");
         }
 
-        private void Mov(GameEngine engine)
+	    private static void DecrementB(GameEngine engine, int address)
+	    {
+		    var oldStatement = engine.Memory[address].Statement;
+		    engine.WriteToMemory(address, new Statement(oldStatement)
+		    {
+			    FieldB = oldStatement.FieldB.Decremented()
+		    });
+	    }
+
+	    private void Mov(GameEngine engine)
         {
             if (Statement.ModeA == AddressingMode.Immediate)
             {
@@ -230,10 +235,11 @@ namespace Core.Engine
 
 		private void Djn(GameEngine engine)
 		{
-			CalcAddress(engine, Statement.ModeB, Statement.FieldB);
-			Statement.FieldB = Statement.FieldB.Decremented();
+			var addressB = CalcAddress(engine, Statement.ModeB, Statement.FieldB);
+			DecrementB(engine, addressB);
+			var condition = engine.Memory[addressB].Statement.FieldB.Calculate();
 			var addressA = CalcAddress(engine, Statement.ModeA, Statement.FieldA);
-			if (Statement.FieldB.Calculate() != 0)
+			if (condition != 0)
 				engine.JumpTo(addressA);
 		}
 
