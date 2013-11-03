@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Core;
 using Core.Arena;
 using Core.Game;
 using Core.Game.MarsBased;
@@ -55,6 +56,7 @@ namespace Server
 			};
 			var prefix = GetPrefix(args);
 			var godModeSecret = Guid.NewGuid();
+			Log.For<GameHttpServer>().Warn(string.Format("GodModeSecret: {0}", godModeSecret));
 			var warriorProgramParser = new MarsWarriorProgramParser(baseRules);
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));

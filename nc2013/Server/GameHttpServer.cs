@@ -57,7 +57,6 @@ namespace Server
 				new ArenaPlayerHandler(playersRepo, gamesRepo)
 			};
 			stopEvent = new ManualResetEvent(false);
-			Log.For(this).Warn(string.Format("GodModeSecret: {0}", godModeSecret));
 		}
 
 		[NotNull]
