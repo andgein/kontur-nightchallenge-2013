@@ -44,6 +44,7 @@ namespace Server
 			listener.Prefixes.Add(prefix);
 			handlers = new IHttpHandler[]
 			{
+				new IndexHandler(),
 				new DebuggerStartHandler(debuggerManager),
 				new DebuggerStateHandler(debuggerManager),
 				new DebuggerStepHandler(debuggerManager),
