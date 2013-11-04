@@ -6,9 +6,9 @@ using Core.Engine;
 namespace Core.Parser
 {
 	public class Warrior
-    {
-        public List<Statement> Statements { get; private set; }
-        public Dictionary<String, int> Labels { get; private set; }
+	{
+		public List<Statement> Statements { get; private set; }
+		public Dictionary<String, int> Labels { get; private set; }
 		public Dictionary<String, Expression> Constants { get; private set; }
 		public HashSet<String> EvaluatingConstants { get; private set; }
 
@@ -16,30 +16,40 @@ namespace Core.Parser
 		public int StartAddress { get; private set; }
 
 		public Warrior(List<Statement> statements)
-        {
-            Statements = statements;
-            Labels = new Dictionary<string, int>();
+		{
+			Statements = statements;
+			Labels = new Dictionary<string, int>();
 			Constants = new Dictionary<string, Expression>();
 			EvaluatingConstants = new HashSet<string>();
 
-        }
+		}
 
-        public Warrior() : this(new List<Statement>())
-        {
-        }
+		public Warrior() : this(new List<Statement>())
+		{
+		}
 
-        public void AddStatement(Statement statement, ParserState state)
-        {
-            if (statement.HasLabel && Labels.ContainsKey(statement.Label))
-                throw new CompilationException("Statement with same label already exists", state);
+		public void AddStatement(Statement statement, ParserState state)
+		{
+			if (statement.HasLabel && Labels.ContainsKey(statement.Label))
+				throw new CompilationException("Statement with same label already exists", state);
 			if (statement.HasLabel && Constants.ContainsKey(statement.Label))
 				throw new CompilationException("Constant with same label already exists", state);
 
-            Statements.Add(statement);
+			Statements.Add(statement);
 
-            if (statement.HasLabel)
-                Labels[statement.Label] = Statements.Count - 1;
-        }
+			if (statement.HasLabel)
+				Labels[statement.Label] = Statements.Count - 1;
+		}
+
+		public Expression ExpandConstant(string name)
+		{
+			if (EvaluatingConstants.Contains(name))
+				throw new InvalidOperationException("cycle");//TODO message
+			EvaluatingConstants.Add(name);
+			Constants[name] = Constants[name].ExpandConstants(this);
+			EvaluatingConstants.Remove(name);
+			return Constants[name];
+		}
 
 		public void EvaluateAllExpressions()
 		{
@@ -48,9 +58,12 @@ namespace Core.Parser
 			foreach (var constant in Constants.Keys.ToArray())
 			{
 				EvaluatingConstants.Clear();
-				EvaluatingConstants.Add(constant);
-				Constants[constant] = new NumberExpression(Constants[constant].Calculate(this));
-				EvaluatingConstants.Remove(constant);
+				ExpandConstant(constant);
+			}
+			foreach (var statement in Statements)
+			{
+				statement.FieldA = statement.FieldA.ExpandConstants(this);
+				statement.FieldB = statement.FieldB.ExpandConstants(this);
 			}
 
 			foreach (var statement in Statements)
@@ -72,5 +85,5 @@ namespace Core.Parser
 					throw new CompilationException("END argument must be label or number", StartAddressExpression.ToString(), 0);
 			}
 		}
-    }
+	}
 }
