@@ -2,7 +2,6 @@
 ;name hypergate
 ;author Christian
 ;strategy hypergate
-;assert CORESIZE==80
 
 gate         equ wait-10
 wait              spl wait,<gate

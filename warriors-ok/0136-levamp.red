@@ -4,7 +4,6 @@
 ;author Matthieu Walraet
 ;strategy vamp stun clear gate quick
 ;strategy redcode on http://bach.iie.cnam.fr:2000/walraet/levamp.html
-;assert !(CORESIZE % 5)
 
 per     EQU 3315
 

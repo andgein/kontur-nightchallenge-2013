@@ -3,7 +3,6 @@
 ;author Stefan Strack
 ;strategy spl/jmp bombing B-scanner with single core-clear
 ;strategy Submitted: @date@
-;assert CORESIZE==55440
 
 INCR    equ 4766 ;4766 ;5146; 6422; 2554 ;34
 ;best so far: 4766 (55,000 cycles)

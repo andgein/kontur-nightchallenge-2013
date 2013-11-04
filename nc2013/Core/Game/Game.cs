@@ -24,7 +24,7 @@ namespace Core.Game
                     parser.Parse(psi.Program),
                     psi.StartAddress.HasValue ? (int) psi.StartAddress : r.Next(Parameters.CORESIZE)
                     ));
-            engine = new Engine.GameEngine(warriors);
+            engine = new GameEngine(warriors);
         }
 
         public GameState GameState

@@ -5,7 +5,6 @@
 ;NSFCWT Round 2
 ;strategy a REAL generic spiral;
 ;strategy just so i tie as close to 100% as possible ;)
-;assert CORE==8000
 
 launch  spl 8
         spl 4

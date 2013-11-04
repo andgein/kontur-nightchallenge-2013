@@ -57,7 +57,7 @@ namespace Tests.Core.Engine
 			Console.WriteLine(program);
 			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
 			var ourGame = new Game(programStartInfos);
-			var marsGame = new MarsGame(new Rules() {WarriorsCount = 1}, programStartInfos);
+			var marsGame = new MarsGame(new Rules() {WarriorsCount = 1, MaxLength = 1000}, programStartInfos);
 			for (int i = 0; i < 30; i++)
 			{
 				ourGame.Step(1);

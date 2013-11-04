@@ -1,7 +1,7 @@
 ;redcode 
 ;name Mobility 8000
 ;author David Moore 
-;assert CORESIZE==8000 && MAXPROCESSES==8000 
+;assert CORESIZE==8000
 ;strategy Phase 1: Attack (dwarf + stun) 
 ;strategy Phase 2: Defense (full gate) 
 

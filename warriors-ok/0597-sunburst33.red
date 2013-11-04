@@ -1,7 +1,6 @@
 ;redcode-94x
 ;name Sunburst 33
 ;author Jay Han
-;assert CORESIZE==55440
 
 p1          equ 27790
 s1          equ 68

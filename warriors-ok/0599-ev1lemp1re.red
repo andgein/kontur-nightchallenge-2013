@@ -9,7 +9,6 @@
 ;strategy
 ;strategy Oh, you wanted "Corewar" strategy?
 ;strategy quickscan -> quickvamp -> imp -> clear
-;assert CORESIZE==8000 && MAXPROCESSES==8 
 ;MAXLENGTH==100
 
 ;----------------------------------------------------------------------

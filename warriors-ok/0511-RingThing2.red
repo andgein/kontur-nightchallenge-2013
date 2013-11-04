@@ -1,7 +1,6 @@
 ;redcode
 ;name RingThing2
 ;author Anders Ivner
-;assert (CORESIZE == 8192)
 ;strategy 5 point spiral / 33% spl 0 bombing stone -> backward
 ;strategy 3 point spiral killing coreclear
 
