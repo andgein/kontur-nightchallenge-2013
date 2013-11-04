@@ -50,7 +50,7 @@ namespace Core.Engine
 		{
 			if (GameOver)
 				return new StepResult();
-			if (CurrentStep >= Parameters.MaxStepsPerWarrior)
+			if (CurrentStep >= Parameters.MaxStepsPerWarrior * Warriors.Count)
 			{
 				GameOver = true;
 				return new StepResult();
