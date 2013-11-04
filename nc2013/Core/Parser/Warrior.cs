@@ -65,7 +65,6 @@ namespace Core.Parser
 				statement.FieldA = statement.FieldA.ExpandConstants(this);
 				statement.FieldB = statement.FieldB.ExpandConstants(this);
 			}
-		    StartAddressExpression = StartAddressExpression.ExpandConstants(this);
 
 			foreach (var statement in Statements)
 			{
@@ -78,6 +77,7 @@ namespace Core.Parser
 				StartAddress = 0;
 			else
 			{
+                StartAddressExpression = StartAddressExpression.ExpandConstants(this);
 				if (StartAddressExpression.GetType() == typeof(VariableExpression))
 					StartAddress = ModularArith.Mod(Statements.Count + StartAddressExpression.Calculate(this, Statements.Count));
 				else if (StartAddressExpression.GetType() == typeof(NumberExpression))
