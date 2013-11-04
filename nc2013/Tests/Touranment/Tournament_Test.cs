@@ -21,8 +21,10 @@ namespace Tests.Touranment
 			var battleRunner = new DobleCheckedBattleRunner();
 			var tournament = new RoundRobinTournament(battleRunner, 1, "completeRanking", players, null, false);
 			var result = tournament.Run();
-			Assert.That(battleRunner.DifferentResults, Is.Empty);
+			var battlesWithDifferentResults = battleRunner.BattlesWithDifferentResults;
+			File.WriteAllText(@"failed-battles.json", JsonConvert.SerializeObject(battlesWithDifferentResults, Formatting.Indented));
 			File.WriteAllText(@"complete-ranking.json", JsonConvert.SerializeObject(result, Formatting.Indented));
+			Assert.That(battlesWithDifferentResults.Count, Is.EqualTo(0));
 		}
 	}
 }

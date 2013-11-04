@@ -6,6 +6,7 @@ using Core.Game;
 using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using nMars.RedCode;
 using NUnit.Framework;
 
 namespace Tests.Touranment
@@ -16,21 +17,21 @@ namespace Tests.Touranment
 
 		public DobleCheckedBattleRunner()
 		{
-			DifferentResults = new List<string>();
+			BattlesWithDifferentResults = new List<Battle>();
 		}
 
-		public List<string> DifferentResults { get; private set; }
+		public List<Battle> BattlesWithDifferentResults { get; private set; }
 
-		protected override void PostProcessBattle(Battle battle, [NotNull] ProgramStartInfo[] programStartInfos, [NotNull] GameState finalGameState)
+		protected override void PostProcessBattle([NotNull] Rules rules, [NotNull] Battle battle, [NotNull] GameState finalGameState)
 		{
-			var marsFinalGameState = GetFinalGameStateByMars(programStartInfos);
+			var marsFinalGameState = GetFinalGameStateByMars(rules, battle);
 			Assert.That(finalGameState.ProgramStartInfos[0].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[0].StartAddress));
 			Assert.That(finalGameState.ProgramStartInfos[1].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[1].StartAddress));
 			var m = Normalize(marsFinalGameState);
 			var o = Normalize(finalGameState);
 			if (o != m)
 			{
-				DifferentResults.Add(string.Format("StartAddress1: {0} Player1: {1}\r\nStartAddress2: {2} Player2: {3}", finalGameState.ProgramStartInfos[0].StartAddress, battle.Player1, finalGameState.ProgramStartInfos[1].StartAddress, battle.Player2));
+				BattlesWithDifferentResults.Add(battle);
 			}
 			//Assert.That(finalGameState.GameOver, Is.EqualTo(marsFinalGameState.GameOver));
 			//Assert.That(finalGameState.Winner, Is.EqualTo(marsFinalGameState.Winner));
@@ -38,8 +39,9 @@ namespace Tests.Touranment
 		}
 
 		[NotNull]
-		private GameState GetFinalGameStateByMars([NotNull] ProgramStartInfo[] programStartInfos)
+		private static GameState GetFinalGameStateByMars([NotNull] Rules rules, [NotNull] Battle battle)
 		{
+			var programStartInfos = battle.GetProgramStartInfos();
 			var game = new MarsGame(rules, programStartInfos);
 			game.StepToEnd();
 			return game.GameState;

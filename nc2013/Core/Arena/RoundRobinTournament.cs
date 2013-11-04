@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Core.Engine;
 using JetBrains.Annotations;
+using nMars.RedCode;
 
 namespace Core.Arena
 {
@@ -15,6 +17,7 @@ namespace Core.Arena
 		private readonly AutoResetEvent botSubmissionSignal;
 		private readonly ManualResetEvent stopSignal;
 		private readonly bool suppressBattleErrors;
+		private readonly Rules rules;
 		private readonly Random rnd = new Random();
 
 		public RoundRobinTournament([NotNull] IBattleRunner battleRunner, int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal, bool suppressBattleErrors = true)
@@ -26,6 +29,21 @@ namespace Core.Arena
 			this.botSubmissionSignal = botSubmissionSignal;
 			this.stopSignal = stopSignal;
 			this.suppressBattleErrors = suppressBattleErrors;
+			rules = new Rules
+			{
+				WarriorsCount = 2,
+				Rounds = 1,
+				MaxCycles = Parameters.MaxStepsPerWarrior,
+				CoreSize = Parameters.CoreSize,
+				PSpaceSize = 500, // coreSize / 16 
+				EnablePSpace = false,
+				MaxProcesses = Parameters.MaxQueueSize,
+				MaxLength = Parameters.MaxWarriorLength,
+				MinDistance = Parameters.MinWarriorsDistance,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
+			};
 		}
 
 		[NotNull]
@@ -79,17 +97,20 @@ namespace Core.Arena
 		[NotNull]
 		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
+			var battleCount = 0;
 			if (botSubmissionSignal != null)
 				botSubmissionSignal.WaitOne(0);
 			for (var i = 0; i < battlesPerPair; i++)
 			{
-				rnd.Shuffle(pairs);
 				foreach (var pair in pairs)
 				{
 					var battle = new Battle
 					{
+						Number = ++battleCount,
 						Player1 = pair.Item1,
+						StartAddress1 = 0,
 						Player2 = pair.Item2,
+						StartAddress2 = NextLoadAddress(0),
 					};
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
@@ -97,6 +118,7 @@ namespace Core.Arena
 				}
 				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0) || stopSignal != null && stopSignal.WaitOne(0))
 					yield break;
+				rnd.Shuffle(pairs);
 			}
 		}
 		private BattlePlayerResultType GetResultForPlayer(int player, int? winner)
@@ -106,12 +128,19 @@ namespace Core.Arena
 			return BattlePlayerResultType.Loss;
 		}
 
+		private int NextLoadAddress(int baseAddress)
+		{
+			var positions = rules.CoreSize + 1 - (rules.MinDistance << 1);
+			var nextLoadAddress = ModularArith.Mod(baseAddress + rules.MinDistance + rnd.Next() % positions);
+			return nextLoadAddress;
+		}
+
 		[NotNull]
 		private BattleResult RunBattle([NotNull] Battle battle)
 		{
 			try
 			{
-				var gameState = battleRunner.RunBattle(battle);
+				var gameState = battleRunner.RunBattle(rules, battle);
 				var winner = gameState.Winner;
 				var res1 = GetResultForPlayer(0, winner);
 				var p1 = new BattlePlayerResult
@@ -130,8 +159,18 @@ namespace Core.Arena
 				return new BattleResult
 				{
 					RunToCompletion = true,
-					Player1Result = p1,
-					Player2Result = p2,
+					Player1Result = new BattlePlayerResult
+					{
+						Player = battle.Player1,
+						StartAddress = battle.StartAddress1,
+						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 0 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
+					},
+					Player2Result = new BattlePlayerResult
+					{
+						Player = battle.Player2,
+						StartAddress = battle.StartAddress2,
+						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 1 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
+					},
 				};
 			}
 			catch (Exception e)
