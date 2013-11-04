@@ -68,6 +68,8 @@ namespace Core.Engine
 			if (stepResult.SplittedInInstruction.HasValue)
 				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
+            CurrentStep++;
+
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
 			if (Warriors.Count > 1 && countLivedWarriors == 1 ||
 				Warriors.Count == 1 && countLivedWarriors == 0)
@@ -77,8 +79,6 @@ namespace Core.Engine
 				return stepResult;
 			}
 			CurrentWarrior = nextWarrior.GetValueOrDefault();
-			CurrentStep++;
-
 			return stepResult;
 		}
 
