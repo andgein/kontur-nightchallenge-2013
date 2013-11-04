@@ -28,19 +28,34 @@ namespace Server.Arena
 			{
 				Name = p.Name,
 				Version = p.Version
-			}).ToArray();
+			})
+			.OrderByDescending(x => x.Version)
+			.ToArray();
 			ArenaPlayer arenaPlayer;
 			TournamentRanking ranking = null;
 			var playerInfo = new PlayerInfo();
+			var lastVersion = playerVersions.GetLastVersion();
 			if (version.HasValue)
 			{
 				arenaPlayer = playerVersions.FirstOrDefault(p => p.Version == version.Value);
 				if (arenaPlayer != null)
-					ranking = gamesRepo.TryLoadRanking(arenaPlayer.Timestamp.Ticks.ToString());
+				{
+					var tournamentId = "last";
+					if (arenaPlayer.Version != lastVersion.Version)
+					{
+						var nextVersion = playerVersions.First(p => p.Version > version.Value);
+						tournamentId = gamesRepo.GetAllTournamentIds()
+							.Select(id => new DateTime(long.Parse(id), DateTimeKind.Utc))
+							.OrderBy(ts => ts)
+							.Last(ts => ts < nextVersion.Timestamp)
+							.Ticks.ToString();
+					}
+					ranking = gamesRepo.TryLoadRanking(tournamentId);
+				}
 			}
 			else
 			{
-				arenaPlayer = playerVersions.GetLastVersion();
+				arenaPlayer = lastVersion;
 				ranking = gamesRepo.TryLoadRanking("last");
 			}
 			if (ranking != null)
