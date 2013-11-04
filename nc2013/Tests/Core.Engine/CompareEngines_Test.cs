@@ -39,7 +39,7 @@ namespace Tests.Core.Engine
 //		[TestCase("0001-dwarf")]
 //		[TestCase("0828-NULL")]
 //		[TestCase("0646-elf")]
-		[TestCase("0257-warf")]
+		[TestCase("0105-hopper2")]
 		public void TestOne(string name)
 		{
 			var program = File.ReadAllText(TestWarriors.GetBotFile(@"warriors-ok\" + name + ".red"));

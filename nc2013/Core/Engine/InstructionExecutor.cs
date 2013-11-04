@@ -43,13 +43,13 @@ namespace Core.Engine
 
 		private EvaluatedOp EvalOp(GameEngine engine, Expression field, AddressingMode mode)
 		{
-			if (mode == AddressingMode.Immediate) return new EvaluatedOp(field.Calculate(), OpType.Value);
+			if (mode == AddressingMode.Immediate) return new EvaluatedOp(field.Calculate());
 			int address = field.Calculate() + engine.CurrentIp;
-			if (mode == AddressingMode.Direct) return new EvaluatedOp(address, OpType.Address);
+			if (mode == AddressingMode.Direct) return new EvaluatedOp(address, engine.Memory[address].Statement);
 			if (mode == AddressingMode.PredecrementIndirect)
 				DecrementB(engine, address);
 			int inderectAddress = address + engine.Memory[address].Statement.FieldB.Calculate();
-			return new EvaluatedOp(inderectAddress, OpType.Address);
+			return new EvaluatedOp(inderectAddress, engine.Memory[inderectAddress].Statement);
 		}
 
 		private Action<GameEngine, EvaluatedOp, EvaluatedOp> GetExecuteMethod(Instruction instruction)
@@ -74,8 +74,8 @@ namespace Core.Engine
 		{
 			var newStatement =
 				a.IsImmediate ?
-					engine.Memory[b.Addr].Statement.SetB(a.Value)
-					: engine.Memory[a.Addr].Statement;
+					b.Statement.SetB(a.Value)
+					: a.Statement;
 			engine.WriteToMemory(b.Addr, newStatement);
 		}
 
@@ -170,11 +170,19 @@ namespace Core.Engine
 		{
 			public readonly OpType Type;
 			private readonly int v;
+			public readonly Statement Statement;
 
-			public EvaluatedOp(int value, OpType type)
+			public EvaluatedOp(int addr, Statement statement)
+			{
+				v = addr;
+				Type = OpType.Address;
+				Statement = statement;
+			}
+
+			public EvaluatedOp(int value)
 			{
 				v = value;
-				Type = type;
+				Type = OpType.Value;
 			}
 
 			public int Value
