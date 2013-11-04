@@ -28,7 +28,7 @@ namespace Core.Parser
 
         protected static bool IsIdentificatorChar(char c)
         {
-            return Char.IsLetter(c) || Char.IsNumber(c) || c == '_';
+            return Char.IsLetter(c) || Char.IsNumber(c) || c == '_' || c == '.';
         }
 
         protected static bool IsIdentificatorChar(string s, int idx)

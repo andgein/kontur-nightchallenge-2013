@@ -13,6 +13,7 @@ namespace Core.Engine
 		}
 
 		private readonly Dictionary<StatementType, Action<GameEngine, EvaluatedOp, EvaluatedOp>> executers;
+		private readonly Dictionary<StatementType, Action<GameEngine, EvaluatedVectorizedOp, EvaluatedVectorizedOp>> vectorizedExecuters;
 
 		public InstructionExecutor()
 		{
@@ -30,15 +31,53 @@ namespace Core.Engine
 				{StatementType.Spl, Spl},
 				{StatementType.Dat, Dat},
 			};
+			vectorizedExecuters = new Dictionary<StatementType, Action<GameEngine, EvaluatedVectorizedOp, EvaluatedVectorizedOp>>
+			{
+				{StatementType.Add4, Add4},
+//				{StatementType.Mov4, Mov4},
+//				{StatementType.Sub4, Sub4},
+			};
 		}
 
 		public void Execute(GameEngine engine, Instruction instruction)
 		{
 			var statement = instruction.Statement;
-			var method = GetExecuteMethod(instruction);
-			var a = EvalOp(engine, statement.FieldA, statement.ModeA);
-			var b = EvalOp(engine, statement.FieldB, statement.ModeB);
-			method(engine, a, b);
+			StatementType type = statement.Type;
+			var method = FindExecuteMethod(type);
+			if (method != null)
+			{
+				var a = EvalOp(engine, statement.FieldA, statement.ModeA);
+				var b = EvalOp(engine, statement.FieldB, statement.ModeB);
+				method(engine, a, b);
+			}
+			var vMethod = FindVectorizedExecuteMethod(type);
+			if (vMethod != null)
+			{
+				var a = EvalVectorizedOp(engine, statement.FieldA, statement.ModeA);
+				var b = EvalVectorizedOp(engine, statement.FieldB, statement.ModeB);
+				vMethod(engine, a, b);
+			}
+		}
+
+		private EvaluatedVectorizedOp EvalVectorizedOp(GameEngine engine, Expression field, AddressingMode mode)
+		{
+			if (mode == AddressingMode.Immediate) return new EvaluatedVectorizedOp(field.CalculateByMod());
+			var addresses = new int[4];
+			var statements = new Statement[4];
+			var baseAddress = field.Calculate() + engine.CurrentIp;
+			for (int i = 0; i < 4; i++)
+			{
+				var address = baseAddress + i;
+				if (mode != AddressingMode.Direct) 
+				{
+					if (mode == AddressingMode.PredecrementIndirect)
+						DecrementB(engine, address);
+					address = address + engine.Memory[address].Statement.FieldB.Calculate();
+				}
+				addresses[i] = address;
+				statements[i] = engine.Memory[address].Statement;
+			}
+			return new EvaluatedVectorizedOp(addresses, statements);
 		}
 
 		private EvaluatedOp EvalOp(GameEngine engine, Expression field, AddressingMode mode)
@@ -47,18 +86,25 @@ namespace Core.Engine
 			int address = field.Calculate() + engine.CurrentIp;
 			if (mode == AddressingMode.Direct) return new EvaluatedOp(address, engine.Memory[address].Statement);
 			if (mode == AddressingMode.PredecrementIndirect)
+			{
 				DecrementB(engine, address);
+			}
 			int inderectAddress = address + engine.Memory[address].Statement.FieldB.Calculate();
 			return new EvaluatedOp(inderectAddress, engine.Memory[inderectAddress].Statement);
 		}
 
-		private Action<GameEngine, EvaluatedOp, EvaluatedOp> GetExecuteMethod(Instruction instruction)
+		private Action<GameEngine, EvaluatedOp, EvaluatedOp> FindExecuteMethod(StatementType statementType)
 		{
-			var statement = instruction.Statement;
-			var statementType = statement.Type;
 			if (!executers.ContainsKey(statementType))
-				throw new ArgumentException("Can't find executor for statement");
+				return null;
 			return executers[statementType];
+		}
+
+		private Action<GameEngine, EvaluatedVectorizedOp, EvaluatedVectorizedOp> FindVectorizedExecuteMethod(StatementType statementType)
+		{
+			if (!vectorizedExecuters.ContainsKey(statementType))
+				return null;
+			return vectorizedExecuters[statementType];
 		}
 
 		private static void DecrementB(GameEngine engine, int address)
@@ -91,6 +137,23 @@ namespace Core.Engine
 					statementB
 						.SetA(statementA.FieldA.Calculate() + statementB.FieldA.Calculate())
 						.SetB(statementA.FieldB.Calculate() + statementB.FieldB.Calculate()));
+			}
+		}
+
+		private void Add4(GameEngine engine, EvaluatedVectorizedOp a, EvaluatedVectorizedOp b)
+		{
+			var statementsB = b.Statements;
+			if (a.IsImmediate)
+				for (int i = 0; i < 4; i++)
+					engine.WriteToMemory(b.Addr[i], statementsB[i].SetB(a.Value[i] + statementsB[i].FieldB.Calculate()));
+			else
+			{
+				var statementsA = a.Statements;
+				for (int i = 0; i < 4; i++)
+					engine.WriteToMemory(b.Addr[i],
+					statementsB[i]
+						.SetA(statementsA[i].FieldA.Calculate() + statementsB[i].FieldA.Calculate())
+						.SetB(statementsA[i].FieldB.Calculate() + statementsB[i].FieldB.Calculate()));
 			}
 		}
 
@@ -171,49 +234,6 @@ namespace Core.Engine
 		private void Dat(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
 			engine.KillCurrentProcess();
-		}
-
-		public class EvaluatedOp
-		{
-			public readonly OpType Type;
-			private readonly int v;
-			public readonly Statement Statement;
-
-			public EvaluatedOp(int addr, Statement statement)
-			{
-				v = addr;
-				Type = OpType.Address;
-				Statement = statement;
-			}
-
-			public EvaluatedOp(int value)
-			{
-				v = value;
-				Type = OpType.Value;
-			}
-
-			public int Value
-			{
-				get
-				{
-					if (Type != OpType.Value) throw new InvalidOperationException("should be immediate!");
-					return v;
-				}
-			}
-
-			public int Addr
-			{
-				get
-				{
-					if (Type != OpType.Address) throw new InvalidOperationException("should not be immediate!");
-					return v;
-				}
-			}
-
-			public bool IsImmediate
-			{
-				get { return Type == OpType.Value; }
-			}
 		}
 	}
 }

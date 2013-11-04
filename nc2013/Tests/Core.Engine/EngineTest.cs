@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Tests.Core.Engine
 {
-    [TestFixture]
+	[TestFixture]
     class EngineTest
     {
         //[Test]

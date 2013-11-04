@@ -19,6 +19,11 @@ namespace Core.Engine
 		private StepResult stepResult;
 		private readonly InstructionExecutor instructionExecutor = new InstructionExecutor();
 
+		public GameEngine(params WarriorStartInfo[] warriorsStartInfos)
+			: this((IEnumerable<WarriorStartInfo>)warriorsStartInfos)
+		{
+			
+		}
 		public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
 		{
 			Memory = new Memory(Parameters.CORESIZE);

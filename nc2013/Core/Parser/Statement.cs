@@ -131,7 +131,7 @@ namespace Core.Parser
 
 		public override string ToString()
 		{
-			return String.Format("{0} {1}{2} {3}{4}",
+			return String.Format("{0} {1}{2}, {3}{4}",
 				statementFactory.GetStatementMnemonic(Type),
 				(char) ModeA,
 				ModularArith.Mod(FieldA.Calculate()),
@@ -155,5 +155,8 @@ namespace Core.Parser
 		Dat,
 		End,
 		Equ,
+		Add4,
+		Sub4,
+		Mov4,
 	}
 }
