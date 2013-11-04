@@ -23,6 +23,9 @@ namespace Core.Parser
 				Tuple.Create(StatementType.Mov, AddressingMode.Immediate),
 				Tuple.Create(StatementType.Add, AddressingMode.Immediate),
 				Tuple.Create(StatementType.Sub, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Mov4, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Add4, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Sub4, AddressingMode.Immediate),
 				Tuple.Create(StatementType.Cmp, AddressingMode.Immediate),
 				Tuple.Create(StatementType.Slt, AddressingMode.Immediate),
 				Tuple.Create(StatementType.Dat, AddressingMode.Direct),
@@ -117,16 +120,10 @@ namespace Core.Parser
 			}
 			else if (statement.Type != StatementType.Equ 
 				&& statement.Type != StatementType.End 
-//				&& statement.Type != StatementType.Dat
 				&& statement.Type != StatementType.Spl
 				&& statement.Type != StatementType.Jmp
 				)
 				throw new CompilationException("B-Field Expected " + command, State);
-//			see http://corewar.co.uk/icws94.htm#2.4
-//			if (statement.Type == StatementType.Dat && b == null)
-//				statement.SetFields(Tuple.Create(AddressingMode.Immediate, (Expression)new NumberExpression(0)), a);
-//			else
-//				statement.SetFields(a, b);
 			statement.SetFields(a, b);
 			CheckStatementIsCorrect(statement);
 			return statement;

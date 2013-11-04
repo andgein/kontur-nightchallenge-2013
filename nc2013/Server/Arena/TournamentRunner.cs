@@ -90,7 +90,7 @@ namespace Server.Arena
 				Program = p.Program,
 				//Warrior = parser.Parse(p.Program),
 			}).ToArray();
-			var tournament = new RoundRobinTournament(battlesPerPair, tournamentId, tournamentPlayers, botSubmissionSignal);
+			var tournament = new RoundRobinTournament(battlesPerPair, tournamentId, tournamentPlayers, botSubmissionSignal, stopSignal);
 			var result = tournament.Run();
 			gamesRepo.SaveTournamentResult(tournamentId, result);
 		}

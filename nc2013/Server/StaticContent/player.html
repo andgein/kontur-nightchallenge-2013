@@ -47,11 +47,11 @@
 			<tr ng-repeat="enemyStats in gamesByEnemy">
 				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
 				<td>{{enemyStats.wins}}</td>
-				<td class="small">{{100*rankingEntry.wins/rankingEntry.games | number:0}}%</td>
+				<td class="small">{{100*enemyStats.wins/enemyStats.games | number:0}}%</td>
 				<td>{{enemyStats.draws}}</td>
-				<td class="small">{{100*rankingEntry.draws/rankingEntry.games | number:0}}%</td>
-				<td>{{enemyStats.losses}}</td>
-				<td class="small">{{100*rankingEntry.loses/rankingEntry.games | number:0}}%</td>
+				<td class="small">{{100*enemyStats.draws/enemyStats.games | number:0}}%</td>
+				<td>{{enemyStats.loses}}</td>
+				<td class="small">{{100*enemyStats.loses/enemyStats.games | number:0}}%</td>
 				<td ng-if="godMode">
 					<span ng-repeat="gameInfo in enemyStats.gameInfos">
 						<a href="#" ng-click="openDebugger({{gameInfo}})">{{gameInfo.player1Result.resultType}}</a>

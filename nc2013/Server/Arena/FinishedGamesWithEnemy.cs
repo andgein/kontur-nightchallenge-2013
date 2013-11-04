@@ -18,7 +18,10 @@ namespace Server.Arena
 		public int Draws;
 
 		[JsonProperty]
-		public int Losses;
+		public int Loses;
+
+		[JsonProperty]
+		public int Games { get { return Wins + Draws + Loses; } }
 
 		[JsonProperty]
 		public FinishedGameInfo[] GameInfos;

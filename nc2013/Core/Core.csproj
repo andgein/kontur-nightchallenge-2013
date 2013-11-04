@@ -60,6 +60,7 @@
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
     <Compile Include="Arena\TournamentPlayer.cs" />
     <Compile Include="Arena\TournamentRanking.cs" />
+    <Compile Include="Engine\EvaluatedOp.cs" />
     <Compile Include="Engine\GameEngine.cs" />
     <Compile Include="Engine\Instruction.cs" />
     <Compile Include="Engine\Memory.cs" />
