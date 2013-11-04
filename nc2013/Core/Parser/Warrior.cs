@@ -65,6 +65,7 @@ namespace Core.Parser
 				statement.FieldA = statement.FieldA.ExpandConstants(this);
 				statement.FieldB = statement.FieldB.ExpandConstants(this);
 			}
+		    StartAddressExpression = StartAddressExpression.ExpandConstants(this);
 
 			foreach (var statement in Statements)
 			{

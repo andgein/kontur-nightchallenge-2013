@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Core.Game;
 using Core.Game.MarsBased;
-using Core.Parser;
 using NUnit.Framework;
-using Core.Engine;
 using Newtonsoft.Json;
 using nMars.RedCode;
 

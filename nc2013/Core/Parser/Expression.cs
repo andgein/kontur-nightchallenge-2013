@@ -126,7 +126,8 @@ namespace Core.Parser
 
 		public override Expression ExpandConstants(Warrior warrior)
 		{
-			if (warrior.Labels.ContainsKey(Name)) return this;
+			if (warrior.Labels.ContainsKey(Name))
+                return this;
 			if (!warrior.Constants.ContainsKey(Name))
 				throw new InvalidOperationException("Unknown constant " + Name);
 			return warrior.ExpandConstant(Name);
