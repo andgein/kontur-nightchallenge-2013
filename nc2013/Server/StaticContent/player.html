@@ -45,7 +45,9 @@
 				<th ng-if="godMode">Битвы</th>
 			</tr>
 			<tr ng-repeat="enemyStats in gamesByEnemy">
-				<td>{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}</td>
+				<td><a href="player.html?name={{enemyStats.enemy}}&version={{enemyStats.enemyVersion}}">
+						{{enemyStats.enemy}} v{{enemyStats.enemyVersion}}
+				    </a></td>
 				<td>{{enemyStats.wins}}</td>
 				<td class="small">{{100*enemyStats.wins/enemyStats.games | number:0}}%</td>
 				<td>{{enemyStats.draws}}</td>
@@ -61,7 +63,9 @@
 		</table>
 		<h3>Все версии бота</h3>
 		<ul>
-			<li ng-repeat="botVersionInfo in botVersionInfos"><a href="player.html?name={{botVersionInfo.name}}&version={{botVersionInfo.version}}">ver.{{botVersionInfo.version}}</a></li>
+			<li ng-repeat="botVersionInfo in botVersionInfos">
+				<a href="player.html?name={{botVersionInfo.name}}&version={{botVersionInfo.version}}">{{botVersionInfo.name}} v{{botVersionInfo.version}}</a> ({{botVersionInfo.timestamp}})
+			</li>
 		</ul>
 	</div>
 </body>

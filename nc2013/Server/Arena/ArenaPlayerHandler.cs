@@ -27,7 +27,8 @@ namespace Server.Arena
 			var botVersionInfos = playerVersions.Select(p => new BotVersionInfo
 			{
 				Name = p.Name,
-				Version = p.Version
+				Version = p.Version,
+				Timestamp = p.Timestamp
 			})
 			.OrderByDescending(x => x.Version)
 			.ToArray();
@@ -47,7 +48,7 @@ namespace Server.Arena
 						tournamentId = gamesRepo.GetAllTournamentIds()
 							.Select(id => new DateTime(long.Parse(id), DateTimeKind.Utc))
 							.OrderBy(ts => ts)
-							.Last(ts => ts < nextVersion.Timestamp)
+							.LastOrDefault(ts => ts < nextVersion.Timestamp)
 							.Ticks.ToString();
 					}
 					ranking = gamesRepo.TryLoadRanking(tournamentId);

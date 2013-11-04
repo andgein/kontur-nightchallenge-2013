@@ -73,7 +73,13 @@ namespace Server
 		public static void SendResponse<T>([NotNull] this GameHttpContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
 		{
 			context.Response.StatusCode = (int) statusCode;
-			var result = JsonConvert.SerializeObject(value, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented});
+			var jsonSettings = new JsonSerializerSettings
+			{
+				ContractResolver = new CamelCasePropertyNamesContractResolver(), 
+				DateFormatString = "yyyy-MM-dd HH:mm:ss",
+				Formatting = Formatting.Indented
+			};
+			var result = JsonConvert.SerializeObject(value, jsonSettings);
 			context.SendResponseRaw(result, "application/json; charset=utf-8");
 		}
 

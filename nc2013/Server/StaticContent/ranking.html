@@ -42,7 +42,7 @@
 			</tr>
 			<tr ng-repeat="p in ranking.places">
 				<td>{{$index+1}}</td>
-				<td><a href="player.html?name={{p.name}}">{{p.name}}</a></td>
+				<td><a href="player.html?name={{p.name}}&version={{p.version}}">{{p.name}} v{{p.version}}</a></td>
 				<td>{{p.score}}</td>
 				<td class="small">{{p.score / p.games | number:1}} за бой</td>
 				<td>{{p.wins}}</td>

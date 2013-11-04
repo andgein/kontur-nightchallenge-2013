@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Server.Arena
 {
@@ -10,5 +11,8 @@ namespace Server.Arena
 
 		[JsonProperty]
 		public int Version;
+
+		[JsonProperty]
+		public DateTime Timestamp;
 	}
 }
