@@ -79,7 +79,8 @@ namespace Core.Arena
 		[NotNull]
 		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
-			botSubmissionSignal.WaitOne(0);
+			if (botSubmissionSignal != null)
+				botSubmissionSignal.WaitOne(0);
 			for (var i = 0; i < battlesPerPair; i++)
 			{
 				rnd.Shuffle(pairs);

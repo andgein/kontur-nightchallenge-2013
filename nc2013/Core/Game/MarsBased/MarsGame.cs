@@ -115,7 +115,7 @@ namespace Core.Game.MarsBased
 			if (warrior == null)
 				throw new WarriorProgramParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
 			warrior.FileName = filename;
-			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
+			warrior.PredefinedLoadAddress = programStartInfo.StartAddress;
 			return warrior;
 		}
 	}

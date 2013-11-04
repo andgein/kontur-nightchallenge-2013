@@ -1,7 +1,6 @@
 ﻿using System;
 using Core.Engine;
 using Core.Game;
-using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using nMars.RedCode;
 
@@ -9,7 +8,7 @@ namespace Core.Arena
 {
 	public class BattleRunner : IBattleRunner
 	{
-		private readonly Rules rules;
+		protected readonly Rules rules;
 		private readonly Random rnd = new Random();
 
 		public BattleRunner()
@@ -37,9 +36,9 @@ namespace Core.Arena
 			var programStartInfos = battle.GetProgramStartInfos();
 			programStartInfos[0].StartAddress = 0;
 			programStartInfos[1].StartAddress = NextLoadAddress(0);
-			var game = new MarsGame(rules, programStartInfos);
-			game.StepToEnd();
-			return game.GameState;
+			var finalGameState = GetFinalGameState(programStartInfos);
+			PostProcessBattle(battle, programStartInfos, finalGameState);
+			return finalGameState;
 		}
 
 		private int NextLoadAddress(int baseAddress)
@@ -47,6 +46,18 @@ namespace Core.Arena
 			var positions = rules.CoreSize + 1 - (rules.MinDistance << 1);
 			var nextLoadAddress = ModularArith.Mod(baseAddress + rules.MinDistance + rnd.Next() % positions);
 			return nextLoadAddress;
+		}
+
+		[NotNull]
+		private static GameState GetFinalGameState([NotNull] ProgramStartInfo[] programStartInfos)
+		{
+			var game = new Game.Game(programStartInfos);
+			game.StepToEnd();
+			return game.GameState;
+		}
+
+		protected virtual void PostProcessBattle([NotNull] Battle battle, [NotNull] ProgramStartInfo[] programStartInfos, [NotNull] GameState finalGameState)
+		{
 		}
 	}
 }
