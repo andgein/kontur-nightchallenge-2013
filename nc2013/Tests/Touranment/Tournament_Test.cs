@@ -19,7 +19,7 @@ namespace Tests.Touranment
 				Version = 1,
 			}).ToArray();
 			var battleRunner = new DobleCheckedBattleRunner();
-			var tournament = new RoundRobinTournament(battleRunner, 1, "completeRanking", players, null, false);
+			var tournament = new RoundRobinTournament(battleRunner, 1, "completeRanking", players, null, null, false);
 			var result = tournament.Run();
 			var battlesWithDifferentResults = battleRunner.BattlesWithDifferentResults;
 			File.WriteAllText(@"failed-battles.json", JsonConvert.SerializeObject(battlesWithDifferentResults, Formatting.Indented));

@@ -121,6 +121,7 @@ namespace Core.Arena
 				rnd.Shuffle(pairs);
 			}
 		}
+
 		private BattlePlayerResultType GetResultForPlayer(int player, int? winner)
 		{
 			if (!winner.HasValue) return BattlePlayerResultType.Draw;
@@ -142,35 +143,23 @@ namespace Core.Arena
 			{
 				var gameState = battleRunner.RunBattle(rules, battle);
 				var winner = gameState.Winner;
-				var res1 = GetResultForPlayer(0, winner);
 				var p1 = new BattlePlayerResult
 				{
-					Player = battle.Player1, 
-//					StartAddress = gameState.ProgramStartInfos[0].StartAddress ?? 0, 
-					ResultType = res1,
+					Player = battle.Player1,
+					StartAddress = battle.StartAddress1,
+					ResultType = GetResultForPlayer(0, winner),
 				};
-				var res2 = GetResultForPlayer(1, winner);
 				var p2 = new BattlePlayerResult
 				{
-					Player = battle.Player2, 
-//					StartAddress = (int) gameState.ProgramStartInfos[1].StartAddress, 
-					ResultType = res2,
+					Player = battle.Player2,
+					StartAddress = battle.StartAddress2,
+					ResultType = GetResultForPlayer(1, winner),
 				};
 				return new BattleResult
 				{
 					RunToCompletion = true,
-					Player1Result = new BattlePlayerResult
-					{
-						Player = battle.Player1,
-						StartAddress = battle.StartAddress1,
-						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 0 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
-					},
-					Player2Result = new BattlePlayerResult
-					{
-						Player = battle.Player2,
-						StartAddress = battle.StartAddress2,
-						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 1 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
-					},
+					Player1Result = p1,
+					Player2Result = p2,
 				};
 			}
 			catch (Exception e)
