@@ -12,7 +12,10 @@ namespace Tests.Touranment
 {
 	public class DobleCheckedBattleRunner : BattleRunner
 	{
-		private static readonly Regex r = new Regex("LastModifiedByProgram\":.*?\\}", RegexOptions.Compiled);
+		private static readonly Regex r1 = new Regex("LastModifiedByProgram\":.*?\\}", RegexOptions.Compiled);
+		private static readonly Regex r2 = new Regex("LastPointer\":.*?\"", RegexOptions.Compiled);
+		private static readonly Regex r3 = new Regex("CurrentInstruction\":.*?\\}", RegexOptions.Compiled);
+		private static readonly Regex r4 = new Regex("CurrentProgram\":.*?\"", RegexOptions.Compiled);
 
 		public DobleCheckedBattleRunner()
 		{
@@ -30,9 +33,9 @@ namespace Tests.Touranment
 			{
 				BattlesWithDifferentResults.Add(battle);
 			}
-			//var m = Normalize(marsFinalGameState);
-			//var o = Normalize(finalGameState);
-			//Assert.That(o, Is.EqualTo(m));
+			var m = Normalize(marsFinalGameState);
+			var o = Normalize(finalGameState);
+			Assert.That(o, Is.EqualTo(m));
 		}
 
 		[NotNull]
@@ -52,9 +55,12 @@ namespace Tests.Touranment
 
 		private static string Normalize(string s)
 		{
-			foreach (var x in new[] { ".AB", ".A", ".B", ".I", ".F", ".X", " ", "\t", ",", "\"Winner\":0", "\"Winner\":null", })
+			foreach (var x in new[] { ".AB", ".A", ".B", ".I", ".F", ".X", " ", "\t", ",", })
 				s = s.Replace(x, "");
-			s = r.Replace(s, "}");
+			s = r1.Replace(s, "}");
+			s = r2.Replace(s, "\"");
+			s = r3.Replace(s, "}");
+			s = r4.Replace(s, "\"");
 			return s;
 		}
 	}
