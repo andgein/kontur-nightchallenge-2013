@@ -7,6 +7,7 @@ using Core;
 using Core.Arena;
 using Core.Game;
 using Core.Game.MarsBased;
+using Core.Parser;
 using nMars.RedCode;
 using Server.Arena;
 using log4net;
@@ -57,8 +58,7 @@ namespace Server
 			var prefix = GetPrefix(args);
 			var godModeSecret = Guid.NewGuid();
 			Log.For<GameHttpServer>().Warn(string.Format("GodModeSecret: {0}", godModeSecret));
-			var warriorProgramParser = new MarsWarriorProgramParser(baseRules);
-			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
+			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), new WarriorParser());
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
 			var sessionManager = new SessionManager("../sessions");
 			var gameServer = new GameServer();

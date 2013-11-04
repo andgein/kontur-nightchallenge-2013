@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Game;
 
 namespace Core.Parser
 {
-	public class WarriorParser : Parser
+	public class WarriorParser : Parser, IWarriorProgramParser
 	{
 		private readonly StatementFactory statementFactory = new StatementFactory();
 		private readonly ExpressionParser expressionParser = new ExpressionParser();
@@ -177,6 +178,19 @@ namespace Core.Parser
 		private bool IsCommandToken(string token)
 		{
 			return statementFactory.Commands.ContainsKey(token.ToUpper());
+		}
+
+		public string ValidateProgram(string program)
+		{
+			try
+			{
+				Parse(program);
+				return null;
+			}
+			catch (Exception e)
+			{
+				return e.Message;
+			}
 		}
 	}
 }
