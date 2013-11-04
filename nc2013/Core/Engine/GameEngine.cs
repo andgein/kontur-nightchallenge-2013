@@ -105,7 +105,7 @@ namespace Core.Engine
 		{
 			Memory[address].Statement = statement;
 			Memory[address].LastModifiedByProgram = CurrentWarrior;
-			stepResult.ChangeMemory(address, statement, CurrentWarrior);
+			stepResult.ChangeMemory(address);
 		}
 
 		public void KillCurrentProcess()

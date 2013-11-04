@@ -64,12 +64,11 @@ namespace Core.Game
                         ChangeType = ProcessStateChangeType.Executed
                     }).ToArray()
                 };
-            var memoryDiffs = new Dictionary<int, CellState>();
+        	var memoryDiffs = new HashSet<int>();
         	for (var i = 0; i < stepCount; ++i)
             {
             	var stepResult = engine.Step();
-            	foreach (var md in stepResult.MemoryDiff)
-					memoryDiffs[md.Key] = md.Value;
+				memoryDiffs.UnionWith(stepResult.MemoryDiffs);
             }
 
         	return new Diff
@@ -78,10 +77,15 @@ namespace Core.Game
                 CurrentStep = engine.CurrentStep,
                 GameOver = engine.GameOver,
                 Winner = engine.Winner,
-                MemoryDiffs = memoryDiffs.Select(md => new MemoryDiff
+                MemoryDiffs = memoryDiffs.Select(address => new MemoryDiff
                 {
-                    Address = (uint) md.Key,
-                    CellState = md.Value
+                    Address = (uint) address,
+                    CellState = new CellState
+                    {
+                    	Instruction = engine.Memory[address].Statement.ToString(),
+						CellType = engine.Memory[address].Statement.CellType,
+						LastModifiedByProgram = engine.Memory[address].LastModifiedByProgram
+                    }
                 }).ToArray(),
                 ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
                 {

@@ -7,6 +7,8 @@ namespace Core.Engine
     {
         public static int Mod(int a, int b = Parameters.CORESIZE)
         {
+			if (a < b && a >= 0)
+				return a;
             var result = a % b;
             if (result < 0)
                 result += b;
@@ -17,11 +19,11 @@ namespace Core.Engine
 
 	    public static int Div(int a, int b)
 	    {
-		    int asgn = Math.Sign(a);
-			int bsgn = Math.Sign(b);
+		    var asgn = Math.Sign(a);
+			var bsgn = Math.Sign(b);
 		    a = Math.Abs(a);
 		    b = Math.Abs(b);
-		    return (asgn*bsgn)*(a/b);
+		    return (asgn * bsgn) * (a / b);
 	    }
     }
 }

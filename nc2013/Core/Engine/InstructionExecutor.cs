@@ -63,7 +63,7 @@ namespace Core.Engine
 
 		private static void DecrementB(GameEngine engine, int address)
 		{
-			Statement oldStatement = engine.Memory[address].Statement;
+			var oldStatement = engine.Memory[address].Statement;
 			engine.WriteToMemory(address, new Statement(oldStatement)
 			{
 				FieldB = oldStatement.FieldB.Decremented()

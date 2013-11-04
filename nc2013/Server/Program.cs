@@ -61,8 +61,8 @@ namespace Server
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
 			var sessionManager = new SessionManager("../sessions");
-//			var gameServer = new GameServer();
-			var gameServer = new MarsGameServer(baseRules);
+			var gameServer = new GameServer();
+//			var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
 			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 10);
 			var httpServer = new GameHttpServer(

@@ -14,7 +14,7 @@ namespace Tests.Core.Engine
 	public class CompareEngines_Test
 	{
 		public string[] BotsOk = TestWarriors.GetBotFiles("warriors-ok").ToArray();
-		public string[] BotsBad = TestWarriors.GetBotFiles("warriors-bad").ToArray();
+//		public string[] BotsBad = TestWarriors.GetBotFiles("warriors-bad").ToArray();
 
 		[Test]
 		[TestCaseSource("BotsOk")]
@@ -23,12 +23,12 @@ namespace Tests.Core.Engine
 			Compare(File.ReadAllText(bot));
 		}
 
-		[Test]
-		[TestCaseSource("BotsBad")]
-		public void TestBad(string bot)
-		{
-			Compare(File.ReadAllText(bot));
-		}
+//		[Test]
+//		[TestCaseSource("BotsBad")]
+//		public void TestBad(string bot)
+//		{
+//			Compare(File.ReadAllText(bot));
+//		}
 
 		[Test]
 //		[TestCase("0002-imp")]

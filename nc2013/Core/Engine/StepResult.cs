@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Core.Game;
-using Core.Parser;
 
 namespace Core.Engine
 {
@@ -9,24 +7,19 @@ namespace Core.Engine
         public bool KilledInInstruction;
         public int? SetNextIP;
         public int? SplittedInInstruction;
-        public readonly Dictionary<int, CellState> MemoryDiff;
+    	public readonly HashSet<int> MemoryDiffs;
 
         public StepResult()
         {
             KilledInInstruction = false;
             SetNextIP = null;
             SplittedInInstruction = null;
-            MemoryDiff = new Dictionary<int, CellState>();
+			MemoryDiffs = new HashSet<int>();
         }
 
-        public void ChangeMemory(int address, Statement statement, int modifiedBy)
+        public void ChangeMemory(int address)
         {
-            MemoryDiff[ModularArith.Mod(address)] = new CellState
-            {
-                CellType = statement.CellType,
-                Instruction = statement.ToString(),
-                LastModifiedByProgram = modifiedBy
-            };
+        	MemoryDiffs.Add(ModularArith.Mod(address));
         }
     }
 }

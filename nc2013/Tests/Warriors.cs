@@ -6,7 +6,7 @@ namespace Tests
 {
 	public static class TestWarriors
 	{
-		public const string basePath = @"..\..\..\..\";
+		private const string basePath = @"..\..\..\..\";
 
 		public static IEnumerable<string> GetBotFiles(string folder)
 		{
