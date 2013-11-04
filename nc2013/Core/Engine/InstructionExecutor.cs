@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Parser;
 
 namespace Core.Engine
@@ -34,8 +35,8 @@ namespace Core.Engine
 			vectorizedExecuters = new Dictionary<StatementType, Action<GameEngine, EvaluatedVectorizedOp, EvaluatedVectorizedOp>>
 			{
 				{StatementType.Add4, Add4},
-//				{StatementType.Mov4, Mov4},
-//				{StatementType.Sub4, Sub4},
+				{StatementType.Mov4, Mov4},
+				{StatementType.Sub4, Sub4},
 			};
 		}
 
@@ -125,6 +126,16 @@ namespace Core.Engine
 			engine.WriteToMemory(b.Addr, newStatement);
 		}
 
+		private void Mov4(GameEngine engine, EvaluatedVectorizedOp a, EvaluatedVectorizedOp b)
+		{
+			var newStatements =
+				a.IsImmediate ?
+					b.Statements.Select((stm, i) => stm.SetB(a.Value[i])).ToArray()
+					: a.Statements;
+			for (int i = 0; i < 4; i++)
+				engine.WriteToMemory(b.Addr[i], newStatements[i]);
+		}
+
 		private void Add(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
 			var statementB = b.Statement;
@@ -157,17 +168,32 @@ namespace Core.Engine
 			}
 		}
 
+		private void Sub4(GameEngine engine, EvaluatedVectorizedOp a, EvaluatedVectorizedOp b)
+		{
+			var statementsB = b.Statements;
+			if (a.IsImmediate)
+				for (int i = 0; i < 4; i++)
+					engine.WriteToMemory(b.Addr[i], statementsB[i].SetB(a.Value[i] - statementsB[i].FieldB.Calculate()));
+			else
+			{
+				var statementsA = a.Statements;
+				for (int i = 0; i < 4; i++)
+					engine.WriteToMemory(b.Addr[i],
+					statementsB[i]
+						.SetA(statementsA[i].FieldA.Calculate() - statementsB[i].FieldA.Calculate())
+						.SetB(statementsA[i].FieldB.Calculate() - statementsB[i].FieldB.Calculate()));
+			}
+		}
 		private void Sub(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
+			var statementB = b.Statement;
 			if (a.IsImmediate)
 			{
-				var statementB = b.Statement;
 				engine.WriteToMemory(b.Addr, statementB.SetB(statementB.FieldB.Calculate() - a.Value));
 			}
 			else
 			{
 				var statementA = a.Statement;
-				var statementB = b.Statement;
 				engine.WriteToMemory(b.Addr,
 					statementB
 						.SetA(statementB.FieldA.Calculate() - statementA.FieldA.Calculate())
