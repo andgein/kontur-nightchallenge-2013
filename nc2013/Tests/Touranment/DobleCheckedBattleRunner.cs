@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Core.Arena;
 using Core.Game;
@@ -13,20 +14,27 @@ namespace Tests.Touranment
 	{
 		private static readonly Regex r = new Regex("LastModifiedByProgram\":.*?\\}", RegexOptions.Compiled);
 
+		public DobleCheckedBattleRunner()
+		{
+			DifferentResults = new List<string>();
+		}
+
+		public List<string> DifferentResults { get; private set; }
+
 		protected override void PostProcessBattle(Battle battle, [NotNull] ProgramStartInfo[] programStartInfos, [NotNull] GameState finalGameState)
 		{
 			var marsFinalGameState = GetFinalGameStateByMars(programStartInfos);
+			Assert.That(finalGameState.ProgramStartInfos[0].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[0].StartAddress));
+			Assert.That(finalGameState.ProgramStartInfos[1].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[1].StartAddress));
 			var m = Normalize(marsFinalGameState);
 			var o = Normalize(finalGameState);
 			if (o != m)
 			{
-				Console.WriteLine("Different battle results for:");
-				Console.WriteLine("Player1: {0}", battle.Player1);
-				Console.WriteLine("Player2: {0}", battle.Player2);
+				DifferentResults.Add(string.Format("StartAddress1: {0} Player1: {1}\r\nStartAddress2: {2} Player2: {3}", finalGameState.ProgramStartInfos[0].StartAddress, battle.Player1, finalGameState.ProgramStartInfos[1].StartAddress, battle.Player2));
 			}
-			Assert.That(o, Is.EqualTo(m));
-			Assert.That(finalGameState.GameOver, Is.EqualTo(marsFinalGameState.GameOver));
-			Assert.That(finalGameState.Winner, Is.EqualTo(marsFinalGameState.Winner));
+			//Assert.That(finalGameState.GameOver, Is.EqualTo(marsFinalGameState.GameOver));
+			//Assert.That(finalGameState.Winner, Is.EqualTo(marsFinalGameState.Winner));
+			//Assert.That(o, Is.EqualTo(m));
 		}
 
 		[NotNull]

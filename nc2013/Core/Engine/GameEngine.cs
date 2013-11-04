@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core.Parser;
-using nMars.RedCode;
 
 namespace Core.Engine
 {
@@ -73,17 +72,17 @@ namespace Core.Engine
 			if (stepResult.SplittedInInstruction.HasValue)
 				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
 
-            CurrentStep++;
+			CurrentStep++;
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
-			if (Warriors.Count > 1 && countLivedWarriors == 1 ||
-				Warriors.Count == 1 && countLivedWarriors == 0)
+			CurrentWarrior = nextWarrior.GetValueOrDefault();
+
+			if (Warriors.Count > 1 && countLivedWarriors == 1 || Warriors.Count == 1 && countLivedWarriors == 0)
 			{
 				GameOver = true;
 				Winner = nextWarrior;
 				return stepResult;
 			}
-			CurrentWarrior = nextWarrior.GetValueOrDefault();
 			return stepResult;
 		}
 
