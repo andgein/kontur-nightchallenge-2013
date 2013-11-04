@@ -11,15 +11,17 @@ namespace Server.Arena
 	{
 		private readonly IPlayersRepo playersRepo;
 		private readonly IGamesRepo gamesRepo;
+		private readonly IBattleRunner battleRunner;
 		private readonly int battlesPerPair;
 		private readonly ManualResetEvent stopSignal = new ManualResetEvent(false);
 		private readonly AutoResetEvent botSubmissionSignal = new AutoResetEvent(false);
 		private readonly Thread thread;
 
-		public TournamentRunner([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, int battlesPerPair)
+		public TournamentRunner([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] IBattleRunner battleRunner, int battlesPerPair)
 		{
 			this.playersRepo = playersRepo;
 			this.gamesRepo = gamesRepo;
+			this.battleRunner = battleRunner;
 			this.battlesPerPair = battlesPerPair;
 			thread = new Thread(TournamentCycle)
 			{
@@ -88,9 +90,8 @@ namespace Server.Arena
 				Name = p.Name,
 				Version = p.Version,
 				Program = p.Program,
-				//Warrior = parser.Parse(p.Program),
 			}).ToArray();
-			var tournament = new RoundRobinTournament(battlesPerPair, tournamentId, tournamentPlayers, botSubmissionSignal, stopSignal);
+			var tournament = new RoundRobinTournament(battleRunner, battlesPerPair, tournamentId, tournamentPlayers, botSubmissionSignal, stopSignal);
 			var result = tournament.Run();
 			gamesRepo.SaveTournamentResult(tournamentId, result);
 		}

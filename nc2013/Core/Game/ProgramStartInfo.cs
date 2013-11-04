@@ -11,7 +11,7 @@ namespace Core.Game
 		public string Program { get; set; }
 
 		[JsonProperty]
-		public uint? StartAddress { get; set; }
+		public int? StartAddress { get; set; }
 
 		public override string ToString()
 		{

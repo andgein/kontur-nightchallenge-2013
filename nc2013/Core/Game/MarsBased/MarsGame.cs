@@ -22,7 +22,7 @@ namespace Core.Game.MarsBased
 			this.programStartInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
 			{
 				Program = pi.Program,
-				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : (uint)engine.warriors[idx].LoadAddress,
+				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : engine.warriors[idx].LoadAddress,
 			}).ToArray();
 		}
 

@@ -27,8 +27,8 @@ namespace Server.Debugging
 			var program2 = GetBotProgram(gameInfo.Player2Result.Player);
 			var programStartInfos = new[]
 			{
-				new ProgramStartInfo{ Program = program1, StartAddress = (uint)gameInfo.Player1Result.StartAddress, },
-				new ProgramStartInfo{ Program = program2, StartAddress = (uint)gameInfo.Player2Result.StartAddress, }
+				new ProgramStartInfo{ Program = program1, StartAddress = gameInfo.Player1Result.StartAddress, },
+				new ProgramStartInfo{ Program = program2, StartAddress = gameInfo.Player2Result.StartAddress, }
 			};
 
 			debugger.StartNewGame(programStartInfos);

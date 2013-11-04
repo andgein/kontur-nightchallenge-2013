@@ -26,12 +26,12 @@ namespace Core.Engine
 		}
 		public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
 		{
-			Memory = new Memory(Parameters.CORESIZE);
+			Memory = new Memory(Parameters.CoreSize);
 			Warriors = new List<RunningWarrior>();
 			var idx = 0;
 			foreach (var wsi in warriorsStartInfos)
 			{
-				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, Parameters.CORESIZE);
+				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, Parameters.CoreSize);
 				Warriors.Add(warrior);
 				PlaceWarrior(warrior, wsi.LoadAddress);
 			}
@@ -51,7 +51,7 @@ namespace Core.Engine
 		{
 			if (GameOver)
 				return new StepResult();
-			if (CurrentStep >= Parameters.MaxSteps)
+			if (CurrentStep >= Parameters.MaxStepsPerWarrior)
 			{
 				GameOver = true;
 				return new StepResult();

@@ -49,6 +49,7 @@
     <Compile Include="Core.Parser\ExpressionParserTest.cs" />
     <Compile Include="Core.Parser\WarriorParserTest.cs" />
     <Compile Include="Core.Parser\WarriorParser_BigTest.cs" />
+    <Compile Include="Touranment\Tournament_Test.cs" />
     <Compile Include="Warriors.cs" />
     <Compile Include="MarsEngineRunner.cs" />
     <Compile Include="Mars\ComparingEngine.cs" />

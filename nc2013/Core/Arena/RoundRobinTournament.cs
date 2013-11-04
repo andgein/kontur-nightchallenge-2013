@@ -2,29 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Core.Game;
-using Core.Game.MarsBased;
 using JetBrains.Annotations;
-using nMars.RedCode;
 
 namespace Core.Arena
 {
 	public class RoundRobinTournament
 	{
+		private readonly IBattleRunner battleRunner;
 		private readonly int battlesPerPair;
 		private readonly string tournamentId;
 		private readonly TournamentPlayer[] players;
 		private readonly AutoResetEvent botSubmissionSignal;
 		private readonly ManualResetEvent stopSignal;
+		private readonly bool suppressBattleErrors;
 		private readonly Random rnd = new Random();
 
-		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal)
+		public RoundRobinTournament([NotNull] IBattleRunner battleRunner, int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal, bool suppressBattleErrors = true)
 		{
+			this.battleRunner = battleRunner;
 			this.battlesPerPair = battlesPerPair;
 			this.tournamentId = tournamentId;
 			this.players = players;
 			this.botSubmissionSignal = botSubmissionSignal;
 			this.stopSignal = stopSignal;
+			this.suppressBattleErrors = suppressBattleErrors;
 		}
 
 		[NotNull]
@@ -109,7 +110,7 @@ namespace Core.Arena
 		{
 			try
 			{
-				var gameState = GetFinalGameStateForBattle(battle);
+				var gameState = battleRunner.RunBattle(battle);
 				var winner = gameState.Winner;
 				var res1 = GetResultForPlayer(0, winner);
 				var p1 = new BattlePlayerResult
@@ -134,32 +135,11 @@ namespace Core.Arena
 			}
 			catch (Exception e)
 			{
+				if (!suppressBattleErrors)
+					throw;
 				Log.For(this).Error(string.Format("Battle failed: {0}", battle), e);
 				return new BattleResult { RunToCompletion = false };
 			}
-		}
-
-		[NotNull]
-		private static GameState GetFinalGameStateForBattle([NotNull] Battle battle)
-		{
-			var rules = new Rules
-			{
-				WarriorsCount = 2,
-				Rounds = 1,
-				MaxCycles = 80000,
-				CoreSize = 8000,
-				PSpaceSize = 500, // coreSize / 16 
-				EnablePSpace = false,
-				MaxProcesses = 1000,
-				MaxLength = 10000,
-				MinDistance = 10000,
-				Version = 93,
-				ScoreFormula = ScoreFormula.Standard,
-				ICWSStandard = ICWStandard.ICWS88,
-			};
-			var game = new Game.Game(battle.GetProgramStartInfos());
-			game.StepToEnd();
-			return game.GameState;
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using Core.Parser;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Core.Arena
 {
@@ -14,9 +13,6 @@ namespace Core.Arena
 
 		[JsonIgnore]
 		public string Program;
-
-		[JsonIgnore]
-		public Warrior Warrior;
 
 		private bool Equals(TournamentPlayer other)
 		{
