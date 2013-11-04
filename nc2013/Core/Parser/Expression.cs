@@ -92,7 +92,7 @@ namespace Core.Parser
 
 		public NumberExpression(int value)
 		{
-			Value = ModularArith.Mod(value);
+			Value = value;
 		}
 
 		public override int Calculate(Warrior warrior = null, int address = 0)
