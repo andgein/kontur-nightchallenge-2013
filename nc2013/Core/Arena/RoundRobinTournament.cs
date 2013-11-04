@@ -15,14 +15,16 @@ namespace Core.Arena
 		private readonly string tournamentId;
 		private readonly TournamentPlayer[] players;
 		private readonly AutoResetEvent botSubmissionSignal;
+		private readonly ManualResetEvent stopSignal;
 		private readonly Random rnd = new Random();
 
-		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal)
+		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal)
 		{
 			this.battlesPerPair = battlesPerPair;
 			this.tournamentId = tournamentId;
 			this.players = players;
 			this.botSubmissionSignal = botSubmissionSignal;
+			this.stopSignal = stopSignal;
 		}
 
 		[NotNull]
@@ -91,9 +93,15 @@ namespace Core.Arena
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
 				}
-				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0))
+				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0) || stopSignal != null && stopSignal.WaitOne(0))
 					yield break;
 			}
+		}
+		private BattlePlayerResultType GetResultForPlayer(int player, int? winner)
+		{
+			if (!winner.HasValue) return BattlePlayerResultType.Draw;
+			if (winner == player) return BattlePlayerResultType.Win;
+			return BattlePlayerResultType.Loss;
 		}
 
 		[NotNull]
@@ -103,21 +111,25 @@ namespace Core.Arena
 			{
 				var gameState = GetFinalGameStateForBattle(battle);
 				var winner = gameState.Winner;
+				var res1 = GetResultForPlayer(0, winner);
+				var p1 = new BattlePlayerResult
+				{
+					Player = battle.Player1, 
+//					StartAddress = gameState.ProgramStartInfos[0].StartAddress ?? 0, 
+					ResultType = res1,
+				};
+				var res2 = GetResultForPlayer(1, winner);
+				var p2 = new BattlePlayerResult
+				{
+					Player = battle.Player2, 
+//					StartAddress = (int) gameState.ProgramStartInfos[1].StartAddress, 
+					ResultType = res2,
+				};
 				return new BattleResult
 				{
 					RunToCompletion = true,
-					Player1Result = new BattlePlayerResult
-					{
-						Player = battle.Player1,
-						StartAddress = (int)gameState.ProgramStartInfos[0].StartAddress,
-						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 0 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
-					},
-					Player2Result = new BattlePlayerResult
-					{
-						Player = battle.Player2,
-						StartAddress = (int)gameState.ProgramStartInfos[1].StartAddress,
-						ResultType = !winner.HasValue ? BattlePlayerResultType.Draw : (winner.Value == 1 ? BattlePlayerResultType.Win : BattlePlayerResultType.Loss),
-					},
+					Player1Result = p1,
+					Player2Result = p2,
 				};
 			}
 			catch (Exception e)
@@ -139,13 +151,13 @@ namespace Core.Arena
 				PSpaceSize = 500, // coreSize / 16 
 				EnablePSpace = false,
 				MaxProcesses = 1000,
-				MaxLength = 100,
-				MinDistance = 100,
+				MaxLength = 10000,
+				MinDistance = 10000,
 				Version = 93,
 				ScoreFormula = ScoreFormula.Standard,
 				ICWSStandard = ICWStandard.ICWS88,
 			};
-			var game = new MarsGame(rules, battle.GetProgramStartInfos());
+			var game = new Game.Game(battle.GetProgramStartInfos());
 			game.StepToEnd();
 			return game.GameState;
 		}
