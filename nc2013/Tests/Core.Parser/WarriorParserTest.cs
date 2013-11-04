@@ -94,12 +94,19 @@ namespace Tests.Core.Parser
             parser.Parse("MOV 0, ; comment");
         }
 
-        [Test]
-        [ExpectedException(typeof(CompilationException))]
-        public void TestInvalidCommand()
-        {
-            parser.Parse("INV 0, 1");
-        }
+		[Test]
+		[ExpectedException(typeof(CompilationException))]
+		public void TestInvalidCommand()
+		{
+			parser.Parse("INV 0, 1");
+		}
+
+		[Test]
+		[ExpectedException(typeof(CompilationException))]
+		public void TestInvalidAddressingMode()
+		{
+			parser.Parse("ADD #1, #2");
+		}
 
         [Test]
         public void TestDifferentAddressingModes()

@@ -35,7 +35,7 @@ namespace Tests.Core.Engine
 //		[TestCase("0001-dwarf")]
 //		[TestCase("0828-NULL")]
 //		[TestCase("0646-elf")]
-		[TestCase("0105-hopper2")]
+		[TestCase("0305-lewis1")]
 		public void TestOne(string name)
 		{
 			var program = File.ReadAllText(TestWarriors.GetBotFile(@"warriors-ok\" + name + ".red"));
@@ -53,7 +53,16 @@ namespace Tests.Core.Engine
 			Console.WriteLine(program);
 			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
 			var ourGame = new Game(programStartInfos);
-			var marsGame = new MarsGame(new Rules() {WarriorsCount = 1, MaxLength = 1000}, programStartInfos);
+			MarsGame marsGame = null;
+			try
+			{
+				marsGame = new MarsGame(new Rules(){MaxLength = 1000, WarriorsCount = 1}, programStartInfos);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("Mars exception " + e.Message.Split('\r', '\n')[0]);
+				return;
+			}
 			for (int i = 0; i < 30; i++)
 			{
 				ourGame.Step(1);

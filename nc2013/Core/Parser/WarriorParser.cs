@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Core.Parser
@@ -7,6 +8,26 @@ namespace Core.Parser
 	{
 		private readonly StatementFactory statementFactory = new StatementFactory();
 		private readonly ExpressionParser expressionParser = new ExpressionParser();
+		private readonly static Tuple<StatementType, AddressingMode>[] restrictedModesA = new []
+			{
+				Tuple.Create(StatementType.Jmp, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Jmz, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Jmn, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Djn, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Spl, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Dat, AddressingMode.Direct   ),
+				Tuple.Create(StatementType.Dat, AddressingMode.Indirect ),
+			};
+		private readonly static Tuple<StatementType, AddressingMode>[] restrictedModesB = new []
+			{
+				Tuple.Create(StatementType.Mov, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Add, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Sub, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Cmp, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Slt, AddressingMode.Immediate),
+				Tuple.Create(StatementType.Dat, AddressingMode.Direct),
+				Tuple.Create(StatementType.Dat, AddressingMode.Indirect),
+			};
 
 		public Warrior Parse(String text)
 		{
@@ -107,9 +128,17 @@ namespace Core.Parser
 //			else
 //				statement.SetFields(a, b);
 			statement.SetFields(a, b);
+			CheckStatementIsCorrect(statement);
 			return statement;
 		}
-		
+
+		private void CheckStatementIsCorrect(Statement statement)
+		{
+			if (restrictedModesA.Contains(Tuple.Create(statement.Type, statement.ModeA)) 
+				||restrictedModesB.Contains(Tuple.Create(statement.Type, statement.ModeB)))
+				throw new CompilationException("Invalid addressing mode", State);
+		}
+
 		private Tuple<AddressingMode, Expression> ReadModeAndField()
 		{
 			var mode = ParseAddressingMode();
