@@ -82,7 +82,7 @@ namespace Server.Arena
 					EnemyVersion = g.Key.Version,
 					Wins = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Win),
 					Draws = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Draw),
-					Losses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
+					Loses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
 					GameInfos = godMode ? GetGameInfos(g) : null,
 				})
 				.OrderByDescending(x => x.Wins)
