@@ -18,5 +18,6 @@ namespace Core.Game
 		[JsonProperty]
 		public int? LastModifiedByProgram { get; set; }
 
+
 	}
 }

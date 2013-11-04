@@ -8,6 +8,10 @@ namespace Core.Game
 	[DebuggerDisplay("CurStep={CurrentStep} CurProg={CurrentProgram} Instr={CurrentInstruction}")]
 	public class GameState
 	{
+		[JsonProperty]
+		[NotNull]
+		public CellState[] MemoryState { get; set; }
+
 		[NotNull]
 		[JsonProperty]
 		public ProgramStartInfo[] ProgramStartInfos { get; set; }
@@ -24,9 +28,7 @@ namespace Core.Game
 		[JsonProperty]
 		public bool GameOver { get; set; }
 
-		[JsonProperty]
-		[NotNull]
-		public CellState[] MemoryState { get; set; }
+
 
 		[JsonProperty]
 		[NotNull]

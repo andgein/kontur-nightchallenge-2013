@@ -43,7 +43,7 @@ namespace Core.Engine
 
 		private EvaluatedOp EvalOp(GameEngine engine, Expression field, AddressingMode mode)
 		{
-			if (mode == AddressingMode.Immediate) return new EvaluatedOp(field.Calculate());
+			if (mode == AddressingMode.Immediate) return new EvaluatedOp(field.CalculateByMod());
 			int address = field.Calculate() + engine.CurrentIp;
 			if (mode == AddressingMode.Direct) return new EvaluatedOp(address, engine.Memory[address].Statement);
 			if (mode == AddressingMode.PredecrementIndirect)
@@ -81,12 +81,12 @@ namespace Core.Engine
 
 		private void Add(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
-			var statementB = engine.Memory[b.Addr].Statement;
+			var statementB = b.Statement;
 			if (a.IsImmediate)
 				engine.WriteToMemory(b.Addr, statementB.SetB(a.Value + statementB.FieldB.Calculate()));
 			else
 			{
-				var statementA = engine.Memory[a.Addr].Statement;
+				var statementA = a.Statement;
 				engine.WriteToMemory(b.Addr,
 					statementB
 						.SetA(statementA.FieldA.Calculate() + statementB.FieldA.Calculate())
@@ -98,13 +98,13 @@ namespace Core.Engine
 		{
 			if (a.IsImmediate)
 			{
-				var statementB = engine.Memory[b.Addr].Statement;
+				var statementB = b.Statement;
 				engine.WriteToMemory(b.Addr, statementB.SetB(statementB.FieldB.Calculate() - a.Value));
 			}
 			else
 			{
-				var statementA = engine.Memory[a.Addr].Statement;
-				var statementB = engine.Memory[b.Addr].Statement;
+				var statementA = a.Statement;
+				var statementB = b.Statement;
 				engine.WriteToMemory(b.Addr,
 					statementB
 						.SetA(statementB.FieldA.Calculate() - statementA.FieldA.Calculate())
@@ -119,30 +119,37 @@ namespace Core.Engine
 
 		private void Jmz(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
-			int cond = b.IsImmediate ? b.Value : engine.Memory[b.Addr].Statement.FieldB.Calculate();
+			int cond = b.IsImmediate ? b.Value : b.Statement.FieldB.CalculateByMod();
 			if (cond == 0)
 				engine.JumpTo(a.Addr);
 		}
 
 		private void Jmn(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
-			var cond = b.IsImmediate ? b.Value : engine.Memory[b.Addr].Statement.FieldB.Calculate();
+			var cond = b.IsImmediate ? b.Value : b.Statement.FieldB.CalculateByMod();
 			if (cond != 0)
 				engine.JumpTo(a.Addr);
 		}
 
 		private void Cmp(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
-			var left = a.IsImmediate ? a.Value : engine.Memory[a.Addr].Statement.FieldB.Calculate();
-			var right = engine.Memory[b.Addr].Statement.FieldB.Calculate();
-			if (left == right)
+			bool condition;
+			if (a.IsImmediate)
+			{
+				var left = a.Value;
+				var right = b.Statement.FieldB.CalculateByMod();
+				condition = left == right;
+			}
+			else
+				condition = a.Statement == b.Statement;
+			if (condition)
 				engine.JumpTo(engine.CurrentIp + 2);
 		}
 
 		private void Slt(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
 		{
-			var left = a.IsImmediate ? a.Value : engine.Memory[a.Addr].Statement.FieldB.Calculate();
-			var right = engine.Memory[b.Addr].Statement.FieldB.Calculate();
+			var left = a.IsImmediate ? a.Value : a.Statement.FieldB.CalculateByMod();
+			var right = b.Statement.FieldB.CalculateByMod();
 			if (left < right)
 				engine.JumpTo(engine.CurrentIp + 2);
 		}
@@ -156,7 +163,7 @@ namespace Core.Engine
 		{
 			var bAddr = b.IsImmediate ? engine.CurrentIp : b.Addr;
 			DecrementB(engine, bAddr);
-			var condition = engine.Memory[bAddr].Statement.FieldB.Calculate();
+			var condition = engine.Memory[bAddr].Statement.FieldB.CalculateByMod();
 			if (condition != 0)
 				engine.JumpTo(a.Addr);
 		}

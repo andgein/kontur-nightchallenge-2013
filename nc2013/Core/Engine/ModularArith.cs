@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Core.Engine
 {
@@ -13,5 +14,14 @@ namespace Core.Engine
 			Debug.Assert(result < b);
             return result;
         }
+
+	    public static int Div(int a, int b)
+	    {
+		    int asgn = Math.Sign(a);
+			int bsgn = Math.Sign(b);
+		    a = Math.Abs(a);
+		    b = Math.Abs(b);
+		    return (asgn*bsgn)*(a/b);
+	    }
     }
 }

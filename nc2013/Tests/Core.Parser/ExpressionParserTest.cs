@@ -145,6 +145,11 @@ namespace Tests.Core.Parser
 		[TestCase("-1*-1", 1)]
 		[TestCase("-(1+1)", -2)]
 		[TestCase("-(3*2)", -6)]
+		[TestCase("((-400/35)/4-1) ", -3)]
+		[TestCase("-400/35", -11)]
+		[TestCase("(-400/35)", -11)]
+		[TestCase("(-400/35)/4", -2)]
+		[TestCase("(-400/35)/4-1", -3)]
 		public void Eval(string text, int expectedResult)
 		{
 			var expr = parser.Parse(text);

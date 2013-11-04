@@ -68,8 +68,8 @@ namespace Core.Parser
 
 			foreach (var statement in Statements)
 			{
-				statement.FieldA = new NumberExpression(statement.FieldA.Calculate(this, address));
-				statement.FieldB = new NumberExpression(statement.FieldB.Calculate(this, address));
+				statement.FieldA = new NumberExpression(ModularArith.Mod(statement.FieldA.Calculate(this, address)));
+				statement.FieldB = new NumberExpression(ModularArith.Mod(statement.FieldB.Calculate(this, address)));
 				address++;
 			}
 

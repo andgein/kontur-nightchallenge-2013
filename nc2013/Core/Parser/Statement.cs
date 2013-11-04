@@ -28,21 +28,13 @@ namespace Core.Parser
 				FieldB = b.Item2;
 			}
 		}
-		public Statement SetA(Expression newA)
-		{
-			return new Statement(this) { FieldA = newA };
-		}
 		public Statement SetA(int newA)
 		{
-			return new Statement(this) { FieldA = new NumberExpression(newA) };
-		}
-		public Statement SetB(Expression newB)
-		{
-			return new Statement(this) { FieldB = newB };
+			return new Statement(this) { FieldA = new NumberExpression(ModularArith.Mod(newA)) };
 		}
 		public Statement SetB(int newB)
 		{
-			return new Statement(this) { FieldB = new NumberExpression(newB)};
+			return new Statement(this) { FieldB = new NumberExpression(ModularArith.Mod(newB))};
 		}
 		public AddressingMode ModeA { get { return modeA; } set { ExistsFieldA = true; modeA = value; } }
 		public Expression FieldA

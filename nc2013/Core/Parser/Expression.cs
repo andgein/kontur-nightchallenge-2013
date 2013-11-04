@@ -7,6 +7,11 @@ namespace Core.Parser
 	{
 		public abstract int Calculate(Warrior warrior = null, int address = 0);
 		
+		public int CalculateByMod()
+		{
+			return ModularArith.Mod(Calculate());
+		}
+		
 		public abstract Expression ExpandConstants(Warrior warrior);
 
 		public Expression Decremented()
@@ -43,12 +48,12 @@ namespace Core.Parser
 					answer = Left.Calculate(warrior, address) * Right.Calculate(warrior, address);
 					break;
 				case BinaryOperation.Div:
-					answer = Left.Calculate(warrior, address) / Right.Calculate(warrior, address);
+					answer = ModularArith.Div(Left.Calculate(warrior, address), Right.Calculate(warrior, address));
 					break;
 				default:
 					throw new InvalidOperationException("Invalid operation to calculate: " + Op);
 			}
-			return ModularArith.Mod(answer);
+			return answer;
 		}
 
 		public override Expression ExpandConstants(Warrior warrior)

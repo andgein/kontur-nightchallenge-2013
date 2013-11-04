@@ -43,50 +43,78 @@ namespace Tests.Core.Engine
 		}
 
 		[Test]
-		public void TestDJN()
+		public void TestSLT()
 		{
-			Compare("DJN 0, 1");
+			Compare(
+@"DAT #0, #1
+SLT #17, -1
+MOV 1, 1
+DAT #0, #0
+");
 		}
 
 		public void Compare(string program)
 		{
 			Console.WriteLine(program);
-			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
-			var ourGame = new Game(programStartInfos);
-			MarsGame marsGame = null;
-			try
+			GameState our;
+			GameState mars;
+			Run(program, 79999, out our, out mars);
+			if (!AreEqual(our, mars))
 			{
-				marsGame = new MarsGame(new Rules(){MaxLength = 1000, WarriorsCount = 1}, programStartInfos);
+				var step = FindFirstErrorStep(program, 0, 80000, out our, out mars);
+				Assert.IsTrue(step < 79999);
+				Console.WriteLine("Error on step " + step);
+				File.WriteAllText(@"mars.txt", JsonConvert.SerializeObject(mars, Formatting.Indented));
+				File.WriteAllText(@"our.txt", JsonConvert.SerializeObject(our, Formatting.Indented));
+				Assert.AreEqual(Normalize(mars), Normalize(our));
 			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Mars exception " + e.Message.Split('\r', '\n')[0]);
-				return;
-			}
-			for (int i = 0; i < 30; i++)
-			{
-				ourGame.Step(1);
-				marsGame.Step(1);
-				CompareStates(ourGame.GameState, marsGame.GameState, i);
-			}
-//			ourGame.Step(100);
-//			marsGame.Step(100);
-			CompareStates(ourGame.GameState, marsGame.GameState, 100);
 		}
 
-		private void CompareStates(GameState our, GameState mars, int i)
+		private int FindFirstErrorStep(string program, int minSteps, int maxSteps, out GameState our, out GameState mars)
+		{
+			our = null;
+			mars = null;
+			while (maxSteps - minSteps > 1)
+			{
+				int m = (minSteps + maxSteps)/2;
+				Run(program, m, out our, out mars);
+				if (AreEqual(mars, our)) 
+					minSteps = m;
+				else maxSteps = m;
+			}
+			return maxSteps;
+		}
+
+		private void Run(string program, int stepsCount, out GameState our, out GameState mars)
+		{
+			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
+			var ourGame = new Game(programStartInfos);
+			var marsGame = new MarsGame(new Rules() { MaxLength = 1000, WarriorsCount = 1 }, programStartInfos);
+			ourGame.Step(stepsCount);
+			marsGame.Step(stepsCount);
+			our = ourGame.GameState;
+			mars = marsGame.GameState;
+		}
+
+		private bool AreEqual(GameState mars, GameState our)
 		{
 			var m = Normalize(mars);
 			var o = Normalize(our);
-			Assert.AreEqual(m, o, "Step: " + i);
+			return m == o;
 		}
 
+		private static Regex r = new Regex("LastModifiedByProgram\":.*?\\}", RegexOptions.Compiled);
 		private string Normalize(GameState gs)
 		{
 			var s = JsonConvert.SerializeObject(gs);
-			foreach (var x in new[] {".AB", ".A", ".B", ".I", ".F", ".X", " ", "\t", ","})
+			return Normalize(s);
+		}
+
+		private static string Normalize(string s)
+		{
+			foreach (var x in new[] {".AB", ".A", ".B", ".I", ".F", ".X", " ", "\t", ",", "\"Winner\":0", "\"Winner\":null",})
 				s = s.Replace(x, "");
-			s = Regex.Replace(s, "LastModifiedByProgram\":.*\\}", "}");
+			s = r.Replace(s, "}");
 			return s;
 		}
 	}
