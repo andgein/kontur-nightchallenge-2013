@@ -1,4 +1,5 @@
 using System;
+using Core.Engine;
 using Core.Game;
 
 namespace Core.Parser
@@ -141,9 +142,9 @@ namespace Core.Parser
 			return String.Format("{0} {1}{2} {3}{4}",
 				statementFactory.GetStatementMnemonic(Type),
 				(char) ModeA,
-				FieldA.Calculate(),
+				ModularArith.Mod(FieldA.Calculate()),
 				(char) ModeB,
-				FieldB.Calculate());
+				ModularArith.Mod(FieldB.Calculate()));
 		}
 	}
 
