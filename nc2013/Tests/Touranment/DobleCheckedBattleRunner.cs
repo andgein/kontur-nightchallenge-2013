@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Core.Arena;
 using Core.Game;
@@ -27,14 +26,12 @@ namespace Tests.Touranment
 			var marsFinalGameState = GetFinalGameStateByMars(rules, battle);
 			Assert.That(finalGameState.ProgramStartInfos[0].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[0].StartAddress));
 			Assert.That(finalGameState.ProgramStartInfos[1].StartAddress, Is.EqualTo(marsFinalGameState.ProgramStartInfos[1].StartAddress));
-			var m = Normalize(marsFinalGameState);
-			var o = Normalize(finalGameState);
-			if (o != m)
+			if (finalGameState.GameOver != marsFinalGameState.GameOver || finalGameState.Winner != marsFinalGameState.Winner)
 			{
 				BattlesWithDifferentResults.Add(battle);
 			}
-			//Assert.That(finalGameState.GameOver, Is.EqualTo(marsFinalGameState.GameOver));
-			//Assert.That(finalGameState.Winner, Is.EqualTo(marsFinalGameState.Winner));
+			//var m = Normalize(marsFinalGameState);
+			//var o = Normalize(finalGameState);
 			//Assert.That(o, Is.EqualTo(m));
 		}
 
