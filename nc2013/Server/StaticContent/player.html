@@ -15,8 +15,7 @@
 		var PlayerController = function($scope, $http) {
 			var f = MakeJsonController(server.basePath() + "arena/player" + window.location.search);
 			$scope.openDebugger = function (gameInfo) {
-				server.post("debugger/load", JSON.stringify(gameInfo), false);
-				window.open("debugger.html");
+				window.location = "debugger/load?" + $.param(gameInfo);
 			};
 			f($scope, $http);
 		}
@@ -56,7 +55,7 @@
 				<td class="small">{{100*enemyStats.loses/enemyStats.games | number:0}}%</td>
 				<td ng-if="godMode">
 					<span ng-repeat="gameInfo in enemyStats.gameInfos">
-						<a href="#" ng-click="openDebugger({{gameInfo}})">{{gameInfo.player1Result.resultType}}</a>
+						<a href="javascript:void(0)" ng-click="openDebugger({{gameInfo}})">{{gameInfo.player1Result.resultType}}</a>
 					</span>
 				</td>
 			</tr>
