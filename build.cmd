@@ -17,7 +17,7 @@ move /y corewar.zip bin\StaticContent || exit /b 1
 popd
 
 erase corewar-deploy.zip || exit /b 1
-7za.exe a -ir!.deploy\* corewar-deploy.zip || exit /b 1
+7za.exe a -ir!.deploy\* -xr!.deploy\logs\* corewar-deploy.zip || exit /b 1
 
 echo Corewar build succeeded!
 
