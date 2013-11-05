@@ -6,7 +6,6 @@ using System.Linq;
 using Core;
 using Core.Arena;
 using Core.Game;
-using Core.Game.MarsBased;
 using Core.Parser;
 using JetBrains.Annotations;
 using nMars.RedCode;
@@ -29,14 +28,7 @@ namespace Server
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
 			Runtime.Init(log);
-			try
-			{
-				RunServer(args);
-			}
-			catch (Exception e)
-			{
-				log.Fatal("Unhandled exception:", e);
-			}
+			RunServer(args);
 		}
 
 		private static void RunServer([NotNull] string[] args)
