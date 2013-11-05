@@ -316,10 +316,11 @@
 				font-family: monospace;
 				cursor: pointer;
 			}
-			.overview-program-container .command:hover {
-				text-decoration: underline;
-				color: blue;
-			}
+
+				.overview-program-container .command:hover {
+					text-decoration: underline;
+					color: blue;
+				}
 
 				.overview-program-container .command.current {
 					background-color: gold;
@@ -358,6 +359,20 @@
 		.debugger-gameRunStatus-gameover {
 			display: none;
 			background-color: yellow;
+		}
+
+		.nextCommands-container {
+		}
+		.nextCommands-label {
+			/*display: inline-block;*/
+			vertical-align: top;
+		}
+		.nextCommands {
+			display: inline-block;
+			height: 150px;
+			width: 240px;
+			overflow-y: scroll;
+			border: solid 1px black;
 		}
 	</style>
 </head>
@@ -430,8 +445,8 @@
 					<div>
 						Last: <span id="lastCommandA" class="command"></span>
 					</div>
-					<div>
-						Next: <span id="nextCommandA" class="command"></span>
+					<div class="nextCommands-container">
+						<span class="nextCommands-label">Next: </span><span id="nextCommandA" class="nextCommands"></span>
 					</div>
 				</div>
 				<div class="overview-program-container">
@@ -442,8 +457,8 @@
 					<div>
 						Last: <span id="lastCommandB" class="command"></span>
 					</div>
-					<div>
-						Next: <span id="nextCommandB" class="command"></span>
+					<div class="nextCommands-container">
+						<span class="nextCommands-label">Next: </span><span id="nextCommandB" class="nextCommands"></span>
 					</div>
 				</div>
 			</div>
