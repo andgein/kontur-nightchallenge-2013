@@ -52,7 +52,8 @@ namespace Core.Arena
 		public RoundRobinTournamentResult Run()
 		{
 			ParseWarriors();
-			var battleResults = RunTournament(GenerateAllPairs()).ToList();
+			var pairs = GenerateAllPairs();
+			var battleResults = RunTournament(pairs).ToList();
 			var ranking = MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
 			return new RoundRobinTournamentResult
 			{
@@ -152,8 +153,7 @@ namespace Core.Arena
 		{
 			try
 			{
-				var gameState = battleRunner.RunBattle(rules, battle);
-				var winner = gameState.Winner;
+				var winner = battleRunner.RunBattle(rules, battle);
 				var p1 = new BattlePlayerResult
 				{
 					Player = battle.Player1,

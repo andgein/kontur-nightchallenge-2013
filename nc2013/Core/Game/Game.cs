@@ -31,6 +31,7 @@ namespace Core.Game
 			engine = new GameEngine(warriorStartInfos);
 		}
 
+		[NotNull]
 		public GameState GameState
 		{
 			get
@@ -48,6 +49,22 @@ namespace Core.Game
 						LastPointer = (uint)engine.CurrentIp,
 						ProcessPointers = w.Queue.ToArray().Select(x => (uint)x).ToArray()
 					}).ToArray(),
+				};
+			}
+		}
+
+		[NotNull]
+		public GameState GameStateFast
+		{
+			get
+			{
+				return new GameState
+				{
+					CurrentProgram = engine.CurrentWarrior,
+					CurrentStep = engine.CurrentStep,
+					ProgramStartInfos = programStartInfos,
+					GameOver = engine.GameOver,
+					Winner = engine.Winner,
 				};
 			}
 		}

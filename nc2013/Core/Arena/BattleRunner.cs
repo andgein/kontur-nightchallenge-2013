@@ -7,12 +7,11 @@ namespace Core.Arena
 {
 	public class BattleRunner : IBattleRunner
 	{
-		[NotNull]
-		public GameState RunBattle([NotNull] Rules rules, [NotNull] Battle battle)
+		public int? RunBattle([NotNull] Rules rules, [NotNull] Battle battle)
 		{
 			var finalGameState = GetFinalGameState(battle);
 			PostProcessBattle(rules, battle, finalGameState);
-			return finalGameState;
+			return finalGameState.Winner;
 		}
 
 		[NotNull]
@@ -22,7 +21,7 @@ namespace Core.Arena
 			var warriorStartInfos = battle.GetWarriorStartInfos();
 			var game = new Game.Game(programStartInfos, warriorStartInfos);
 			game.StepToEnd();
-			return game.GameState;
+			return game.GameStateFast;
 		}
 
 		[NotNull]
