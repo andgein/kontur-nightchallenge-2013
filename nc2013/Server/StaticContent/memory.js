@@ -64,7 +64,13 @@ var Cell = Base.extend({
 		if (Cell._lastScrolledInto)
 			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
 		this.$listingItem.addClass("justScrolled");
-		this.$listingItem[0].scrollIntoView();
+		if (!this.$listing)
+			this.$listing = this.$listingItem.parent();
+		if (!this.$listingPivot) {
+			this.$listingPivot = $("div.listingItem:eq(5)", this.$listing);
+		}
+		var top = this.$listingItem.position().top;
+		this.$listing.scrollTop(top - this.$listingPivot.position().top);
 		Cell._lastScrolledInto = this;
 	},
 	reset: function () {
