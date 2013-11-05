@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,9 +6,9 @@ using Core.Arena;
 using Core.Game;
 using Core.Parser;
 using JetBrains.Annotations;
-using Server.Arena;
 using log4net;
 using log4net.Config;
+using Server.Arena;
 using Server.Debugging;
 using Server.Sessions;
 using Debugger = System.Diagnostics.Debugger;
@@ -18,9 +17,8 @@ namespace Server
 {
 	public static class Program
 	{
-		private const string defaultPrefix = "http://*/corewar/";
-		private const int defaultBattlesPerPair = 5;
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private const string defaultSettingsFilename = "config";
+		private static readonly ILog log = LogManager.GetLogger(typeof (Program));
 
 		public static void Main([NotNull] string[] args)
 		{
@@ -29,14 +27,15 @@ namespace Server
 			RunServer(args);
 		}
 
-		private static void RunServer([NotNull] string[] args)
+		private static void RunServer([NotNull] IEnumerable<string> args)
 		{
 			var staticContentPath = GetStaticContentDir();
-			var prefix = GetPrefix(args);
-			var battlesPerPair = GetBattlesPerPair(args);
-			var productionMode = ProductionMode(args);
-			var godAccessOnly = GodAccessOnly(args);
-			var godModeSecret = GenerateGodModeSecret();
+			var settingsFile = GetSettingsFile(args);
+			var prefix = settingsFile.HttpListenerPrefix;
+			var battlesPerPair = settingsFile.BattlesPerPair;
+			var productionMode = settingsFile.ProductionMode;
+			var godAccessOnly = settingsFile.GodAccessOnly;
+			var godModeSecret = settingsFile.GodModeSecret;
 			var warriorProgramParser = new WarriorParser();
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new CachingGamesRepo(new GamesRepo(new DirectoryInfo("../games")));
@@ -62,41 +61,14 @@ namespace Server
 			log.InfoFormat("Stopped");
 		}
 
-		private static Guid GenerateGodModeSecret()
+		[NotNull]
+		private static SettingsFile GetSettingsFile([NotNull] IEnumerable<string> args)
 		{
-			var godModeSecret = Guid.NewGuid();
-			log.Warn(string.Format("GodModeSecret: {0}", godModeSecret));
-			return godModeSecret;
-		}
-
-		private static int GetBattlesPerPair([NotNull] IEnumerable<string> args)
-		{
-			var battlesPerPairArg = args.FirstOrDefault(x => x.StartsWith("-battlesPerPair:", StringComparison.OrdinalIgnoreCase));
-			var battlesPerPair = battlesPerPairArg == null ? defaultBattlesPerPair : int.Parse(battlesPerPairArg.Split(':')[1]);
-			log.InfoFormat("BattlesPerPair: {0}", battlesPerPair);
-			return battlesPerPair;
-		}
-
-		private static bool ProductionMode([NotNull] IEnumerable<string> args)
-		{
-			var productionMode = args.Any(x => string.Equals(x, "-production", StringComparison.OrdinalIgnoreCase));
-			log.InfoFormat("ProductionMode: {0}", productionMode);
-			return productionMode;
-		}
-
-		private static bool GodAccessOnly([NotNull] IEnumerable<string> args)
-		{
-			var godAccessOnly = args.Any(x => string.Equals(x, "-godAccessOnly", StringComparison.OrdinalIgnoreCase));
-			log.InfoFormat("GodAccessOnly: {0}", godAccessOnly);
-			return godAccessOnly;
-		}
-
-		private static string GetPrefix([NotNull] IEnumerable<string> args)
-		{
-			var prefix = args.FirstOrDefault();
-			var result = string.IsNullOrEmpty(prefix) ? defaultPrefix : prefix;
-			log.InfoFormat("HttpListenerPrefix: {0}", result);
-			return result;
+			var filename = args.FirstOrDefault();
+			filename = string.IsNullOrEmpty(filename) ? defaultSettingsFilename : filename;
+			var settingsFile = new SettingsFile(filename);
+			log.Info(settingsFile.ToString());
+			return settingsFile;
 		}
 
 		private static string GetStaticContentDir()

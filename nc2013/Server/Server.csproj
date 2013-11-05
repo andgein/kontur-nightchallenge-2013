@@ -86,6 +86,7 @@
     <Compile Include="Sessions\ISessionManager.cs" />
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
+    <Compile Include="SettingsFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\fonts\glyphicons-halflings-regular.eot">
