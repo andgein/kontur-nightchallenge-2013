@@ -118,9 +118,6 @@
     <None Include="StaticContent\angular.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="StaticContent\jquery-1.7.2.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\ranking.html">
@@ -131,15 +128,18 @@
     <Content Include="log.config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="StaticContent\jquery-1.7.2.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="StaticContent\ajax-loader.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="StaticContent\bootstrap.min.js">
+    <None Include="StaticContent\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StaticContent\common.css">
+    </None>
+    <None Include="StaticContent\common.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="StaticContent\json2.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
