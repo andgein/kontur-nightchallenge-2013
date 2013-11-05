@@ -1,0 +1,5145 @@
+{
+    "TournamentId": "allBotsRanking",
+    "Timestamp": "2013-11-05T09:13:37.5701844Z",
+    "Places": [
+      {
+        "Draws": 136,
+        "Games": 570,
+        "Loses": 33,
+        "Name": "0188-quicksilver88",
+        "Score": 1339,
+        "Version": 1,
+        "Wins": 401
+      },
+      {
+        "Draws": 139,
+        "Games": 570,
+        "Loses": 38,
+        "Name": "0146-montage",
+        "Score": 1318,
+        "Version": 1,
+        "Wins": 393
+      },
+      {
+        "Draws": 133,
+        "Games": 570,
+        "Loses": 43,
+        "Name": "0505-SNAKE",
+        "Score": 1315,
+        "Version": 1,
+        "Wins": 394
+      },
+      {
+        "Draws": 163,
+        "Games": 570,
+        "Loses": 30,
+        "Name": "0443-Montage",
+        "Score": 1294,
+        "Version": 1,
+        "Wins": 377
+      },
+      {
+        "Draws": 135,
+        "Games": 570,
+        "Loses": 52,
+        "Name": "0298-snake",
+        "Score": 1284,
+        "Version": 1,
+        "Wins": 383
+      },
+      {
+        "Draws": 148,
+        "Games": 570,
+        "Loses": 46,
+        "Name": "0048-chimera",
+        "Score": 1276,
+        "Version": 1,
+        "Wins": 376
+      },
+      {
+        "Draws": 136,
+        "Games": 570,
+        "Loses": 54,
+        "Name": "0299-snake7",
+        "Score": 1276,
+        "Version": 1,
+        "Wins": 380
+      },
+      {
+        "Draws": 126,
+        "Games": 570,
+        "Loses": 61,
+        "Name": "0218-snake7",
+        "Score": 1275,
+        "Version": 1,
+        "Wins": 383
+      },
+      {
+        "Draws": 145,
+        "Games": 570,
+        "Loses": 58,
+        "Name": "0506-Snake7",
+        "Score": 1246,
+        "Version": 1,
+        "Wins": 367
+      },
+      {
+        "Draws": 179,
+        "Games": 570,
+        "Loses": 38,
+        "Name": "0270-LEWINSK3",
+        "Score": 1238,
+        "Version": 1,
+        "Wins": 353
+      },
+      {
+        "Draws": 144,
+        "Games": 570,
+        "Loses": 62,
+        "Name": "0382-FlashPaper3.7[1]",
+        "Score": 1236,
+        "Version": 1,
+        "Wins": 364
+      },
+      {
+        "Draws": 212,
+        "Games": 570,
+        "Loses": 17,
+        "Name": "0124-impsimpsimps",
+        "Score": 1235,
+        "Version": 1,
+        "Wins": 341
+      },
+      {
+        "Draws": 205,
+        "Games": 570,
+        "Loses": 26,
+        "Name": "0418-Imps!Imps!Imps!",
+        "Score": 1222,
+        "Version": 1,
+        "Wins": 339
+      },
+      {
+        "Draws": 133,
+        "Games": 570,
+        "Loses": 79,
+        "Name": "0398-HeremPaperv0.9",
+        "Score": 1207,
+        "Version": 1,
+        "Wins": 358
+      },
+      {
+        "Draws": 132,
+        "Games": 570,
+        "Loses": 80,
+        "Name": "0289-hpaper",
+        "Score": 1206,
+        "Version": 1,
+        "Wins": 358
+      },
+      {
+        "Draws": 69,
+        "Games": 570,
+        "Loses": 127,
+        "Name": "0143-medusa7x",
+        "Score": 1191,
+        "Version": 1,
+        "Wins": 374
+      },
+      {
+        "Draws": 144,
+        "Games": 570,
+        "Loses": 78,
+        "Name": "0404-Hydra",
+        "Score": 1188,
+        "Version": 1,
+        "Wins": 348
+      },
+      {
+        "Draws": 131,
+        "Games": 570,
+        "Loses": 87,
+        "Name": "0100-herempaper",
+        "Score": 1187,
+        "Version": 1,
+        "Wins": 352
+      },
+      {
+        "Draws": 66,
+        "Games": 570,
+        "Loses": 131,
+        "Name": "0096-gymnospermtrickery",
+        "Score": 1185,
+        "Version": 1,
+        "Wins": 373
+      },
+      {
+        "Draws": 202,
+        "Games": 570,
+        "Loses": 41,
+        "Name": "0365-Diamod88",
+        "Score": 1183,
+        "Version": 1,
+        "Wins": 327
+      },
+      {
+        "Draws": 102,
+        "Games": 570,
+        "Loses": 111,
+        "Name": "0377-FastFoodv2.1",
+        "Score": 1173,
+        "Version": 1,
+        "Wins": 357
+      },
+      {
+        "Draws": 80,
+        "Games": 570,
+        "Loses": 127,
+        "Name": "0438-Medusasv2",
+        "Score": 1169,
+        "Version": 1,
+        "Wins": 363
+      },
+      {
+        "Draws": 103,
+        "Games": 570,
+        "Loses": 113,
+        "Name": "0464-PacManv3",
+        "Score": 1165,
+        "Version": 1,
+        "Wins": 354
+      },
+      {
+        "Draws": 65,
+        "Games": 570,
+        "Loses": 140,
+        "Name": "0521-Synch4",
+        "Score": 1160,
+        "Version": 1,
+        "Wins": 365
+      },
+      {
+        "Draws": 103,
+        "Games": 570,
+        "Loses": 115,
+        "Name": "0169-pacman3",
+        "Score": 1159,
+        "Version": 1,
+        "Wins": 352
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 132,
+        "Name": "0167-oneshot88",
+        "Score": 1156,
+        "Version": 1,
+        "Wins": 359
+      },
+      {
+        "Draws": 260,
+        "Games": 570,
+        "Loses": 12,
+        "Name": "0074-evilspirit88",
+        "Score": 1154,
+        "Version": 1,
+        "Wins": 298
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 111,
+        "Name": "0480-QuickFreeze",
+        "Score": 1153,
+        "Version": 1,
+        "Wins": 347
+      },
+      {
+        "Draws": 177,
+        "Games": 570,
+        "Loses": 69,
+        "Name": "0159-nimbus12",
+        "Score": 1149,
+        "Version": 1,
+        "Wins": 324
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 140,
+        "Name": "0172-paratroops",
+        "Score": 1148,
+        "Version": 1,
+        "Wins": 359
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 141,
+        "Name": "0439-Medusasv7X",
+        "Score": 1147,
+        "Version": 1,
+        "Wins": 359
+      },
+      {
+        "Draws": 76,
+        "Games": 570,
+        "Loses": 138,
+        "Name": "0045-charon7",
+        "Score": 1144,
+        "Version": 1,
+        "Wins": 356
+      },
+      {
+        "Draws": 102,
+        "Games": 570,
+        "Loses": 122,
+        "Name": "0186-quickfreeze",
+        "Score": 1140,
+        "Version": 1,
+        "Wins": 346
+      },
+      {
+        "Draws": 177,
+        "Games": 570,
+        "Loses": 72,
+        "Name": "0450-Nimbus1.2",
+        "Score": 1140,
+        "Version": 1,
+        "Wins": 321
+      },
+      {
+        "Draws": 91,
+        "Games": 570,
+        "Loses": 131,
+        "Name": "0290-irongate",
+        "Score": 1135,
+        "Version": 1,
+        "Wins": 348
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0233-synch4",
+        "Score": 1133,
+        "Version": 1,
+        "Wins": 354
+      },
+      {
+        "Draws": 158,
+        "Games": 570,
+        "Loses": 87,
+        "Name": "0295-paper",
+        "Score": 1133,
+        "Version": 1,
+        "Wins": 325
+      },
+      {
+        "Draws": 46,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0031-brazen",
+        "Score": 1129,
+        "Version": 1,
+        "Wins": 361
+      },
+      {
+        "Draws": 156,
+        "Games": 570,
+        "Loses": 90,
+        "Name": "0466-Paper",
+        "Score": 1128,
+        "Version": 1,
+        "Wins": 324
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 143,
+        "Name": "0209-sixthsense",
+        "Score": 1127,
+        "Version": 1,
+        "Wins": 350
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 143,
+        "Name": "0498-SixthSense",
+        "Score": 1127,
+        "Version": 1,
+        "Wins": 350
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0107-iaasmr3",
+        "Score": 1125,
+        "Version": 1,
+        "Wins": 350
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 154,
+        "Name": "0025-blitzkrieg",
+        "Score": 1124,
+        "Version": 1,
+        "Wins": 354
+      },
+      {
+        "Draws": 65,
+        "Games": 570,
+        "Loses": 152,
+        "Name": "0128-irongate",
+        "Score": 1124,
+        "Version": 1,
+        "Wins": 353
+      },
+      {
+        "Draws": 82,
+        "Games": 570,
+        "Loses": 141,
+        "Name": "0047-charon81",
+        "Score": 1123,
+        "Version": 1,
+        "Wins": 347
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0060-crimp",
+        "Score": 1121,
+        "Version": 1,
+        "Wins": 348
+      },
+      {
+        "Draws": 115,
+        "Games": 570,
+        "Loses": 120,
+        "Name": "0481-QuickFreezev1.5",
+        "Score": 1120,
+        "Version": 1,
+        "Wins": 335
+      },
+      {
+        "Draws": 250,
+        "Games": 570,
+        "Loses": 31,
+        "Name": "0272-PAULSS3",
+        "Score": 1117,
+        "Version": 1,
+        "Wins": 289
+      },
+      {
+        "Draws": 127,
+        "Games": 570,
+        "Loses": 113,
+        "Name": "0535-twopassdemo",
+        "Score": 1117,
+        "Version": 1,
+        "Wins": 330
+      },
+      {
+        "Draws": 65,
+        "Games": 570,
+        "Loses": 155,
+        "Name": "0468-Paratroopsv1.2",
+        "Score": 1115,
+        "Version": 1,
+        "Wins": 350
+      },
+      {
+        "Draws": 170,
+        "Games": 570,
+        "Loses": 86,
+        "Name": "0184-proteus3",
+        "Score": 1112,
+        "Version": 1,
+        "Wins": 314
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0423-IronGate[2]",
+        "Score": 1111,
+        "Version": 1,
+        "Wins": 344
+      },
+      {
+        "Draws": 63,
+        "Games": 570,
+        "Loses": 158,
+        "Name": "0078-firestorm11",
+        "Score": 1110,
+        "Version": 1,
+        "Wins": 349
+      },
+      {
+        "Draws": 66,
+        "Games": 570,
+        "Loses": 156,
+        "Name": "0426-Ironyv1.0",
+        "Score": 1110,
+        "Version": 1,
+        "Wins": 348
+      },
+      {
+        "Draws": 165,
+        "Games": 570,
+        "Loses": 91,
+        "Name": "0106-hydra",
+        "Score": 1107,
+        "Version": 1,
+        "Wins": 314
+      },
+      {
+        "Draws": 80,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0142-medusa2",
+        "Score": 1106,
+        "Version": 1,
+        "Wins": 342
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 137,
+        "Name": "0076-fastfood",
+        "Score": 1103,
+        "Version": 1,
+        "Wins": 335
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 151,
+        "Name": "0329-Blurstone88",
+        "Score": 1103,
+        "Version": 1,
+        "Wins": 342
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 143,
+        "Name": "0422-IronGate[1]",
+        "Score": 1103,
+        "Version": 1,
+        "Wins": 338
+      },
+      {
+        "Draws": 250,
+        "Games": 570,
+        "Loses": 36,
+        "Name": "0548-WellIdontknow",
+        "Score": 1102,
+        "Version": 1,
+        "Wins": 284
+      },
+      {
+        "Draws": 104,
+        "Games": 570,
+        "Loses": 136,
+        "Name": "0508-Spitfire3",
+        "Score": 1094,
+        "Version": 1,
+        "Wins": 330
+      },
+      {
+        "Draws": 63,
+        "Games": 570,
+        "Loses": 164,
+        "Name": "0026-blurstone88",
+        "Score": 1092,
+        "Version": 1,
+        "Wins": 343
+      },
+      {
+        "Draws": 69,
+        "Games": 570,
+        "Loses": 160,
+        "Name": "0194-s4b",
+        "Score": 1092,
+        "Version": 1,
+        "Wins": 341
+      },
+      {
+        "Draws": 155,
+        "Games": 570,
+        "Loses": 103,
+        "Name": "0099-hellicon",
+        "Score": 1091,
+        "Version": 1,
+        "Wins": 312
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 159,
+        "Name": "0421-Impurge",
+        "Score": 1091,
+        "Version": 1,
+        "Wins": 340
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 155,
+        "Name": "0569-FSTORM",
+        "Score": 1091,
+        "Version": 1,
+        "Wins": 338
+      },
+      {
+        "Draws": 267,
+        "Games": 570,
+        "Loses": 29,
+        "Name": "0257-wellIdont",
+        "Score": 1089,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 87,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0347-Charonv7.0",
+        "Score": 1089,
+        "Version": 1,
+        "Wins": 334
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 141,
+        "Name": "0181-precipice",
+        "Score": 1087,
+        "Version": 1,
+        "Wins": 329
+      },
+      {
+        "Draws": 88,
+        "Games": 570,
+        "Loses": 150,
+        "Name": "0061-crimp2",
+        "Score": 1084,
+        "Version": 1,
+        "Wins": 332
+      },
+      {
+        "Draws": 68,
+        "Games": 570,
+        "Loses": 164,
+        "Name": "0328-Blitzkrieg",
+        "Score": 1082,
+        "Version": 1,
+        "Wins": 338
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 162,
+        "Name": "0360-Crimp[1]",
+        "Score": 1082,
+        "Version": 1,
+        "Wins": 337
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 168,
+        "Name": "0378-FireStormv1.1",
+        "Score": 1082,
+        "Version": 1,
+        "Wins": 340
+      },
+      {
+        "Draws": 64,
+        "Games": 570,
+        "Loses": 167,
+        "Name": "0161-nomucking",
+        "Score": 1081,
+        "Version": 1,
+        "Wins": 339
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 135,
+        "Name": "0549-WinterWerewolf",
+        "Score": 1081,
+        "Version": 1,
+        "Wins": 323
+      },
+      {
+        "Draws": 105,
+        "Games": 570,
+        "Loses": 140,
+        "Name": "0465-PaleShears3",
+        "Score": 1080,
+        "Version": 1,
+        "Wins": 325
+      },
+      {
+        "Draws": 80,
+        "Games": 570,
+        "Loses": 157,
+        "Name": "0276-fstorm",
+        "Score": 1079,
+        "Version": 1,
+        "Wins": 333
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0286-fstorm",
+        "Score": 1079,
+        "Version": 1,
+        "Wins": 336
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 159,
+        "Name": "0049-clamp",
+        "Score": 1077,
+        "Version": 1,
+        "Wins": 333
+      },
+      {
+        "Draws": 135,
+        "Games": 570,
+        "Loses": 121,
+        "Name": "0187-quickfreeze15",
+        "Score": 1077,
+        "Version": 1,
+        "Wins": 314
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 134,
+        "Name": "0301-wwwolf3",
+        "Score": 1076,
+        "Version": 1,
+        "Wins": 320
+      },
+      {
+        "Draws": 253,
+        "Games": 570,
+        "Loses": 43,
+        "Name": "0449-Nightfall",
+        "Score": 1075,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 73,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0457-NoMuckingAbout",
+        "Score": 1075,
+        "Version": 1,
+        "Wins": 334
+      },
+      {
+        "Draws": 60,
+        "Games": 570,
+        "Loses": 172,
+        "Name": "0131-irony",
+        "Score": 1074,
+        "Version": 1,
+        "Wins": 338
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 162,
+        "Name": "0345-charon",
+        "Score": 1074,
+        "Version": 1,
+        "Wins": 333
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 160,
+        "Name": "0361-Crimp[2]",
+        "Score": 1074,
+        "Version": 1,
+        "Wins": 332
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 150,
+        "Name": "0349-Charonv8.1",
+        "Score": 1072,
+        "Version": 1,
+        "Wins": 326
+      },
+      {
+        "Draws": 91,
+        "Games": 570,
+        "Loses": 152,
+        "Name": "0425-IronTrap",
+        "Score": 1072,
+        "Version": 1,
+        "Wins": 327
+      },
+      {
+        "Draws": 154,
+        "Games": 570,
+        "Loses": 110,
+        "Name": "0477-Proteus3",
+        "Score": 1072,
+        "Version": 1,
+        "Wins": 306
+      },
+      {
+        "Draws": 93,
+        "Games": 570,
+        "Loses": 151,
+        "Name": "0201-serenade",
+        "Score": 1071,
+        "Version": 1,
+        "Wins": 326
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 143,
+        "Name": "0226-stasis",
+        "Score": 1069,
+        "Version": 1,
+        "Wins": 321
+      },
+      {
+        "Draws": 73,
+        "Games": 570,
+        "Loses": 166,
+        "Name": "0350-ClaMP",
+        "Score": 1066,
+        "Version": 1,
+        "Wins": 331
+      },
+      {
+        "Draws": 96,
+        "Games": 570,
+        "Loses": 152,
+        "Name": "0358-CreampuffII",
+        "Score": 1062,
+        "Version": 1,
+        "Wins": 322
+      },
+      {
+        "Draws": 83,
+        "Games": 570,
+        "Loses": 161,
+        "Name": "0424-IronSword",
+        "Score": 1061,
+        "Version": 1,
+        "Wins": 326
+      },
+      {
+        "Draws": 88,
+        "Games": 570,
+        "Loses": 158,
+        "Name": "0375-Emerald[1]",
+        "Score": 1060,
+        "Version": 1,
+        "Wins": 324
+      },
+      {
+        "Draws": 165,
+        "Games": 570,
+        "Loses": 107,
+        "Name": "0397-Hellicon2",
+        "Score": 1059,
+        "Version": 1,
+        "Wins": 298
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0056-cproba",
+        "Score": 1057,
+        "Version": 1,
+        "Wins": 317
+      },
+      {
+        "Draws": 205,
+        "Games": 570,
+        "Loses": 81,
+        "Name": "0504-SmoothNoodleMap6[2]",
+        "Score": 1057,
+        "Version": 1,
+        "Wins": 284
+      },
+      {
+        "Draws": 118,
+        "Games": 570,
+        "Loses": 139,
+        "Name": "0541-VanityII",
+        "Score": 1057,
+        "Version": 1,
+        "Wins": 313
+      },
+      {
+        "Draws": 51,
+        "Games": 570,
+        "Loses": 184,
+        "Name": "0134-kobold",
+        "Score": 1056,
+        "Version": 1,
+        "Wins": 335
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 159,
+        "Name": "0147-moonstone",
+        "Score": 1055,
+        "Version": 1,
+        "Wins": 322
+      },
+      {
+        "Draws": 236,
+        "Games": 570,
+        "Loses": 61,
+        "Name": "0269-JOSHUA3",
+        "Score": 1055,
+        "Version": 1,
+        "Wins": 273
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0325-BeholdersEyev1.1",
+        "Score": 1054,
+        "Version": 1,
+        "Wins": 316
+      },
+      {
+        "Draws": 105,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0046-charon80",
+        "Score": 1053,
+        "Version": 1,
+        "Wins": 316
+      },
+      {
+        "Draws": 60,
+        "Games": 570,
+        "Loses": 179,
+        "Name": "0126-impurge",
+        "Score": 1053,
+        "Version": 1,
+        "Wins": 331
+      },
+      {
+        "Draws": 84,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0310-Anotherscanner",
+        "Score": 1053,
+        "Version": 1,
+        "Wins": 323
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0513-Stasis",
+        "Score": 1053,
+        "Version": 1,
+        "Wins": 315
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 154,
+        "Name": "0130-irontrap",
+        "Score": 1052,
+        "Version": 1,
+        "Wins": 318
+      },
+      {
+        "Draws": 97,
+        "Games": 570,
+        "Loses": 155,
+        "Name": "0129-ironsword",
+        "Score": 1051,
+        "Version": 1,
+        "Wins": 318
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 157,
+        "Name": "0437-Medusasv2.1",
+        "Score": 1051,
+        "Version": 1,
+        "Wins": 319
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 155,
+        "Name": "0019-beholder",
+        "Score": 1049,
+        "Version": 1,
+        "Wins": 317
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 154,
+        "Name": "0220-spitfire3",
+        "Score": 1048,
+        "Version": 1,
+        "Wins": 316
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 158,
+        "Name": "0348-Charonv8.0",
+        "Score": 1048,
+        "Version": 1,
+        "Wins": 318
+      },
+      {
+        "Draws": 36,
+        "Games": 570,
+        "Loses": 197,
+        "Name": "0064-djustice",
+        "Score": 1047,
+        "Version": 1,
+        "Wins": 337
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 156,
+        "Name": "0359-Crimp2",
+        "Score": 1046,
+        "Version": 1,
+        "Wins": 316
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0217-snake",
+        "Score": 1042,
+        "Version": 1,
+        "Wins": 310
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0020-beholder17",
+        "Score": 1037,
+        "Version": 1,
+        "Wins": 307
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0259-winter3",
+        "Score": 1037,
+        "Version": 1,
+        "Wins": 307
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 158,
+        "Name": "0436-MatchStick",
+        "Score": 1036,
+        "Version": 1,
+        "Wins": 312
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0072-eclipse2",
+        "Score": 1035,
+        "Version": 1,
+        "Wins": 307
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0170-pale3",
+        "Score": 1035,
+        "Version": 1,
+        "Wins": 307
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 153,
+        "Name": "0141-matchstick",
+        "Score": 1033,
+        "Version": 1,
+        "Wins": 308
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 150,
+        "Name": "0252-vanityII",
+        "Score": 1032,
+        "Version": 1,
+        "Wins": 306
+      },
+      {
+        "Draws": 171,
+        "Games": 570,
+        "Loses": 112,
+        "Name": "0526-TheIMPirestrikesback[2]",
+        "Score": 1032,
+        "Version": 1,
+        "Wins": 287
+      },
+      {
+        "Draws": 226,
+        "Games": 570,
+        "Loses": 76,
+        "Name": "0036-bump",
+        "Score": 1030,
+        "Version": 1,
+        "Wins": 268
+      },
+      {
+        "Draws": 93,
+        "Games": 570,
+        "Loses": 165,
+        "Name": "0034-bscanlive",
+        "Score": 1029,
+        "Version": 1,
+        "Wins": 312
+      },
+      {
+        "Draws": 63,
+        "Games": 570,
+        "Loses": 185,
+        "Name": "0225-st",
+        "Score": 1029,
+        "Version": 1,
+        "Wins": 322
+      },
+      {
+        "Draws": 57,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0460-Notiesallowed2",
+        "Score": 1029,
+        "Version": 1,
+        "Wins": 324
+      },
+      {
+        "Draws": 47,
+        "Games": 570,
+        "Loses": 196,
+        "Name": "0366-DigitalJustice",
+        "Score": 1028,
+        "Version": 1,
+        "Wins": 327
+      },
+      {
+        "Draws": 134,
+        "Games": 570,
+        "Loses": 138,
+        "Name": "0474-PLASMA4a",
+        "Score": 1028,
+        "Version": 1,
+        "Wins": 298
+      },
+      {
+        "Draws": 256,
+        "Games": 570,
+        "Loses": 57,
+        "Name": "0158-nightfall",
+        "Score": 1027,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 73,
+        "Games": 570,
+        "Loses": 179,
+        "Name": "0488-s4b",
+        "Score": 1027,
+        "Version": 1,
+        "Wins": 318
+      },
+      {
+        "Draws": 195,
+        "Games": 570,
+        "Loses": 99,
+        "Name": "0525-TheIMPirestrikesback[1]",
+        "Score": 1023,
+        "Version": 1,
+        "Wins": 276
+      },
+      {
+        "Draws": 125,
+        "Games": 570,
+        "Loses": 146,
+        "Name": "0246-twill",
+        "Score": 1022,
+        "Version": 1,
+        "Wins": 299
+      },
+      {
+        "Draws": 122,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0282-bplus",
+        "Score": 1022,
+        "Version": 1,
+        "Wins": 300
+      },
+      {
+        "Draws": 85,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0059-creampuff2",
+        "Score": 1021,
+        "Version": 1,
+        "Wins": 312
+      },
+      {
+        "Draws": 184,
+        "Games": 570,
+        "Loses": 107,
+        "Name": "0118-impire",
+        "Score": 1021,
+        "Version": 1,
+        "Wins": 279
+      },
+      {
+        "Draws": 123,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0030-bpp",
+        "Score": 1017,
+        "Version": 1,
+        "Wins": 298
+      },
+      {
+        "Draws": 223,
+        "Games": 570,
+        "Loses": 83,
+        "Name": "0337-bump",
+        "Score": 1015,
+        "Version": 1,
+        "Wins": 264
+      },
+      {
+        "Draws": 213,
+        "Games": 570,
+        "Loses": 90,
+        "Name": "0216-smoothnod6",
+        "Score": 1014,
+        "Version": 1,
+        "Wins": 267
+      },
+      {
+        "Draws": 126,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0258-winter",
+        "Score": 1014,
+        "Version": 1,
+        "Wins": 296
+      },
+      {
+        "Draws": 144,
+        "Games": 570,
+        "Loses": 136,
+        "Name": "0267-zippol",
+        "Score": 1014,
+        "Version": 1,
+        "Wins": 290
+      },
+      {
+        "Draws": 119,
+        "Games": 570,
+        "Loses": 153,
+        "Name": "0296-plasma",
+        "Score": 1013,
+        "Version": 1,
+        "Wins": 298
+      },
+      {
+        "Draws": 131,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0534-Twill",
+        "Score": 1013,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 121,
+        "Games": 570,
+        "Loses": 152,
+        "Name": "0355-cproba",
+        "Score": 1012,
+        "Version": 1,
+        "Wins": 297
+      },
+      {
+        "Draws": 61,
+        "Games": 570,
+        "Loses": 192,
+        "Name": "0515-stone88",
+        "Score": 1012,
+        "Version": 1,
+        "Wins": 317
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 192,
+        "Name": "0228-stone88",
+        "Score": 1010,
+        "Version": 1,
+        "Wins": 316
+      },
+      {
+        "Draws": 67,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0238-tombstone",
+        "Score": 1009,
+        "Version": 1,
+        "Wins": 314
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0563-the8kings",
+        "Score": 1003,
+        "Version": 1,
+        "Wins": 303
+      },
+      {
+        "Draws": 69,
+        "Games": 570,
+        "Loses": 190,
+        "Name": "0163-noties",
+        "Score": 1002,
+        "Version": 1,
+        "Wins": 311
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 159,
+        "Name": "0203-shears",
+        "Score": 1001,
+        "Version": 1,
+        "Wins": 295
+      },
+      {
+        "Draws": 146,
+        "Games": 570,
+        "Loses": 139,
+        "Name": "0557-ZippoLighter",
+        "Score": 1001,
+        "Version": 1,
+        "Wins": 285
+      },
+      {
+        "Draws": 129,
+        "Games": 570,
+        "Loses": 152,
+        "Name": "0543-VentdumontSharr",
+        "Score": 996,
+        "Version": 1,
+        "Wins": 289
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 192,
+        "Name": "0459-Notiesallowed",
+        "Score": 994,
+        "Version": 1,
+        "Wins": 308
+      },
+      {
+        "Draws": 136,
+        "Games": 570,
+        "Loses": 148,
+        "Name": "0472-Plasma-Advanced",
+        "Score": 994,
+        "Version": 1,
+        "Wins": 286
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 162,
+        "Name": "0091-gisela609",
+        "Score": 992,
+        "Version": 1,
+        "Wins": 292
+      },
+      {
+        "Draws": 128,
+        "Games": 570,
+        "Loses": 154,
+        "Name": "0493-Shears",
+        "Score": 992,
+        "Version": 1,
+        "Wins": 288
+      },
+      {
+        "Draws": 121,
+        "Games": 570,
+        "Loses": 159,
+        "Name": "0179-plasma_adv",
+        "Score": 991,
+        "Version": 1,
+        "Wins": 290
+      },
+      {
+        "Draws": 61,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0312-Anti-Vampire",
+        "Score": 991,
+        "Version": 1,
+        "Wins": 310
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 168,
+        "Name": "0110-illusion",
+        "Score": 990,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 45,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0430-Kobold",
+        "Score": 990,
+        "Version": 1,
+        "Wins": 315
+      },
+      {
+        "Draws": 126,
+        "Games": 570,
+        "Loses": 156,
+        "Name": "0473-PLASMA4",
+        "Score": 990,
+        "Version": 1,
+        "Wins": 288
+      },
+      {
+        "Draws": 143,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0051-cloner2",
+        "Score": 989,
+        "Version": 1,
+        "Wins": 282
+      },
+      {
+        "Draws": 104,
+        "Games": 570,
+        "Loses": 171,
+        "Name": "0346-Charonv3.0(Echo)",
+        "Score": 989,
+        "Version": 1,
+        "Wins": 295
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 170,
+        "Name": "0445-Mutagen2.1",
+        "Score": 988,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 68,
+        "Games": 570,
+        "Loses": 196,
+        "Name": "0306-aa",
+        "Score": 986,
+        "Version": 1,
+        "Wins": 306
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 176,
+        "Name": "0319-B-scannersliveinvain",
+        "Score": 986,
+        "Version": 1,
+        "Wins": 296
+      },
+      {
+        "Draws": 110,
+        "Games": 570,
+        "Loses": 169,
+        "Name": "0373-EclipseV2.0",
+        "Score": 983,
+        "Version": 1,
+        "Wins": 291
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 178,
+        "Name": "0152-mutagen21",
+        "Score": 980,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 202,
+        "Name": "0164-noties2",
+        "Score": 980,
+        "Version": 1,
+        "Wins": 306
+      },
+      {
+        "Draws": 119,
+        "Games": 570,
+        "Loses": 165,
+        "Name": "0562-ev1lemp1re",
+        "Score": 977,
+        "Version": 1,
+        "Wins": 286
+      },
+      {
+        "Draws": 97,
+        "Games": 570,
+        "Loses": 180,
+        "Name": "0053-confetti",
+        "Score": 976,
+        "Version": 1,
+        "Wins": 293
+      },
+      {
+        "Draws": 147,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0042-challenge1",
+        "Score": 975,
+        "Version": 1,
+        "Wins": 276
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 169,
+        "Name": "0550-WinterWerewolf3",
+        "Score": 975,
+        "Version": 1,
+        "Wins": 287
+      },
+      {
+        "Draws": 124,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0318-B++",
+        "Score": 973,
+        "Version": 1,
+        "Wins": 283
+      },
+      {
+        "Draws": 195,
+        "Games": 570,
+        "Loses": 116,
+        "Name": "0011-armadillo88",
+        "Score": 972,
+        "Version": 1,
+        "Wins": 259
+      },
+      {
+        "Draws": 107,
+        "Games": 570,
+        "Loses": 176,
+        "Name": "0090-gibraltar",
+        "Score": 968,
+        "Version": 1,
+        "Wins": 287
+      },
+      {
+        "Draws": 134,
+        "Games": 570,
+        "Loses": 158,
+        "Name": "0253-vent",
+        "Score": 968,
+        "Version": 1,
+        "Wins": 278
+      },
+      {
+        "Draws": 65,
+        "Games": 570,
+        "Loses": 204,
+        "Name": "0381-flash",
+        "Score": 968,
+        "Version": 1,
+        "Wins": 301
+      },
+      {
+        "Draws": 127,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0433-lilshears",
+        "Score": 967,
+        "Version": 1,
+        "Wins": 280
+      },
+      {
+        "Draws": 99,
+        "Games": 570,
+        "Loses": 182,
+        "Name": "0242-tungsten",
+        "Score": 966,
+        "Version": 1,
+        "Wins": 289
+      },
+      {
+        "Draws": 205,
+        "Games": 570,
+        "Loses": 112,
+        "Name": "0315-Armadillo",
+        "Score": 964,
+        "Version": 1,
+        "Wins": 253
+      },
+      {
+        "Draws": 51,
+        "Games": 570,
+        "Loses": 215,
+        "Name": "0285-flash",
+        "Score": 963,
+        "Version": 1,
+        "Wins": 304
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 179,
+        "Name": "0241-tripplestarv2imp",
+        "Score": 961,
+        "Version": 1,
+        "Wins": 285
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 183,
+        "Name": "0407-Illusion",
+        "Score": 961,
+        "Version": 1,
+        "Wins": 287
+      },
+      {
+        "Draws": 55,
+        "Games": 570,
+        "Loses": 214,
+        "Name": "0009-antivampire",
+        "Score": 958,
+        "Version": 1,
+        "Wins": 301
+      },
+      {
+        "Draws": 118,
+        "Games": 570,
+        "Loses": 172,
+        "Name": "0044-charon3",
+        "Score": 958,
+        "Version": 1,
+        "Wins": 280
+      },
+      {
+        "Draws": 136,
+        "Games": 570,
+        "Loses": 160,
+        "Name": "0178-plasma4",
+        "Score": 958,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 188,
+        "Name": "0491-scissors3.1",
+        "Score": 958,
+        "Version": 1,
+        "Wins": 288
+      },
+      {
+        "Draws": 156,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0122-imps",
+        "Score": 957,
+        "Version": 1,
+        "Wins": 267
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0367-DoubleStormII",
+        "Score": 957,
+        "Version": 1,
+        "Wins": 293
+      },
+      {
+        "Draws": 80,
+        "Games": 570,
+        "Loses": 198,
+        "Name": "0140-lobot",
+        "Score": 956,
+        "Version": 1,
+        "Wins": 292
+      },
+      {
+        "Draws": 72,
+        "Games": 570,
+        "Loses": 204,
+        "Name": "0145-mobility",
+        "Score": 954,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 205,
+        "Name": "0499-Sleepless",
+        "Score": 953,
+        "Version": 1,
+        "Wins": 294
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0109-ike",
+        "Score": 951,
+        "Version": 1,
+        "Wins": 281
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 206,
+        "Name": "0281-aa",
+        "Score": 950,
+        "Version": 1,
+        "Wins": 293
+      },
+      {
+        "Draws": 111,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0538-V3",
+        "Score": 945,
+        "Version": 1,
+        "Wins": 278
+      },
+      {
+        "Draws": 182,
+        "Games": 570,
+        "Loses": 134,
+        "Name": "0469-Parthenos",
+        "Score": 944,
+        "Version": 1,
+        "Wins": 254
+      },
+      {
+        "Draws": 92,
+        "Games": 570,
+        "Loses": 195,
+        "Name": "0500-sleepless1.2",
+        "Score": 941,
+        "Version": 1,
+        "Wins": 283
+      },
+      {
+        "Draws": 246,
+        "Games": 570,
+        "Loses": 93,
+        "Name": "0302-soiwon",
+        "Score": 939,
+        "Version": 1,
+        "Wins": 231
+      },
+      {
+        "Draws": 195,
+        "Games": 570,
+        "Loses": 128,
+        "Name": "0000-armadillo",
+        "Score": 936,
+        "Version": 1,
+        "Wins": 247
+      },
+      {
+        "Draws": 126,
+        "Games": 570,
+        "Loses": 174,
+        "Name": "0138-lilshears",
+        "Score": 936,
+        "Version": 1,
+        "Wins": 270
+      },
+      {
+        "Draws": 92,
+        "Games": 570,
+        "Loses": 197,
+        "Name": "0211-sleepless",
+        "Score": 935,
+        "Version": 1,
+        "Wins": 281
+      },
+      {
+        "Draws": 104,
+        "Games": 570,
+        "Loses": 190,
+        "Name": "0510-SplitBomb",
+        "Score": 932,
+        "Version": 1,
+        "Wins": 276
+      },
+      {
+        "Draws": 125,
+        "Games": 570,
+        "Loses": 177,
+        "Name": "0399-HitBeast",
+        "Score": 929,
+        "Version": 1,
+        "Wins": 268
+      },
+      {
+        "Draws": 61,
+        "Games": 570,
+        "Loses": 220,
+        "Name": "0003-aa",
+        "Score": 928,
+        "Version": 1,
+        "Wins": 289
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 198,
+        "Name": "0300-splitbomb",
+        "Score": 928,
+        "Version": 1,
+        "Wins": 278
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 186,
+        "Name": "0531-Tungsten",
+        "Score": 928,
+        "Version": 1,
+        "Wins": 272
+      },
+      {
+        "Draws": 95,
+        "Games": 570,
+        "Loses": 198,
+        "Name": "0070-dwarfer2",
+        "Score": 926,
+        "Version": 1,
+        "Wins": 277
+      },
+      {
+        "Draws": 178,
+        "Games": 570,
+        "Loses": 143,
+        "Name": "0440-MICE",
+        "Score": 925,
+        "Version": 1,
+        "Wins": 249
+      },
+      {
+        "Draws": 174,
+        "Games": 570,
+        "Loses": 146,
+        "Name": "0278-Mice",
+        "Score": 924,
+        "Version": 1,
+        "Wins": 250
+      },
+      {
+        "Draws": 173,
+        "Games": 570,
+        "Loses": 149,
+        "Name": "0043-chaos",
+        "Score": 917,
+        "Version": 1,
+        "Wins": 248
+      },
+      {
+        "Draws": 179,
+        "Games": 570,
+        "Loses": 145,
+        "Name": "0173-parthenos",
+        "Score": 917,
+        "Version": 1,
+        "Wins": 246
+      },
+      {
+        "Draws": 111,
+        "Games": 570,
+        "Loses": 192,
+        "Name": "0390-Gibraltar",
+        "Score": 912,
+        "Version": 1,
+        "Wins": 267
+      },
+      {
+        "Draws": 159,
+        "Games": 570,
+        "Loses": 160,
+        "Name": "0417-Imps!",
+        "Score": 912,
+        "Version": 1,
+        "Wins": 251
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0079-fizzle",
+        "Score": 911,
+        "Version": 1,
+        "Wins": 265
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0502-Small4",
+        "Score": 911,
+        "Version": 1,
+        "Wins": 265
+      },
+      {
+        "Draws": 123,
+        "Games": 570,
+        "Loses": 185,
+        "Name": "0101-hitbeast",
+        "Score": 909,
+        "Version": 1,
+        "Wins": 262
+      },
+      {
+        "Draws": 192,
+        "Games": 570,
+        "Loses": 139,
+        "Name": "0162-nothingspII",
+        "Score": 909,
+        "Version": 1,
+        "Wins": 239
+      },
+      {
+        "Draws": 117,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0180-pleeease",
+        "Score": 909,
+        "Version": 1,
+        "Wins": 264
+      },
+      {
+        "Draws": 129,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0214-small4",
+        "Score": 909,
+        "Version": 1,
+        "Wins": 260
+      },
+      {
+        "Draws": 96,
+        "Games": 570,
+        "Loses": 205,
+        "Name": "0040-catcan",
+        "Score": 903,
+        "Version": 1,
+        "Wins": 269
+      },
+      {
+        "Draws": 68,
+        "Games": 570,
+        "Loses": 224,
+        "Name": "0284-flail",
+        "Score": 902,
+        "Version": 1,
+        "Wins": 278
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 220,
+        "Name": "0080-flail",
+        "Score": 900,
+        "Version": 1,
+        "Wins": 275
+      },
+      {
+        "Draws": 86,
+        "Games": 570,
+        "Loses": 213,
+        "Name": "0197-scissors31",
+        "Score": 899,
+        "Version": 1,
+        "Wins": 271
+      },
+      {
+        "Draws": 110,
+        "Games": 570,
+        "Loses": 197,
+        "Name": "0379-Fizzle",
+        "Score": 899,
+        "Version": 1,
+        "Wins": 263
+      },
+      {
+        "Draws": 166,
+        "Games": 570,
+        "Loses": 160,
+        "Name": "0263-x5v13",
+        "Score": 898,
+        "Version": 1,
+        "Wins": 244
+      },
+      {
+        "Draws": 40,
+        "Games": 570,
+        "Loses": 244,
+        "Name": "0447-Mutagen[SS]",
+        "Score": 898,
+        "Version": 1,
+        "Wins": 286
+      },
+      {
+        "Draws": 92,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0370-Dwarfer",
+        "Score": 896,
+        "Version": 1,
+        "Wins": 268
+      },
+      {
+        "Draws": 211,
+        "Games": 570,
+        "Loses": 131,
+        "Name": "0268-EADON3",
+        "Score": 895,
+        "Version": 1,
+        "Wins": 228
+      },
+      {
+        "Draws": 202,
+        "Games": 570,
+        "Loses": 137,
+        "Name": "0458-NothingSpecial-II",
+        "Score": 895,
+        "Version": 1,
+        "Wins": 231
+      },
+      {
+        "Draws": 165,
+        "Games": 570,
+        "Loses": 162,
+        "Name": "0085-gambit",
+        "Score": 894,
+        "Version": 1,
+        "Wins": 243
+      },
+      {
+        "Draws": 84,
+        "Games": 570,
+        "Loses": 216,
+        "Name": "0542-VanityIIx",
+        "Score": 894,
+        "Version": 1,
+        "Wins": 270
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 195,
+        "Name": "0250-v3",
+        "Score": 893,
+        "Version": 1,
+        "Wins": 259
+      },
+      {
+        "Draws": 111,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0202-shark",
+        "Score": 891,
+        "Version": 1,
+        "Wins": 260
+      },
+      {
+        "Draws": 126,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0371-DwarferII",
+        "Score": 891,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 42,
+        "Games": 570,
+        "Loses": 245,
+        "Name": "0454-No.5",
+        "Score": 891,
+        "Version": 1,
+        "Wins": 283
+      },
+      {
+        "Draws": 102,
+        "Games": 570,
+        "Loses": 205,
+        "Name": "0492-Shark1.0",
+        "Score": 891,
+        "Version": 1,
+        "Wins": 263
+      },
+      {
+        "Draws": 24,
+        "Games": 570,
+        "Loses": 258,
+        "Name": "0094-gnat2a",
+        "Score": 888,
+        "Version": 1,
+        "Wins": 288
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0342-CatCan[FU]",
+        "Score": 885,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 229,
+        "Name": "0133-kinch",
+        "Score": 883,
+        "Version": 1,
+        "Wins": 271
+      },
+      {
+        "Draws": 61,
+        "Games": 570,
+        "Loses": 235,
+        "Name": "0307-Achilles",
+        "Score": 883,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 45,
+        "Games": 570,
+        "Loses": 246,
+        "Name": "0483-REDRAIN",
+        "Score": 882,
+        "Version": 1,
+        "Wins": 279
+      },
+      {
+        "Draws": 59,
+        "Games": 570,
+        "Loses": 237,
+        "Name": "0154-nerxa16",
+        "Score": 881,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 150,
+        "Games": 570,
+        "Loses": 177,
+        "Name": "0254-villam",
+        "Score": 879,
+        "Version": 1,
+        "Wins": 243
+      },
+      {
+        "Draws": 56,
+        "Games": 570,
+        "Loses": 240,
+        "Name": "0190-redrain",
+        "Score": 878,
+        "Version": 1,
+        "Wins": 274
+      },
+      {
+        "Draws": 95,
+        "Games": 570,
+        "Loses": 215,
+        "Name": "0431-Levamp",
+        "Score": 875,
+        "Version": 1,
+        "Wins": 260
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 227,
+        "Name": "0435-Lobot",
+        "Score": 875,
+        "Version": 1,
+        "Wins": 266
+      },
+      {
+        "Draws": 107,
+        "Games": 570,
+        "Loses": 208,
+        "Name": "0553-X5V1.2",
+        "Score": 872,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 139,
+        "Games": 570,
+        "Loses": 187,
+        "Name": "0213-small2",
+        "Score": 871,
+        "Version": 1,
+        "Wins": 244
+      },
+      {
+        "Draws": 85,
+        "Games": 570,
+        "Loses": 223,
+        "Name": "0222-splitbomb",
+        "Score": 871,
+        "Version": 1,
+        "Wins": 262
+      },
+      {
+        "Draws": 105,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0219-snowmanv315",
+        "Score": 870,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 56,
+        "Games": 570,
+        "Loses": 243,
+        "Name": "0294-no5",
+        "Score": 869,
+        "Version": 1,
+        "Wins": 271
+      },
+      {
+        "Draws": 55,
+        "Games": 570,
+        "Loses": 244,
+        "Name": "0446-MUTAGENPAR",
+        "Score": 868,
+        "Version": 1,
+        "Wins": 271
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 222,
+        "Name": "0069-dwarfer",
+        "Score": 866,
+        "Version": 1,
+        "Wins": 259
+      },
+      {
+        "Draws": 101,
+        "Games": 570,
+        "Loses": 214,
+        "Name": "0108-icewall",
+        "Score": 866,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 64,
+        "Games": 570,
+        "Loses": 239,
+        "Name": "0322-Bacteria",
+        "Score": 865,
+        "Version": 1,
+        "Wins": 267
+      },
+      {
+        "Draws": 77,
+        "Games": 570,
+        "Loses": 231,
+        "Name": "0380-Flail",
+        "Score": 863,
+        "Version": 1,
+        "Wins": 262
+      },
+      {
+        "Draws": 139,
+        "Games": 570,
+        "Loses": 190,
+        "Name": "0320-BabySwing",
+        "Score": 862,
+        "Version": 1,
+        "Wins": 241
+      },
+      {
+        "Draws": 145,
+        "Games": 570,
+        "Loses": 186,
+        "Name": "0530-TrinityZwo",
+        "Score": 862,
+        "Version": 1,
+        "Wins": 239
+      },
+      {
+        "Draws": 154,
+        "Games": 570,
+        "Loses": 180,
+        "Name": "0544-villam",
+        "Score": 862,
+        "Version": 1,
+        "Wins": 236
+      },
+      {
+        "Draws": 120,
+        "Games": 570,
+        "Loses": 203,
+        "Name": "0262-x5v12",
+        "Score": 861,
+        "Version": 1,
+        "Wins": 247
+      },
+      {
+        "Draws": 170,
+        "Games": 570,
+        "Loses": 170,
+        "Name": "0004-acidrain",
+        "Score": 860,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 44,
+        "Games": 570,
+        "Loses": 254,
+        "Name": "0010-appleseed",
+        "Score": 860,
+        "Version": 1,
+        "Wins": 272
+      },
+      {
+        "Draws": 83,
+        "Games": 570,
+        "Loses": 228,
+        "Name": "0136-levamp",
+        "Score": 860,
+        "Version": 1,
+        "Wins": 259
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 237,
+        "Name": "0429-Kinch",
+        "Score": 859,
+        "Version": 1,
+        "Wins": 263
+      },
+      {
+        "Draws": 159,
+        "Games": 570,
+        "Loses": 178,
+        "Name": "0344-Challenge1",
+        "Score": 858,
+        "Version": 1,
+        "Wins": 233
+      },
+      {
+        "Draws": 27,
+        "Games": 570,
+        "Loses": 266,
+        "Name": "0393-Gnat2a",
+        "Score": 858,
+        "Version": 1,
+        "Wins": 277
+      },
+      {
+        "Draws": 68,
+        "Games": 570,
+        "Loses": 239,
+        "Name": "0353-Comper-2a",
+        "Score": 857,
+        "Version": 1,
+        "Wins": 263
+      },
+      {
+        "Draws": 170,
+        "Games": 570,
+        "Loses": 171,
+        "Name": "0539-Vampire[3]",
+        "Score": 857,
+        "Version": 1,
+        "Wins": 229
+      },
+      {
+        "Draws": 129,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0406-Ikev.21",
+        "Score": 855,
+        "Version": 1,
+        "Wins": 242
+      },
+      {
+        "Draws": 47,
+        "Games": 570,
+        "Loses": 254,
+        "Name": "0153-mutagenpar",
+        "Score": 854,
+        "Version": 1,
+        "Wins": 269
+      },
+      {
+        "Draws": 40,
+        "Games": 570,
+        "Loses": 259,
+        "Name": "0151-mutagen",
+        "Score": 853,
+        "Version": 1,
+        "Wins": 271
+      },
+      {
+        "Draws": 88,
+        "Games": 570,
+        "Loses": 227,
+        "Name": "0229-sucker3",
+        "Score": 853,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 145,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0240-trinityzwo",
+        "Score": 853,
+        "Version": 1,
+        "Wins": 236
+      },
+      {
+        "Draws": 87,
+        "Games": 570,
+        "Loses": 228,
+        "Name": "0516-Sucker3",
+        "Score": 852,
+        "Version": 1,
+        "Wins": 255
+      },
+      {
+        "Draws": 80,
+        "Games": 570,
+        "Loses": 233,
+        "Name": "0561-vanity2x",
+        "Score": 851,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 57,
+        "Games": 570,
+        "Loses": 249,
+        "Name": "0052-comper2a",
+        "Score": 849,
+        "Version": 1,
+        "Wins": 264
+      },
+      {
+        "Draws": 105,
+        "Games": 570,
+        "Loses": 217,
+        "Name": "0215-smartbomb",
+        "Score": 849,
+        "Version": 1,
+        "Wins": 248
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 211,
+        "Name": "0507-SNOWMANv3.15",
+        "Score": 849,
+        "Version": 1,
+        "Wins": 245
+      },
+      {
+        "Draws": 140,
+        "Games": 570,
+        "Loses": 194,
+        "Name": "0264-x5v14",
+        "Score": 848,
+        "Version": 1,
+        "Wins": 236
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 216,
+        "Name": "0174-pesticide",
+        "Score": 846,
+        "Version": 1,
+        "Wins": 246
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 238,
+        "Name": "0280-Piper",
+        "Score": 846,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 236,
+        "Name": "0434-livingdead",
+        "Score": 846,
+        "Version": 1,
+        "Wins": 256
+      },
+      {
+        "Draws": 35,
+        "Games": 570,
+        "Loses": 265,
+        "Name": "0132-killer",
+        "Score": 845,
+        "Version": 1,
+        "Wins": 270
+      },
+      {
+        "Draws": 59,
+        "Games": 570,
+        "Loses": 250,
+        "Name": "0192-rex",
+        "Score": 842,
+        "Version": 1,
+        "Wins": 261
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 237,
+        "Name": "0139-livingdead",
+        "Score": 841,
+        "Version": 1,
+        "Wins": 254
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 237,
+        "Name": "0514-StealthHunter1.0",
+        "Score": 841,
+        "Version": 1,
+        "Wins": 254
+      },
+      {
+        "Draws": 114,
+        "Games": 570,
+        "Loses": 214,
+        "Name": "0297-please",
+        "Score": 840,
+        "Version": 1,
+        "Wins": 242
+      },
+      {
+        "Draws": 143,
+        "Games": 570,
+        "Loses": 195,
+        "Name": "0554-X5V1.4",
+        "Score": 839,
+        "Version": 1,
+        "Wins": 232
+      },
+      {
+        "Draws": 64,
+        "Games": 570,
+        "Loses": 248,
+        "Name": "0485-Rex",
+        "Score": 838,
+        "Version": 1,
+        "Wins": 258
+      },
+      {
+        "Draws": 99,
+        "Games": 570,
+        "Loses": 225,
+        "Name": "0256-warf",
+        "Score": 837,
+        "Version": 1,
+        "Wins": 246
+      },
+      {
+        "Draws": 38,
+        "Games": 570,
+        "Loses": 266,
+        "Name": "0428-Killer[2]",
+        "Score": 836,
+        "Version": 1,
+        "Wins": 266
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 221,
+        "Name": "0405-Icewall",
+        "Score": 835,
+        "Version": 1,
+        "Wins": 243
+      },
+      {
+        "Draws": 213,
+        "Games": 570,
+        "Loses": 150,
+        "Name": "0155-nerxa19",
+        "Score": 834,
+        "Version": 1,
+        "Wins": 207
+      },
+      {
+        "Draws": 124,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0546-Warf",
+        "Score": 832,
+        "Version": 1,
+        "Wins": 236
+      },
+      {
+        "Draws": 138,
+        "Games": 570,
+        "Loses": 202,
+        "Name": "0501-Small2",
+        "Score": 828,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 76,
+        "Games": 570,
+        "Loses": 244,
+        "Name": "0227-stealth",
+        "Score": 826,
+        "Version": 1,
+        "Wins": 250
+      },
+      {
+        "Draws": 166,
+        "Games": 570,
+        "Loses": 184,
+        "Name": "0308-AcidRain1.0",
+        "Score": 826,
+        "Version": 1,
+        "Wins": 220
+      },
+      {
+        "Draws": 138,
+        "Games": 570,
+        "Loses": 203,
+        "Name": "0547-Warrior42",
+        "Score": 825,
+        "Version": 1,
+        "Wins": 229
+      },
+      {
+        "Draws": 87,
+        "Games": 570,
+        "Loses": 238,
+        "Name": "0084-freeze-x",
+        "Score": 822,
+        "Version": 1,
+        "Wins": 245
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 255,
+        "Name": "0014-backfire",
+        "Score": 821,
+        "Version": 1,
+        "Wins": 253
+      },
+      {
+        "Draws": 67,
+        "Games": 570,
+        "Loses": 252,
+        "Name": "0395-Hard-rockv.7",
+        "Score": 820,
+        "Version": 1,
+        "Wins": 251
+      },
+      {
+        "Draws": 186,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0149-mousebomb",
+        "Score": 819,
+        "Version": 1,
+        "Wins": 211
+      },
+      {
+        "Draws": 48,
+        "Games": 570,
+        "Loses": 265,
+        "Name": "0150-mrnasty",
+        "Score": 819,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 245,
+        "Name": "0343-ChainGang1.1",
+        "Score": 819,
+        "Version": 1,
+        "Wins": 247
+      },
+      {
+        "Draws": 162,
+        "Games": 570,
+        "Loses": 190,
+        "Name": "0452-No.3",
+        "Score": 816,
+        "Version": 1,
+        "Wins": 218
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 226,
+        "Name": "0245-twilight6",
+        "Score": 814,
+        "Version": 1,
+        "Wins": 235
+      },
+      {
+        "Draws": 116,
+        "Games": 570,
+        "Loses": 222,
+        "Name": "0391-glassreplicant",
+        "Score": 812,
+        "Version": 1,
+        "Wins": 232
+      },
+      {
+        "Draws": 41,
+        "Games": 570,
+        "Loses": 272,
+        "Name": "0427-Killer[1]",
+        "Score": 812,
+        "Version": 1,
+        "Wins": 257
+      },
+      {
+        "Draws": 49,
+        "Games": 570,
+        "Loses": 268,
+        "Name": "0314-AppleseedFive++",
+        "Score": 808,
+        "Version": 1,
+        "Wins": 253
+      },
+      {
+        "Draws": 106,
+        "Games": 570,
+        "Loses": 230,
+        "Name": "0470-Pesticide",
+        "Score": 808,
+        "Version": 1,
+        "Wins": 234
+      },
+      {
+        "Draws": 264,
+        "Games": 570,
+        "Loses": 125,
+        "Name": "0467-paratrooperv2.1",
+        "Score": 807,
+        "Version": 1,
+        "Wins": 181
+      },
+      {
+        "Draws": 107,
+        "Games": 570,
+        "Loses": 230,
+        "Name": "0116-imperor3",
+        "Score": 806,
+        "Version": 1,
+        "Wins": 233
+      },
+      {
+        "Draws": 119,
+        "Games": 570,
+        "Loses": 223,
+        "Name": "0058-crazyjane",
+        "Score": 803,
+        "Version": 1,
+        "Wins": 228
+      },
+      {
+        "Draws": 85,
+        "Games": 570,
+        "Loses": 246,
+        "Name": "0007-antidwarf2",
+        "Score": 802,
+        "Version": 1,
+        "Wins": 239
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 236,
+        "Name": "0386-Freeze-x!",
+        "Score": 802,
+        "Version": 1,
+        "Wins": 234
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 228,
+        "Name": "0412-ImperorIII",
+        "Score": 802,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 98,
+        "Games": 570,
+        "Loses": 238,
+        "Name": "0066-droid",
+        "Score": 800,
+        "Version": 1,
+        "Wins": 234
+      },
+      {
+        "Draws": 172,
+        "Games": 570,
+        "Loses": 189,
+        "Name": "0292-no3",
+        "Score": 799,
+        "Version": 1,
+        "Wins": 209
+      },
+      {
+        "Draws": 107,
+        "Games": 570,
+        "Loses": 234,
+        "Name": "0503-Smartbomb4.1",
+        "Score": 794,
+        "Version": 1,
+        "Wins": 229
+      },
+      {
+        "Draws": 120,
+        "Games": 570,
+        "Loses": 226,
+        "Name": "0092-glassrep",
+        "Score": 792,
+        "Version": 1,
+        "Wins": 224
+      },
+      {
+        "Draws": 270,
+        "Games": 570,
+        "Loses": 126,
+        "Name": "0171-paratrooper21",
+        "Score": 792,
+        "Version": 1,
+        "Wins": 174
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 259,
+        "Name": "0041-chaingang",
+        "Score": 791,
+        "Version": 1,
+        "Wins": 240
+      },
+      {
+        "Draws": 184,
+        "Games": 570,
+        "Loses": 184,
+        "Name": "0081-flamdownpour",
+        "Score": 790,
+        "Version": 1,
+        "Wins": 202
+      },
+      {
+        "Draws": 76,
+        "Games": 570,
+        "Loses": 257,
+        "Name": "0016-bacteria",
+        "Score": 787,
+        "Version": 1,
+        "Wins": 237
+      },
+      {
+        "Draws": 270,
+        "Games": 570,
+        "Loses": 128,
+        "Name": "0341-cancercells",
+        "Score": 786,
+        "Version": 1,
+        "Wins": 172
+      },
+      {
+        "Draws": 54,
+        "Games": 570,
+        "Loses": 275,
+        "Name": "0097-hardrock",
+        "Score": 777,
+        "Version": 1,
+        "Wins": 241
+      },
+      {
+        "Draws": 121,
+        "Games": 570,
+        "Loses": 231,
+        "Name": "0357-CrazyJane",
+        "Score": 775,
+        "Version": 1,
+        "Wins": 218
+      },
+      {
+        "Draws": 93,
+        "Games": 570,
+        "Loses": 250,
+        "Name": "0368-Droid",
+        "Score": 774,
+        "Version": 1,
+        "Wins": 227
+      },
+      {
+        "Draws": 83,
+        "Games": 570,
+        "Loses": 257,
+        "Name": "0311-Anti-Dwarf2",
+        "Score": 773,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 113,
+        "Games": 570,
+        "Loses": 240,
+        "Name": "0068-dwarf28",
+        "Score": 764,
+        "Version": 1,
+        "Wins": 217
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 256,
+        "Name": "0156-nerxa9",
+        "Score": 764,
+        "Version": 1,
+        "Wins": 225
+      },
+      {
+        "Draws": 123,
+        "Games": 570,
+        "Loses": 235,
+        "Name": "0287-greplic",
+        "Score": 759,
+        "Version": 1,
+        "Wins": 212
+      },
+      {
+        "Draws": 162,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0545-Virus[SA]",
+        "Score": 756,
+        "Version": 1,
+        "Wins": 198
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 272,
+        "Name": "0065-dominatrix",
+        "Score": 754,
+        "Version": 1,
+        "Wins": 228
+      },
+      {
+        "Draws": 145,
+        "Games": 570,
+        "Loses": 222,
+        "Name": "0487-Rollv1.0",
+        "Score": 754,
+        "Version": 1,
+        "Wins": 203
+      },
+      {
+        "Draws": 160,
+        "Games": 570,
+        "Loses": 213,
+        "Name": "0102-hithard",
+        "Score": 751,
+        "Version": 1,
+        "Wins": 197
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 247,
+        "Name": "0304-28dwarf",
+        "Score": 751,
+        "Version": 1,
+        "Wins": 214
+      },
+      {
+        "Draws": 140,
+        "Games": 570,
+        "Loses": 227,
+        "Name": "0193-roll",
+        "Score": 749,
+        "Version": 1,
+        "Wins": 203
+      },
+      {
+        "Draws": 103,
+        "Games": 570,
+        "Loses": 252,
+        "Name": "0279-Midget",
+        "Score": 748,
+        "Version": 1,
+        "Wins": 215
+      },
+      {
+        "Draws": 171,
+        "Games": 570,
+        "Loses": 207,
+        "Name": "0255-virus",
+        "Score": 747,
+        "Version": 1,
+        "Wins": 192
+      },
+      {
+        "Draws": 54,
+        "Games": 570,
+        "Loses": 285,
+        "Name": "0444-MrNasty",
+        "Score": 747,
+        "Version": 1,
+        "Wins": 231
+      },
+      {
+        "Draws": 229,
+        "Games": 570,
+        "Loses": 169,
+        "Name": "0239-trident",
+        "Score": 745,
+        "Version": 1,
+        "Wins": 172
+      },
+      {
+        "Draws": 209,
+        "Games": 570,
+        "Loses": 184,
+        "Name": "0271-LEWIS3",
+        "Score": 740,
+        "Version": 1,
+        "Wins": 177
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 251,
+        "Name": "0063-curse",
+        "Score": 739,
+        "Version": 1,
+        "Wins": 210
+      },
+      {
+        "Draws": 90,
+        "Games": 570,
+        "Loses": 264,
+        "Name": "0364-Curse",
+        "Score": 738,
+        "Version": 1,
+        "Wins": 216
+      },
+      {
+        "Draws": 74,
+        "Games": 570,
+        "Loses": 275,
+        "Name": "0196-sargent",
+        "Score": 737,
+        "Version": 1,
+        "Wins": 221
+      },
+      {
+        "Draws": 268,
+        "Games": 570,
+        "Loses": 147,
+        "Name": "0555-XDwarfer",
+        "Score": 733,
+        "Version": 1,
+        "Wins": 155
+      },
+      {
+        "Draws": 73,
+        "Games": 570,
+        "Loses": 277,
+        "Name": "0558-s_duff",
+        "Score": 733,
+        "Version": 1,
+        "Wins": 220
+      },
+      {
+        "Draws": 97,
+        "Games": 570,
+        "Loses": 262,
+        "Name": "0385-Fleas2",
+        "Score": 730,
+        "Version": 1,
+        "Wins": 211
+      },
+      {
+        "Draws": 233,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0529-trident",
+        "Score": 725,
+        "Version": 1,
+        "Wins": 164
+      },
+      {
+        "Draws": 214,
+        "Games": 570,
+        "Loses": 186,
+        "Name": "0415-Impring",
+        "Score": 724,
+        "Version": 1,
+        "Wins": 170
+      },
+      {
+        "Draws": 213,
+        "Games": 570,
+        "Loses": 187,
+        "Name": "0166-ogremark2",
+        "Score": 723,
+        "Version": 1,
+        "Wins": 170
+      },
+      {
+        "Draws": 35,
+        "Games": 570,
+        "Loses": 306,
+        "Name": "0038-burp",
+        "Score": 722,
+        "Version": 1,
+        "Wins": 229
+      },
+      {
+        "Draws": 64,
+        "Games": 570,
+        "Loses": 287,
+        "Name": "0175-phew",
+        "Score": 721,
+        "Version": 1,
+        "Wins": 219
+      },
+      {
+        "Draws": 142,
+        "Games": 570,
+        "Loses": 235,
+        "Name": "0212-slowdown",
+        "Score": 721,
+        "Version": 1,
+        "Wins": 193
+      },
+      {
+        "Draws": 24,
+        "Games": 570,
+        "Loses": 316,
+        "Name": "0392-Gnat",
+        "Score": 714,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 125,
+        "Games": 570,
+        "Loses": 250,
+        "Name": "0336-Bullwhip1.0",
+        "Score": 710,
+        "Version": 1,
+        "Wins": 195
+      },
+      {
+        "Draws": 48,
+        "Games": 570,
+        "Loses": 303,
+        "Name": "0339-Burp",
+        "Score": 705,
+        "Version": 1,
+        "Wins": 219
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 269,
+        "Name": "0236-tinytim",
+        "Score": 703,
+        "Version": 1,
+        "Wins": 201
+      },
+      {
+        "Draws": 12,
+        "Games": 570,
+        "Loses": 328,
+        "Name": "0093-gnat",
+        "Score": 702,
+        "Version": 1,
+        "Wins": 230
+      },
+      {
+        "Draws": 101,
+        "Games": 570,
+        "Loses": 269,
+        "Name": "0189-rat",
+        "Score": 701,
+        "Version": 1,
+        "Wins": 200
+      },
+      {
+        "Draws": 92,
+        "Games": 570,
+        "Loses": 275,
+        "Name": "0338-bump.v2",
+        "Score": 701,
+        "Version": 1,
+        "Wins": 203
+      },
+      {
+        "Draws": 83,
+        "Games": 570,
+        "Loses": 282,
+        "Name": "0490-Sargent",
+        "Score": 698,
+        "Version": 1,
+        "Wins": 205
+      },
+      {
+        "Draws": 87,
+        "Games": 570,
+        "Loses": 280,
+        "Name": "0037-bump2",
+        "Score": 696,
+        "Version": 1,
+        "Wins": 203
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 279,
+        "Name": "0083-fleas2",
+        "Score": 695,
+        "Version": 1,
+        "Wins": 202
+      },
+      {
+        "Draws": 140,
+        "Games": 570,
+        "Loses": 247,
+        "Name": "0035-bullwhip",
+        "Score": 689,
+        "Version": 1,
+        "Wins": 183
+      },
+      {
+        "Draws": 223,
+        "Games": 570,
+        "Loses": 192,
+        "Name": "0120-impring",
+        "Score": 688,
+        "Version": 1,
+        "Wins": 155
+      },
+      {
+        "Draws": 295,
+        "Games": 570,
+        "Loses": 144,
+        "Name": "0482-ramscoop-x",
+        "Score": 688,
+        "Version": 1,
+        "Wins": 131
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 279,
+        "Name": "0566-tinytim11",
+        "Score": 685,
+        "Version": 1,
+        "Wins": 197
+      },
+      {
+        "Draws": 90,
+        "Games": 570,
+        "Loses": 282,
+        "Name": "0376-FallingLeaf1.21",
+        "Score": 684,
+        "Version": 1,
+        "Wins": 198
+      },
+      {
+        "Draws": 95,
+        "Games": 570,
+        "Loses": 279,
+        "Name": "0001-dwarf",
+        "Score": 683,
+        "Version": 1,
+        "Wins": 196
+      },
+      {
+        "Draws": 44,
+        "Games": 570,
+        "Loses": 313,
+        "Name": "0317-Autov1.0",
+        "Score": 683,
+        "Version": 1,
+        "Wins": 213
+      },
+      {
+        "Draws": 217,
+        "Games": 570,
+        "Loses": 198,
+        "Name": "0462-OGREmark2",
+        "Score": 682,
+        "Version": 1,
+        "Wins": 155
+      },
+      {
+        "Draws": 147,
+        "Games": 570,
+        "Loses": 246,
+        "Name": "0528-ToLiveIsToDie3.5",
+        "Score": 678,
+        "Version": 1,
+        "Wins": 177
+      },
+      {
+        "Draws": 70,
+        "Games": 570,
+        "Loses": 298,
+        "Name": "0384-Fleas",
+        "Score": 676,
+        "Version": 1,
+        "Wins": 202
+      },
+      {
+        "Draws": 44,
+        "Games": 570,
+        "Loses": 316,
+        "Name": "0478-ProtonDance-X",
+        "Score": 674,
+        "Version": 1,
+        "Wins": 210
+      },
+      {
+        "Draws": 143,
+        "Games": 570,
+        "Loses": 251,
+        "Name": "0237-tolive",
+        "Score": 671,
+        "Version": 1,
+        "Wins": 176
+      },
+      {
+        "Draws": 65,
+        "Games": 570,
+        "Loses": 304,
+        "Name": "0039-bynars",
+        "Score": 668,
+        "Version": 1,
+        "Wins": 201
+      },
+      {
+        "Draws": 62,
+        "Games": 570,
+        "Loses": 307,
+        "Name": "0340-Bynars",
+        "Score": 665,
+        "Version": 1,
+        "Wins": 201
+      },
+      {
+        "Draws": 120,
+        "Games": 570,
+        "Loses": 269,
+        "Name": "0050-cleaver",
+        "Score": 663,
+        "Version": 1,
+        "Wins": 181
+      },
+      {
+        "Draws": 234,
+        "Games": 570,
+        "Loses": 193,
+        "Name": "0113-impbreed11",
+        "Score": 663,
+        "Version": 1,
+        "Wins": 143
+      },
+      {
+        "Draws": 227,
+        "Games": 570,
+        "Loses": 198,
+        "Name": "0073-elf",
+        "Score": 662,
+        "Version": 1,
+        "Wins": 145
+      },
+      {
+        "Draws": 119,
+        "Games": 570,
+        "Loses": 270,
+        "Name": "0352-Cleaver",
+        "Score": 662,
+        "Version": 1,
+        "Wins": 181
+      },
+      {
+        "Draws": 266,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0265-xdwarfer",
+        "Score": 659,
+        "Version": 1,
+        "Wins": 131
+      },
+      {
+        "Draws": 29,
+        "Games": 570,
+        "Loses": 331,
+        "Name": "0517-SuicidalAlien22",
+        "Score": 659,
+        "Version": 1,
+        "Wins": 210
+      },
+      {
+        "Draws": 246,
+        "Games": 570,
+        "Loses": 187,
+        "Name": "0496-Signal-gun1.1",
+        "Score": 657,
+        "Version": 1,
+        "Wins": 137
+      },
+      {
+        "Draws": 40,
+        "Games": 570,
+        "Loses": 327,
+        "Name": "0524-test[JKW2]",
+        "Score": 649,
+        "Version": 1,
+        "Wins": 203
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 282,
+        "Name": "0075-fallingleaf",
+        "Score": 648,
+        "Version": 1,
+        "Wins": 180
+      },
+      {
+        "Draws": 99,
+        "Games": 570,
+        "Loses": 288,
+        "Name": "0115-impdwarf",
+        "Score": 648,
+        "Version": 1,
+        "Wins": 183
+      },
+      {
+        "Draws": 219,
+        "Games": 570,
+        "Loses": 208,
+        "Name": "0374-elf",
+        "Score": 648,
+        "Version": 1,
+        "Wins": 143
+      },
+      {
+        "Draws": 91,
+        "Games": 570,
+        "Loses": 295,
+        "Name": "0533-TwilightPits3",
+        "Score": 643,
+        "Version": 1,
+        "Wins": 184
+      },
+      {
+        "Draws": 104,
+        "Games": 570,
+        "Loses": 287,
+        "Name": "0199-scoop23",
+        "Score": 641,
+        "Version": 1,
+        "Wins": 179
+      },
+      {
+        "Draws": 11,
+        "Games": 570,
+        "Loses": 349,
+        "Name": "0291-no1",
+        "Score": 641,
+        "Version": 1,
+        "Wins": 210
+      },
+      {
+        "Draws": 127,
+        "Games": 570,
+        "Loses": 273,
+        "Name": "0012-astrogem",
+        "Score": 637,
+        "Version": 1,
+        "Wins": 170
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 305,
+        "Name": "0283-csapda2",
+        "Score": 637,
+        "Version": 1,
+        "Wins": 186
+      },
+      {
+        "Draws": 101,
+        "Games": 570,
+        "Loses": 291,
+        "Name": "0244-twilight3",
+        "Score": 635,
+        "Version": 1,
+        "Wins": 178
+      },
+      {
+        "Draws": 40,
+        "Games": 570,
+        "Loses": 332,
+        "Name": "0185-protondance",
+        "Score": 634,
+        "Version": 1,
+        "Wins": 198
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 306,
+        "Name": "0363-csapda2",
+        "Score": 634,
+        "Version": 1,
+        "Wins": 185
+      },
+      {
+        "Draws": 102,
+        "Games": 570,
+        "Loses": 291,
+        "Name": "0369-Dum-Dum",
+        "Score": 633,
+        "Version": 1,
+        "Wins": 177
+      },
+      {
+        "Draws": 17,
+        "Games": 570,
+        "Loses": 348,
+        "Name": "0451-No.1",
+        "Score": 632,
+        "Version": 1,
+        "Wins": 205
+      },
+      {
+        "Draws": 57,
+        "Games": 570,
+        "Loses": 322,
+        "Name": "0293-no4",
+        "Score": 630,
+        "Version": 1,
+        "Wins": 191
+      },
+      {
+        "Draws": 86,
+        "Games": 570,
+        "Loses": 303,
+        "Name": "0067-dumdum",
+        "Score": 629,
+        "Version": 1,
+        "Wins": 181
+      },
+      {
+        "Draws": 67,
+        "Games": 570,
+        "Loses": 317,
+        "Name": "0453-No.4",
+        "Score": 625,
+        "Version": 1,
+        "Wins": 186
+      },
+      {
+        "Draws": 279,
+        "Games": 570,
+        "Loses": 176,
+        "Name": "0456-NoHope",
+        "Score": 624,
+        "Version": 1,
+        "Wins": 115
+      },
+      {
+        "Draws": 277,
+        "Games": 570,
+        "Loses": 178,
+        "Name": "0206-shrimp",
+        "Score": 622,
+        "Version": 1,
+        "Wins": 115
+      },
+      {
+        "Draws": 79,
+        "Games": 570,
+        "Loses": 310,
+        "Name": "0455-NoChallenge",
+        "Score": 622,
+        "Version": 1,
+        "Wins": 181
+      },
+      {
+        "Draws": 282,
+        "Games": 570,
+        "Loses": 175,
+        "Name": "0495-Shrimp",
+        "Score": 621,
+        "Version": 1,
+        "Wins": 113
+      },
+      {
+        "Draws": 35,
+        "Games": 570,
+        "Loses": 341,
+        "Name": "0230-suicidalalien22",
+        "Score": 617,
+        "Version": 1,
+        "Wins": 194
+      },
+      {
+        "Draws": 192,
+        "Games": 570,
+        "Loses": 237,
+        "Name": "0198-scoop11",
+        "Score": 615,
+        "Version": 1,
+        "Wins": 141
+      },
+      {
+        "Draws": 252,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0207-signalgun",
+        "Score": 609,
+        "Version": 1,
+        "Wins": 119
+      },
+      {
+        "Draws": 90,
+        "Games": 570,
+        "Loses": 307,
+        "Name": "0411-ImpDwarf1.0",
+        "Score": 609,
+        "Version": 1,
+        "Wins": 173
+      },
+      {
+        "Draws": 38,
+        "Games": 570,
+        "Loses": 342,
+        "Name": "0441-minidwarf",
+        "Score": 608,
+        "Version": 1,
+        "Wins": 190
+      },
+      {
+        "Draws": 110,
+        "Games": 570,
+        "Loses": 295,
+        "Name": "0021-binarytree",
+        "Score": 605,
+        "Version": 1,
+        "Wins": 165
+      },
+      {
+        "Draws": 86,
+        "Games": 570,
+        "Loses": 311,
+        "Name": "0062-crimson",
+        "Score": 605,
+        "Version": 1,
+        "Wins": 173
+      },
+      {
+        "Draws": 50,
+        "Games": 570,
+        "Loses": 335,
+        "Name": "0387-garlic",
+        "Score": 605,
+        "Version": 1,
+        "Wins": 185
+      },
+      {
+        "Draws": 382,
+        "Games": 570,
+        "Loses": 114,
+        "Name": "0057-crazyimp",
+        "Score": 604,
+        "Version": 1,
+        "Wins": 74
+      },
+      {
+        "Draws": 55,
+        "Games": 570,
+        "Loses": 333,
+        "Name": "0086-garlic",
+        "Score": 601,
+        "Version": 1,
+        "Wins": 182
+      },
+      {
+        "Draws": 115,
+        "Games": 570,
+        "Loses": 293,
+        "Name": "0098-harpye",
+        "Score": 601,
+        "Version": 1,
+        "Wins": 162
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 322,
+        "Name": "0144-minjump",
+        "Score": 594,
+        "Version": 1,
+        "Wins": 173
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 300,
+        "Name": "0326-BinaryTree",
+        "Score": 594,
+        "Version": 1,
+        "Wins": 162
+      },
+      {
+        "Draws": 67,
+        "Games": 570,
+        "Loses": 328,
+        "Name": "0442-MinJump",
+        "Score": 592,
+        "Version": 1,
+        "Wins": 175
+      },
+      {
+        "Draws": 262,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0288-homunc",
+        "Score": 589,
+        "Version": 1,
+        "Wins": 109
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 324,
+        "Name": "0033-bridge",
+        "Score": 588,
+        "Version": 1,
+        "Wins": 171
+      },
+      {
+        "Draws": 110,
+        "Games": 570,
+        "Loses": 301,
+        "Name": "0316-AstroGeminion3p",
+        "Score": 587,
+        "Version": 1,
+        "Wins": 159
+      },
+      {
+        "Draws": 209,
+        "Games": 570,
+        "Loses": 236,
+        "Name": "0200-seed",
+        "Score": 584,
+        "Version": 1,
+        "Wins": 125
+      },
+      {
+        "Draws": 73,
+        "Games": 570,
+        "Loses": 327,
+        "Name": "0335-Bridge",
+        "Score": 583,
+        "Version": 1,
+        "Wins": 170
+      },
+      {
+        "Draws": 391,
+        "Games": 570,
+        "Loses": 115,
+        "Name": "0356-CrazyImp",
+        "Score": 583,
+        "Version": 1,
+        "Wins": 64
+      },
+      {
+        "Draws": 95,
+        "Games": 570,
+        "Loses": 313,
+        "Name": "0160-nochallenge",
+        "Score": 581,
+        "Version": 1,
+        "Wins": 162
+      },
+      {
+        "Draws": 250,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0103-homunculus",
+        "Score": 580,
+        "Version": 1,
+        "Wins": 110
+      },
+      {
+        "Draws": 222,
+        "Games": 570,
+        "Loses": 229,
+        "Name": "0234-tamper",
+        "Score": 579,
+        "Version": 1,
+        "Wins": 119
+      },
+      {
+        "Draws": 242,
+        "Games": 570,
+        "Loses": 218,
+        "Name": "0522-tamper",
+        "Score": 572,
+        "Version": 1,
+        "Wins": 110
+      },
+      {
+        "Draws": 189,
+        "Games": 570,
+        "Loses": 254,
+        "Name": "0077-fastvamp31",
+        "Score": 570,
+        "Version": 1,
+        "Wins": 127
+      },
+      {
+        "Draws": 248,
+        "Games": 570,
+        "Loses": 216,
+        "Name": "0400-Homunculus",
+        "Score": 566,
+        "Version": 1,
+        "Wins": 106
+      },
+      {
+        "Draws": 203,
+        "Games": 570,
+        "Loses": 248,
+        "Name": "0556-XeroxII",
+        "Score": 560,
+        "Version": 1,
+        "Wins": 119
+      },
+      {
+        "Draws": 220,
+        "Games": 570,
+        "Loses": 238,
+        "Name": "0261-wuss",
+        "Score": 556,
+        "Version": 1,
+        "Wins": 112
+      },
+      {
+        "Draws": 94,
+        "Games": 570,
+        "Loses": 322,
+        "Name": "0362-Crimsonv1.1",
+        "Score": 556,
+        "Version": 1,
+        "Wins": 154
+      },
+      {
+        "Draws": 322,
+        "Games": 570,
+        "Loses": 171,
+        "Name": "0334-Breadman1.0",
+        "Score": 553,
+        "Version": 1,
+        "Wins": 77
+      },
+      {
+        "Draws": 75,
+        "Games": 570,
+        "Loses": 336,
+        "Name": "0432-Lichen1988",
+        "Score": 552,
+        "Version": 1,
+        "Wins": 159
+      },
+      {
+        "Draws": 318,
+        "Games": 570,
+        "Loses": 176,
+        "Name": "0413-IMPGUN",
+        "Score": 546,
+        "Version": 1,
+        "Wins": 76
+      },
+      {
+        "Draws": 125,
+        "Games": 570,
+        "Loses": 306,
+        "Name": "0396-Harpye",
+        "Score": 542,
+        "Version": 1,
+        "Wins": 139
+      },
+      {
+        "Draws": 337,
+        "Games": 570,
+        "Loses": 166,
+        "Name": "0117-impgun",
+        "Score": 538,
+        "Version": 1,
+        "Wins": 67
+      },
+      {
+        "Draws": 188,
+        "Games": 570,
+        "Loses": 266,
+        "Name": "0247-twopir",
+        "Score": 536,
+        "Version": 1,
+        "Wins": 116
+      },
+      {
+        "Draws": 389,
+        "Games": 570,
+        "Loses": 133,
+        "Name": "0486-RingThing2",
+        "Score": 533,
+        "Version": 1,
+        "Wins": 48
+      },
+      {
+        "Draws": 193,
+        "Games": 570,
+        "Loses": 264,
+        "Name": "0519-SuperImp1.0",
+        "Score": 532,
+        "Version": 1,
+        "Wins": 113
+      },
+      {
+        "Draws": 72,
+        "Games": 570,
+        "Loses": 345,
+        "Name": "0494-SHRAPNEL",
+        "Score": 531,
+        "Version": 1,
+        "Wins": 153
+      },
+      {
+        "Draws": 222,
+        "Games": 570,
+        "Loses": 245,
+        "Name": "0552-Wuss",
+        "Score": 531,
+        "Version": 1,
+        "Wins": 103
+      },
+      {
+        "Draws": 320,
+        "Games": 570,
+        "Loses": 182,
+        "Name": "0032-breadman",
+        "Score": 524,
+        "Version": 1,
+        "Wins": 68
+      },
+      {
+        "Draws": 200,
+        "Games": 570,
+        "Loses": 264,
+        "Name": "0135-lemming",
+        "Score": 518,
+        "Version": 1,
+        "Wins": 106
+      },
+      {
+        "Draws": 61,
+        "Games": 570,
+        "Loses": 357,
+        "Name": "0205-shrapnel",
+        "Score": 517,
+        "Version": 1,
+        "Wins": 152
+      },
+      {
+        "Draws": 192,
+        "Games": 570,
+        "Loses": 270,
+        "Name": "0305-2IR",
+        "Score": 516,
+        "Version": 1,
+        "Wins": 108
+      },
+      {
+        "Draws": 188,
+        "Games": 570,
+        "Loses": 273,
+        "Name": "0231-superimp",
+        "Score": 515,
+        "Version": 1,
+        "Wins": 109
+      },
+      {
+        "Draws": 41,
+        "Games": 570,
+        "Loses": 371,
+        "Name": "0313-Antivamp",
+        "Score": 515,
+        "Version": 1,
+        "Wins": 158
+      },
+      {
+        "Draws": 131,
+        "Games": 570,
+        "Loses": 312,
+        "Name": "0013-auto",
+        "Score": 512,
+        "Version": 1,
+        "Wins": 127
+      },
+      {
+        "Draws": 160,
+        "Games": 570,
+        "Loses": 293,
+        "Name": "0208-simplescan2",
+        "Score": 511,
+        "Version": 1,
+        "Wins": 117
+      },
+      {
+        "Draws": 213,
+        "Games": 570,
+        "Loses": 258,
+        "Name": "0266-xeroxII",
+        "Score": 510,
+        "Version": 1,
+        "Wins": 99
+      },
+      {
+        "Draws": 165,
+        "Games": 570,
+        "Loses": 291,
+        "Name": "0497-SimpleScan2",
+        "Score": 507,
+        "Version": 1,
+        "Wins": 114
+      },
+      {
+        "Draws": 275,
+        "Games": 570,
+        "Loses": 218,
+        "Name": "0123-imps0",
+        "Score": 506,
+        "Version": 1,
+        "Wins": 77
+      },
+      {
+        "Draws": 71,
+        "Games": 570,
+        "Loses": 354,
+        "Name": "0137-lichen",
+        "Score": 506,
+        "Version": 1,
+        "Wins": 145
+      },
+      {
+        "Draws": 136,
+        "Games": 570,
+        "Loses": 312,
+        "Name": "0489-Safev2.0",
+        "Score": 502,
+        "Version": 1,
+        "Wins": 122
+      },
+      {
+        "Draws": 30,
+        "Games": 570,
+        "Loses": 383,
+        "Name": "0008-antivamp",
+        "Score": 501,
+        "Version": 1,
+        "Wins": 157
+      },
+      {
+        "Draws": 156,
+        "Games": 570,
+        "Loses": 300,
+        "Name": "0024-blanket",
+        "Score": 498,
+        "Version": 1,
+        "Wins": 114
+      },
+      {
+        "Draws": 279,
+        "Games": 570,
+        "Loses": 218,
+        "Name": "0419-IMPS",
+        "Score": 498,
+        "Version": 1,
+        "Wins": 73
+      },
+      {
+        "Draws": 338,
+        "Games": 570,
+        "Loses": 179,
+        "Name": "0114-impcannon",
+        "Score": 497,
+        "Version": 1,
+        "Wins": 53
+      },
+      {
+        "Draws": 206,
+        "Games": 570,
+        "Loses": 267,
+        "Name": "0509-SPLAT",
+        "Score": 497,
+        "Version": 1,
+        "Wins": 97
+      },
+      {
+        "Draws": 96,
+        "Games": 570,
+        "Loses": 342,
+        "Name": "0018-banzai2",
+        "Score": 492,
+        "Version": 1,
+        "Wins": 132
+      },
+      {
+        "Draws": 195,
+        "Games": 570,
+        "Loses": 277,
+        "Name": "0372-DynamicImp-gate",
+        "Score": 489,
+        "Version": 1,
+        "Wins": 98
+      },
+      {
+        "Draws": 194,
+        "Games": 570,
+        "Loses": 279,
+        "Name": "0148-mortar",
+        "Score": 485,
+        "Version": 1,
+        "Wins": 97
+      },
+      {
+        "Draws": 142,
+        "Games": 570,
+        "Loses": 314,
+        "Name": "0195-safe2",
+        "Score": 484,
+        "Version": 1,
+        "Wins": 114
+      },
+      {
+        "Draws": 182,
+        "Games": 570,
+        "Loses": 288,
+        "Name": "0176-pinchers",
+        "Score": 482,
+        "Version": 1,
+        "Wins": 100
+      },
+      {
+        "Draws": 89,
+        "Games": 570,
+        "Loses": 351,
+        "Name": "0324-BANZAITOO",
+        "Score": 479,
+        "Version": 1,
+        "Wins": 130
+      },
+      {
+        "Draws": 86,
+        "Games": 570,
+        "Loses": 354,
+        "Name": "0235-threader2",
+        "Score": 476,
+        "Version": 1,
+        "Wins": 130
+      },
+      {
+        "Draws": 178,
+        "Games": 570,
+        "Loses": 293,
+        "Name": "0191-revimp",
+        "Score": 475,
+        "Version": 1,
+        "Wins": 99
+      },
+      {
+        "Draws": 54,
+        "Games": 570,
+        "Loses": 376,
+        "Name": "0223-spreel",
+        "Score": 474,
+        "Version": 1,
+        "Wins": 140
+      },
+      {
+        "Draws": 101,
+        "Games": 570,
+        "Loses": 345,
+        "Name": "0248-ultra",
+        "Score": 473,
+        "Version": 1,
+        "Wins": 124
+      },
+      {
+        "Draws": 309,
+        "Games": 570,
+        "Loses": 210,
+        "Name": "0394-Gulliver",
+        "Score": 462,
+        "Version": 1,
+        "Wins": 51
+      },
+      {
+        "Draws": 298,
+        "Games": 570,
+        "Loses": 218,
+        "Name": "0095-gulliver",
+        "Score": 460,
+        "Version": 1,
+        "Wins": 54
+      },
+      {
+        "Draws": 177,
+        "Games": 570,
+        "Loses": 299,
+        "Name": "0416-Impring[SC]",
+        "Score": 459,
+        "Version": 1,
+        "Wins": 94
+      },
+      {
+        "Draws": 66,
+        "Games": 570,
+        "Loses": 373,
+        "Name": "0511-spreel",
+        "Score": 459,
+        "Version": 1,
+        "Wins": 131
+      },
+      {
+        "Draws": 212,
+        "Games": 570,
+        "Loses": 276,
+        "Name": "0221-splat",
+        "Score": 458,
+        "Version": 1,
+        "Wins": 82
+      },
+      {
+        "Draws": 202,
+        "Games": 570,
+        "Loses": 283,
+        "Name": "0006-annoying",
+        "Score": 457,
+        "Version": 1,
+        "Wins": 85
+      },
+      {
+        "Draws": 187,
+        "Games": 570,
+        "Loses": 294,
+        "Name": "0484-reverseimp",
+        "Score": 454,
+        "Version": 1,
+        "Wins": 89
+      },
+      {
+        "Draws": 198,
+        "Games": 570,
+        "Loses": 287,
+        "Name": "0071-dynamic",
+        "Score": 453,
+        "Version": 1,
+        "Wins": 85
+      },
+      {
+        "Draws": 186,
+        "Games": 570,
+        "Loses": 296,
+        "Name": "0121-impring2",
+        "Score": 450,
+        "Version": 1,
+        "Wins": 88
+      },
+      {
+        "Draws": 406,
+        "Games": 570,
+        "Loses": 151,
+        "Name": "0408-Imp",
+        "Score": 445,
+        "Version": 1,
+        "Wins": 13
+      },
+      {
+        "Draws": 168,
+        "Games": 570,
+        "Loses": 311,
+        "Name": "0055-corporate",
+        "Score": 441,
+        "Version": 1,
+        "Wins": 91
+      },
+      {
+        "Draws": 144,
+        "Games": 570,
+        "Loses": 327,
+        "Name": "0520-SuperLance.09b",
+        "Score": 441,
+        "Version": 1,
+        "Wins": 99
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 351,
+        "Name": "0536-UltraSlick",
+        "Score": 439,
+        "Version": 1,
+        "Wins": 110
+      },
+      {
+        "Draws": 259,
+        "Games": 570,
+        "Loses": 254,
+        "Name": "0125-imptrap",
+        "Score": 430,
+        "Version": 1,
+        "Wins": 57
+      },
+      {
+        "Draws": 394,
+        "Games": 570,
+        "Loses": 164,
+        "Name": "0331-Boring",
+        "Score": 430,
+        "Version": 1,
+        "Wins": 12
+      },
+      {
+        "Draws": 115,
+        "Games": 570,
+        "Loses": 350,
+        "Name": "0532-turtle",
+        "Score": 430,
+        "Version": 1,
+        "Wins": 105
+      },
+      {
+        "Draws": 391,
+        "Games": 570,
+        "Loses": 166,
+        "Name": "0551-Wow",
+        "Score": 430,
+        "Version": 1,
+        "Wins": 13
+      },
+      {
+        "Draws": 396,
+        "Games": 570,
+        "Loses": 163,
+        "Name": "0183-primeimp2",
+        "Score": 429,
+        "Version": 1,
+        "Wins": 11
+      },
+      {
+        "Draws": 150,
+        "Games": 570,
+        "Loses": 328,
+        "Name": "0232-superlance",
+        "Score": 426,
+        "Version": 1,
+        "Wins": 92
+      },
+      {
+        "Draws": 117,
+        "Games": 570,
+        "Loses": 350,
+        "Name": "0243-turtle",
+        "Score": 426,
+        "Version": 1,
+        "Wins": 103
+      },
+      {
+        "Draws": 384,
+        "Games": 570,
+        "Loses": 173,
+        "Name": "0273-LEWINSK5",
+        "Score": 423,
+        "Version": 1,
+        "Wins": 13
+      },
+      {
+        "Draws": 199,
+        "Games": 570,
+        "Loses": 297,
+        "Name": "0330-Body-Snatcher3",
+        "Score": 421,
+        "Version": 1,
+        "Wins": 74
+      },
+      {
+        "Draws": 384,
+        "Games": 570,
+        "Loses": 174,
+        "Name": "0168-orc",
+        "Score": 420,
+        "Version": 1,
+        "Wins": 12
+      },
+      {
+        "Draws": 387,
+        "Games": 570,
+        "Loses": 172,
+        "Name": "0476-Prime-Impv2.0",
+        "Score": 420,
+        "Version": 1,
+        "Wins": 11
+      },
+      {
+        "Draws": 385,
+        "Games": 570,
+        "Loses": 174,
+        "Name": "0111-imp",
+        "Score": 418,
+        "Version": 1,
+        "Wins": 11
+      },
+      {
+        "Draws": 382,
+        "Games": 570,
+        "Loses": 176,
+        "Name": "0182-primeimp",
+        "Score": 418,
+        "Version": 1,
+        "Wins": 12
+      },
+      {
+        "Draws": 155,
+        "Games": 570,
+        "Loses": 328,
+        "Name": "0388-Gate-Daemon",
+        "Score": 416,
+        "Version": 1,
+        "Wins": 87
+      },
+      {
+        "Draws": 392,
+        "Games": 570,
+        "Loses": 170,
+        "Name": "0463-orc",
+        "Score": 416,
+        "Version": 1,
+        "Wins": 8
+      },
+      {
+        "Draws": 373,
+        "Games": 570,
+        "Loses": 183,
+        "Name": "0512-Spwum",
+        "Score": 415,
+        "Version": 1,
+        "Wins": 14
+      },
+      {
+        "Draws": 375,
+        "Games": 570,
+        "Loses": 182,
+        "Name": "0260-wow",
+        "Score": 414,
+        "Version": 1,
+        "Wins": 13
+      },
+      {
+        "Draws": 147,
+        "Games": 570,
+        "Loses": 334,
+        "Name": "0564-hypergate",
+        "Score": 414,
+        "Version": 1,
+        "Wins": 89
+      },
+      {
+        "Draws": 377,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0119-implance",
+        "Score": 413,
+        "Version": 1,
+        "Wins": 12
+      },
+      {
+        "Draws": 109,
+        "Games": 570,
+        "Loses": 360,
+        "Name": "0105-hopper2",
+        "Score": 412,
+        "Version": 1,
+        "Wins": 101
+      },
+      {
+        "Draws": 381,
+        "Games": 570,
+        "Loses": 179,
+        "Name": "0002-imp",
+        "Score": 411,
+        "Version": 1,
+        "Wins": 10
+      },
+      {
+        "Draws": 147,
+        "Games": 570,
+        "Loses": 335,
+        "Name": "0088-gatedaemon",
+        "Score": 411,
+        "Version": 1,
+        "Wins": 88
+      },
+      {
+        "Draws": 392,
+        "Games": 570,
+        "Loses": 172,
+        "Name": "0277-Imp",
+        "Score": 410,
+        "Version": 1,
+        "Wins": 6
+      },
+      {
+        "Draws": 151,
+        "Games": 570,
+        "Loses": 333,
+        "Name": "0565-hypergate",
+        "Score": 409,
+        "Version": 1,
+        "Wins": 86
+      },
+      {
+        "Draws": 381,
+        "Games": 570,
+        "Loses": 180,
+        "Name": "0028-boring2",
+        "Score": 408,
+        "Version": 1,
+        "Wins": 9
+      },
+      {
+        "Draws": 180,
+        "Games": 570,
+        "Loses": 314,
+        "Name": "0127-impzapper",
+        "Score": 408,
+        "Version": 1,
+        "Wins": 76
+      },
+      {
+        "Draws": 381,
+        "Games": 570,
+        "Loses": 180,
+        "Name": "0275-MORGAN5",
+        "Score": 408,
+        "Version": 1,
+        "Wins": 9
+      },
+      {
+        "Draws": 353,
+        "Games": 570,
+        "Loses": 199,
+        "Name": "0224-spwum",
+        "Score": 407,
+        "Version": 1,
+        "Wins": 18
+      },
+      {
+        "Draws": 110,
+        "Games": 570,
+        "Loses": 361,
+        "Name": "0402-Hopper2",
+        "Score": 407,
+        "Version": 1,
+        "Wins": 99
+      },
+      {
+        "Draws": 381,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0274-LEWIS5",
+        "Score": 405,
+        "Version": 1,
+        "Wins": 8
+      },
+      {
+        "Draws": 381,
+        "Games": 570,
+        "Loses": 181,
+        "Name": "0475-Prime-Impv1.0",
+        "Score": 405,
+        "Version": 1,
+        "Wins": 8
+      },
+      {
+        "Draws": 197,
+        "Games": 570,
+        "Loses": 304,
+        "Name": "0309-ANNOYING",
+        "Score": 404,
+        "Version": 1,
+        "Wins": 69
+      },
+      {
+        "Draws": 359,
+        "Games": 570,
+        "Loses": 196,
+        "Name": "0414-ImpLance0.2b",
+        "Score": 404,
+        "Version": 1,
+        "Wins": 15
+      },
+      {
+        "Draws": 149,
+        "Games": 570,
+        "Loses": 337,
+        "Name": "0354-CorporateProgram",
+        "Score": 401,
+        "Version": 1,
+        "Wins": 84
+      },
+      {
+        "Draws": 78,
+        "Games": 570,
+        "Loses": 385,
+        "Name": "0005-agonykiller",
+        "Score": 399,
+        "Version": 1,
+        "Wins": 107
+      },
+      {
+        "Draws": 180,
+        "Games": 570,
+        "Loses": 320,
+        "Name": "0479-Quick-Scan88Prototype",
+        "Score": 390,
+        "Version": 1,
+        "Wins": 70
+      },
+      {
+        "Draws": 359,
+        "Games": 570,
+        "Loses": 201,
+        "Name": "0332-Boring2",
+        "Score": 389,
+        "Version": 1,
+        "Wins": 10
+      },
+      {
+        "Draws": 313,
+        "Games": 570,
+        "Loses": 232,
+        "Name": "0471-Pit-Scannerv1.2",
+        "Score": 388,
+        "Version": 1,
+        "Wins": 25
+      },
+      {
+        "Draws": 199,
+        "Games": 570,
+        "Loses": 310,
+        "Name": "0027-bodysnatch",
+        "Score": 382,
+        "Version": 1,
+        "Wins": 61
+      },
+      {
+        "Draws": 118,
+        "Games": 570,
+        "Loses": 364,
+        "Name": "0104-hopper",
+        "Score": 382,
+        "Version": 1,
+        "Wins": 88
+      },
+      {
+        "Draws": 218,
+        "Games": 570,
+        "Loses": 299,
+        "Name": "0023-blamo01",
+        "Score": 377,
+        "Version": 1,
+        "Wins": 53
+      },
+      {
+        "Draws": 182,
+        "Games": 570,
+        "Loses": 324,
+        "Name": "0410-ImpBreed1.0",
+        "Score": 374,
+        "Version": 1,
+        "Wins": 64
+      },
+      {
+        "Draws": 199,
+        "Games": 570,
+        "Loses": 313,
+        "Name": "0251-vampyre",
+        "Score": 373,
+        "Version": 1,
+        "Wins": 58
+      },
+      {
+        "Draws": 316,
+        "Games": 570,
+        "Loses": 236,
+        "Name": "0165-notquiteimp",
+        "Score": 370,
+        "Version": 1,
+        "Wins": 18
+      },
+      {
+        "Draws": 54,
+        "Games": 570,
+        "Loses": 411,
+        "Name": "0204-shortestworm8",
+        "Score": 369,
+        "Version": 1,
+        "Wins": 105
+      },
+      {
+        "Draws": 189,
+        "Games": 570,
+        "Loses": 321,
+        "Name": "0540-VAMPYRE",
+        "Score": 369,
+        "Version": 1,
+        "Wins": 60
+      },
+      {
+        "Draws": 306,
+        "Games": 570,
+        "Loses": 244,
+        "Name": "0177-pitscan12",
+        "Score": 366,
+        "Version": 1,
+        "Wins": 20
+      },
+      {
+        "Draws": 254,
+        "Games": 570,
+        "Loses": 279,
+        "Name": "0029-boring3",
+        "Score": 365,
+        "Version": 1,
+        "Wins": 37
+      },
+      {
+        "Draws": 117,
+        "Games": 570,
+        "Loses": 372,
+        "Name": "0401-Hopper",
+        "Score": 360,
+        "Version": 1,
+        "Wins": 81
+      },
+      {
+        "Draws": 67,
+        "Games": 570,
+        "Loses": 409,
+        "Name": "0210-slaver",
+        "Score": 349,
+        "Version": 1,
+        "Wins": 94
+      },
+      {
+        "Draws": 185,
+        "Games": 570,
+        "Loses": 331,
+        "Name": "0409-ImpBreed-x1.0a",
+        "Score": 347,
+        "Version": 1,
+        "Wins": 54
+      },
+      {
+        "Draws": 196,
+        "Games": 570,
+        "Loses": 324,
+        "Name": "0112-impbreed",
+        "Score": 346,
+        "Version": 1,
+        "Wins": 50
+      },
+      {
+        "Draws": 111,
+        "Games": 570,
+        "Loses": 383,
+        "Name": "0351-Claudiaincarnation0.3",
+        "Score": 339,
+        "Version": 1,
+        "Wins": 76
+      },
+      {
+        "Draws": 117,
+        "Games": 570,
+        "Loses": 380,
+        "Name": "0087-gate",
+        "Score": 336,
+        "Version": 1,
+        "Wins": 73
+      },
+      {
+        "Draws": 123,
+        "Games": 570,
+        "Loses": 376,
+        "Name": "0389-Gate",
+        "Score": 336,
+        "Version": 1,
+        "Wins": 71
+      },
+      {
+        "Draws": 92,
+        "Games": 570,
+        "Loses": 399,
+        "Name": "0082-flea",
+        "Score": 329,
+        "Version": 1,
+        "Wins": 79
+      },
+      {
+        "Draws": 112,
+        "Games": 570,
+        "Loses": 386,
+        "Name": "0303-scholl1",
+        "Score": 328,
+        "Version": 1,
+        "Wins": 72
+      },
+      {
+        "Draws": 182,
+        "Games": 570,
+        "Loses": 340,
+        "Name": "0568-incendiarybomb",
+        "Score": 326,
+        "Version": 1,
+        "Wins": 48
+      },
+      {
+        "Draws": 255,
+        "Games": 570,
+        "Loses": 293,
+        "Name": "0333-Boring3",
+        "Score": 321,
+        "Version": 1,
+        "Wins": 22
+      },
+      {
+        "Draws": 127,
+        "Games": 570,
+        "Loses": 379,
+        "Name": "0089-geminicannon",
+        "Score": 319,
+        "Version": 1,
+        "Wins": 64
+      },
+      {
+        "Draws": 83,
+        "Games": 570,
+        "Loses": 412,
+        "Name": "0383-Flea",
+        "Score": 308,
+        "Version": 1,
+        "Wins": 75
+      },
+      {
+        "Draws": 8,
+        "Games": 570,
+        "Loses": 474,
+        "Name": "0518-Sunburst33",
+        "Score": 272,
+        "Version": 1,
+        "Wins": 88
+      },
+      {
+        "Draws": 13,
+        "Games": 570,
+        "Loses": 473,
+        "Name": "0560-sunburst33",
+        "Score": 265,
+        "Version": 1,
+        "Wins": 84
+      },
+      {
+        "Draws": 178,
+        "Games": 570,
+        "Loses": 366,
+        "Name": "0403-HOSER",
+        "Score": 256,
+        "Version": 1,
+        "Wins": 26
+      },
+      {
+        "Draws": 153,
+        "Games": 570,
+        "Loses": 384,
+        "Name": "0249-useless",
+        "Score": 252,
+        "Version": 1,
+        "Wins": 33
+      },
+      {
+        "Draws": 160,
+        "Games": 570,
+        "Loses": 380,
+        "Name": "0537-Useless",
+        "Score": 250,
+        "Version": 1,
+        "Wins": 30
+      },
+      {
+        "Draws": 164,
+        "Games": 570,
+        "Loses": 380,
+        "Name": "0523-test[JKW1]",
+        "Score": 242,
+        "Version": 1,
+        "Wins": 26
+      },
+      {
+        "Draws": 99,
+        "Games": 570,
+        "Loses": 424,
+        "Name": "0022-binarytree2",
+        "Score": 240,
+        "Version": 1,
+        "Wins": 47
+      },
+      {
+        "Draws": 163,
+        "Games": 570,
+        "Loses": 382,
+        "Name": "0461-NULL",
+        "Score": 238,
+        "Version": 1,
+        "Wins": 25
+      },
+      {
+        "Draws": 87,
+        "Games": 570,
+        "Loses": 433,
+        "Name": "0527-TheShortestWorm",
+        "Score": 237,
+        "Version": 1,
+        "Wins": 50
+      },
+      {
+        "Draws": 118,
+        "Games": 570,
+        "Loses": 421,
+        "Name": "0157-niche",
+        "Score": 211,
+        "Version": 1,
+        "Wins": 31
+      },
+      {
+        "Draws": 134,
+        "Games": 570,
+        "Loses": 412,
+        "Name": "0054-copykatq2",
+        "Score": 206,
+        "Version": 1,
+        "Wins": 24
+      },
+      {
+        "Draws": 96,
+        "Games": 570,
+        "Loses": 439,
+        "Name": "0327-BinraryTree2.0(beta)",
+        "Score": 201,
+        "Version": 1,
+        "Wins": 35
+      },
+      {
+        "Draws": 146,
+        "Games": 570,
+        "Loses": 409,
+        "Name": "0420-IMPSTOMPER",
+        "Score": 191,
+        "Version": 1,
+        "Wins": 15
+      },
+      {
+        "Draws": 119,
+        "Games": 570,
+        "Loses": 427,
+        "Name": "0448-Niche1.0",
+        "Score": 191,
+        "Version": 1,
+        "Wins": 24
+      },
+      {
+        "Draws": 108,
+        "Games": 570,
+        "Loses": 438,
+        "Name": "0015-backimp",
+        "Score": 180,
+        "Version": 1,
+        "Wins": 24
+      },
+      {
+        "Draws": 68,
+        "Games": 570,
+        "Loses": 468,
+        "Name": "0017-banzai",
+        "Score": 170,
+        "Version": 1,
+        "Wins": 34
+      },
+      {
+        "Draws": 76,
+        "Games": 570,
+        "Loses": 463,
+        "Name": "0323-BANZAI",
+        "Score": 169,
+        "Version": 1,
+        "Wins": 31
+      },
+      {
+        "Draws": 100,
+        "Games": 570,
+        "Loses": 450,
+        "Name": "0321-BackImp",
+        "Score": 160,
+        "Version": 1,
+        "Wins": 20
+      },
+      {
+        "Draws": 39,
+        "Games": 570,
+        "Loses": 505,
+        "Name": "0570-Prime,bonusandbigbucks",
+        "Score": 117,
+        "Version": 1,
+        "Wins": 26
+      },
+      {
+        "Draws": 5,
+        "Games": 570,
+        "Loses": 563,
+        "Name": "0567-impspiral",
+        "Score": 11,
+        "Version": 1,
+        "Wins": 2
+      },
+      {
+        "Draws": 0,
+        "Games": 570,
+        "Loses": 570,
+        "Name": "0559-cocottemaker0",
+        "Score": 0,
+        "Version": 1,
+        "Wins": 0
+      }
+    ]
+}
