@@ -30,10 +30,9 @@ namespace Tests.Touranment
 			foreach (var botFilename in botFiles)
 			{
 				var botName = Path.GetFileNameWithoutExtension(botFilename);
-				var playerName = botName.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries).Last();
 				var player = new ArenaPlayer
 				{
-					Name = playerName,
+					Name = botName,
 					Password = Guid.NewGuid().ToString(),
 					Authors = "Corewar community",
 					Program = File.ReadAllText(botFilename),
