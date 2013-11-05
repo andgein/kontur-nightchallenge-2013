@@ -31,7 +31,7 @@ namespace Tests.Touranment
 			var battleRunner = new BattleRunner();
 			var tournament = new RoundRobinTournament(battleRunner, 1, "allBotsRanking", players, null, null, false);
 			var result = tournament.Run();
-			File.WriteAllText(@"all-bots-ranking.json", JsonConvert.SerializeObject(result, Formatting.Indented));
+			File.WriteAllText(@"all-bots-ranking.json", JsonConvert.SerializeObject(result.TournamentRanking, Formatting.Indented));
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Tests.Touranment
 			var result = tournament.Run();
 			var battlesWithDifferentResults = battleRunner.BattlesWithDifferentResults;
 			File.WriteAllText(@"failed-battles.json", JsonConvert.SerializeObject(battlesWithDifferentResults, Formatting.Indented));
-			File.WriteAllText(@"complete-ranking.json", JsonConvert.SerializeObject(result, Formatting.Indented));
+			File.WriteAllText(@"complete-ranking.json", JsonConvert.SerializeObject(result.TournamentRanking, Formatting.Indented));
 			Assert.That(battlesWithDifferentResults.Count, Is.EqualTo(0));
 		}
 	}
