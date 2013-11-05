@@ -46,7 +46,7 @@ namespace Server
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
 			{
 				log.Fatal("Unhandled exception in current AppDomain", (Exception) args.ExceptionObject);
-				Environment.ExitCode = -1;
+				Environment.Exit(-1);
 			};
 		}
 
