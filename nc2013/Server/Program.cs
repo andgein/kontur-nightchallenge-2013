@@ -39,7 +39,7 @@ namespace Server
 			var godModeSecret = GenerateGodModeSecret();
 			var warriorProgramParser = new WarriorParser();
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
-			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
+			var gamesRepo = new CachingGamesRepo(new GamesRepo(new DirectoryInfo("../games")));
 			var sessionManager = new SessionManager("../sessions");
 			var gameServer = new GameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
