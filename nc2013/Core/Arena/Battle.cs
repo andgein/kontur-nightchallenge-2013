@@ -1,4 +1,5 @@
-﻿using Core.Game;
+﻿using Core.Engine;
+using Core.Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -29,6 +30,16 @@ namespace Core.Arena
 			{
 				new ProgramStartInfo { Program = Player1.Program, StartAddress = StartAddress1 },
 				new ProgramStartInfo { Program = Player2.Program, StartAddress = StartAddress2 }
+			};
+		}
+
+		[NotNull]
+		public WarriorStartInfo[] GetWarriorStartInfos()
+		{
+			return new[]
+			{
+				new WarriorStartInfo(Player1.Warrior, StartAddress1),
+				new WarriorStartInfo(Player2.Warrior, StartAddress2)
 			};
 		}
 

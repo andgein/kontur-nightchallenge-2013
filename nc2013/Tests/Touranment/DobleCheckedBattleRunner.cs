@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using Core.Arena;
 using Core.Game;
-using Core.Game.MarsBased;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using nMars.RedCode;
@@ -36,15 +35,6 @@ namespace Tests.Touranment
 			var m = Normalize(marsFinalGameState);
 			var o = Normalize(finalGameState);
 			Assert.That(o, Is.EqualTo(m));
-		}
-
-		[NotNull]
-		private static GameState GetFinalGameStateByMars([NotNull] Rules rules, [NotNull] Battle battle)
-		{
-			var programStartInfos = battle.GetProgramStartInfos();
-			var game = new MarsGame(rules, programStartInfos);
-			game.StepToEnd();
-			return game.GameState;
 		}
 
 		private static string Normalize(GameState gs)

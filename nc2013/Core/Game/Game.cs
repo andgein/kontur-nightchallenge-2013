@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Engine;
 using Core.Parser;
+using JetBrains.Annotations;
 
 namespace Core.Game
 {
@@ -11,13 +12,10 @@ namespace Core.Game
 		private readonly GameEngine engine;
 		private readonly ProgramStartInfo[] programStartInfos;
 
-		public Game(ProgramStartInfo[] programStartInfos)
+		public Game([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			this.programStartInfos = programStartInfos;
-
-			//TODO: RandomAllocator
 			var r = new Random();
-
 			var parser = new WarriorParser();
 			var warriors = programStartInfos.Select(
 				psi => new WarriorStartInfo(
@@ -25,6 +23,12 @@ namespace Core.Game
 					psi.StartAddress.HasValue ? (int)psi.StartAddress : r.Next(Parameters.CoreSize)
 					));
 			engine = new GameEngine(warriors);
+		}
+
+		public Game([NotNull] ProgramStartInfo[] programStartInfos, [NotNull] WarriorStartInfo[] warriorStartInfos)
+		{
+			this.programStartInfos = programStartInfos;
+			engine = new GameEngine(warriorStartInfos);
 		}
 
 		public GameState GameState

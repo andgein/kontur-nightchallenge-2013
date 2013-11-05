@@ -65,7 +65,7 @@ namespace Server
 //			var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
 			var battleRunner = new BattleRunner();
-			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, battleRunner, 5);
+			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, battleRunner, 10);
 			var httpServer = new GameHttpServer(
 				prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, 
 				GetStaticContentDir(), godModeSecret);

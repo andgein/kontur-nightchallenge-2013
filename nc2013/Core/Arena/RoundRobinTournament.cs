@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Core.Engine;
+using Core.Parser;
 using JetBrains.Annotations;
 using nMars.RedCode;
 
@@ -19,6 +20,7 @@ namespace Core.Arena
 		private readonly bool suppressBattleErrors;
 		private readonly Rules rules;
 		private readonly Random rnd = new Random();
+		private readonly WarriorParser warriorParser = new WarriorParser();
 
 		public RoundRobinTournament([NotNull] IBattleRunner battleRunner, int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal, bool suppressBattleErrors = true)
 		{
@@ -49,6 +51,7 @@ namespace Core.Arena
 		[NotNull]
 		public RoundRobinTournamentResult Run()
 		{
+			ParseWarriors();
 			var battleResults = RunTournament(GenerateAllPairs()).ToList();
 			var ranking = MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
 			return new RoundRobinTournamentResult
@@ -56,6 +59,12 @@ namespace Core.Arena
 				BattleResults = battleResults,
 				TournamentRanking = ranking,
 			};
+		}
+
+		private void ParseWarriors()
+		{
+			foreach (var player in players)
+				player.Warrior = warriorParser.Parse(player.Program);
 		}
 
 		[NotNull]
