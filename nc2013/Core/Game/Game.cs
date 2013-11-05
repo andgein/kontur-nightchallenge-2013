@@ -103,7 +103,7 @@ namespace Core.Game
 		public void StepToEnd()
 		{
 			while (!engine.GameOver)
-				Step(1);
+				engine.Step();
 		}
 	}
 }
