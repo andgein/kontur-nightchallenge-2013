@@ -13,8 +13,8 @@ namespace Server.Debugging
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
-			//HandleWithDiffs(context, debugger, stepCount);
-			HandleWithoutDiffs(context, debugger, stepCount);
+			HandleWithDiffs(context, debugger, stepCount);
+			//HandleWithoutDiffs(context, debugger, stepCount);
 		}
 
 		private static void HandleWithoutDiffs([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, int stepCount)
