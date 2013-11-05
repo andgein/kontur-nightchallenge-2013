@@ -20,12 +20,13 @@ namespace Tests.Touranment
 		[Test]
 		public void AllOkBots()
 		{
-			var players = TestWarriors.GetBotFiles("warriors-ok").Select(botFilename => new TournamentPlayer
+			var players = TestWarriors.GetBotFiles("warriors-ok").Concat(TestWarriors.GetBotFiles("warriors-vec")).Select(botFilename => new TournamentPlayer
 			{
 				Name = Path.GetFileNameWithoutExtension(botFilename),
 				Program = File.ReadAllText(botFilename),
 				Version = 1,
-			}).ToArray();
+			})
+			.ToArray();
 			Log.For(this).InfoFormat("Number of players: {0}", players.Length);
 			var battleRunner = new BattleRunner();
 			var tournament = new RoundRobinTournament(battleRunner, 1, "allBotsRanking", players, null, null, false);
