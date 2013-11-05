@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Core;
 using Core.Arena;
@@ -11,14 +12,40 @@ namespace Tests.Touranment
 	[TestFixture]
 	public class Tournament_Test
 	{
+		const string playersDir = @".\players";
+
 		[SetUp]
 		public void SetUp()
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
+			if (Directory.Exists(playersDir))
+				Directory.Delete(playersDir, true);
+			Directory.CreateDirectory(playersDir);
 		}
 
 		[Test]
-		public void AllOkBots()
+		public void ConvertToPlayers()
+		{
+			var botFiles = TestWarriors.GetBotFiles("warriors-best");
+			foreach (var botFilename in botFiles)
+			{
+				var botName = Path.GetFileNameWithoutExtension(botFilename);
+				var playerName = botName.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries).Last();
+				var player = new ArenaPlayer
+				{
+					Name = playerName,
+					Password = Guid.NewGuid().ToString(),
+					Authors = "Corewar community",
+					Program = File.ReadAllText(botFilename),
+					Timestamp = DateTime.UtcNow,
+				};
+				var playerFilename = Path.Combine(playersDir, botName + ".json");
+				File.WriteAllText(playerFilename, JsonConvert.SerializeObject(new[] { player }, Formatting.Indented));
+			}
+		}
+
+		[Test]
+		public void UberTournament()
 		{
 			var players = TestWarriors.GetBotFiles("warriors-ok").Concat(TestWarriors.GetBotFiles("warriors-vec")).Select(botFilename => new TournamentPlayer
 			{
