@@ -1,2 +1,2 @@
 cd .deploy\bin
-start corewar.exe config
+start corewar.exe ..\..\config

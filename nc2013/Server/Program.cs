@@ -17,7 +17,6 @@ namespace Server
 {
 	public static class Program
 	{
-		private const string defaultSettingsFilename = "config";
 		private static readonly ILog log = LogManager.GetLogger(typeof (Program));
 
 		public static void Main([NotNull] string[] args)
@@ -65,7 +64,6 @@ namespace Server
 		private static SettingsFile GetSettingsFile([NotNull] IEnumerable<string> args)
 		{
 			var filename = args.FirstOrDefault();
-			filename = string.IsNullOrEmpty(filename) ? defaultSettingsFilename : filename;
 			var settingsFile = new SettingsFile(filename);
 			log.Info(settingsFile.ToString());
 			return settingsFile;

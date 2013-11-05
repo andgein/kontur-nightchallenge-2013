@@ -7,21 +7,25 @@ namespace Server
 {
 	public class SettingsFile
 	{
-		private const string defaultPrefix = "http://*/corewar/";
+		private const string defaultPrefix = "http://*:8080/corewar/";
 		private const int defaultBattlesPerPair = 5;
 
 		private static readonly ILog log = LogManager.GetLogger(typeof (SettingsFile));
 
-		public SettingsFile([NotNull] string fileName)
+		public SettingsFile([CanBeNull] string settingsFilename)
 		{
 			HttpListenerPrefix = defaultPrefix;
 			BattlesPerPair = defaultBattlesPerPair;
 			ProductionMode = false;
 			GodAccessOnly = false;
 			GodModeSecret = Guid.NewGuid().ToString();
-			if (File.Exists(fileName))
+			if (string.IsNullOrEmpty(settingsFilename))
+				log.Warn("Using default settings");
+			else if (!File.Exists(settingsFilename))
+				log.Warn(string.Format("Settings file {0} not found - using default settings", settingsFilename));
+			else
 			{
-				var lines = File.ReadLines(fileName);
+				var lines = File.ReadLines(settingsFilename);
 				foreach (var line in lines)
 				{
 					if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith("#"))
