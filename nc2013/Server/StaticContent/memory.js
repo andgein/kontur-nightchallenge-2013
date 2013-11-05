@@ -1,17 +1,23 @@
 var Memory = Base.extend({
 	constructor: function(options) {
+		var cellsHtml = "";
+		var listingHtml = "";
 		var cellCount = options.cellCount;
 		this.cells = [];
 		for (var i = 0; i < cellCount; ++i) {
 			var cell = new Cell(i);
 			this.cells.push(cell);
+			cellsHtml += "<div class='mapCell'></div>";
+			listingHtml += "<div class='listingItem'>" + cell.getListingItemContent() + "</div>";
 		}
-		
+		options.$map.html(cellsHtml);
+		options.$listing.html(listingHtml);
+
 		var that = this;
-		options.$map.find("div.mapCell").each(function(index) {
+		options.$map.find("div").each(function(index) {
 			that.cells[index].attachMapCell($(this));
 		});
-		options.$listing.find("div.listingItem").each(function(index) {
+		options.$listing.find("div").each(function(index) {
 			that.cells[index].attachListingItem($(this));
 		});
 	},

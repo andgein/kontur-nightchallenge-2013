@@ -113,6 +113,7 @@ var GameRunner = Base.extend({
 	constructor: function (options) {
 		this.game = options.game;
 		this.onGameRunStatusChanged = options.onGameRunStatusChanged;
+		this.onGameStarted = options.onGameStarted;
 		this.onGameError = options.onGameError;
 	},
 	_play: function (options) {
@@ -131,6 +132,7 @@ var GameRunner = Base.extend({
 			if (options.requirePlaying && gameRunStatus != "playing") {
 				result = that.game.start();
 				justStarted = true;
+				that.onGameStarted && that.onGameStarted();
 			} else {
 				result = $.when(gameRunStatus);
 			}
