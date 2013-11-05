@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Game;
 
 namespace Core.Engine
 {
@@ -8,6 +9,7 @@ namespace Core.Engine
         public int? SetNextIP;
         public int? SplittedInInstruction;
     	public readonly HashSet<int> MemoryDiffs;
+    	public readonly ProgramStateDiff ProgramStateDiff;
 
         public StepResult()
         {
@@ -15,6 +17,7 @@ namespace Core.Engine
             SetNextIP = null;
             SplittedInInstruction = null;
 			MemoryDiffs = new HashSet<int>();
+        	ProgramStateDiff = new ProgramStateDiff();
         }
 
         public void ChangeMemory(int address)

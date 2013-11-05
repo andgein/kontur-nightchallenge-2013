@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Game;
 using Core.Parser;
 using nMars.RedCode;
 
@@ -13,6 +14,8 @@ namespace Core.Engine
 		public int CurrentIp { get; private set; }
 		public bool GameOver { get; private set; }
 		public int? Winner { get; private set; }
+
+		public uint? LastPointer;
 
 		private int countLivedWarriors;
 
@@ -65,15 +68,29 @@ namespace Core.Engine
 			ExecuteInstruction(instruction);
 
 			if (!stepResult.KilledInInstruction)
-				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1));
+			{
+				var nextIp = stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1);
+				Warriors[CurrentWarrior].Queue.Enqueue(nextIp);
+				stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Executed;
+			}
 			else
+			{
+				stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Killed;
+
 				if (Warriors[CurrentWarrior].Queue.Count == 0)
 					countLivedWarriors--;
+			}
 
 			if (stepResult.SplittedInInstruction.HasValue)
-				Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault());
+			{
+				if (Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault()))
+					stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Splitted;
+			}
 
-            CurrentStep++;
+			stepResult.ProgramStateDiff.Program = CurrentWarrior;
+			stepResult.ProgramStateDiff.NextPointer = (uint?) Warriors[CurrentWarrior].Queue.PeekOrNull();
+
+			CurrentStep++;
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
 			if (Warriors.Count > 1 && countLivedWarriors == 1 ||
@@ -104,6 +121,7 @@ namespace Core.Engine
 		private void ExecuteInstruction(Instruction instruction)
 		{
 			instructionExecutor.Execute(this, instruction);
+			LastPointer = (uint) instruction.Address;
 		}
 
 		public void WriteToMemory(int address, Statement statement)

@@ -12,6 +12,6 @@ namespace Core.Game
 		public ProcessStateChangeType ChangeType { get; set; }
 
 		[JsonProperty]
-		public uint NextPointer { get; set; }
+		public uint? NextPointer { get; set; }
 	}
 }

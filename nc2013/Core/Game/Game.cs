@@ -8,7 +8,7 @@ namespace Core.Game
 {
 	public class Game : IGame
     {
-        private readonly Engine.GameEngine engine;
+        private readonly GameEngine engine;
         private readonly ProgramStartInfo[] programStartInfos = new ProgramStartInfo[0];
 
         public Game(ProgramStartInfo[] programStartInfos)
@@ -41,7 +41,7 @@ namespace Core.Game
                     MemoryState = engine.Memory.ToMemoryState(),
                     ProgramStates = engine.Warriors.Select(w => new ProgramState
                     {
-                        LastPointer = (uint)engine.CurrentIp,
+                        LastPointer = engine.LastPointer,
                         ProcessPointers = w.Queue.ToArray().Select(x => (uint) x).ToArray()
                     }).ToArray(),
                 };
@@ -57,18 +57,16 @@ namespace Core.Game
                     CurrentStep = engine.CurrentStep,
                     GameOver = engine.GameOver,
                     Winner = engine.Winner,
-                    ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
-                    {
-                        NextPointer = (uint) w.Queue.Peek(),
-                        Program = w.Index,
-                        ChangeType = ProcessStateChangeType.Executed
-                    }).ToArray()
                 };
+
+        	var programStateDiffs = new List<ProgramStateDiff>();
+
         	var memoryDiffs = new HashSet<int>();
         	for (var i = 0; i < stepCount; ++i)
             {
             	var stepResult = engine.Step();
 				memoryDiffs.UnionWith(stepResult.MemoryDiffs);
+				programStateDiffs.Add(stepResult.ProgramStateDiff);
             }
 
         	return new Diff
@@ -87,12 +85,7 @@ namespace Core.Game
 						LastModifiedByProgram = engine.Memory[address].LastModifiedByProgram
                     }
                 }).ToArray(),
-                ProgramStateDiffs = engine.Warriors.Select(w => new ProgramStateDiff
-                {
-                    NextPointer = w.Queue.Count > 0 ? (uint)w.Queue.Peek() : 0,
-                    Program = w.Index,
-                    ChangeType = ProcessStateChangeType.Executed
-                }).ToArray()
+                ProgramStateDiffs = programStateDiffs.ToArray()
             };
         }
 
