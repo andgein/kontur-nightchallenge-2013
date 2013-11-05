@@ -1,23 +1,17 @@
 var Memory = Base.extend({
 	constructor: function(options) {
-		var cellsHtml = "";
-		var listingHtml = "";
 		var cellCount = options.cellCount;
 		this.cells = [];
 		for (var i = 0; i < cellCount; ++i) {
 			var cell = new Cell(i);
 			this.cells.push(cell);
-			cellsHtml += "<div class='mapCell'></div>";
-			listingHtml += "<div class='listingItem'>" + cell.getListingItemContent() + "</div>";
 		}
-		options.$map.html(cellsHtml);
-		options.$listing.html(listingHtml);
-
+		
 		var that = this;
-		options.$map.find("div").each(function(index) {
+		options.$map.find("div.mapCell").each(function(index) {
 			that.cells[index].attachMapCell($(this));
 		});
-		options.$listing.find("div").each(function(index) {
+		options.$listing.find("div.listingItem").each(function(index) {
 			that.cells[index].attachListingItem($(this));
 		});
 	},
@@ -70,7 +64,13 @@ var Cell = Base.extend({
 		if (Cell._lastScrolledInto)
 			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
 		this.$listingItem.addClass("justScrolled");
-		this.$listingItem[0].scrollIntoView();
+		if (!this.$listing)
+			this.$listing = this.$listingItem.parent();
+		if (!this.$listingPivot) {
+			this.$listingPivot = $("div.listingItem:eq(5)", this.$listing);
+		}
+		var top = this.$listingItem.position().top;
+		this.$listing.scrollTop(top - this.$listingPivot.position().top);
 		Cell._lastScrolledInto = this;
 	},
 	reset: function () {

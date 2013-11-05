@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -14,18 +15,18 @@ namespace Server
 		{
 			var value = context.GetOptionalGuidParam(paramName);
 			if (!value.HasValue)
-				throw new HttpException(HttpStatusCode.BadRequest, String.Format("Query parameter '{0}' is not specified", paramName));
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
 			return value.Value;
 		}
 
 		public static Guid? GetOptionalGuidParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
 		{
 			var guidString = context.Request.QueryString[paramName];
-			if (String.IsNullOrEmpty(guidString))
+			if (string.IsNullOrEmpty(guidString))
 				return null;
 			Guid values;
 			if (!Guid.TryParse(guidString, out values))
-				throw new HttpException(HttpStatusCode.BadRequest, String.Format("Query parameter '{0}' is invalid - Guid is expected", paramName));
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - Guid is expected", paramName));
 			return values;
 		}
 
@@ -33,33 +34,33 @@ namespace Server
 		{
 			var result = context.GetOptionalIntParam(paramName);
 			if (!result.HasValue)
-				throw new HttpException(HttpStatusCode.BadRequest, String.Format("Query parameter '{0}' is not specified", paramName));
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
 			return result.Value;
 		}
 
 		public static int? GetOptionalIntParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
-			if (String.IsNullOrEmpty(valueString))
+			if (string.IsNullOrEmpty(valueString))
 				return null;
 			int value;
 			if (!Int32.TryParse(valueString, out value))
-				throw new HttpException(HttpStatusCode.BadRequest, String.Format("Query parameter '{0}' is invalid - int is expected", paramName));
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - int is expected", paramName));
 			return value;
 		}
 
 		public static string GetStringParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
-			if (String.IsNullOrEmpty(valueString))
-				throw new HttpException(HttpStatusCode.BadRequest, String.Format("Query parameter '{0}' is not specified", paramName));
+			if (string.IsNullOrEmpty(valueString))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
 			return valueString;
 		}
 
 		public static string GetOptionalStringParam([NotNull] this GameHttpContext context, string paramName)
 		{
 			var valueString = context.Request.QueryString[paramName];
-			return String.IsNullOrEmpty(valueString) ? null : valueString;
+			return string.IsNullOrEmpty(valueString) ? null : valueString;
 		}
 
 		public static T GetRequest<T>([NotNull] this GameHttpContext context)
@@ -75,7 +76,7 @@ namespace Server
 			context.Response.StatusCode = (int) statusCode;
 			var jsonSettings = new JsonSerializerSettings
 			{
-				ContractResolver = new CamelCasePropertyNamesContractResolver(), 
+				ContractResolver = new CamelCasePropertyNamesContractResolver(),
 				DateFormatString = "yyyy-MM-dd HH:mm:ss",
 				Formatting = Formatting.Indented
 			};
@@ -83,25 +84,15 @@ namespace Server
 			context.SendResponseRaw(result, "application/json; charset=utf-8");
 		}
 
-		[NotNull]
-		private static Stream GetOutputStream([NotNull] this GameHttpContext context)
-		{
-			var acceptEncoding = context.Request.Headers["Accept-Encoding"];
-			if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
-			{
-				context.Response.AppendHeader("Content-Encoding", "gzip");
-				return new GZipStream(context.Response.OutputStream, CompressionMode.Compress);
-			}
-			return context.Response.OutputStream;
-		}
-
 		public static void SendResponseString([NotNull] this GameHttpContext context, [CanBeNull] string value)
 		{
 			if (!string.IsNullOrEmpty(value))
 			{
-				context.Response.ContentType = "text/plain; charset=utf-8";
-				using (var writer = new StreamWriter(context.GetOutputStream()))
-					writer.Write(value);
+				var memoryStream = new MemoryStream();
+				var writer = new StreamWriter(memoryStream);
+				writer.Write(value);
+				writer.Flush();
+				context.SendResponseRaw(memoryStream.ToArray(), "text/plain; charset=utf-8");
 			}
 		}
 
@@ -109,10 +100,11 @@ namespace Server
 		{
 			if (!ReferenceEquals(value, null))
 			{
-				if (!String.IsNullOrEmpty(contentType))
-					context.Response.ContentType = contentType;
-				using (var writer = new StreamWriter(context.GetOutputStream()))
-					writer.Write(value);
+				var memoryStream = new MemoryStream();
+				var writer = new StreamWriter(memoryStream);
+				writer.Write(value);
+				writer.Flush();
+				context.SendResponseRaw(memoryStream.ToArray(), contentType);
 			}
 		}
 
@@ -120,10 +112,22 @@ namespace Server
 		{
 			if (value != null)
 			{
-				if (!String.IsNullOrEmpty(contentType))
+				if (!string.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
-				using (var outputStream = context.GetOutputStream())
-					outputStream.Write(value, 0, value.Length);
+				var acceptEncoding = context.Request.Headers["Accept-Encoding"];
+				if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
+				{
+					var gzipedStream = new MemoryStream();
+					using (var gzipStream = new GZipStream(gzipedStream, CompressionMode.Compress, true))
+						gzipStream.Write(value, 0, value.Length);
+					if (gzipedStream.Length < value.Length)
+					{
+						context.Response.AppendHeader("Content-Encoding", "gzip");
+						value = gzipedStream.ToArray();
+					}
+				}
+				context.Response.ContentLength64 = value.Length;
+				context.Response.OutputStream.Write(value, 0, value.Length);
 			}
 		}
 
@@ -196,6 +200,20 @@ namespace Server
 		{
 			if (!File.Exists(path)) return false;
 			var contentType = TryGetContentType(path);
+			var lastWriteTimeUtc = File.GetLastWriteTimeUtc(path).ToString("R");
+			var ifModifiedSinceString = context.Request.Headers["If-Modified-Since"];
+			if (!string.IsNullOrEmpty(ifModifiedSinceString))
+			{
+				DateTime ifModifiedSince;
+				if (DateTime.TryParseExact(ifModifiedSinceString, "R", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out ifModifiedSince))
+					if (ifModifiedSince.ToUniversalTime().ToString("R") == lastWriteTimeUtc)
+					{
+						context.Response.StatusCode = (int) HttpStatusCode.NotModified;
+						return true;
+					}
+			}
+			context.Response.AppendHeader("Cache-Control", "public");
+			context.Response.AppendHeader("Last-Modified", lastWriteTimeUtc);
 			context.SendResponseRaw(File.ReadAllBytes(path), contentType);
 			return true;
 		}
@@ -203,7 +221,7 @@ namespace Server
 		public static void SendStaticFile([NotNull] this GameHttpContext context, [NotNull] string localPath)
 		{
 			if (!context.TryHandleStatic(localPath))
-				throw new HttpException(HttpStatusCode.NotFound, String.Format("Static resource '{0}' is not found", context.Request.RawUrl));
+				throw new HttpException(HttpStatusCode.NotFound, string.Format("Static resource '{0}' is not found", context.Request.RawUrl));
 		}
 	}
 }

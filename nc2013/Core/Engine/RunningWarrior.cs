@@ -9,8 +9,9 @@ namespace Core.Engine
         public int Index { get; private set; }
 
         public readonly RunningQueue Queue;
+    	public uint? LastPointer;
 
-        public RunningWarrior(Warrior warrior, int index, int loadAddress, int coresize)
+    	public RunningWarrior(Warrior warrior, int index, int loadAddress, int coresize)
         {
             Warrior = warrior;
             Index = index;

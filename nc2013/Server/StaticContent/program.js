@@ -60,12 +60,12 @@ var ProgramState = Base.extend({
 	},
 	current: function (isCurrent) {
 		if (isCurrent) {
-			this.$next.addClass("current");
+			this.$nextCommand && this.$nextCommand.addClass("current");
 			if (this.useAutofocus)
 				this._scrollIntoNext();
 		}
 		else
-			this.$next.removeClass("current");
+			this.$nextCommand && this.$nextCommand.removeClass("current");
 	},
 	setProgramState: function (programState) {
 		this._removeInstructionPointers();
@@ -105,13 +105,27 @@ var ProgramState = Base.extend({
 			this.$last.text(lastCell.getListingItemContent());
 		} else
 			this.$last.text("");
-
+		var $nextCommands = $("div.command", this.$next);
 		if (this.programState && this.programState.processPointers.length > 0) {
-			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
-			this.$next.text(nextCell.getListingItemContent());
+			var that = this;
+			$nextCommands.each(function (index, div) {
+				var processPointers = that.programState.processPointers;
+				if (index < processPointers.length)
+					$(div).removeClass("hidden").text(that.memory.getCell(processPointers[index]).getListingItemContent());
+				else
+					$(div).addClass("hidden");
+			});
+			if ($nextCommands.length < this.programState.processPointers.length) {
+				var commandsHtml = "";
+				for (var i = $nextCommands.length; i < this.programState.processPointers.length; ++i)
+					commandsHtml += "<div class='command'>" + this.memory.getCell(this.programState.processPointers[i]).getListingItemContent() + "</div>";
+				this.$next.append(commandsHtml);
+			}
+			if (!this.$nextCommand)
+				this.$nextCommand = $("div.command:eq(0)", this.$next);
 		}
 		else
-			this.$next.text("");
+			$nextCommands.addClass("hidden");
 	},
 	_scrollIntoNext: function () {
 		if (this.programState && this.programState.processPointers.length > 0) {

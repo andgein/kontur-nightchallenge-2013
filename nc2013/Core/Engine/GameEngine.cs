@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Game;
 using Core.Parser;
-using nMars.RedCode;
 
 namespace Core.Engine
 {
@@ -15,8 +14,6 @@ namespace Core.Engine
 		public bool GameOver { get; private set; }
 		public int? Winner { get; private set; }
 
-		public uint? LastPointer;
-
 		private int countLivedWarriors;
 
 		private StepResult stepResult;
@@ -29,12 +26,12 @@ namespace Core.Engine
 		}
 		public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
 		{
-			Memory = new Memory(Parameters.CORESIZE);
+			Memory = new Memory(Parameters.CoreSize);
 			Warriors = new List<RunningWarrior>();
 			var idx = 0;
 			foreach (var wsi in warriorsStartInfos)
 			{
-				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, Parameters.CORESIZE);
+				var warrior = new RunningWarrior(wsi.Warrior, idx++, wsi.LoadAddress, Parameters.CoreSize);
 				Warriors.Add(warrior);
 				PlaceWarrior(warrior, wsi.LoadAddress);
 			}
@@ -54,7 +51,7 @@ namespace Core.Engine
 		{
 			if (GameOver)
 				return new StepResult();
-			if (CurrentStep >= Parameters.MaxSteps)
+			if (CurrentStep >= Parameters.MaxStepsPerWarrior * Warriors.Count)
 			{
 				GameOver = true;
 				return new StepResult();
@@ -65,7 +62,7 @@ namespace Core.Engine
 
 			stepResult = new StepResult();
 
-			ExecuteInstruction(instruction);
+			ExecuteInstruction(Warriors[CurrentWarrior], instruction);
 
 			if (!stepResult.KilledInInstruction)
 			{
@@ -93,14 +90,14 @@ namespace Core.Engine
 			CurrentStep++;
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
-			if (Warriors.Count > 1 && countLivedWarriors == 1 ||
-				Warriors.Count == 1 && countLivedWarriors == 0)
+			CurrentWarrior = nextWarrior.GetValueOrDefault();
+
+			if (Warriors.Count > 1 && countLivedWarriors == 1 || Warriors.Count == 1 && countLivedWarriors == 0)
 			{
 				GameOver = true;
 				Winner = nextWarrior;
 				return stepResult;
 			}
-			CurrentWarrior = nextWarrior.GetValueOrDefault();
 			return stepResult;
 		}
 
@@ -118,10 +115,10 @@ namespace Core.Engine
 			return currentWarrior;
 		}
 
-		private void ExecuteInstruction(Instruction instruction)
+		private void ExecuteInstruction(RunningWarrior warrior, Instruction instruction)
 		{
 			instructionExecutor.Execute(this, instruction);
-			LastPointer = (uint) instruction.Address;
+			warrior.LastPointer = (uint) instruction.Address;
 		}
 
 		public void WriteToMemory(int address, Statement statement)

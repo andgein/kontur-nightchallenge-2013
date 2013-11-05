@@ -96,6 +96,7 @@ namespace Server.Arena
 				GamesByEnemy = gamesByEnemy,
 				BotVersionInfos = botVersionInfos,
 				GodMode = godMode,
+				Program = godMode ? arenaPlayer.Program : null
 			};
 			return playerInfo;
 		}

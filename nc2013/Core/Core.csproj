@@ -51,7 +51,10 @@
     <Compile Include="Arena\BattlePlayerResult.cs" />
     <Compile Include="Arena\BattlePlayerResultType.cs" />
     <Compile Include="Arena\BattleResult.cs" />
+    <Compile Include="Arena\BattleRunner.cs" />
+    <Compile Include="Arena\CachingGamesRepo.cs" />
     <Compile Include="Arena\GamesRepo.cs" />
+    <Compile Include="Arena\IBattleRunner.cs" />
     <Compile Include="Arena\IGamesRepo.cs" />
     <Compile Include="Arena\IPlayersRepo.cs" />
     <Compile Include="Arena\RankingEntry.cs" />

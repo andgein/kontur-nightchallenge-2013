@@ -20,3 +20,5 @@
 _ReSharper*
 /.deploy/*
 corewar-deploy.zip
+config
+production-config

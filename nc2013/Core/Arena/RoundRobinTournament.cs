@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Core.Game;
-using Core.Game.MarsBased;
+using Core.Engine;
+using Core.Parser;
 using JetBrains.Annotations;
 using nMars.RedCode;
 
@@ -11,32 +11,61 @@ namespace Core.Arena
 {
 	public class RoundRobinTournament
 	{
+		private readonly IBattleRunner battleRunner;
 		private readonly int battlesPerPair;
 		private readonly string tournamentId;
 		private readonly TournamentPlayer[] players;
 		private readonly AutoResetEvent botSubmissionSignal;
 		private readonly ManualResetEvent stopSignal;
+		private readonly bool suppressBattleErrors;
+		private readonly Rules rules;
 		private readonly Random rnd = new Random();
+		private readonly WarriorParser warriorParser = new WarriorParser();
 
-		public RoundRobinTournament(int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal)
+		public RoundRobinTournament([NotNull] IBattleRunner battleRunner, int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal, bool suppressBattleErrors = true)
 		{
+			this.battleRunner = battleRunner;
 			this.battlesPerPair = battlesPerPair;
 			this.tournamentId = tournamentId;
 			this.players = players;
 			this.botSubmissionSignal = botSubmissionSignal;
 			this.stopSignal = stopSignal;
+			this.suppressBattleErrors = suppressBattleErrors;
+			rules = new Rules
+			{
+				WarriorsCount = 2,
+				Rounds = 1,
+				MaxCycles = Parameters.MaxStepsPerWarrior,
+				CoreSize = Parameters.CoreSize,
+				PSpaceSize = 500, // coreSize / 16 
+				EnablePSpace = false,
+				MaxProcesses = Parameters.MaxQueueSize,
+				MaxLength = Parameters.MaxWarriorLength,
+				MinDistance = Parameters.MinWarriorsDistance,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
+			};
 		}
 
 		[NotNull]
 		public RoundRobinTournamentResult Run()
 		{
-			var battleResults = RunTournament(GenerateAllPairs()).ToList();
+			ParseWarriors();
+			var pairs = GenerateAllPairs();
+			var battleResults = RunTournament(pairs).ToList();
 			var ranking = MakeRankingTable(battleResults.SelectMany(r => r.Results).ToList());
 			return new RoundRobinTournamentResult
 			{
 				BattleResults = battleResults,
 				TournamentRanking = ranking,
 			};
+		}
+
+		private void ParseWarriors()
+		{
+			foreach (var player in players)
+				player.Warrior = warriorParser.Parse(player.Program);
 		}
 
 		[NotNull]
@@ -78,25 +107,33 @@ namespace Core.Arena
 		[NotNull]
 		private IEnumerable<BattleResult> RunTournament([NotNull] List<Tuple<TournamentPlayer, TournamentPlayer>> pairs)
 		{
-			botSubmissionSignal.WaitOne(0);
+			var battleCount = 0;
+			if (botSubmissionSignal != null)
+				botSubmissionSignal.WaitOne(0);
 			for (var i = 0; i < battlesPerPair; i++)
 			{
-				rnd.Shuffle(pairs);
 				foreach (var pair in pairs)
 				{
 					var battle = new Battle
 					{
+						Number = ++battleCount,
 						Player1 = pair.Item1,
+						StartAddress1 = 0,
 						Player2 = pair.Item2,
+						StartAddress2 = NextLoadAddress(0),
 					};
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
+					if (battleCount % 500 == 1)
+						Log.For(this).InfoFormat("Battles performed: {0}", battleCount);
 				}
 				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0) || stopSignal != null && stopSignal.WaitOne(0))
 					yield break;
+				rnd.Shuffle(pairs);
 			}
 		}
+
 		private BattlePlayerResultType GetResultForPlayer(int player, int? winner)
 		{
 			if (!winner.HasValue) return BattlePlayerResultType.Draw;
@@ -104,26 +141,30 @@ namespace Core.Arena
 			return BattlePlayerResultType.Loss;
 		}
 
+		private int NextLoadAddress(int baseAddress)
+		{
+			var positions = rules.CoreSize + 1 - (rules.MinDistance << 1);
+			var nextLoadAddress = ModularArith.Mod(baseAddress + rules.MinDistance + rnd.Next() % positions);
+			return nextLoadAddress;
+		}
+
 		[NotNull]
 		private BattleResult RunBattle([NotNull] Battle battle)
 		{
 			try
 			{
-				var gameState = GetFinalGameStateForBattle(battle);
-				var winner = gameState.Winner;
-				var res1 = GetResultForPlayer(0, winner);
+				var winner = battleRunner.RunBattle(rules, battle);
 				var p1 = new BattlePlayerResult
 				{
-					Player = battle.Player1, 
-//					StartAddress = gameState.ProgramStartInfos[0].StartAddress ?? 0, 
-					ResultType = res1,
+					Player = battle.Player1,
+					StartAddress = battle.StartAddress1,
+					ResultType = GetResultForPlayer(0, winner),
 				};
-				var res2 = GetResultForPlayer(1, winner);
 				var p2 = new BattlePlayerResult
 				{
-					Player = battle.Player2, 
-//					StartAddress = (int) gameState.ProgramStartInfos[1].StartAddress, 
-					ResultType = res2,
+					Player = battle.Player2,
+					StartAddress = battle.StartAddress2,
+					ResultType = GetResultForPlayer(1, winner),
 				};
 				return new BattleResult
 				{
@@ -134,32 +175,11 @@ namespace Core.Arena
 			}
 			catch (Exception e)
 			{
+				if (!suppressBattleErrors)
+					throw;
 				Log.For(this).Error(string.Format("Battle failed: {0}", battle), e);
 				return new BattleResult { RunToCompletion = false };
 			}
-		}
-
-		[NotNull]
-		private static GameState GetFinalGameStateForBattle([NotNull] Battle battle)
-		{
-			var rules = new Rules
-			{
-				WarriorsCount = 2,
-				Rounds = 1,
-				MaxCycles = 80000,
-				CoreSize = 8000,
-				PSpaceSize = 500, // coreSize / 16 
-				EnablePSpace = false,
-				MaxProcesses = 1000,
-				MaxLength = 10000,
-				MinDistance = 10000,
-				Version = 93,
-				ScoreFormula = ScoreFormula.Standard,
-				ICWSStandard = ICWStandard.ICWS88,
-			};
-			var game = new Game.Game(battle.GetProgramStartInfos());
-			game.StepToEnd();
-			return game.GameState;
 		}
 	}
 }

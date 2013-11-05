@@ -26,17 +26,16 @@ namespace Server
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
 		private readonly SessionManager sessionManager;
-		private readonly Guid godModeSecret;
+		[NotNull] private readonly string godModeSecret;
+		private readonly bool godAccessOnly;
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, 
-			[NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, 
-			[NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, 
-			[NotNull] string staticContentPath, Guid godModeSecret)
+		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, [NotNull] string staticContentPath, [NotNull] string godModeSecret, bool godAccessOnly)
 		{
 			this.sessionManager = sessionManager;
 			this.godModeSecret = godModeSecret;
+			this.godAccessOnly = godAccessOnly;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
 			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", godModeSecret)).AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
@@ -106,13 +105,15 @@ namespace Server
 					lock (context.Session)
 					{
 						var godMode = false;
-						var secretValue = context.GetOptionalGuidParam(godModeSecretCookieName) ?? context.TryGetCookie<Guid>(godModeSecretCookieName, Guid.TryParse);
+						var secretValue = context.GetOptionalStringParam(godModeSecretCookieName) ?? context.TryGetCookie(godModeSecretCookieName);
 						if (secretValue == godModeSecret)
 						{
-							context.SetCookie(godModeSecretCookieName, godModeSecret.ToString(), persistent: false, httpOnly: false);
+							context.SetCookie(godModeSecretCookieName, godModeSecret, persistent: false, httpOnly: false);
 							context.SetCookie(godModeCookieName, "true", persistent: false, httpOnly: false);
 							godMode = true;
 						}
+						else if (godAccessOnly)
+							throw new HttpException(HttpStatusCode.Forbidden, "GodAccessOnly mode is ON");
 
 						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 						if (handlersThatCanHandle.Length == 1)

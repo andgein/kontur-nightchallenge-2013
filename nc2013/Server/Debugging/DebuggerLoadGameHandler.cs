@@ -3,7 +3,6 @@ using System.Net;
 using Core.Arena;
 using Core.Game;
 using JetBrains.Annotations;
-using Server.Arena;
 
 namespace Server.Debugging
 {
@@ -22,22 +21,32 @@ namespace Server.Debugging
 			if (!godMode)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
-			var gameInfo = context.GetRequest<FinishedGameInfo>();
-			var program1 = GetBotProgram(gameInfo.Player1Result.Player);
-			var program2 = GetBotProgram(gameInfo.Player2Result.Player);
+			var playerName1 = context.GetStringParam("player1Result[player][name]");
+			var playerVersion1 = context.GetIntParam("player1Result[player][version]");
+			var playerName2 = context.GetStringParam("player2Result[player][name]");
+			var playerVersion2 = context.GetIntParam("player2Result[player][version]");
 			var programStartInfos = new[]
 			{
-				new ProgramStartInfo{ Program = program1, StartAddress = (uint)gameInfo.Player1Result.StartAddress, },
-				new ProgramStartInfo{ Program = program2, StartAddress = (uint)gameInfo.Player2Result.StartAddress, }
+				new ProgramStartInfo
+				{
+					Program = GetBotProgram(playerName1, playerVersion1),
+					StartAddress = context.GetIntParam("player1Result[startAddress]"),
+				},
+				new ProgramStartInfo
+				{
+					Program = GetBotProgram(playerName2, playerVersion2),
+					StartAddress = context.GetIntParam("player2Result[startAddress]"),
+				}
 			};
 
 			debugger.StartNewGame(programStartInfos);
+			context.Redirect(context.BasePath + "debugger.html");
 		}
 
 		[NotNull]
-		private string GetBotProgram([NotNull] TournamentPlayer player)
+		private string GetBotProgram([NotNull] string playerName, int playerVersion)
 		{
-			return playersRepo.LoadPlayerVersions(player.Name).Single(p => p.Version == player.Version).Program;
+			return playersRepo.LoadPlayerVersions(playerName).Single(p => p.Version == playerVersion).Program;
 		}
 	}
 }

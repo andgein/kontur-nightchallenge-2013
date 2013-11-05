@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Core;
 using Core.Arena;
 using Core.Game;
-using Core.Game.MarsBased;
 using Core.Parser;
-using nMars.RedCode;
-using Server.Arena;
+using JetBrains.Annotations;
 using log4net;
 using log4net.Config;
+using Server.Arena;
 using Server.Debugging;
 using Server.Sessions;
 using Debugger = System.Diagnostics.Debugger;
@@ -20,54 +17,33 @@ namespace Server
 {
 	public static class Program
 	{
-		private const string defaultPrefix = "http://*/corewar/";
+		private static readonly ILog log = LogManager.GetLogger(typeof (Program));
 
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
-
-		public static void Main(string[] args)
+		public static void Main([NotNull] string[] args)
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
 			Runtime.Init(log);
-			try
-			{
-				RunServer(args);
-			}
-			catch (Exception e)
-			{
-				log.Fatal("Unhandled exception:", e);
-			}
+			RunServer(args);
 		}
 
-		private static void RunServer(IEnumerable<string> args)
+		private static void RunServer([NotNull] IEnumerable<string> args)
 		{
-			var baseRules = new Rules
-			{
-				WarriorsCount = 2,
-				Rounds = 1,
-				MaxCycles = 80000,
-				CoreSize = 8000,
-				PSpaceSize = 500, // coreSize / 16 
-				EnablePSpace = false,
-				MaxProcesses = 1000,
-				MaxLength = 100,
-				MinDistance = 100,
-				Version = 93,
-				ScoreFormula = ScoreFormula.Standard,
-				ICWSStandard = ICWStandard.ICWS88,
-			};
-			var prefix = GetPrefix(args);
-			var godModeSecret = Guid.NewGuid();
-			Log.For<GameHttpServer>().Warn(string.Format("GodModeSecret: {0}", godModeSecret));
-			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), new WarriorParser());
-			var gamesRepo = new GamesRepo(new DirectoryInfo("../games"));
+			var staticContentPath = GetStaticContentDir();
+			var settingsFile = GetSettingsFile(args);
+			var prefix = settingsFile.HttpListenerPrefix;
+			var battlesPerPair = settingsFile.BattlesPerPair;
+			var productionMode = settingsFile.ProductionMode;
+			var godAccessOnly = settingsFile.GodAccessOnly;
+			var godModeSecret = settingsFile.GodModeSecret;
+			var warriorProgramParser = new WarriorParser();
+			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
+			var gamesRepo = new CachingGamesRepo(new GamesRepo(new DirectoryInfo("../games")));
 			var sessionManager = new SessionManager("../sessions");
 			var gameServer = new GameServer();
-//			var gameServer = new MarsGameServer(baseRules);
 			var debuggerManager = new DebuggerManager(gameServer);
-			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, 5);
-			var httpServer = new GameHttpServer(
-				prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, 
-				GetStaticContentDir(), godModeSecret);
+			var battleRunner = new BattleRunner();
+			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, battleRunner, battlesPerPair);
+			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, staticContentPath, godModeSecret, godAccessOnly);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -76,17 +52,21 @@ namespace Server
 			});
 			tournamentRunner.Start();
 			httpServer.Run();
-			log.InfoFormat("Listening {0}", prefix);
-			Process.Start(httpServer.DefaultUrl);
+			log.InfoFormat("Listening on: {0}", prefix);
+			if (!productionMode)
+				Process.Start(httpServer.DefaultUrl);
 			httpServer.WaitForTermination();
 			tournamentRunner.WaitForTermination();
 			log.InfoFormat("Stopped");
 		}
 
-		private static string GetPrefix(IEnumerable<string> args)
+		[NotNull]
+		private static SettingsFile GetSettingsFile([NotNull] IEnumerable<string> args)
 		{
-			var prefix = args.FirstOrDefault();
-			return string.IsNullOrEmpty(prefix) ? defaultPrefix : prefix;
+			var filename = args.FirstOrDefault();
+			var settingsFile = new SettingsFile(filename);
+			log.Info(settingsFile.ToString());
+			return settingsFile;
 		}
 
 		private static string GetStaticContentDir()

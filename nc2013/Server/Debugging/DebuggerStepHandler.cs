@@ -13,6 +13,22 @@ namespace Server.Debugging
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
+			//HandleWithDiffs(context, debugger, stepCount);
+			HandleWithoutDiffs(context, debugger, stepCount);
+		}
+
+		private static void HandleWithoutDiffs([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, int stepCount)
+		{
+			debugger.Play(game => game.Step(stepCount));
+			var response = new DebuggerStepResponse
+			{
+				GameState = debugger.State.GameState
+			};
+			context.SendResponse(response);
+		}
+
+		private static void HandleWithDiffs([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, int stepCount)
+		{
 			var currentStep = context.GetOptionalIntParam("currentStep");
 			var diff = debugger.Play(game =>
 			{

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Core.Arena;
 using JetBrains.Annotations;
 using Server.Handlers;

@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Engine;
 using Core.Parser;
+using JetBrains.Annotations;
 
 namespace Core.Game
 {
 	public class Game : IGame
-    {
-        private readonly GameEngine engine;
-        private readonly ProgramStartInfo[] programStartInfos = new ProgramStartInfo[0];
+	{
+		private readonly GameEngine engine;
+		private readonly ProgramStartInfo[] programStartInfos;
 
-        public Game(ProgramStartInfo[] programStartInfos)
-        {
-            this.programStartInfos = programStartInfos;
+		public Game([NotNull] ProgramStartInfo[] programStartInfos)
+		{
+			this.programStartInfos = programStartInfos;
+			var r = new Random();
+			var parser = new WarriorParser();
+			var warriors = programStartInfos.Select(
+				psi => new WarriorStartInfo(
+					parser.Parse(psi.Program),
+					psi.StartAddress.HasValue ? (int)psi.StartAddress : r.Next(Parameters.CoreSize)
+					));
+			engine = new GameEngine(warriors);
+		}
 
-            //TODO: RandomAllocator
-            var r = new Random();
-
-            var parser = new WarriorParser();
-            var warriors = programStartInfos.Select(
-                psi => new WarriorStartInfo(
-                    parser.Parse(psi.Program),
-                    psi.StartAddress.HasValue ? (int) psi.StartAddress : r.Next(Parameters.CORESIZE)
-                    ));
-            engine = new GameEngine(warriors);
-        }
+		public Game([NotNull] ProgramStartInfo[] programStartInfos, [NotNull] WarriorStartInfo[] warriorStartInfos)
+		{
+			this.programStartInfos = programStartInfos;
+			engine = new GameEngine(warriorStartInfos);
+		}
 
         public GameState GameState
         {
@@ -41,12 +45,28 @@ namespace Core.Game
                     MemoryState = engine.Memory.ToMemoryState(),
                     ProgramStates = engine.Warriors.Select(w => new ProgramState
                     {
-                        LastPointer = engine.LastPointer,
+                        LastPointer = w.LastPointer,
                         ProcessPointers = w.Queue.ToArray().Select(x => (uint) x).ToArray()
                     }).ToArray(),
                 };
             }
         }
+
+		[NotNull]
+		public GameState GameStateFast
+		{
+			get
+			{
+				return new GameState
+				{
+					CurrentProgram = engine.CurrentWarrior,
+					CurrentStep = engine.CurrentStep,
+					ProgramStartInfos = programStartInfos,
+					GameOver = engine.GameOver,
+					Winner = engine.Winner,
+				};
+			}
+		}
 
         public Diff Step(int stepCount)
         {
@@ -69,18 +89,18 @@ namespace Core.Game
 				programStateDiffs.Add(stepResult.ProgramStateDiff);
             }
 
-        	return new Diff
-            {
-                CurrentProgram = engine.CurrentWarrior,
-                CurrentStep = engine.CurrentStep,
-                GameOver = engine.GameOver,
-                Winner = engine.Winner,
-                MemoryDiffs = memoryDiffs.Select(address => new MemoryDiff
-                {
-                    Address = (uint) address,
-                    CellState = new CellState
-                    {
-                    	Instruction = engine.Memory[address].Statement.ToString(),
+			return new Diff
+			{
+				CurrentProgram = engine.CurrentWarrior,
+				CurrentStep = engine.CurrentStep,
+				GameOver = engine.GameOver,
+				Winner = engine.Winner,
+				MemoryDiffs = memoryDiffs.Select(address => new MemoryDiff
+				{
+					Address = (uint)address,
+					CellState = new CellState
+					{
+						Instruction = engine.Memory[address].Statement.ToString(),
 						CellType = engine.Memory[address].Statement.CellType,
 						LastModifiedByProgram = engine.Memory[address].LastModifiedByProgram
                     }
@@ -89,10 +109,10 @@ namespace Core.Game
             };
         }
 
-        public void StepToEnd()
-        {
+		public void StepToEnd()
+		{
 			while (!engine.GameOver)
-				Step(1);
-        }
-    }
+				engine.Step();
+		}
+	}
 }

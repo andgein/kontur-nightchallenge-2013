@@ -22,7 +22,7 @@ namespace Core.Game.MarsBased
 			this.programStartInfos = programStartInfos.Select((pi, idx) => new ProgramStartInfo
 			{
 				Program = pi.Program,
-				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : (uint)engine.warriors[idx].LoadAddress,
+				StartAddress = pi.StartAddress.HasValue ? pi.StartAddress.Value : engine.warriors[idx].LoadAddress,
 			}).ToArray();
 		}
 
@@ -115,7 +115,7 @@ namespace Core.Game.MarsBased
 			if (warrior == null)
 				throw new WarriorProgramParserException(string.Format("Failed to parse warrior {0} [{1}]: {2}", implicitName, warriorParser.GetErrorMessages(), programStartInfo));
 			warrior.FileName = filename;
-			warrior.PredefinedLoadAddress = (int?)programStartInfo.StartAddress;
+			warrior.PredefinedLoadAddress = programStartInfo.StartAddress;
 			return warrior;
 		}
 	}

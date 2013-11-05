@@ -35,6 +35,7 @@ namespace Tests.Core.Engine
 //		[TestCase("0001-dwarf")]
 //		[TestCase("0828-NULL")]
 //		[TestCase("0646-elf")]
+		[TestCase("0341-cancercells")]
 		public void TestOne(string name)
 		{
 			var program = File.ReadAllText(TestWarriors.GetBotFile(@"warriors-ok\" + name + ".red"));
@@ -88,7 +89,22 @@ DAT #0, #0
 		{
 			var programStartInfos = new[] { new ProgramStartInfo { Program = program, StartAddress = 0 } };
 			var ourGame = new Game(programStartInfos);
-			var marsGame = new MarsGame(new Rules() { MaxLength = 1000, WarriorsCount = 1 }, programStartInfos);
+			var rules = new Rules
+			{
+				WarriorsCount = 1,
+				Rounds = 1,
+				MaxCycles = 80000,
+				CoreSize = 8000,
+				PSpaceSize = 500, // coreSize / 16 
+				EnablePSpace = false,
+				MaxProcesses = 1000,
+				MaxLength = 256,
+				MinDistance = 100,
+				Version = 93,
+				ScoreFormula = ScoreFormula.Standard,
+				ICWSStandard = ICWStandard.ICWS88,
+			};
+			var marsGame = new MarsGame(rules, programStartInfos);
 			ourGame.Step(stepsCount);
 			marsGame.Step(stepsCount);
 			our = ourGame.GameState;
