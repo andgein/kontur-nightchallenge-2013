@@ -8,6 +8,7 @@ using Core.Arena;
 using Core.Game;
 using Core.Game.MarsBased;
 using Core.Parser;
+using JetBrains.Annotations;
 using nMars.RedCode;
 using Server.Arena;
 using log4net;
@@ -24,7 +25,7 @@ namespace Server
 
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-		public static void Main(string[] args)
+		public static void Main([NotNull] string[] args)
 		{
 			XmlConfigurator.ConfigureAndWatch(new FileInfo("log.config.xml"));
 			Runtime.Init(log);
@@ -38,7 +39,7 @@ namespace Server
 			}
 		}
 
-		private static void RunServer(IEnumerable<string> args)
+		private static void RunServer([NotNull] string[] args)
 		{
 			var baseRules = new Rules
 			{
@@ -78,13 +79,19 @@ namespace Server
 			tournamentRunner.Start();
 			httpServer.Run();
 			log.InfoFormat("Listening {0}", prefix);
-			Process.Start(httpServer.DefaultUrl);
+			if (!ProductionMode(args))
+				Process.Start(httpServer.DefaultUrl);
 			httpServer.WaitForTermination();
 			tournamentRunner.WaitForTermination();
 			log.InfoFormat("Stopped");
 		}
 
-		private static string GetPrefix(IEnumerable<string> args)
+		private static bool ProductionMode([NotNull] IEnumerable<string> args)
+		{
+			return args.Any(x => string.Equals(x, "-production", StringComparison.OrdinalIgnoreCase));
+		}
+
+		private static string GetPrefix([NotNull] IEnumerable<string> args)
 		{
 			var prefix = args.FirstOrDefault();
 			return string.IsNullOrEmpty(prefix) ? defaultPrefix : prefix;
