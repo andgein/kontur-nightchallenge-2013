@@ -32,15 +32,16 @@ namespace Core.Game
 		[NotNull]
 		public ProgramState[] ProgramStates { get; set; }
 
+		[NotNull]
+		[JsonIgnore]
 		public string CurrentInstruction
 		{
 			get
 			{
-				var pointer = ProgramStates[CurrentProgram].LastPointer;
-				if (pointer.HasValue)
-					return pointer.Value + ": " + MemoryState[pointer.Value].Instruction;
-				else
-					return "";
+				var pointers = ProgramStates[CurrentProgram].ProcessPointers;
+				if (pointers.Length > 0)
+					return pointers[0] + ": " + MemoryState[pointers[0]].Instruction;
+				return "";
 			}
 		}
 	}
