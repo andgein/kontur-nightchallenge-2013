@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arena\ArenaPlayerExtensions.cs" />
+    <Compile Include="Arena\ArenaState.cs" />
     <Compile Include="Arena\BadBotException.cs" />
     <Compile Include="Arena\Battle.cs" />
     <Compile Include="Arena\BattlePlayerResult.cs" />

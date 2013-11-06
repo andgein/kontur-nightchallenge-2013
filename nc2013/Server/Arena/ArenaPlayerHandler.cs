@@ -9,21 +9,19 @@ namespace Server.Arena
 {
 	public class ArenaPlayerHandler : StrictPathHttpHandlerBase
 	{
-		private readonly IPlayersRepo playersRepo;
-		private readonly IGamesRepo gamesRepo;
+		private readonly ArenaState arenaState;
 
-		public ArenaPlayerHandler([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo)
+		public ArenaPlayerHandler([NotNull] ArenaState arenaState)
 			: base("arena/player")
 		{
-			this.playersRepo = playersRepo;
-			this.gamesRepo = gamesRepo;
+			this.arenaState = arenaState;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
 			var playerName = context.GetStringParam("name");
 			var version = context.GetOptionalIntParam("version");
-			var playerVersions = playersRepo.LoadPlayerVersions(playerName);
+			var playerVersions = arenaState.PlayersRepo.LoadPlayerVersions(playerName);
 			var botVersionInfos = playerVersions.Select(p => new BotVersionInfo
 			{
 				Name = p.Name,
@@ -47,19 +45,19 @@ namespace Server.Arena
 						if (arenaPlayer.Version != lastVersion.Version)
 						{
 							var nextVersion = playerVersions.First(p => p.Version > version.Value);
-							tournamentId = gamesRepo.GetAllTournamentIds()
+							tournamentId = arenaState.GamesRepo.GetAllTournamentIds()
 								.Select(id => new DateTime(long.Parse(id), DateTimeKind.Utc))
 								.OrderBy(ts => ts)
 								.LastOrDefault(ts => ts < nextVersion.Timestamp)
 								.Ticks.ToString();
 						}
-						ranking = gamesRepo.TryLoadRanking(tournamentId);
+						ranking = arenaState.GamesRepo.TryLoadRanking(tournamentId);
 					}
 				}
 				else
 				{
 					arenaPlayer = lastVersion;
-					ranking = gamesRepo.TryLoadRanking("last");
+					ranking = arenaState.GamesRepo.TryLoadRanking("last");
 				}
 				if (ranking != null)
 					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, godMode);
@@ -75,7 +73,7 @@ namespace Server.Arena
 				Name = arenaPlayer.Name,
 				Version = arenaPlayer.Version,
 			};
-			var games = gamesRepo.LoadGames(ranking.TournamentId);
+			var games = arenaState.GamesRepo.LoadGames(ranking.TournamentId);
 			var gamesByEnemy = games
 				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result)))
 				.Where(x => x.Item1.Player.Name == arenaPlayer.Name && x.Item1.Player.Version == arenaPlayer.Version)

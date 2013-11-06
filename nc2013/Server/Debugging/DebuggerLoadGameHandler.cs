@@ -7,12 +7,12 @@ namespace Server.Debugging
 {
 	public class DebuggerLoadGameHandler : DebuggerHandlerBase
 	{
-		private readonly IPlayersRepo playersRepo;
+		private readonly ArenaState arenaState;
 
-		public DebuggerLoadGameHandler([NotNull] IDebuggerManager debuggerManager, [NotNull] IPlayersRepo playersRepo)
+		public DebuggerLoadGameHandler([NotNull] IDebuggerManager debuggerManager, [NotNull] ArenaState arenaState)
 			: base("debugger/load", debuggerManager)
 		{
-			this.playersRepo = playersRepo;
+			this.arenaState = arenaState;
 		}
 
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
@@ -45,7 +45,7 @@ namespace Server.Debugging
 		[NotNull]
 		private string GetBotProgram([NotNull] string playerName, int playerVersion)
 		{
-			return playersRepo.LoadPlayerVersions(playerName).Single(p => p.Version == playerVersion).Program;
+			return arenaState.PlayersRepo.LoadPlayerVersions(playerName).Single(p => p.Version == playerVersion).Program;
 		}
 	}
 }

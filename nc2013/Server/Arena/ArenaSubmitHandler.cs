@@ -8,13 +8,13 @@ namespace Server.Arena
 {
 	public class ArenaSubmitHandler : StrictPathHttpHandlerBase
 	{
-		private readonly IPlayersRepo playersRepo;
+		private readonly ArenaState arenaState;
 		private readonly ITournamentRunner tournamentRunner;
 
-		public ArenaSubmitHandler([NotNull] IPlayersRepo playersRepo, [NotNull] ITournamentRunner tournamentRunner)
+		public ArenaSubmitHandler([NotNull] ArenaState arenaState, [NotNull] ITournamentRunner tournamentRunner)
 			: base("arena/submit")
 		{
-			this.playersRepo = playersRepo;
+			this.arenaState = arenaState;
 			this.tournamentRunner = tournamentRunner;
 		}
 
@@ -23,7 +23,7 @@ namespace Server.Arena
 			var arenaPlayer = context.GetRequest<ArenaPlayer>();
 			try
 			{
-				if (playersRepo.CreateOrUpdate(arenaPlayer))
+				if (arenaState.PlayersRepo.CreateOrUpdate(arenaPlayer))
 				{
 					Log.For(this).Info(string.Format("New bot submitted: {0}", arenaPlayer));
 					tournamentRunner.SignalBotSubmission();

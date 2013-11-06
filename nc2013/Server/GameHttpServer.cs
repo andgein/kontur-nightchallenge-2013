@@ -25,19 +25,17 @@ namespace Server
 		private Task listenerTask;
 		private readonly string basePath;
 		private readonly ManualResetEvent stopEvent;
+		private readonly ArenaState arenaState;
 		private readonly SessionManager sessionManager;
-		[NotNull] private readonly string godModeSecret;
-		private readonly bool godAccessOnly;
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
-		public GameHttpServer([NotNull] string prefix, [NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, [NotNull] string staticContentPath, [NotNull] string godModeSecret, bool godAccessOnly)
+		public GameHttpServer([NotNull] string prefix, [NotNull] ArenaState arenaState, [NotNull] SessionManager sessionManager, [NotNull] IDebuggerManager debuggerManager, [NotNull] ITournamentRunner tournamentRunner, [NotNull] string staticContentPath)
 		{
+			this.arenaState = arenaState;
 			this.sessionManager = sessionManager;
-			this.godModeSecret = godModeSecret;
-			this.godAccessOnly = godAccessOnly;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
-			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", godModeSecret)).AbsoluteUri;
+			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", arenaState.GodModeSecret)).AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
@@ -52,12 +50,12 @@ namespace Server
 				new DebuggerRemoveBreakpointHandler(debuggerManager),
 				new DebuggerAddBreakpointHandler(debuggerManager),
 				new DebuggerClearBreakpointsHandler(debuggerManager),
-				new DebuggerLoadGameHandler(debuggerManager, playersRepo),
+				new DebuggerLoadGameHandler(debuggerManager, arenaState),
 				new StaticHandler(staticContentPath),
-				new ArenaRankingHandler(gamesRepo),
-				new ArenaSubmitHandler(playersRepo, tournamentRunner),
-				new ArenaPlayerHandler(playersRepo, gamesRepo),
-				new ArenaRemovePlayerHandler(playersRepo, gamesRepo)
+				new ArenaRankingHandler(arenaState),
+				new ArenaSubmitHandler(arenaState, tournamentRunner),
+				new ArenaPlayerHandler(arenaState),
+				new ArenaRemovePlayerHandler(arenaState),
 			};
 			stopEvent = new ManualResetEvent(false);
 		}
@@ -109,13 +107,13 @@ namespace Server
 					{
 						var godMode = false;
 						var secretValue = context.GetOptionalStringParam(godModeSecretCookieName) ?? context.TryGetCookie(godModeSecretCookieName);
-						if (secretValue == godModeSecret)
+						if (secretValue == arenaState.GodModeSecret)
 						{
-							context.SetCookie(godModeSecretCookieName, godModeSecret, persistent: false, httpOnly: false);
+							context.SetCookie(godModeSecretCookieName, arenaState.GodModeSecret, persistent: false, httpOnly: false);
 							context.SetCookie(godModeCookieName, "true", persistent: false, httpOnly: false);
 							godMode = true;
 						}
-						else if (godAccessOnly)
+						else if (arenaState.GodAccessOnly)
 							throw new HttpException(HttpStatusCode.Forbidden, "GodAccessOnly mode is ON");
 
 						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();

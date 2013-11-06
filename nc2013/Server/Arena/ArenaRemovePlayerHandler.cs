@@ -7,14 +7,12 @@ namespace Server.Arena
 {
 	public class ArenaRemovePlayerHandler : StrictPathHttpHandlerBase
 	{
-		private readonly IPlayersRepo playersRepo;
-		private readonly IGamesRepo gamesRepo;
+		private readonly ArenaState arenaState;
 
-		public ArenaRemovePlayerHandler([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo)
+		public ArenaRemovePlayerHandler([NotNull] ArenaState arenaState)
 			: base("arena/player/remove")
 		{
-			this.playersRepo = playersRepo;
-			this.gamesRepo = gamesRepo;
+			this.arenaState = arenaState;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context, bool godMode)
@@ -23,8 +21,8 @@ namespace Server.Arena
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
 			var playerName = context.GetOptionalStringParam("name");
-			gamesRepo.RemovePlayer(playerName);
-			playersRepo.Remove(playerName);
+			arenaState.GamesRepo.RemovePlayer(playerName);
+			arenaState.PlayersRepo.Remove(playerName);
 
 			context.Redirect(context.BasePath + "ranking.html");
 		}

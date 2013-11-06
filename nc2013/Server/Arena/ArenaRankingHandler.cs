@@ -8,19 +8,19 @@ namespace Server.Arena
 {
 	public class ArenaRankingHandler : StrictPathHttpHandlerBase
 	{
-		private readonly IGamesRepo gamesRepo;
+		private readonly ArenaState arenaState;
 
-		public ArenaRankingHandler([NotNull] IGamesRepo gamesRepo)
+		public ArenaRankingHandler([NotNull] ArenaState arenaState)
 			: base("arena/ranking")
 		{
-			this.gamesRepo = gamesRepo;
+			this.arenaState = arenaState;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
 			var tournamentId = context.GetOptionalStringParam("tournamentId");
-			var ranking = gamesRepo.TryLoadRanking(tournamentId ?? "last");
-			var tournamentHistoryItems = gamesRepo.GetAllTournamentIds().Select(id => new TournamentHistoryItem
+			var ranking = arenaState.GamesRepo.TryLoadRanking(tournamentId ?? "last");
+			var tournamentHistoryItems = arenaState.GamesRepo.GetAllTournamentIds().Select(id => new TournamentHistoryItem
 			{
 				TournamentId = id,
 				CreationTimestamp = new DateTime(long.Parse(id), DateTimeKind.Utc),

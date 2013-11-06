@@ -43,7 +43,8 @@ namespace Server
 			var debuggerManager = new DebuggerManager(gameServer);
 			var battleRunner = new BattleRunner();
 			var tournamentRunner = new TournamentRunner(playersRepo, gamesRepo, battleRunner, battlesPerPair);
-			var httpServer = new GameHttpServer(prefix, playersRepo, gamesRepo, sessionManager, debuggerManager, tournamentRunner, staticContentPath, godModeSecret, godAccessOnly);
+			var arenaManager = new ArenaState(playersRepo, gamesRepo, godModeSecret, godAccessOnly);
+			var httpServer = new GameHttpServer(prefix, arenaManager, sessionManager, debuggerManager, tournamentRunner, staticContentPath);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
