@@ -151,6 +151,7 @@
 			border-radius: 5px;
 			padding: 5px 10px 5px 10px;
 			display: inline-block;
+			margin-bottom: 10px;
 		}
 
 		.run-status-playing .debugger-container,
@@ -394,6 +395,7 @@
 		<span class="debugger-gameRunStatus">
 			<span class="debugger-gameRunStatus-loading">loading, please wait...</span>
 		</span>
+		<div id="error-message" class="debugger-error hidden"></div>
 		<div class="programs-container">
 			<div class="program-container">
 				<div class="program-title">
@@ -448,7 +450,6 @@
 				<div>
 					Current Step: <span id="currentStep"></span>
 				</div>
-				<div id="error-message" class="debugger-error hidden"></div>
 				<div class="overview-program-container">
 					<div class="map-header">Program A <span class="debugger-winnerState" id="programAWinner"><span class="winner-info">winner</span><span class="draw-info">draw</span></span></div>
 					<div>
