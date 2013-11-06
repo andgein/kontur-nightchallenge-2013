@@ -97,7 +97,6 @@
     <Compile Include="Game\WarriorProgramParserException.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Parser\AddressingMode.cs" />
-    <Compile Include="Parser\CommandDescriber.cs" />
     <Compile Include="Parser\CompilationException.cs" />
     <Compile Include="Parser\Expression.cs" />
     <Compile Include="Parser\ExpressionParser.cs" />

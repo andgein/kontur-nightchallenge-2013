@@ -53,7 +53,6 @@
     <Compile Include="Arena\PlayerInfo.cs" />
     <Compile Include="Arena\TournamentHistoryItem.cs" />
     <Compile Include="Arena\TournamentRunner.cs" />
-    <Compile Include="CommandDescribeHandler.cs" />
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerLoadGameHandler.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />

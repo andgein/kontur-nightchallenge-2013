@@ -51,7 +51,6 @@ namespace Server
 				new DebuggerResetHandler(debuggerManager),
 				new DebuggerLoadGameHandler(debuggerManager, playersRepo),
 				new StaticHandler(staticContentPath),
-				new CommandDescribeHandler(),
 				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo, tournamentRunner),
 				new ArenaPlayerHandler(playersRepo, gamesRepo)
