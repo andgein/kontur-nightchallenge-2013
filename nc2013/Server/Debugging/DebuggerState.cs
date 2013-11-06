@@ -9,7 +9,7 @@ namespace Server.Debugging
 	{
 		[CanBeNull]
 		[JsonProperty]
-		public ProgramStartInfo[] ProgramStartInfos { get; set; }
+		public DebuggerProgramStartInfo[] ProgramStartInfos { get; set; }
 
 		[CanBeNull]
 		[JsonProperty]

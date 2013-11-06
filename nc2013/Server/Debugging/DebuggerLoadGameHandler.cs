@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
 using Core.Arena;
-using Core.Game;
 using JetBrains.Annotations;
 
 namespace Server.Debugging
@@ -27,12 +26,12 @@ namespace Server.Debugging
 			var playerVersion2 = context.GetIntParam("player2Result[player][version]");
 			var programStartInfos = new[]
 			{
-				new ProgramStartInfo
+				new DebuggerProgramStartInfo
 				{
 					Program = GetBotProgram(playerName1, playerVersion1),
 					StartAddress = context.GetIntParam("player1Result[startAddress]"),
 				},
-				new ProgramStartInfo
+				new DebuggerProgramStartInfo
 				{
 					Program = GetBotProgram(playerName2, playerVersion2),
 					StartAddress = context.GetIntParam("player2Result[startAddress]"),

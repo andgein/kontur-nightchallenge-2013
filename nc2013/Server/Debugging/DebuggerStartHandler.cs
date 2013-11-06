@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Core.Game;
 using Core.Parser;
 using JetBrains.Annotations;
 
@@ -11,7 +10,7 @@ namespace Server.Debugging
 
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
-			var programStartInfos = context.GetRequest<ProgramStartInfo[]>();
+			var programStartInfos = context.GetRequest<DebuggerProgramStartInfo[]>();
 			try
 			{
 				debugger.StartNewGame(programStartInfos);

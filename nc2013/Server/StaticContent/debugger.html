@@ -46,6 +46,7 @@
 				$win: $("#programAWinner"),
 				$source: $("#programA"),
 				$startAddress: $("#startAddressA"),
+				$enabled: $("#enabledProgramA"),
 				programIndex: 0
 			}));
 			programs.push(new ProgramState({
@@ -56,6 +57,7 @@
 				$win: $("#programBWinner"),
 				$source: $("#programB"),
 				$startAddress: $("#startAddressB"),
+				$enabled: $("#enabledProgramB"),
 				programIndex: 1
 			}));
 			var game = new Game({
@@ -89,7 +91,7 @@
 
 		function switchAutofocus() {
 			for (var i = 0; i < programs.length; ++i)
-				programs[i].autofocus(!!$("#autofocus:checked").length);
+				programs[i].autofocus($("#autofocus").is(":checked"));
 		}
 
 		var slowSpeed = 1;
@@ -283,12 +285,15 @@
 			.listingItem.nextCommand {
 				background-color: gold;
 			}
-			.listingItem.nextCommand.modified0 {
-				background-color: #df7c00;
-			}
-			.listingItem.nextCommand.modified1 {
-				background-color: #70be60;
-			}
+
+				.listingItem.nextCommand.modified0 {
+					background-color: #df7c00;
+				}
+
+				.listingItem.nextCommand.modified1 {
+					background-color: #70be60;
+				}
+
 			.listingItem.justScrolled {
 				border: dashed 2px red;
 			}
@@ -376,10 +381,12 @@
 
 		.nextCommands-container {
 		}
+
 		.nextCommands-label {
 			/*display: inline-block;*/
 			vertical-align: top;
 		}
+
 		.nextCommands {
 			display: inline-block;
 			height: 150px;
@@ -399,15 +406,17 @@
 		<div class="programs-container">
 			<div class="program-container">
 				<div class="program-title">
-					Program A @
-						<input type="text" class="program-startAddress" placeholder="start address" id="startAddressA" />
+					<input type="checkbox" id="enabledProgramA" />
+					<label for="enabledProgramA">Program A @</label>
+					<input type="text" class="program-startAddress" placeholder="start address" id="startAddressA" />
 				</div>
 				<textarea class="program" id="programA"></textarea>
 			</div>
 			<div class="program-container">
 				<div class="program-title">
-					Program B @
-						<input type="text" class="program-startAddress" placeholder="start address" id="startAddressB" />
+					<input type="checkbox" id="enabledProgramB" />
+					<label for="enabledProgramB">Program B @</label>
+					<input type="text" class="program-startAddress" placeholder="start address" id="startAddressB" />
 				</div>
 				<textarea class="program" id="programB"></textarea>
 			</div>

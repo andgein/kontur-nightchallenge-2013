@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Core;
 using Core.Game;
@@ -14,12 +15,13 @@ namespace Server.Debugging
 		private readonly ISession session;
 		private IGame game;
 
-		private ProgramStartInfo[] lastProgramStartInfos;
-		private readonly ProgramStartInfo[] defaultProgramStartInfos =
+		private DebuggerProgramStartInfo[] lastProgramStartInfos;
+
+		private readonly DebuggerProgramStartInfo[] defaultProgramStartInfos =
 		{
-			new ProgramStartInfo{Program = @";imp strategy
-MOV 0, 1"}, 
-			new ProgramStartInfo{Program = @";dwarf strategy
+			new DebuggerProgramStartInfo {Program = @";imp strategy
+MOV 0, 1"},
+			new DebuggerProgramStartInfo {Program = @";dwarf strategy
 ADD #4, 3
 MOV 2, @2
 JMP -2
@@ -49,10 +51,10 @@ DAT #0, #0"}
 				lastProgramStartInfos = defaultProgramStartInfos;
 		}
 
-		public void StartNewGame([NotNull] ProgramStartInfo[] programStartInfos)
+		public void StartNewGame([NotNull] DebuggerProgramStartInfo[] programStartInfos)
 		{
 			lastProgramStartInfos = programStartInfos;
-			game = gameServer.StartNewGame(programStartInfos);
+			game = gameServer.StartNewGame(programStartInfos.Where(x => !x.Disabled).Select(x => new ProgramStartInfo {Program = x.Program, StartAddress = x.StartAddress}).ToArray());
 			session.Save(debuggerStateKey, State);
 		}
 

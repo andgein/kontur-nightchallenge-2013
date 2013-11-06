@@ -55,6 +55,7 @@
     <Compile Include="Debugging\DebuggerHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerLoadGameHandler.cs" />
     <Compile Include="Debugging\DebuggerManager.cs" />
+    <Compile Include="Debugging\DebuggerProgramStartInfo.cs" />
     <Compile Include="Debugging\DebuggerResetHandler.cs" />
     <Compile Include="Debugging\DebuggerState.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />

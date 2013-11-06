@@ -28,8 +28,6 @@ namespace Core.Game
 		[JsonProperty]
 		public bool GameOver { get; set; }
 
-
-
 		[JsonProperty]
 		[NotNull]
 		public ProgramState[] ProgramStates { get; set; }
@@ -38,7 +36,7 @@ namespace Core.Game
 		{
 			get
 			{
-				uint? pointer = ProgramStates[CurrentProgram].LastPointer;
+				var pointer = ProgramStates[CurrentProgram].LastPointer;
 				if (pointer.HasValue)
 					return pointer.Value + ": " + MemoryState[pointer.Value].Instruction;
 				else

@@ -5,6 +5,7 @@ var ProgramState = Base.extend({
 		this.$next = options.$next;
 		this.$win = options.$win;
 		this.$source = options.$source;
+		this.$enabled = options.$enabled;
 		this.$startAddress = options.$startAddress;
 		this.memory = options.memory;
 		this.programIndex = options.programIndex;
@@ -74,15 +75,17 @@ var ProgramState = Base.extend({
 	},
 	setProgramStartInfo: function (programStartInfo) {
 		this.$source.val(programStartInfo && programStartInfo.program || "");
-		var startAddress = "";
-		if (programStartInfo && programStartInfo.startAddress != undefined)
-			startAddress = programStartInfo.startAddress;
-		this.$startAddress.val(startAddress);
+		this.$startAddress.val(programStartInfo && programStartInfo.startAddress || "");
+		if (!programStartInfo || !programStartInfo.disabled)
+			this.$enabled.attr("checked", "checked");
+		else
+			this.$enabled.removeAttr("checked");
 	},
 	getProgramStartInfo: function () {
 		var source = this.$source.val();
 		var startAddress = this.$startAddress.val();
-		return source && { program: source, startAddress: startAddress };
+		var enabled = this.$enabled.is(":checked");
+		return source && { program: source, startAddress: startAddress, disabled: !enabled };
 	},
 	_removeInstructionPointers: function () {
 		if (!this.programState || !this.programState.processPointers)
