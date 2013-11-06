@@ -60,6 +60,12 @@ var Cell = Base.extend({
 		this.cellState = cellState;
 		this._refreshState();
 	},
+	setNextCommand: function () {
+		if (Cell._lastCommand)
+			Cell._lastCommand.$listingItem.removeClass("nextCommand");
+		this.$listingItem.addClass("nextCommand");
+		Cell._lastCommand = this;
+	},
 	scrollIntoView: function () {
 		if (Cell._lastScrolledInto)
 			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
@@ -75,6 +81,7 @@ var Cell = Base.extend({
 	},
 	reset: function () {
 		this.$listingItem.removeClass("justScrolled");
+		this.$listingItem.removeClass("nextCommand");
 		var instructionPointersToRemove = [];
 		for (var i in this.activeInstructionPointers)
 			instructionPointersToRemove.push(i);
@@ -137,5 +144,6 @@ var Cell = Base.extend({
 		return this.address + " " + this.cellState.instruction;
 	}
 }, {
-	_lastScrolledInto: null
+	_lastScrolledInto: null,
+	_lastCommand: null
 });

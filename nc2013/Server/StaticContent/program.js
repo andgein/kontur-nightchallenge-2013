@@ -61,8 +61,7 @@ var ProgramState = Base.extend({
 	current: function (isCurrent) {
 		if (isCurrent) {
 			this.$nextCommand && this.$nextCommand.addClass("current");
-			if (this.useAutofocus)
-				this._scrollIntoNext();
+			this._markNextCommand();
 		}
 		else
 			this.$nextCommand && this.$nextCommand.removeClass("current");
@@ -126,6 +125,14 @@ var ProgramState = Base.extend({
 		}
 		else
 			$nextCommands.addClass("hidden");
+	},
+	_markNextCommand: function () {
+		if (this.programState && this.programState.processPointers.length > 0) {
+			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
+			nextCell.setNextCommand();
+			if (this.useAutofocus)
+				nextCell.scrollIntoView();
+		}
 	},
 	_scrollIntoNext: function () {
 		if (this.programState && this.programState.processPointers.length > 0) {
