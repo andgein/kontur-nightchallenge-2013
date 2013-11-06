@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace Core.Game
 {
@@ -13,5 +14,11 @@ namespace Core.Game
 
 		[JsonProperty]
 		public uint? NextPointer { get; set; }
+
+		[NotNull]
+		public override string ToString()
+		{
+			return string.Format("Program: {0}, ChangeType: {1}, NextPointer: {2}", Program, ChangeType, NextPointer);
+		}
 	}
 }
