@@ -124,9 +124,12 @@ namespace Core.Engine
 
 		public void WriteToMemory(int address, Statement statement)
 		{
-			Memory[address].Statement = statement;
-			Memory[address].LastModifiedByProgram = CurrentWarrior;
-			stepResult.ChangeMemory(address);
+			if (Memory[address].Statement != statement || Memory[address].LastModifiedByProgram != CurrentWarrior)
+			{
+				Memory[address].Statement = statement;
+				Memory[address].LastModifiedByProgram = CurrentWarrior;
+				stepResult.ChangeMemory(address);
+			}
 		}
 
 		public void KillCurrentProcess()
