@@ -8,6 +8,7 @@ namespace Core.Engine
 	{
 		public List<RunningWarrior> Warriors { get; private set; }
 		public readonly Memory Memory;
+		public int? LastExecutedWarrior { get; private set; }
 		public int CurrentWarrior { get; private set; }
 		public int CurrentStep { get; private set; }
 		public int CurrentIp { get; private set; }
@@ -68,28 +69,26 @@ namespace Core.Engine
 			{
 				var nextIp = stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : ModularArith.Mod(CurrentIp + 1);
 				Warriors[CurrentWarrior].Queue.Enqueue(nextIp);
-				stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Executed;
+				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff{Program = CurrentWarrior, NextPointer = (uint?) nextIp, ChangeType = ProcessStateChangeType.Executed});
 			}
 			else
 			{
-				stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Killed;
-
+				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = null, ChangeType = ProcessStateChangeType.Killed });
 				if (Warriors[CurrentWarrior].Queue.Count == 0)
 					countLivedWarriors--;
 			}
 
 			if (stepResult.SplittedInInstruction.HasValue)
 			{
-				if (Warriors[CurrentWarrior].Queue.Enqueue(stepResult.SplittedInInstruction.GetValueOrDefault()))
-					stepResult.ProgramStateDiff.ChangeType = ProcessStateChangeType.Splitted;
+				var nextIp = stepResult.SplittedInInstruction.GetValueOrDefault();
+				if (Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
+					stepResult.ProgramStateDiffs.Add(new ProgramStateDiff{Program = CurrentWarrior, NextPointer = (uint?) nextIp, ChangeType = ProcessStateChangeType.Splitted});
 			}
-
-			stepResult.ProgramStateDiff.Program = CurrentWarrior;
-			stepResult.ProgramStateDiff.NextPointer = (uint?) Warriors[CurrentWarrior].Queue.PeekOrNull();
-
+			
 			CurrentStep++;
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
+			LastExecutedWarrior = CurrentWarrior;
 			CurrentWarrior = nextWarrior.GetValueOrDefault();
 
 			if (Warriors.Count > 1 && countLivedWarriors == 1 || Warriors.Count == 1 && countLivedWarriors == 0)

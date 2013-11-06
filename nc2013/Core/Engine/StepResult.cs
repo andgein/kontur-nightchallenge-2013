@@ -9,7 +9,7 @@ namespace Core.Engine
         public int? SetNextIP;
         public int? SplittedInInstruction;
     	public readonly HashSet<int> MemoryDiffs;
-    	public readonly ProgramStateDiff ProgramStateDiff;
+    	public readonly List<ProgramStateDiff> ProgramStateDiffs;
 
         public StepResult()
         {
@@ -17,7 +17,7 @@ namespace Core.Engine
             SetNextIP = null;
             SplittedInInstruction = null;
 			MemoryDiffs = new HashSet<int>();
-        	ProgramStateDiff = new ProgramStateDiff();
+        	ProgramStateDiffs = new List<ProgramStateDiff>();
         }
 
         public void ChangeMemory(int address)

@@ -86,8 +86,8 @@ namespace Core.Game
             {
             	var stepResult = engine.Step();
 				memoryDiffs.UnionWith(stepResult.MemoryDiffs);
-				programStateDiffs.Add(stepResult.ProgramStateDiff);
-            }
+				programStateDiffs.AddRange(stepResult.ProgramStateDiffs);
+			}
 
 			return new Diff
 			{
