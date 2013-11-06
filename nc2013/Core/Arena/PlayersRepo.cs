@@ -53,6 +53,16 @@ namespace Core.Arena
 			}
 		}
 
+		public void Remove([NotNull] string name)
+		{
+			lock (playersDir)
+			{
+				var file = GetFile(name);
+				if (file.Exists)
+					file.Delete();
+			}
+		}
+
 		[CanBeNull]
 		private ArenaPlayer[] TryUpdatePlayer([NotNull] ArenaPlayer[] existingVersions, [NotNull] ArenaPlayer request)
 		{

@@ -57,6 +57,7 @@
     <Compile Include="Arena\IBattleRunner.cs" />
     <Compile Include="Arena\IGamesRepo.cs" />
     <Compile Include="Arena\IPlayersRepo.cs" />
+    <Compile Include="Arena\Ranking.cs" />
     <Compile Include="Arena\RankingEntry.cs" />
     <Compile Include="Arena\RoundRobinTournament.cs" />
     <Compile Include="Arena\RoundRobinTournamentResult.cs" />

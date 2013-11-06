@@ -11,5 +11,7 @@ namespace Core.Arena
 
 		[NotNull]
 		ArenaPlayer[] LoadLastVersions();
+
+		void Remove([NotNull] string name);
 	}
 }

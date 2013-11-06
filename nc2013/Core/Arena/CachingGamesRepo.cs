@@ -47,6 +47,13 @@ namespace Core.Arena
 			return gamesRepo.GetAllTournamentIds();
 		}
 
+		public void RemovePlayer([NotNull] string playerName)
+		{
+			gamesRepo.RemovePlayer(playerName);
+			gamesCache.Clear();
+			rankingCache.Clear();
+		}
+
 		private void InvalidateCache([NotNull] string tournamentId)
 		{
 			List<BattleResult> dummy;

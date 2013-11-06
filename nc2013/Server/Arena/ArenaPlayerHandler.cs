@@ -32,35 +32,38 @@ namespace Server.Arena
 			})
 			.OrderByDescending(x => x.Version)
 			.ToArray();
-			ArenaPlayer arenaPlayer;
 			TournamentRanking ranking = null;
 			var playerInfo = new PlayerInfo();
-			var lastVersion = playerVersions.GetLastVersion();
-			if (version.HasValue)
+			var lastVersion = playerVersions.TryGetLastVersion();
+			if (lastVersion != null)
 			{
-				arenaPlayer = playerVersions.FirstOrDefault(p => p.Version == version.Value);
-				if (arenaPlayer != null)
+				ArenaPlayer arenaPlayer;
+				if (version.HasValue)
 				{
-					var tournamentId = "last";
-					if (arenaPlayer.Version != lastVersion.Version)
+					arenaPlayer = playerVersions.FirstOrDefault(p => p.Version == version.Value);
+					if (arenaPlayer != null)
 					{
-						var nextVersion = playerVersions.First(p => p.Version > version.Value);
-						tournamentId = gamesRepo.GetAllTournamentIds()
-							.Select(id => new DateTime(long.Parse(id), DateTimeKind.Utc))
-							.OrderBy(ts => ts)
-							.LastOrDefault(ts => ts < nextVersion.Timestamp)
-							.Ticks.ToString();
+						var tournamentId = "last";
+						if (arenaPlayer.Version != lastVersion.Version)
+						{
+							var nextVersion = playerVersions.First(p => p.Version > version.Value);
+							tournamentId = gamesRepo.GetAllTournamentIds()
+								.Select(id => new DateTime(long.Parse(id), DateTimeKind.Utc))
+								.OrderBy(ts => ts)
+								.LastOrDefault(ts => ts < nextVersion.Timestamp)
+								.Ticks.ToString();
+						}
+						ranking = gamesRepo.TryLoadRanking(tournamentId);
 					}
-					ranking = gamesRepo.TryLoadRanking(tournamentId);
 				}
+				else
+				{
+					arenaPlayer = lastVersion;
+					ranking = gamesRepo.TryLoadRanking("last");
+				}
+				if (ranking != null)
+					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, godMode);
 			}
-			else
-			{
-				arenaPlayer = lastVersion;
-				ranking = gamesRepo.TryLoadRanking("last");
-			}
-			if (ranking != null)
-				playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, godMode);
 			context.SendResponse(playerInfo);
 		}
 

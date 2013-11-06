@@ -11,5 +11,8 @@ namespace Server.Arena
 
 		[JsonProperty]
 		public TournamentHistoryItem[] HistoryItems;
+
+		[JsonProperty]
+		public bool GodMode;
 	}
 }

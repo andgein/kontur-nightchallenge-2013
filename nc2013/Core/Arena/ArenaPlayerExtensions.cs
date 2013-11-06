@@ -5,6 +5,12 @@ namespace Core.Arena
 {
 	public static class ArenaPlayerExtensions
 	{
+		[CanBeNull]
+		public static ArenaPlayer TryGetLastVersion([NotNull] this ArenaPlayer[] playerVersions)
+		{
+			return playerVersions.Length == 0 ? null : playerVersions.GetLastVersion();
+		}
+
 		[NotNull]
 		public static ArenaPlayer GetLastVersion([NotNull] this ArenaPlayer[] playerVersions)
 		{

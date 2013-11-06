@@ -17,5 +17,7 @@ namespace Core.Arena
 
 		[NotNull]
 		string[] GetAllTournamentIds();
+
+		void RemovePlayer([NotNull] string playerName);
 	}
 }

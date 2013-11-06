@@ -11,7 +11,13 @@
 	<script src="common.js"></script>
 	<script src="server.js"></script>
 	<script>
-		var RankCtrl = MakeJsonController(server.basePath() + "arena/ranking" + window.location.search);
+		var RankCtrl = function ($scope, $http) {
+			var f = MakeJsonController(server.basePath() + "arena/ranking" + window.location.search);
+			$scope.removePlayer = function (player) {
+				window.location = "arena/player/remove?name=" + player.name;
+			};
+			f($scope, $http);
+		}
 	</script>
 	<style>
 		.ranking-table th {
@@ -39,6 +45,7 @@
 				<th colspan="2">Ничьих</th>
 				<th colspan="2">Поражений</th>
 				<th>Всего боев</th>
+				<th ng-if="godMode"></th>
 			</tr>
 			<tr ng-repeat="p in ranking.places">
 				<td>{{$index+1}}</td>
@@ -52,6 +59,7 @@
 				<td>{{p.loses}}</td>
 				<td class="small">{{100*p.loses / p.games | number:0}}%</td>
 				<td>{{p.games}}</td>
+				<td ng-if="godMode"><a href="javascript:void(0)" ng-click="removePlayer({{p}})">Удалить насовсем!</a></td>
 			</tr>
 		</table>
 		

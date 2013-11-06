@@ -53,7 +53,8 @@ namespace Server
 				new StaticHandler(staticContentPath),
 				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo, tournamentRunner),
-				new ArenaPlayerHandler(playersRepo, gamesRepo)
+				new ArenaPlayerHandler(playersRepo, gamesRepo),
+				new ArenaRemovePlayerHandler(playersRepo, gamesRepo),
 			};
 			stopEvent = new ManualResetEvent(false);
 		}
