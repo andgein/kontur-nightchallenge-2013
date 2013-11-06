@@ -21,10 +21,10 @@ namespace Core.Parser
 			Labels = new Dictionary<string, int>();
 			Constants = new Dictionary<string, Expression>();
 			EvaluatingConstants = new HashSet<string>();
-
 		}
 
-		public Warrior() : this(new List<Statement>())
+		public Warrior()
+			: this(new List<Statement>())
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace Core.Parser
 		public Expression ExpandConstant(string name)
 		{
 			if (EvaluatingConstants.Contains(name))
-				throw new InvalidOperationException("cycle");//TODO message
+				throw new CompilationException("Cycle in constants evaluation detected", name, 0);
 			EvaluatingConstants.Add(name);
 			Constants[name] = Constants[name].ExpandConstants(this);
 			EvaluatingConstants.Remove(name);
@@ -77,7 +77,7 @@ namespace Core.Parser
 				StartAddress = 0;
 			else
 			{
-                StartAddressExpression = StartAddressExpression.ExpandConstants(this);
+				StartAddressExpression = StartAddressExpression.ExpandConstants(this);
 				if (StartAddressExpression.GetType() == typeof(VariableExpression))
 					StartAddress = ModularArith.Mod(Statements.Count + StartAddressExpression.Calculate(this, Statements.Count));
 				else if (StartAddressExpression.GetType() == typeof(NumberExpression))

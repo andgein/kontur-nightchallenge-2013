@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Core.Engine;
 using Core.Game;
 
 namespace Core.Parser
@@ -9,33 +11,42 @@ namespace Core.Parser
 		private readonly StatementFactory statementFactory = new StatementFactory();
 		private readonly ExpressionParser expressionParser = new ExpressionParser();
 		private readonly static Tuple<StatementType, AddressingMode>[] restrictedModesA = new []
-			{
-				Tuple.Create(StatementType.Jmp, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Jmz, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Jmn, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Djn, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Spl, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Dat, AddressingMode.Direct   ),
-				Tuple.Create(StatementType.Dat, AddressingMode.Indirect ),
-			};
+		{
+			Tuple.Create(StatementType.Jmp, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Jmz, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Jmn, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Djn, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Spl, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Dat, AddressingMode.Direct   ),
+			Tuple.Create(StatementType.Dat, AddressingMode.Indirect ),
+		};
 		private readonly static Tuple<StatementType, AddressingMode>[] restrictedModesB = new []
-			{
-				Tuple.Create(StatementType.Mov, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Add, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Sub, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Mov4, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Add4, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Sub4, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Cmp, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Slt, AddressingMode.Immediate),
-				Tuple.Create(StatementType.Dat, AddressingMode.Direct),
-				Tuple.Create(StatementType.Dat, AddressingMode.Indirect),
-			};
+		{
+			Tuple.Create(StatementType.Mov, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Add, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Sub, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Mov4, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Add4, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Sub4, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Cmp, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Slt, AddressingMode.Immediate),
+			Tuple.Create(StatementType.Dat, AddressingMode.Direct),
+			Tuple.Create(StatementType.Dat, AddressingMode.Indirect),
+		};
+
+		private static readonly Dictionary<char, AddressingMode> allowedAddressingModes = new Dictionary<char, AddressingMode>
+		{
+			{'$', AddressingMode.Direct},
+			{'#', AddressingMode.Immediate},
+			{'@', AddressingMode.Indirect},
+			{'<', AddressingMode.PredecrementIndirect},
+		};
 
 		public Warrior Parse(String text)
 		{
 			var warrior = new Warrior();
-			foreach (var line in text.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries))
+			var lines = text.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+			foreach (var line in lines)
 			{
 				var stLine = TrimComment(line);
 				if (stLine.All(Char.IsWhiteSpace))
@@ -52,12 +63,15 @@ namespace Core.Parser
 				if (statement.Type == StatementType.Equ)
 				{
 					if (!statement.HasLabel)
-						throw new CompilationException("EQU operator should have name", State);
+						throw new CompilationException("EQU statement should have label", State);
 					warrior.Constants[statement.Label] = statement.FieldA;
 					continue;
 				}
 				warrior.AddStatement(statement, State);
 			}
+
+			if (warrior.Statements.Count > Parameters.MaxWarriorLength)
+				throw new CompilationException(string.Format("Too long program. Max allowed length is {0}", Parameters.MaxWarriorLength), State);
 
 			warrior.EvaluateAllExpressions();
 			return warrior;
@@ -107,6 +121,7 @@ namespace Core.Parser
 
 			var statement = statementFactory.Create(warrior, command);
 			statement.Label = label;
+
 			Tuple<AddressingMode, Expression> a = null, b = null;
 			if (!RestOnlyWhitespaces())
 				a = ReadModeAndField();
@@ -155,16 +170,8 @@ namespace Core.Parser
 		{
 			SkipWhitespaces();
 			AddressingMode mode;
-			try
-			{
-				mode = (AddressingMode) Enum.ToObject(typeof (AddressingMode), @State.Current);
-				if (! Enum.IsDefined(typeof (AddressingMode), mode))
-					 throw new Exception();
-			}
-			catch (Exception)
-			{
+			if (!allowedAddressingModes.TryGetValue(State.Current, out mode))
 				return AddressingMode.Direct;
-			}
 			State.Next();
 			return mode;
 		}

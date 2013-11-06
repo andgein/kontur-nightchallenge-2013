@@ -39,7 +39,7 @@ namespace Core.Game.MarsBased
 			if (currentTurn < 0)
 				currentTurn = 0;
 			gameState = GetGameState(currentTurn);
-			return null; // todo !!!
+			return null;
 		}
 
 		public void StepToEnd()

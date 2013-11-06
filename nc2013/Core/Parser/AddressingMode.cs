@@ -1,11 +1,10 @@
 namespace Core.Parser
 {
 	public enum AddressingMode
-    {
-        Direct = '$',
-        Immediate = '#',
-        Indirect = '@',
-        PredecrementIndirect = '<'
-    }
-
+	{
+		Direct = '$',
+		Immediate = '#',
+		Indirect = '@',
+		PredecrementIndirect = '<'
+	}
 }

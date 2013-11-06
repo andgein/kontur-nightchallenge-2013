@@ -3,34 +3,34 @@ using System;
 namespace Core.Parser
 {
 	public class ParserState
-    {
-        public String Str { get; private set; }
-        public int Pos;
+	{
+		public String Str { get; private set; }
+		public int Pos;
 
-        public ParserState(string str, int pos = 0)
-        {
-            Str = str;
-            Pos = pos;
-        }
-        
-        public char Current
-        {
-            get { return Str[Pos]; }
-        }
+		public ParserState(string str, int pos = 0)
+		{
+			Str = str;
+			Pos = pos;
+		}
 
-        public string Tail
-        {
-            get { return Str.Substring(Pos); }
-        }
+		public char Current
+		{
+			get { return Str[Pos]; }
+		}
 
-        public bool Finished()
-        {
-            return Pos >= Str.Length;
-        }
+		public string Tail
+		{
+			get { return Str.Substring(Pos); }
+		}
 
-        public void Next()
-        {
-            Pos++;
-        }
-    }
+		public bool Finished()
+		{
+			return Pos >= Str.Length;
+		}
+
+		public void Next()
+		{
+			Pos++;
+		}
+	}
 }
