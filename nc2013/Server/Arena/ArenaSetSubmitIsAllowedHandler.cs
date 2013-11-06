@@ -5,11 +5,11 @@ using Server.Handlers;
 
 namespace Server.Arena
 {
-	public class ArenaSetSubmitIsEnabledStateHandler : StrictPathHttpHandlerBase
+	public class ArenaSetSubmitIsAllowedHandler : StrictPathHttpHandlerBase
 	{
 		private readonly ArenaState arenaState;
 
-		public ArenaSetSubmitIsEnabledStateHandler([NotNull] ArenaState arenaState)
+		public ArenaSetSubmitIsAllowedHandler([NotNull] ArenaState arenaState)
 			: base("arena/submit/allowed/set")
 		{
 			this.arenaState = arenaState;
