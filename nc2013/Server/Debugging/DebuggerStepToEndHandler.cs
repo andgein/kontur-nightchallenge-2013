@@ -8,8 +8,13 @@ namespace Server.Debugging
 
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
-			debugger.Play(game => game.StepToEnd());
-			context.SendResponse(debugger.State.GameState);
+			var gameStepResult = debugger.StepToEnd();
+			var response = new DebuggerStepResponse
+			{
+				StoppedOnBreakpoint = gameStepResult.StoppedInBreakpoint,
+				GameState = debugger.State.GameState
+			};
+			context.SendResponse(response);
 		}
 	}
 }

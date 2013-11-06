@@ -174,6 +174,9 @@
 		.map-header, .listing-header {
 			font-weight: bolder;
 		}
+		.listing-header-second {
+			padding-top: 10px;
+		}
 
 		#map {
 			float: left;
@@ -412,6 +415,10 @@
 			overflow-y: scroll;
 			border: solid 1px black;
 		}
+
+		.listing-breakpoints {
+			padding-top: 10px;
+		}
 	</style>
 </head>
 <body class="run-status-loading">
@@ -441,7 +448,7 @@
 			<div class="programs-buttons-container">
 				<button onclick="gameRunner.run(slowSpeed);">Run</button>
 				<button onclick="gameRunner.step(+1);">Step into debugger</button>
-				<button onclick="gameRunner.stepToEnd();">Run to end without debugging</button>
+				<button onclick="gameRunner.stepToEnd();">Run until game is over</button>
 			</div>
 		</div>
 	</div>
@@ -515,6 +522,10 @@
 						document.write("<div class='listingItem'></div>");
 					}
 				</script>
+			</div>
+			<div class="listing-header listing-header-second">Breakpoints</div>
+			<div class="listing-breakpoints">
+				
 			</div>
 		</div>
 	</div>

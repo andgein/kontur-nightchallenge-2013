@@ -13,7 +13,9 @@ var Game = Base.extend({
 			.pipe(function (debuggerState) {
 				for (var i = 0; i < that.programs.length; ++i)
 					that.programs[i].setProgramStartInfo(debuggerState.programStartInfos && debuggerState.programStartInfos[i]);
-				return that._setGameState(debuggerState.gameState);
+				return {
+					gameRunStatus: debuggerState.gameState ? that._setGameState(debuggerState.gameState) : that._resetState()
+				};
 			});
 	},
 	start: function () {
@@ -27,85 +29,95 @@ var Game = Base.extend({
 		var that = this;
 		return server.post("debugger/start", JSON.stringify(programStartInfos))
 			.pipe(function (gameState) {
-				return that._setGameState(gameState);
+				return {
+					gameRunStatus: that._setGameState(gameState)
+				};
 			});
+	},
+	_handleStepResponse: function (stepResponse) {
+		if (stepResponse.gameState) {
+			return {
+				gameRunStatus: this._setGameState(stepResponse.gameState),
+				stoppedOnBreakpoint: stepResponse.stoppedOnBreakpoint
+			};
+		}
+		else if (stepResponse.diff) {
+			return {
+				gameRunStatus: this._applyDiff(stepResponse.diff),
+				stoppedOnBreakpoint: stepResponse.stoppedOnBreakpoint
+			};
+		} else
+			throw "stepResponse.diff or stepResponse.gameState should not be empty";
 	},
 	stepToEnd: function () {
 		var that = this;
 		return server.get("debugger/step/end")
-			.pipe(function (gameState) {
-				return that._setGameState(gameState);
+			.pipe(function (stepResponse) {
+				return that._handleStepResponse(stepResponse);
 			});
 	},
 	step: function (stepCount) {
 		var that = this;
 		return server.get("debugger/step", { count: stepCount, currentStep: this.currentStep })
 			.pipe(function (stepResponse) {
-				if (stepResponse.gameState) {
-					return that._setGameState(stepResponse.gameState);
-				}
-				else if (stepResponse.diff) {
-					that.currentStep = stepResponse.diff.currentStep;
-					that.$currentStep.text(stepResponse.diff.currentStep);
-					if (stepResponse.diff.memoryDiffs)
-						that.memory.applyDiffs(stepResponse.diff.memoryDiffs);
-					if (stepResponse.diff.programStateDiffs)
-						for (var i = 0; i < stepResponse.diff.programStateDiffs.length; ++i) {
-							var programStateDiff = stepResponse.diff.programStateDiffs[i];
-							that.programs[programStateDiff.program].applyDiff(programStateDiff);
-						}
-					for (var i = 0; i < that.programs.length; ++i)
-						that.programs[i].current(stepResponse.diff.currentProgram == i);
-					if (stepResponse.diff.gameOver) {
-						if (stepResponse.diff.winner != null)
-							that.programs[stepResponse.diff.winner].win();
-						else
-							for (var i = 0; i < that.programs.length; ++i)
-								that.programs[i].draw();
-						return "gameover";
-					}
-					for (var i = 0; i < that.programs.length; ++i)
-						that.programs[i].plays();
-					return "playing";
-				}
+				return that._handleStepResponse(stepResponse);
 			});
 	},
 	reset: function () {
-		var that = this;
-		return server.get("debugger/reset")
-			.pipe(function () {
-				return that._setGameState(null);
-			});
+		return this.load();
+	},
+	_applyDiff: function (diff) {
+		this.currentStep = diff.currentStep;
+		this.$currentStep.text(diff.currentStep);
+		if (diff.memoryDiffs)
+			this.memory.applyDiffs(diff.memoryDiffs);
+		if (diff.programStateDiffs)
+			for (var i = 0; i < diff.programStateDiffs.length; ++i) {
+				var programStateDiff = diff.programStateDiffs[i];
+				this.programs[programStateDiff.program].applyDiff(programStateDiff);
+			}
+		for (var i = 0; i < this.programs.length; ++i)
+			this.programs[i].current(diff.currentProgram == i);
+		if (diff.gameOver) {
+			if (diff.winner != null)
+				this.programs[diff.winner].win();
+			else
+				for (var i = 0; i < this.programs.length; ++i)
+					this.programs[i].draw();
+			return "gameover";
+		}
+		for (var i = 0; i < this.programs.length; ++i)
+			this.programs[i].plays();
+		return "playing";
+	},
+	_resetState: function () {
+		this.$currentStep.text("");
+		this.currentStep = undefined;
+		this.memory.reset();
+		for (var i = 0; i < this.programs.length; ++i) {
+			this.programs[i].reset();
+		}
+		return "reset";
 	},
 	_setGameState: function (gameState) {
-		if (!gameState) {
-			this.$currentStep.text("");
-			this.currentStep = undefined;
-			this.memory.reset();
-			for (var i = 0; i < this.programs.length; ++i) {
-				this.programs[i].reset();
-			}
-			return "reset";
-		} else {
-			this.$currentStep.text(gameState.currentStep);
-			this.currentStep = gameState.currentStep;
-			this.memory.setCellStates(gameState.memoryState);
-			for (var i = 0; i < gameState.programStates.length; ++i) {
-				this.programs[i].setProgramState(gameState.programStates[i]);
-				this.programs[i].current(gameState.currentProgram == i);
-			}
-			if (gameState.gameOver) {
-				if (gameState.winner != null)
-					this.programs[gameState.winner].win();
-				else
-					for (var i = 0; i < this.programs.length; ++i)
-						this.programs[i].draw();
-				return "gameover";
-			}
-			for (var i = 0; i < this.programs.length; ++i)
-				this.programs[i].plays();
-			return "playing";
+		this.$currentStep.text(gameState.currentStep);
+		this.currentStep = gameState.currentStep;
+		this.memory.setCellStates(gameState.memoryState);
+		for (var i = 0; i < gameState.programStates.length; ++i) {
+			this.programs[i].setProgramState(gameState.programStates[i]);
+			this.programs[i].current(gameState.currentProgram == i);
 		}
+		if (gameState.gameOver) {
+			if (gameState.winner != null)
+				this.programs[gameState.winner].win();
+			else
+				for (var i = 0; i < this.programs.length; ++i)
+					this.programs[i].draw();
+			return "gameover";
+		}
+		for (var i = 0; i < this.programs.length; ++i)
+			this.programs[i].plays();
+		return "playing";
 	}
 });
 
@@ -126,14 +138,15 @@ var GameRunner = Base.extend({
 		}
 
 		var that = this;
-		function nextAction(gameRunStatus) {
+		function nextAction(status) {
 			var result, justStarted = false;
-			if (options.requirePlaying && gameRunStatus != "playing") {
+			if (options.requirePlaying && status.gameRunStatus != "playing") {
 				result = that.game.start();
 				justStarted = true;
-			} else {
-				result = $.when(gameRunStatus);
-			}
+			} else
+				result = $.when(status);
+			if (status.stoppedOnBreakpoint)
+				that.pause();
 			if (options.action)
 				result = result.pipe(function () {
 					return options.action(that.game, justStarted);
@@ -143,8 +156,8 @@ var GameRunner = Base.extend({
 
 		return this.gameQueue = (this.gameQueue || this.game.load())
 			.pipe(nextAction, nextAction)
-			.done(function (gameRunStatus) {
-				that.onGameRunStatusChanged && that.onGameRunStatusChanged(gameRunStatus);
+			.done(function (status) {
+				that.onGameRunStatusChanged && that.onGameRunStatusChanged(status.gameRunStatus);
 				that.onGameError && that.onGameError(null);
 			})
 			.fail(function (err) {
@@ -186,10 +199,10 @@ var GameRunner = Base.extend({
 				if (that.speed)
 					that._play({
 						singleAction: false,
-						action: function (game) {
+						action: function (game, justStarted) {
 							if (that.speed)
-								return game.step(that.speed).done(function (gameRunStatus) {
-									if (gameRunStatus == "playing")
+								return game.step(that.speed + (justStarted ? -1 : 0)).done(function (status) {
+									if (status.gameRunStatus == "playing")
 										setTimeout(iteration, 0);
 									else
 										that.pause();

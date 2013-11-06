@@ -49,12 +49,15 @@ namespace Server
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
+				new DebuggerRemoveBreakpointHandler(debuggerManager),
+				new DebuggerAddBreakpointHandler(debuggerManager),
+				new DebuggerClearBreakpointsHandler(debuggerManager),
 				new DebuggerLoadGameHandler(debuggerManager, playersRepo),
 				new StaticHandler(staticContentPath),
 				new ArenaRankingHandler(gamesRepo),
 				new ArenaSubmitHandler(playersRepo, tournamentRunner),
 				new ArenaPlayerHandler(playersRepo, gamesRepo),
-				new ArenaRemovePlayerHandler(playersRepo, gamesRepo),
+				new ArenaRemovePlayerHandler(playersRepo, gamesRepo)
 			};
 			stopEvent = new ManualResetEvent(false);
 		}

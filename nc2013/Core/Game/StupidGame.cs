@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -32,8 +33,8 @@ namespace Core.Game
 			get { return gameState; }
 		}
 
-		[CanBeNull]
-		public Diff Step(int stepCount)
+		[NotNull]
+		public GameStepResult Step(int stepCount, [CanBeNull] HashSet<Breakpoint> breakpoints = null)
 		{
 			var res = new Diff();
 			gameState.CurrentStep += stepCount;
@@ -47,12 +48,14 @@ namespace Core.Game
 				res.Winner = gameState.Winner;
 				res.GameOver = true;
 			}
-			return res;
+			return new GameStepResult();
 		}
 
-		public void StepToEnd()
+		[NotNull]
+		public GameStepResult StepToEnd([CanBeNull] HashSet<Breakpoint> breakpoints = null)
 		{
 			Step(80000);
+			return new GameStepResult();
 		}
 
 		private ProgramStateDiff RandomProgramStateDiff(int i)

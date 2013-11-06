@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Core.Game
 {
@@ -7,9 +8,10 @@ namespace Core.Game
 		[NotNull]
 		GameState GameState { get; }
 
-		[CanBeNull]
-		Diff Step(int stepCount);
+		[NotNull]
+		GameStepResult Step(int stepCount, [CanBeNull] HashSet<Breakpoint> breakpoints = null);
 
-		void StepToEnd();
+		[NotNull]
+		GameStepResult StepToEnd([CanBeNull] HashSet<Breakpoint> breakpoints = null);
 	}
 }

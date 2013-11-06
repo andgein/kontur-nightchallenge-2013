@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using nMars.Parser.Warrior;
@@ -32,21 +33,23 @@ namespace Core.Game.MarsBased
 			get { return gameState ?? (gameState = GetGameState(0)); }
 		}
 
-		[CanBeNull]
-		public Diff Step(int stepCount)
+		[NotNull]
+		public GameStepResult Step(int stepCount, [CanBeNull] HashSet<Breakpoint> breakpoints = null)
 		{
 			currentTurn += stepCount;
 			if (currentTurn < 0)
 				currentTurn = 0;
 			gameState = GetGameState(currentTurn);
-			return null;
+			return new GameStepResult();
 		}
 
-		public void StepToEnd()
+		[NotNull]
+		public GameStepResult StepToEnd([CanBeNull] HashSet<Breakpoint> breakpoints = null)
 		{
 			var stepsToEnd = rules.MaxCycles * 2 - currentTurn;
 			if (stepsToEnd > 0)
 				Step(stepsToEnd);
+			return new GameStepResult();
 		}
 
 		[NotNull]

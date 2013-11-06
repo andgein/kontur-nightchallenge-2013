@@ -1,4 +1,5 @@
-﻿using Core.Game;
+﻿using System.Collections.Generic;
+using Core.Game;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -14,5 +15,9 @@ namespace Server.Debugging
 		[CanBeNull]
 		[JsonProperty]
 		public GameState GameState { get; set; }
+
+		[JsonProperty]
+		[CanBeNull]
+		public IEnumerable<Breakpoint> Breakpoints { get; set; }
 	}
 }

@@ -42,8 +42,46 @@ namespace Server
 			if (string.IsNullOrEmpty(valueString))
 				return null;
 			int value;
-			if (!Int32.TryParse(valueString, out value))
+			if (!int.TryParse(valueString, out value))
 				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - int is expected", paramName));
+			return value;
+		}
+
+		public static uint GetUIntParam([NotNull] this GameHttpContext context, string paramName)
+		{
+			var result = context.GetOptionalUIntParam(paramName);
+			if (!result.HasValue)
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
+			return result.Value;
+		}
+
+		public static uint? GetOptionalUIntParam([NotNull] this GameHttpContext context, string paramName)
+		{
+			var valueString = context.Request.QueryString[paramName];
+			if (string.IsNullOrEmpty(valueString))
+				return null;
+			uint value;
+			if (!uint.TryParse(valueString, out value))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - uint is expected", paramName));
+			return value;
+		}
+
+		public static TEnum GetEnumParam<TEnum>([NotNull] this GameHttpContext context, string paramName) where TEnum : struct
+		{
+			var result = context.GetOptionalEnumParam<TEnum>(paramName);
+			if (!result.HasValue)
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
+			return result.Value;
+		}
+
+		public static TEnum? GetOptionalEnumParam<TEnum>([NotNull] this GameHttpContext context, string paramName) where TEnum : struct
+		{
+			var valueString = context.Request.QueryString[paramName];
+			if (string.IsNullOrEmpty(valueString))
+				return null;
+			TEnum value;
+			if (!Enum.TryParse(valueString, out value))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - {1} is expected", paramName, typeof(TEnum).Name));
 			return value;
 		}
 

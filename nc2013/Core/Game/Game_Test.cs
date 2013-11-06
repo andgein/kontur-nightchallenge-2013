@@ -16,14 +16,14 @@ namespace Core.Game
 					StartAddress = 0
 				}
 			});
-			var diff = game.Step(1);
-			Assert.IsNotNull(diff);
-			Assert.That(diff.CurrentStep, Is.EqualTo(1));
-			Assert.That(diff.CurrentProgram, Is.EqualTo(0));
-			Assert.That(diff.GameOver, Is.False);
-			Assert.That(diff.Winner, Is.Null);
-			Assert.That(diff.MemoryDiffs, Is.Empty);
-			Assert.That(diff.ProgramStateDiffs, Is.EqualTo(new[]
+			var gameStepResult = game.Step(1);
+			Assert.IsNotNull(gameStepResult.Diff);
+			Assert.That(gameStepResult.Diff.CurrentStep, Is.EqualTo(1));
+			Assert.That(gameStepResult.Diff.CurrentProgram, Is.EqualTo(0));
+			Assert.That(gameStepResult.Diff.GameOver, Is.False);
+			Assert.That(gameStepResult.Diff.Winner, Is.Null);
+			Assert.That(gameStepResult.Diff.MemoryDiffs, Is.Empty);
+			Assert.That(gameStepResult.Diff.ProgramStateDiffs, Is.EqualTo(new[]
 			{
 				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Executed, NextPointer = 1, Program = 0},
 				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Splitted, NextPointer = 0, Program = 0}
@@ -41,13 +41,13 @@ namespace Core.Game
 					StartAddress = 0
 				}
 			});
-			var diff = game.Step(1);
-			Assert.IsNotNull(diff);
-			Assert.That(diff.CurrentStep, Is.EqualTo(1));
-			Assert.That(diff.CurrentProgram, Is.EqualTo(0));
-			Assert.That(diff.GameOver, Is.False);
-			Assert.That(diff.Winner, Is.Null);
-			Assert.That(diff.MemoryDiffs, Is.EqualTo(new[]
+			var gameStepResult = game.Step(1);
+			Assert.IsNotNull(gameStepResult.Diff);
+			Assert.That(gameStepResult.Diff.CurrentStep, Is.EqualTo(1));
+			Assert.That(gameStepResult.Diff.CurrentProgram, Is.EqualTo(0));
+			Assert.That(gameStepResult.Diff.GameOver, Is.False);
+			Assert.That(gameStepResult.Diff.Winner, Is.Null);
+			Assert.That(gameStepResult.Diff.MemoryDiffs, Is.EqualTo(new[]
 			{
 				new MemoryDiff
 				{
@@ -60,9 +60,9 @@ namespace Core.Game
 					}
 				}
 			}));
-			Assert.That(diff.ProgramStateDiffs, Is.EqualTo(new[]
+			Assert.That(gameStepResult.Diff.ProgramStateDiffs, Is.EqualTo(new[]
 			{
-				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Executed, NextPointer = 1, Program = 0},
+				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Executed, NextPointer = 1, Program = 0}
 			}));
 		}
 
@@ -77,16 +77,16 @@ namespace Core.Game
 					StartAddress = 0
 				}
 			});
-			var diff = game.Step(1);
-			Assert.IsNotNull(diff);
-			Assert.That(diff.CurrentStep, Is.EqualTo(1));
-			Assert.That(diff.CurrentProgram, Is.EqualTo(0));
-			Assert.That(diff.GameOver, Is.True);
-			Assert.That(diff.Winner, Is.Null);
-			Assert.That(diff.MemoryDiffs, Is.Empty);
-			Assert.That(diff.ProgramStateDiffs, Is.EqualTo(new[]
+			var gameStepResult = game.Step(1);
+			Assert.IsNotNull(gameStepResult.Diff);
+			Assert.That(gameStepResult.Diff.CurrentStep, Is.EqualTo(1));
+			Assert.That(gameStepResult.Diff.CurrentProgram, Is.EqualTo(0));
+			Assert.That(gameStepResult.Diff.GameOver, Is.True);
+			Assert.That(gameStepResult.Diff.Winner, Is.Null);
+			Assert.That(gameStepResult.Diff.MemoryDiffs, Is.Empty);
+			Assert.That(gameStepResult.Diff.ProgramStateDiffs, Is.EqualTo(new[]
 			{
-				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Killed, NextPointer = null, Program = 0},
+				new ProgramStateDiff {ChangeType = ProcessStateChangeType.Killed, NextPointer = null, Program = 0}
 			}));
 		}
 	}

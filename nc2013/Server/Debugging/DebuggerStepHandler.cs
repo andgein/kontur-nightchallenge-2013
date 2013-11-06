@@ -13,37 +13,13 @@ namespace Server.Debugging
 		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
-			HandleWithDiffs(context, debugger, stepCount);
-			//HandleWithoutDiffs(context, debugger, stepCount);
-		}
-
-		private static void HandleWithoutDiffs([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, int stepCount)
-		{
-			debugger.Play(game => game.Step(stepCount));
-			var response = new DebuggerStepResponse
-			{
-				GameState = debugger.State.GameState
-			};
-			context.SendResponse(response);
-		}
-
-		private static void HandleWithDiffs([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, int stepCount)
-		{
 			var currentStep = context.GetOptionalIntParam("currentStep");
-			var diff = debugger.Play(game =>
-			{
-				if (currentStep != game.GameState.CurrentStep)
-				{
-					game.Step(stepCount);
-					return null;
-				}
-				return game.Step(stepCount);
-			});
-			var response = new DebuggerStepResponse();
-			if (diff == null || DiffIsTooBig(diff))
+			var gameStepResult = debugger.Step(stepCount, currentStep);
+			var response = new DebuggerStepResponse {StoppedOnBreakpoint = gameStepResult.StoppedInBreakpoint};
+			if (gameStepResult.Diff == null || DiffIsTooBig(gameStepResult.Diff))
 				response.GameState = debugger.State.GameState;
 			else
-				response.Diff = diff;
+				response.Diff = gameStepResult.Diff;
 			context.SendResponse(response);
 		}
 

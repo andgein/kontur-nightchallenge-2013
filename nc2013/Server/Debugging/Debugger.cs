@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Core;
@@ -14,8 +15,8 @@ namespace Server.Debugging
 		private readonly IGameServer gameServer;
 		private readonly ISession session;
 		private IGame game;
-
 		private DebuggerProgramStartInfo[] lastProgramStartInfos;
+		private readonly HashSet<Breakpoint> breakpoints = new HashSet<Breakpoint>();
 
 		private readonly DebuggerProgramStartInfo[] defaultProgramStartInfos =
 		{
@@ -40,12 +41,13 @@ DAT #0, #0"}
 					try
 					{
 						game = gameServer.ResumeGame(state.GameState);
-						State.GameState = game.GameState;
 					}
 					catch (Exception e)
 					{
 						Log.For(this).Error("Resume game failed", e);
 					}
+				if (state.Breakpoints != null)
+					breakpoints.UnionWith(state.Breakpoints);
 			}
 			if (lastProgramStartInfos == null)
 				lastProgramStartInfos = defaultProgramStartInfos;
@@ -54,7 +56,7 @@ DAT #0, #0"}
 		public void StartNewGame([NotNull] DebuggerProgramStartInfo[] programStartInfos)
 		{
 			lastProgramStartInfos = programStartInfos;
-			game = gameServer.StartNewGame(programStartInfos.Where(x => !x.Disabled).Select(x => new ProgramStartInfo {Program = x.Program, StartAddress = x.StartAddress}).ToArray());
+			game = gameServer.StartNewGame(programStartInfos.Where(x => !x.Disabled).Select(x => new ProgramStartInfo { Program = x.Program, StartAddress = x.StartAddress }).ToArray());
 			session.Save(debuggerStateKey, State);
 		}
 
@@ -64,11 +66,44 @@ DAT #0, #0"}
 			SaveState();
 		}
 
-		public T Play<T>([NotNull] Func<IGame, T> action)
+		[NotNull]
+		public GameStepResult Step(int stepCount, int? currentStep)
+		{
+			return Play(() =>
+			{
+				var clientStateWasActual = currentStep == game.GameState.CurrentStep;
+				var gameStepResult = game.Step(stepCount, breakpoints);
+				return clientStateWasActual ? gameStepResult : new GameStepResult { StoppedInBreakpoint = gameStepResult.StoppedInBreakpoint };
+			});
+
+		}
+
+		[NotNull]
+		public GameStepResult StepToEnd()
+		{
+			return Play(() => game.StepToEnd(breakpoints));
+		}
+
+		public void AddBreakpoint([NotNull] Breakpoint breakpoint)
+		{
+			breakpoints.Add(breakpoint);
+		}
+
+		public void RemoveBreakpoint([NotNull] Breakpoint breakpoint)
+		{
+			breakpoints.Remove(breakpoint);
+		}
+
+		public void ClearBreakpoints()
+		{
+			breakpoints.Clear();
+		}
+
+		private T Play<T>([NotNull] Func<T> action)
 		{
 			if (game == null)
 				throw new HttpException(HttpStatusCode.Conflict, "Debugger is not started yet");
-			var result = action(game);
+			var result = action();
 			SaveState();
 			return result;
 		}
@@ -76,15 +111,6 @@ DAT #0, #0"}
 		private void SaveState()
 		{
 			session.Save(debuggerStateKey, State);
-		}
-
-		public void Play([NotNull] Action<IGame> action)
-		{
-			Play(g =>
-			{
-				action(g);
-				return 0;
-			});
 		}
 
 		[NotNull]
@@ -95,7 +121,8 @@ DAT #0, #0"}
 				return new DebuggerState
 				{
 					GameState = game == null ? null : game.GameState,
-					ProgramStartInfos = lastProgramStartInfos
+					ProgramStartInfos = lastProgramStartInfos,
+					Breakpoints = breakpoints
 				};
 			}
 		}

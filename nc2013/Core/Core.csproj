@@ -76,6 +76,8 @@
     <Compile Include="Arena\PlayersRepo.cs" />
     <Compile Include="Engine\StepResult.cs" />
     <Compile Include="Engine\WarriorStartInfo.cs" />
+    <Compile Include="Game\Breakpoint.cs" />
+    <Compile Include="Game\BreakpointType.cs" />
     <Compile Include="Game\CellState.cs" />
     <Compile Include="CodeAnnotations.cs" />
     <Compile Include="Game\CellType.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Game\Game_Test.cs" />
     <Compile Include="Game\IWarriorProgramParser.cs" />
     <Compile Include="Game\MarsBased\MarsWarriorProgramParser.cs" />
+    <Compile Include="Game\GameStepResult.cs" />
     <Compile Include="Game\StupidGameServer.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\IGame.cs" />

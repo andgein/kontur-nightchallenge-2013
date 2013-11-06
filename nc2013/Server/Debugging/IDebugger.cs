@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Game;
+﻿using Core.Game;
 using JetBrains.Annotations;
 
 namespace Server.Debugging
@@ -8,8 +7,16 @@ namespace Server.Debugging
 	{
 		void StartNewGame([NotNull] DebuggerProgramStartInfo[] programStartInfos);
 		void Reset();
-		T Play<T>([NotNull] Func<IGame, T> action);
-		void Play([NotNull] Action<IGame> action);
+
+		[NotNull]
+		GameStepResult Step(int stepCount, int? currentStep);
+
+		[NotNull]
+		GameStepResult StepToEnd();
+
+		void AddBreakpoint([NotNull] Breakpoint breakpoint);
+		void RemoveBreakpoint([NotNull] Breakpoint breakpoint);
+		void ClearBreakpoints();
 
 		[NotNull]
 		DebuggerState State { get; }
