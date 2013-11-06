@@ -126,7 +126,7 @@ namespace Core.Arena
 					if (battleResult.RunToCompletion)
 						yield return battleResult;
 					if (battleCount % 500 == 1)
-						Log.For(this).InfoFormat("Battles performed: {0}", battleCount);
+						Log.Perf.InfoFormat("Battles performed: {0}", battleCount);
 				}
 				if (botSubmissionSignal != null && botSubmissionSignal.WaitOne(0) || stopSignal != null && stopSignal.WaitOne(0))
 					yield break;

@@ -63,6 +63,19 @@
 			<conversionPattern value="%level	%date{ISO8601}	[%thread]	%logger	%m%newline" />
 		</layout>
 	</appender>
+
+	<appender name="perf-file" type="log4net.Appender.RollingFileAppender">
+		<lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+		<file type="log4net.Util.PatternString" value="..\logs\perf" />
+		<appendToFile value="true" />
+		<datePattern value="_yyyy-MM-dd" />
+		<maxSizeRollBackups value="100" />
+		<rollingStyle value="Date" />
+		<staticLogFileName value="false" />
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%level	%date{ISO8601}	[%thread]	%logger	%m%newline" />
+		</layout>
+	</appender>
 	
 	<appender name="console-info" type="log4net.Appender.ForwardingAppender" >
 		<threshold value="INFO"/>
@@ -75,8 +88,12 @@
 		<appender-ref ref="file" />
 		<appender-ref ref="errors-file" />
 	</root>
-
+	
 	<logger name="Network" additivity="false">
 		<appender-ref ref="network-file" />
+	</logger>
+
+	<logger name="Perf">
+		<appender-ref ref="perf-file" />
 	</logger>
 </log4net>
