@@ -47,8 +47,6 @@ var Game = Base.extend({
 				else if (stepResponse.diff) {
 					that.currentStep = stepResponse.diff.currentStep;
 					that.$currentStep.text(stepResponse.diff.currentStep);
-					for (var i = 0; i < that.programs.length; ++i)
-						that.programs[i].current(stepResponse.diff.currentProgram == i);
 					if (stepResponse.diff.memoryDiffs)
 						that.memory.applyDiffs(stepResponse.diff.memoryDiffs);
 					if (stepResponse.diff.programStateDiffs)
@@ -56,6 +54,8 @@ var Game = Base.extend({
 							var programStateDiff = stepResponse.diff.programStateDiffs[i];
 							that.programs[programStateDiff.program].applyDiff(programStateDiff);
 						}
+					for (var i = 0; i < that.programs.length; ++i)
+						that.programs[i].current(stepResponse.diff.currentProgram == i);
 					if (stepResponse.diff.gameOver) {
 						if (stepResponse.diff.winner != null)
 							that.programs[stepResponse.diff.winner].win();

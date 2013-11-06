@@ -68,10 +68,10 @@ namespace Core.Engine
 
 			if (!stepResult.KilledInInstruction)
 			{
-				var nextIp = stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1;
+				var nextIp = ModularArith.Mod(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
 				if (!Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
 					throw new InvalidOperationException("Execution should never overflow queue");
-				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)Warriors[CurrentWarrior].Queue.PeekOrNull(), ChangeType = ProcessStateChangeType.Executed });
+				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Executed });
 			}
 			else
 			{
@@ -82,9 +82,9 @@ namespace Core.Engine
 
 			if (stepResult.SplittedInInstruction.HasValue)
 			{
-				var nextIp = stepResult.SplittedInInstruction.GetValueOrDefault();
+				var nextIp = ModularArith.Mod(stepResult.SplittedInInstruction.GetValueOrDefault());
 				if (Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
-					stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)Warriors[CurrentWarrior].Queue.PeekOrNull(), ChangeType = ProcessStateChangeType.Splitted });
+					stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Splitted });
 			}
 			
 			CurrentStep++;
