@@ -186,7 +186,7 @@ namespace Core.Parser
 				Parse(program);
 				return null;
 			}
-			catch (Exception e)
+			catch (CompilationException e)
 			{
 				return e.Message;
 			}
