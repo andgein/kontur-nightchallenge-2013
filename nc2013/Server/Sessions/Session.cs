@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Server.Sessions
 {
@@ -39,7 +37,7 @@ namespace Server.Sessions
 					{
 						if (!Directory.Exists(sessionStorageFolder))
 							Directory.CreateDirectory(sessionStorageFolder);
-						var valueString = JsonConvert.SerializeObject(value, new JsonSerializerSettings {Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver()});
+						var valueString = JsonSerializer.Serialize(value);
 						File.WriteAllText(GetKeyFilename(key), valueString);
 					}
 				}
@@ -55,7 +53,7 @@ namespace Server.Sessions
 			var valueString = File.ReadAllText(filename);
 			try
 			{
-				var result = JsonConvert.DeserializeObject<T>(valueString, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+				var result = JsonSerializer.Deserialize<T>(valueString);
 				return result;
 			}
 			catch (Exception e)

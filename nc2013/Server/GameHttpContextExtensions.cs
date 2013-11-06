@@ -4,8 +4,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Server
 {
@@ -67,20 +65,14 @@ namespace Server
 		{
 			var reader = new StreamReader(context.Request.InputStream);
 			var data = reader.ReadToEnd();
-			var result = JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()});
+			var result = JsonSerializer.Deserialize<T>(data);
 			return result;
 		}
 
 		public static void SendResponse<T>([NotNull] this GameHttpContext context, T value, HttpStatusCode statusCode = HttpStatusCode.OK)
 		{
 			context.Response.StatusCode = (int) statusCode;
-			var jsonSettings = new JsonSerializerSettings
-			{
-				ContractResolver = new CamelCasePropertyNamesContractResolver(),
-				DateFormatString = "yyyy-MM-dd HH:mm:ss",
-				Formatting = Formatting.Indented
-			};
-			var result = JsonConvert.SerializeObject(value, jsonSettings);
+			var result = JsonSerializer.Serialize(value);
 			context.SendResponseRaw(result, "application/json; charset=utf-8");
 		}
 

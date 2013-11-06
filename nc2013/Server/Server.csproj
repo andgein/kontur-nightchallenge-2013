@@ -76,6 +76,7 @@
     <Compile Include="Debugging\DebuggerStepHandler.cs" />
     <Compile Include="HttpException.cs" />
     <Compile Include="Debugging\IDebugger.cs" />
+    <Compile Include="JsonSerializer.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Sessions\ISession.cs" />
     <Compile Include="Program.cs" />
