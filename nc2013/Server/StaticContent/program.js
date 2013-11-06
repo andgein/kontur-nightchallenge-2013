@@ -10,11 +10,11 @@ var ProgramState = Base.extend({
 		this.memory = options.memory;
 		this.programIndex = options.programIndex;
 		var that = this;
-		this.$next.click(function () {
+		this.$next.on("mousedown", function () {
 			that._scrollIntoNext();
 			return false;
 		});
-		this.$last.click(function () {
+		this.$last.on("mousedown", function () {
 			that._scrollIntoLast();
 			return false;
 		});

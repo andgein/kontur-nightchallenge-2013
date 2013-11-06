@@ -280,7 +280,14 @@
 
 		.listingItem {
 			font-family: monospace;
+			padding: 2px;
+			cursor: pointer;
 		}
+
+			.listingItem:hover {
+				text-decoration: underline;
+				color: blue;
+			}
 
 			.listingItem.nextCommand {
 				background-color: gold;
@@ -296,6 +303,7 @@
 
 			.listingItem.justScrolled {
 				border: dashed 2px red;
+				padding: 0;
 			}
 
 			.listingItem.modified0 {

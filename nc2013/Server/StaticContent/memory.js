@@ -55,6 +55,11 @@ var Cell = Base.extend({
 	},
 	attachListingItem: function($listingItem) {
 		this.$listingItem = $listingItem;
+		var that = this;
+		this.$listingItem.click(function () {
+			that.scrollIntoView();
+			return false;
+		});
 	},
 	setCellState: function(cellState) {
 		this.cellState = cellState;
@@ -70,13 +75,17 @@ var Cell = Base.extend({
 		if (Cell._lastScrolledInto)
 			Cell._lastScrolledInto.$listingItem.removeClass("justScrolled");
 		this.$listingItem.addClass("justScrolled");
-		if (!this.$listing)
+		if (!this.$listing) {
 			this.$listing = this.$listingItem.parent();
-		if (!this.$listingPivot) {
-			this.$listingPivot = $("div.listingItem:eq(5)", this.$listing);
+			this.listingHeight = this.$listing.height();
+			this.listingItemHeight = this.$listingItem.height();
 		}
+		if (!this.$listingPivot)
+			this.$listingPivot = $("div.listingItem:eq(5)", this.$listing);
 		var top = this.$listingItem.position().top;
-		this.$listing.scrollTop(top - this.$listingPivot.position().top);
+		var listingTop = this.$listing.position().top;
+		if (top < listingTop || top > listingTop + this.listingHeight - this.listingItemHeight)
+			this.$listing.scrollTop(top - this.$listingPivot.position().top);
 		Cell._lastScrolledInto = this;
 	},
 	reset: function () {
