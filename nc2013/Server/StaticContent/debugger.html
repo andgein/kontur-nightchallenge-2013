@@ -27,6 +27,16 @@
 				if (event.which == 13)
 					step();
 			});
+			$(document.body).on("keydown", function (event) {
+				if (event.ctrlKey && event.which == 37) {
+					gameRunner.step(-1);
+					return false;
+				}
+				else if (event.ctrlKey && event.which == 39) {
+					gameRunner.step(+1);
+					return false;
+				}
+			});
 
 			loadGame();
 		});
@@ -445,8 +455,8 @@
 			<button title="Run slow (x1)" onclick="gameRunner.run(slowSpeed);">></button>
 			<button title="Pause" onclick="gameRunner.pause();">||</button>
 			&nbsp; steps:
-				<button onclick="gameRunner.step(-1);">-1</button>
-			<button onclick="gameRunner.step(+1);">+1</button>
+				<button title="Ctrl+Left" onclick="gameRunner.step(-1);">-1</button>
+			<button title="Ctrl+Right" onclick="gameRunner.step(+1);">+1</button>
 			&nbsp;
 				<input type="text" value="+16" id="stepCount" />
 			<button onclick="step()">go</button>
