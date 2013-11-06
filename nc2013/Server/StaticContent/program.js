@@ -75,7 +75,10 @@ var ProgramState = Base.extend({
 	},
 	setProgramStartInfo: function (programStartInfo) {
 		this.$source.val(programStartInfo && programStartInfo.program || "");
-		this.$startAddress.val(programStartInfo && programStartInfo.startAddress || "");
+		if (programStartInfo && programStartInfo.startAddress != null)
+			this.$startAddress.val(programStartInfo.startAddress);
+		else
+			this.$startAddress.val("");
 		if (!programStartInfo || !programStartInfo.disabled)
 			this.$enabled.attr("checked", "checked");
 		else
