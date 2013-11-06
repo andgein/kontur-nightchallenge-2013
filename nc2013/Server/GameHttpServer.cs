@@ -69,7 +69,7 @@ namespace Server
 				while (true)
 				{
 					var asyncResult = listener.BeginGetContext(null, null);
-					if (WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, stopEvent }) == 1)
+					if (WaitHandle.WaitAny(new[] {asyncResult.AsyncWaitHandle, stopEvent}) == 1)
 						break;
 					var httpListenerContext = listener.EndGetContext(asyncResult);
 					Task.Factory.StartNew(() => HandleRequest(httpListenerContext));
@@ -144,7 +144,7 @@ namespace Server
 					Log.For(this).Error("Request failed", e);
 					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-					httpListenerContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
 						writer.Write(e.ToString());
 					httpListenerContext.Response.Close();
