@@ -1,3 +1,3 @@
-HttpListenerPrefix = http://*:8080/corewar/
+HttpListenerPrefix = http://*:8080/
 ProductionMode = true
 GodAccessOnly = true
