@@ -20,6 +20,9 @@ namespace Server.Arena
 
 		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
+			if (!arenaState.SubmitIsAllowed)
+				throw new HttpException(HttpStatusCode.Forbidden, "Bot submission is disabled");
+
 			var arenaPlayer = context.GetRequest<ArenaPlayer>();
 			try
 			{

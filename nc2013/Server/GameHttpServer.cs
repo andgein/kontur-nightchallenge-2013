@@ -56,6 +56,8 @@ namespace Server
 				new ArenaSubmitHandler(arenaState, tournamentRunner),
 				new ArenaPlayerHandler(arenaState),
 				new ArenaRemovePlayerHandler(arenaState),
+				new ArenaSubmitFormHandler(arenaState),
+				new ArenaSetSubmitIsEnabledStateHandler(arenaState),
 			};
 			stopEvent = new ManualResetEvent(false);
 		}

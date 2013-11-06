@@ -14,11 +14,11 @@
 	<script>
 		var PlayerController = function($scope, $http) {
 			var f = MakeJsonController(server.basePath() + "arena/player" + window.location.search);
-			$scope.openDebugger = function (gameInfo) {
+			$scope.openDebugger = function(gameInfo) {
 				window.location = "debugger/load?" + $.param(gameInfo);
 			};
 			f($scope, $http);
-		}
+		};
 	</script>
 </head>
 <body>

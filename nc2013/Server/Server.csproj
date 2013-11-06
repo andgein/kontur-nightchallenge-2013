@@ -50,6 +50,9 @@
   <ItemGroup>
     <Compile Include="Arena\ArenaRankingResponse.cs" />
     <Compile Include="Arena\ArenaRemovePlayerHandler.cs" />
+    <Compile Include="Arena\ArenaSetSubmitIsEnabledStateHandler.cs" />
+    <Compile Include="Arena\ArenaSubmitFormHandler.cs" />
+    <Compile Include="Arena\ArenaSubmitResponse.cs" />
     <Compile Include="Arena\BotVersionInfo.cs" />
     <Compile Include="Arena\FinishedGameInfo.cs" />
     <Compile Include="Arena\FinishedGamesWithEnemy.cs" />

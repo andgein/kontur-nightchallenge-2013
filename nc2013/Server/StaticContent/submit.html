@@ -12,65 +12,81 @@
 	<script src="common.js"></script>
 	<script src="server.js"></script>
 	<script>
-		var successAlert;
-		var errorAlert;
-		$(function () {
-			successAlert = $(".alert-success");
-			errorAlert = $(".alert-danger");
-			errorAlert.hide();
-			successAlert.hide();
-			$('form').FormCache().submit(function (e) {
-				errorAlert.hide();
-				successAlert.hide();
-				server.post("arena/submit", $('form').asJsonString()).pipe(function() {
-					successAlert.fadeIn();
-				}, function(errorMessage) {
-					errorAlert.fadeIn();
+		var SubmitFormController = function ($scope, $http) {
+			var f = MakeJsonController(server.basePath() + "arena/submit/form" + window.location.search);
+			$scope.enableSubmit = function () {
+				window.location = "arena/submit/allowed/set?value=true";
+			};
+			$scope.disableSubmit = function () {
+				window.location = "arena/submit/allowed/set?value=false";
+			};
+			$scope.submit = function () {
+				var errorContainer = $("#errorContainer");
+				var successContainer = $("#successContainer");
+				errorContainer.hide();
+				successContainer.hide();
+				server.post("arena/submit", $('form').asJsonString()).pipe(function () {
+					successContainer.fadeIn();
+				}, function (errorMessage) {
+					errorContainer.fadeIn();
 					$("#error-message").text(errorMessage);
 				});
-				e.preventDefault();
-			});
-		});
+			};
+			f($scope, $http);
+		};
 	</script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" ng-controller="SubmitFormController">
 		<script>nav()</script>
-		<div class="page-header">
-			<h1>Отправить бота</h1>
+		<div ng-if="submitIsAllowed">
+			<div class="page-header">
+				<h1>Отправить бота</h1>
+				<div ng-if="godMode"><a href="javascript:void(0)" ng-click="disableSubmit()">Закрыть арену</a></div>
+			</div>
+			<div class="row">
+				<form class="col-md-4 form-horizontal">
+					<div class="form-group">
+						<p class="help-block">При первом использовании придумайте логин и пароль вашей команды и заполните поле "Состав команды".</p>
+					</div>
+					<div class="form-group" id="name-group">
+						<label for="">Имя команды (логин)</label>
+						<input type="text" name="name" id="name" class="form-control" placeholder="логин" />
+					</div>
+					<div class="form-group" id="password-group">
+						<label for="password">Пароль</label>
+						<input type="password" name="password" id="password" class="form-control" placeholder="пароль" />
+					</div>
+					<div class="form-group" id="authors-group">
+						<label for="people">Состав команды</label>
+						<textarea rows="4" name="authors" id="authors" class="form-control" placeholder="обязательно лишь при отправке первой версии бота"></textarea>
+					</div>
+					<div class="form-group" id="program-group">
+						<label for="program">Код бота</label>
+						<textarea rows="10" name="program" id="program" class="form-control input-code" placeholder="MOV 0, 1"></textarea>
+					</div>
+					<div class="form-group alert alert-danger" id="errorContainer">
+						<strong>Бот не отправлен!</strong>
+						<div id="error-message"></div>
+					</div>
+					<div class="form-group alert alert-success" id="successContainer">
+						Ваш бот был успешно отправлен в бой! :D
+					</div>
+					<div class="form-group">
+						<button class="btn btn-default btn-lg" ng-click="submit()">В бой его!</button>
+					</div>
+				</form>
+			</div>
+			<script>
+				$("#errorContainer").hide();
+				$("#successContainer").hide();
+		</script>
 		</div>
-		<div class="row">
-			<form class="col-md-4 form-horizontal">
-				<div class="form-group">
-					<p class="help-block">При первом использовании придумайте логин и пароль вашей команды и заполните поле "Состав команды".</p>
-				</div>
-				<div class="form-group" id="name-group">
-					<label for="">Имя команды (логин)</label>
-					<input type="text" name="name" id="name" class="form-control" placeholder="логин" />
-				</div>
-				<div class="form-group" id="password-group">
-					<label for="password">Пароль</label>
-					<input type="password" name="password" id="password" class="form-control" placeholder="пароль" />
-				</div>
-				<div class="form-group" id="authors-group">
-					<label for="people">Состав команды</label>
-					<textarea rows="4" name="authors" id="authors" class="form-control" placeholder="обязательно лишь при отправке первой версии бота"></textarea>
-				</div>
-				<div class="form-group" id="program-group">
-					<label for="program">Код бота</label>
-					<textarea rows="10" name="program" id="program" class="form-control input-code" placeholder="MOV 0, 1"></textarea>
-				</div>
-				<div class="form-group alert alert-danger">
-					<strong>Бот не отправлен!</strong>
-					<div id="error-message"></div>
-				</div>
-				<div class="form-group alert alert-success">
-					Ваш бот был успешно отправлен в бой! :D
-				</div>
-				<div class="form-group">
-					<button class="btn btn-default btn-lg">В бой его!</button>
-				</div>
-			</form>
+		<div ng-if="!submitIsAllowed">
+			<div class="page-header">
+				<h1>Прием ботов прекращен</h1>
+				<div ng-if="godMode"><a href="javascript:void(0)" ng-click="enableSubmit()">Открыть арену</a></div>
+			</div>
 		</div>
 	</div>
 </body>

@@ -22,10 +22,29 @@ namespace Server
 			var guidString = context.Request.QueryString[paramName];
 			if (string.IsNullOrEmpty(guidString))
 				return null;
-			Guid values;
-			if (!Guid.TryParse(guidString, out values))
+			Guid value;
+			if (!Guid.TryParse(guidString, out value))
 				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - Guid is expected", paramName));
-			return values;
+			return value;
+		}
+
+		public static bool GetBoolParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
+		{
+			var value = context.GetOptionalBoolParam(paramName);
+			if (!value.HasValue)
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is not specified", paramName));
+			return value.Value;
+		}
+
+		public static bool? GetOptionalBoolParam([NotNull] this GameHttpContext context, [NotNull] string paramName)
+		{
+			var boolString = context.Request.QueryString[paramName];
+			if (string.IsNullOrEmpty(boolString))
+				return null;
+			bool value;
+			if (!bool.TryParse(boolString, out value))
+				throw new HttpException(HttpStatusCode.BadRequest, string.Format("Query parameter '{0}' is invalid - Boolean is expected", paramName));
+			return value;
 		}
 
 		public static int GetIntParam([NotNull] this GameHttpContext context, string paramName)

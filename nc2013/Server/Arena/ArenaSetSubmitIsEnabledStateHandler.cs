@@ -5,12 +5,12 @@ using Server.Handlers;
 
 namespace Server.Arena
 {
-	public class ArenaRemovePlayerHandler : StrictPathHttpHandlerBase
+	public class ArenaSetSubmitIsEnabledStateHandler : StrictPathHttpHandlerBase
 	{
 		private readonly ArenaState arenaState;
 
-		public ArenaRemovePlayerHandler([NotNull] ArenaState arenaState)
-			: base("arena/player/remove")
+		public ArenaSetSubmitIsEnabledStateHandler([NotNull] ArenaState arenaState)
+			: base("arena/submit/allowed/set")
 		{
 			this.arenaState = arenaState;
 		}
@@ -20,11 +20,8 @@ namespace Server.Arena
 			if (!godMode)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
-			var playerName = context.GetStringParam("name");
-			arenaState.GamesRepo.RemovePlayer(playerName);
-			arenaState.PlayersRepo.Remove(playerName);
-
-			context.Redirect(context.BasePath + "ranking.html");
+			arenaState.SubmitIsAllowed = context.GetBoolParam("value");
+			context.Redirect(context.BasePath + "submit.html");
 		}
 	}
 }
