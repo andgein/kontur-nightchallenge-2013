@@ -64,6 +64,10 @@ namespace Core.Parser
 				{
 					if (!statement.HasLabel)
 						throw new CompilationException("EQU statement should have label", State);
+					if (warrior.Constants.ContainsKey(statement.Label))
+						throw new CompilationException("Constant with same label '" + statement.Label + "' already exists", State);
+					if (warrior.Labels.ContainsKey(statement.Label))
+						throw new CompilationException("Label with same label '" + statement.Label + "' already exists", State);
 					warrior.Constants[statement.Label] = statement.FieldA;
 					continue;
 				}
