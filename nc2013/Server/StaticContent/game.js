@@ -77,7 +77,8 @@ var Game = Base.extend({
 				this.programs[programStateDiff.program].applyDiff(programStateDiff);
 			}
 		for (var i = 0; i < this.programs.length; ++i)
-			this.programs[i].current(diff.currentProgram == i);
+			if (diff.currentProgram == i)
+				this.programs[i].nextProgram();
 		if (diff.gameOver) {
 			if (diff.winner != null)
 				this.programs[diff.winner].win();
@@ -105,7 +106,8 @@ var Game = Base.extend({
 		this.memory.setCellStates(gameState.memoryState);
 		for (var i = 0; i < gameState.programStates.length; ++i) {
 			this.programs[i].setProgramState(gameState.programStates[i]);
-			this.programs[i].current(gameState.currentProgram == i);
+			if (gameState.currentProgram == i)
+				this.programs[i].nextProgram();
 		}
 		if (gameState.gameOver) {
 			if (gameState.winner != null)
@@ -145,11 +147,13 @@ var GameRunner = Base.extend({
 				justStarted = true;
 			} else
 				result = $.when(status);
-			if (status.stoppedOnBreakpoint)
+			if (status.stoppedOnBreakpoint) {
+				status.stoppedOnBreakpoint = false;
 				that.pause();
+			}
 			if (options.action)
 				result = result.pipe(function () {
-					return options.action(that.game, justStarted);
+					return options.action(that.game, justStarted) || status;
 				});
 			return result;
 		}

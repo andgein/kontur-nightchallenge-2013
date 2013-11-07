@@ -1,7 +1,6 @@
 var ProgramState = Base.extend({
 	constructor: function (options) {
 		this.$processCount = options.$processCount;
-		this.$last = options.$last;
 		this.$next = options.$next;
 		this.$win = options.$win;
 		this.$source = options.$source;
@@ -9,15 +8,11 @@ var ProgramState = Base.extend({
 		this.$startAddress = options.$startAddress;
 		this.memory = options.memory;
 		this.programIndex = options.programIndex;
-		var that = this;
-		this.$next.on("mousedown", function () {
-			that._scrollIntoNext();
-			return false;
+		this.lastView = new CellView({
+			$view: options.$last,
+			useText: true
 		});
-		this.$last.on("mousedown", function () {
-			that._scrollIntoLast();
-			return false;
-		});
+		this.nextViews = [];
 	},
 	applyDiff: function (programStateDiff) {
 		this._removeInstructionPointers();
@@ -52,20 +47,15 @@ var ProgramState = Base.extend({
 		this.$win.removeClass("draw");
 		this.$win.addClass("winner");
 	},
-	draw: function() {
+	draw: function () {
 		this.$win.removeClass("winner");
 		this.$win.addClass("draw");
 	},
 	autofocus: function (autofocus) {
 		this.useAutofocus = autofocus;
 	},
-	current: function (isCurrent) {
-		if (isCurrent) {
-			this.$nextCommand && this.$nextCommand.addClass("current");
-			this._markNextCommand();
-		}
-		else
-			this.$nextCommand && this.$nextCommand.removeClass("current");
+	nextProgram: function () {
+		this._setNextCommand();
 	},
 	setProgramState: function (programState) {
 		this._removeInstructionPointers();
@@ -100,56 +90,47 @@ var ProgramState = Base.extend({
 		if (!this.programState || !this.programState.processPointers)
 			return;
 		for (var i = 0; i < this.programState.processPointers.length; ++i)
-			this.memory.getCell(this.programState.processPointers[i]).setInstructionPointer(this.programIndex);
+			this.memory.getCell(this.programState.processPointers[i]).addInstructionPointer(this.programIndex);
 	},
 	_refreshState: function () {
 		this.$processCount.text(this.programState ? this.programState.processPointers.length : "");
 
-		if (this.programState && this.programState.lastPointer) {
+		if (this.programState && this.programState.lastPointer != null) {
 			var lastCell = this.memory.getCell(this.programState.lastPointer);
-			this.$last.text(lastCell.getListingItemContent());
+			this.lastView.setCell(lastCell);
 		} else
-			this.$last.text("");
-		var $nextCommands = $("div.command", this.$next);
-		if (this.programState && this.programState.processPointers.length > 0) {
-			var that = this;
-			$nextCommands.each(function (index, div) {
-				var processPointers = that.programState.processPointers;
-				if (index < processPointers.length)
-					$(div).removeClass("hidden").text(that.memory.getCell(processPointers[index]).getListingItemContent());
+			this.lastView.setCell(null);
+		if (this.programState) {
+			for (var i = 0; i < this.nextViews.length; ++i) {
+				if (i < this.programState.processPointers.length)
+					this.nextViews[i].setCell(this.memory.getCell(this.programState.processPointers[i]));
 				else
-					$(div).addClass("hidden");
-			});
-			if ($nextCommands.length < this.programState.processPointers.length) {
-				var commandsHtml = "";
-				for (var i = $nextCommands.length; i < this.programState.processPointers.length; ++i)
-					commandsHtml += "<div class='command'>" + this.memory.getCell(this.programState.processPointers[i]).getListingItemContent() + "</div>";
-				this.$next.append(commandsHtml);
+					this.nextViews[i].setCell(null);
 			}
-			if (!this.$nextCommand)
-				this.$nextCommand = $("div.command:eq(0)", this.$next);
+			if (this.nextViews.length < this.programState.processPointers.length) {
+				var builder = new CellView.Builder({
+					$container: this.$next,
+					useText: true,
+					cellClass: "listingItem"
+				});
+				for (var i = this.nextViews.length; i < this.programState.processPointers.length; ++i)
+					builder.addCell(this.memory.getCell(this.programState.processPointers[i]));
+				this.nextViews = this.nextViews.concat(builder.build());
+			}
+			if (!this._currentIsSet && this.nextViews.length > 0)
+				this.nextViews[0].addClass("current");
 		}
-		else
-			$nextCommands.addClass("hidden");
+		else {
+			for (var i = 0; i < this.nextViews.length; ++i)
+				this.nextViews[i].setCell(null);
+		}
 	},
-	_markNextCommand: function () {
+	_setNextCommand: function () {
 		if (this.programState && this.programState.processPointers.length > 0) {
 			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
 			nextCell.setNextCommand();
 			if (this.useAutofocus)
 				nextCell.scrollIntoView();
-		}
-	},
-	_scrollIntoNext: function () {
-		if (this.programState && this.programState.processPointers.length > 0) {
-			var nextCell = this.memory.getCell(this.programState.processPointers[0]);
-			nextCell.scrollIntoView();
-		}
-	},
-	_scrollIntoLast: function () {
-		if (this.programState && this.programState.lastPointer) {
-			var lastCell = this.memory.getCell(this.programState.lastPointer);
-			lastCell.scrollIntoView();
 		}
 	}
 });

@@ -14,6 +14,9 @@
 	<script src="server.js"></script>
 	<script src="game.js"></script>
 	<script src="memory.js"></script>
+	<script src="cell.js"></script>
+	<script src="cell.view.js"></script>
+	<script src="listingitem.view.js"></script>
 	<script src="program.js"></script>
 	<script type="text/javascript">
 
@@ -46,7 +49,7 @@
 			var memory = new Memory({
 				$map: $("#map"),
 				$listing: $("#listing"),
-				cellCount: 8000
+				cellCount: coreSize
 			});
 			programs = [];
 			programs.push(new ProgramState({
@@ -82,6 +85,23 @@
 				onGameRunStatusChanged: gameRunStatusChanged
 			});
 			gameRunner.load();
+
+			var listingBuilder = new CellView.Builder({
+				useText: true,
+				$container: $("#listing"),
+				cellClass: "listingItem",
+				viewClass: ListingItemView
+			});
+			listingBuilder.addMemory(memory);
+			listingBuilder.build();
+
+			var mapBuilder = new CellView.Builder({
+				useText: false,
+				$container: $("#map"),
+				cellClass: "mapCell"
+			});
+			mapBuilder.addMemory(memory);
+			mapBuilder.build();
 		}
 
 		function showGameError(err) {
@@ -175,6 +195,7 @@
 		.map-header, .listing-header {
 			font-weight: bolder;
 		}
+
 		.listing-header-second {
 			padding-top: 10px;
 		}
@@ -297,36 +318,46 @@
 			padding: 2px;
 			cursor: pointer;
 		}
-
+		
 			.listingItem:hover {
 				text-decoration: underline;
 				color: blue;
 			}
 
-			.listingItem.nextCommand {
-				background-color: gold;
+		.command {
+			font-family: monospace;
+			padding: 2px;
+			cursor: pointer;
+		}
+			.command:hover {
+				text-decoration: underline;
+				color: blue;
 			}
 
-				.listingItem.nextCommand.modified0 {
-					background-color: #df7c00;
-				}
+		#listing .listingItem.nextCommand {
+			background-color: gold;
+		}
 
-				.listingItem.nextCommand.modified1 {
-					background-color: #70be60;
-				}
-
-			.listingItem.justScrolled {
-				border: dashed 2px red;
-				padding: 0;
+			#listing .listingItem.nextCommand.modified0 {
+				background-color: #df7c00;
 			}
 
-			.listingItem.modified0 {
-				background-color: darkorange;
+			#listing .listingItem.nextCommand.modified1 {
+				background-color: #70be60;
 			}
 
-			.listingItem.modified1 {
-				background-color: lightgreen;
-			}
+		#listing .listingItem.justScrolled {
+			border: dashed 2px red;
+			padding: 0;
+		}
+
+		.listingItem.modified0 {
+			background-color: darkorange;
+		}
+
+		.listingItem.modified1 {
+			background-color: lightgreen;
+		}
 
 		.debugger-winnerState .winner-info {
 			display: none;
@@ -351,20 +382,6 @@
 			padding-right: 20px;
 			padding-top: 10px;
 		}
-
-			.overview-program-container .command {
-				font-family: monospace;
-				cursor: pointer;
-			}
-
-				.overview-program-container .command:hover {
-					text-decoration: underline;
-					color: blue;
-				}
-
-				.overview-program-container .command.current {
-					background-color: gold;
-				}
 
 		.run-status-playing .debugger-gameRunStatus-playing,
 		.run-status-loading .debugger-gameRunStatus-loading,
@@ -416,6 +433,11 @@
 			overflow-y: scroll;
 			border: solid 1px black;
 		}
+
+			.nextCommands .listingItem.nextCommand.current {
+				border: solid 2px red;
+				padding: 0;
+			}
 
 		.listing-breakpoints {
 			padding-top: 10px;
@@ -474,11 +496,6 @@
 		<div class="map-container">
 			<div class="map-header">Memory</div>
 			<div id="map">
-				<script type="text/javascript">
-					for (var i = 0; i < coreSize; ++i) {
-						document.write("<div class='mapCell'></div>");
-					}
-				</script>
 			</div>
 			<div class="overview-container">
 				<div class="map-header">Overview</div>
@@ -518,15 +535,9 @@
 					<label for="autofocus">autofocus</label></span>
 			</div>
 			<div id="listing">
-				<script type="text/javascript">
-					for (var i = 0; i < coreSize; ++i) {
-						document.write("<div class='listingItem'></div>");
-					}
-				</script>
 			</div>
 			<div class="listing-header listing-header-second">Breakpoints</div>
 			<div class="listing-breakpoints">
-				
 			</div>
 		</div>
 	</div>
