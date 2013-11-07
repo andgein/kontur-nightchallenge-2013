@@ -4,8 +4,8 @@ var CellView = Base.extend({
 		this.$view = options.$view;
 		this.$container = options.$container;
 		var that = this;
-		this.$view.on("mousedown", function () {
-			if (that.cell)
+		this.$view.on("mousedown", function (e) {
+			if (that.cell && e.which == 1)
 				that.cell.scrollIntoView();
 		});
 		this.cell = options.cell;
