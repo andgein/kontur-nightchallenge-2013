@@ -25,5 +25,7 @@ namespace Core.Arena
 		public bool GodAccessOnly { get; private set; }
 
 		public bool SubmitIsAllowed { get; set; }
+
+		public bool TournamentIsRunning { get; set; }
 	}
 }

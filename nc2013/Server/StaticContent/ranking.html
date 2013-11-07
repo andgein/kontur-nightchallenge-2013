@@ -33,9 +33,10 @@
 
 		<div class="page-header">
 			<h1>Турнирная таблица</h1>
+			<span ng-if="tournamentIsRunning">Идет очередной турнир...</span>
 		</div>
 
-		<div>Время завершения турнира: {{ranking.timestamp}}</div>
+		<div>Время завершения последнего турнира: {{ranking.timestamp}} UTC</div>
 		<table class="table table-condensed table-bordered ranking-table">
 			<tr>
 				<th>№</th>
@@ -65,7 +66,7 @@
 		
 		<h3>История турниров</h3>
 		<ul>
-			<li ng-repeat="historyItem in historyItems"><a href="ranking.html?tournamentId={{historyItem.tournamentId}}">Время начала: {{historyItem.creationTimestamp}}</a></li>
+			<li ng-repeat="historyItem in historyItems"><a href="ranking.html?tournamentId={{historyItem.tournamentId}}">Время начала: {{historyItem.creationTimestamp}} UTC</a></li>
 		</ul>
 	</div>
 </body>

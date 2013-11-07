@@ -29,6 +29,7 @@ namespace Server.Arena
 			{
 				Ranking = ranking,
 				HistoryItems = tournamentHistoryItems,
+				TournamentIsRunning = arenaState.TournamentIsRunning,
 				GodMode = godMode,
 			};
 			context.SendResponse(response);

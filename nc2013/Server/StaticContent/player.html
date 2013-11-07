@@ -28,7 +28,7 @@
 			<h1>Бот {{rankingEntry.name}} v{{rankingEntry.version}}</h1>
 		</div>
 		<div>Авторство: {{authors}}</div>
-		<div>Время создания: {{submitTimestamp}}</div>
+		<div>Время создания: {{submitTimestamp}} UTC</div>
 		<div>Всего боев: {{rankingEntry.games}}</div>
 		<div>Всего очков: {{rankingEntry.score}} <span class="small">({{rankingEntry.score/rankingEntry.games | number:1}} за бой)</span></div>
 		<div>Побед: {{rankingEntry.wins}} <span class="small">({{100*rankingEntry.wins/rankingEntry.games | number:0}}%)</span></div>
@@ -64,7 +64,7 @@
 		<h3>Все версии бота</h3>
 		<ul>
 			<li ng-repeat="botVersionInfo in botVersionInfos">
-				<a href="player.html?name={{botVersionInfo.name}}&version={{botVersionInfo.version}}">{{botVersionInfo.name}} v{{botVersionInfo.version}}</a> ({{botVersionInfo.timestamp}})
+				<a href="player.html?name={{botVersionInfo.name}}&version={{botVersionInfo.version}}">{{botVersionInfo.name}} v{{botVersionInfo.version}}</a> ({{botVersionInfo.timestamp}} UTC)
 			</li>
 		</ul>
 	</div>

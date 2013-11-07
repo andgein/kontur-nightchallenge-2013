@@ -9,18 +9,16 @@ namespace Server.Arena
 {
 	public class TournamentRunner : ITournamentRunner
 	{
-		private readonly IPlayersRepo playersRepo;
-		private readonly IGamesRepo gamesRepo;
+		private readonly ArenaState arenaState;
 		private readonly IBattleRunner battleRunner;
 		private readonly int battlesPerPair;
 		private readonly ManualResetEvent stopSignal = new ManualResetEvent(false);
 		private readonly AutoResetEvent botSubmissionSignal = new AutoResetEvent(false);
 		private readonly Thread thread;
 
-		public TournamentRunner([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] IBattleRunner battleRunner, int battlesPerPair)
+		public TournamentRunner([NotNull] ArenaState arenaState, [NotNull] IBattleRunner battleRunner, int battlesPerPair)
 		{
-			this.playersRepo = playersRepo;
-			this.gamesRepo = gamesRepo;
+			this.arenaState = arenaState;
 			this.battleRunner = battleRunner;
 			this.battlesPerPair = battlesPerPair;
 			thread = new Thread(TournamentCycle)
@@ -61,7 +59,9 @@ namespace Server.Arena
 					if (players != null)
 					{
 						Log.For(this).InfoFormat("Warriors changed! Tournament {0}: {1} warriors", tournamentId, players.Length);
+						arenaState.TournamentIsRunning = true;
 						Runtime.DoWithPerfMeasurement(string.Format("RunTournament({0})", tournamentId), () => RunTournament(players, tournamentId));
+						arenaState.TournamentIsRunning = false;
 					}
 				}
 				catch (Exception e)
@@ -75,10 +75,10 @@ namespace Server.Arena
 		private ArenaPlayer[] TryStartTournament(out string tournamentId)
 		{
 			tournamentId = null;
-			var players = playersRepo.LoadLastVersions();
+			var players = arenaState.PlayersRepo.LoadLastVersions();
 			if (players.Length == 0) return null;
 			tournamentId = players.Select(p => p.Timestamp).Max().Ticks.ToString();
-			if (!gamesRepo.TryStartTournament(tournamentId))
+			if (!arenaState.GamesRepo.TryStartTournament(tournamentId))
 				return null;
 			return players;
 		}
@@ -93,7 +93,7 @@ namespace Server.Arena
 			}).ToArray();
 			var tournament = new RoundRobinTournament(battleRunner, battlesPerPair, tournamentId, tournamentPlayers, botSubmissionSignal, stopSignal);
 			var result = tournament.Run();
-			gamesRepo.SaveTournamentResult(tournamentId, result);
+			arenaState.GamesRepo.SaveTournamentResult(tournamentId, result);
 		}
 	}
 }
