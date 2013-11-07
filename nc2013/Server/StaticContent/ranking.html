@@ -16,7 +16,13 @@
 			$scope.removePlayer = function(player) {
 				window.location = "arena/player/remove?name=" + player.name;
 			};
-			f($scope, $http);
+
+			function refresh() {
+				f($scope, $http);
+			}
+
+			refresh();
+			setInterval(refresh, 10000);
 		};
 	</script>
 	<style>
