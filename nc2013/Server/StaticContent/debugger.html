@@ -471,6 +471,16 @@
 			overflow-y: scroll;
 		}
 
+			#breakpoints .breakpoint {
+				padding: 2px;
+			}
+
+			#breakpoints .breakpoint.stopped {
+				background-color: gold;
+				border: solid 2px red;
+				padding: 0;
+			}
+
 			#breakpoints .item-control {
 				float: right;
 				font-size: x-small;
@@ -516,6 +526,7 @@
 
 		.break-command {
 			font-family: monospace;
+			font-weight: bold;
 			cursor: pointer;
 		}
 
@@ -560,6 +571,7 @@
 		<div class="debugger-buttons-container">
 			<a href="javascript:void(0)" title="Reset current game and return to programs listing" onclick="gameRunner.reset();">< back</a>
 			&nbsp;&nbsp;
+			<button title="Restart game. Warriors start addresses will not change" onclick="gameRunner.restart();">&#8634;</button>
 				<button title="Run to end" onclick="gameRunner.stepToEnd();">>>>|</button>
 			<button title="Run very fast (x32)" onclick="gameRunner.run(speedX32);">>>></button>
 			<button title="Run fast (x16)" onclick="gameRunner.run(speedX16);">>></button>
@@ -622,24 +634,30 @@
 			<div id="breakpoints">
 			</div>
 			<div id="breakpointEditContainer" class="hidden">
-				<div class="breakpoint-breakAddress-container">Break on address:
+				<div class="breakpoint-breakAddress-container">
+					Break on address:
 					<div class="break-command" id="editBreakpoint-cell"></div>
 				</div>
 				<div>
 					<input type="checkbox" id="breakA" />
-					<label for="breakA">Break A here</label></div>
+					<label for="breakA">Break A here</label>
+				</div>
 				<div>
 					<input type="checkbox" id="breakB" />
-					<label for="breakB">Break B here</label></div>
+					<label for="breakB">Break B here</label>
+				</div>
 				<div>
 					<input type="checkbox" id="breakMemoryA" />
-					<label for="breakMemoryA">Break when A changes memory</label></div>
+					<label for="breakMemoryA">Break when A changes memory</label>
+				</div>
 				<div>
 					<input type="checkbox" id="breakMemoryB" />
-					<label for="breakMemoryB">Break when B changes memory</label></div>
+					<label for="breakMemoryB">Break when B changes memory</label>
+				</div>
 				<div>
 					<button id="editBreakpoint-apply">Apply</button>
-					<button id="editBreakpoint-cancel">Cancel</button></div>
+					<button id="editBreakpoint-cancel">Cancel</button>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -84,6 +84,12 @@ DAT #0, #0"}
 			return Play(() => game.StepToEnd(breakpoints));
 		}
 
+		[NotNull]
+		public GameStepResult Restart()
+		{
+			return Play(() => game.Step(-game.GameState.CurrentStep, breakpoints));
+		}
+
 		public void AddBreakpoint([NotNull] Breakpoint breakpoint)
 		{
 			breakpoints.Add(breakpoint);

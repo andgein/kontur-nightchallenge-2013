@@ -48,6 +48,7 @@ namespace Server
 				new DebuggerStateHandler(debuggerManager),
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
+				new DebuggerRestartHandler(debuggerManager), 
 				new DebuggerResetHandler(debuggerManager),
 				new DebuggerRemoveBreakpointHandler(debuggerManager),
 				new DebuggerAddBreakpointHandler(debuggerManager),

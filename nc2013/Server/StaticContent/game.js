@@ -37,6 +37,7 @@ var Game = Base.extend({
 			});
 	},
 	_handleStepResponse: function (stepResponse) {
+		this.breakpoints.stoppedOnBreakpoint(stepResponse.stoppedOnBreakpoint);
 		if (stepResponse.gameState) {
 			return {
 				gameRunStatus: this._setGameState(stepResponse.gameState),
@@ -54,6 +55,13 @@ var Game = Base.extend({
 	stepToEnd: function () {
 		var that = this;
 		return server.get("debugger/step/end")
+			.pipe(function (stepResponse) {
+				return that._handleStepResponse(stepResponse);
+			});
+	},
+	restart: function () {
+		var that = this;
+		return server.get("debugger/restart")
 			.pipe(function (stepResponse) {
 				return that._handleStepResponse(stepResponse);
 			});
@@ -144,13 +152,13 @@ var GameRunner = Base.extend({
 		var that = this;
 		function nextAction(status) {
 			var result, justStarted = false;
-			if (options.requirePlaying && status.gameRunStatus != "playing") {
+			if (options.requirePlaying && status.gameRunStatus != "playing" && status.gameRunStatus != "gameover") {
 				result = that.game.start();
 				justStarted = true;
 			} else
 				result = $.when(status);
 			if (status.stoppedOnBreakpoint) {
-				status.stoppedOnBreakpoint = false;
+				status.stoppedOnBreakpoint = null;
 				that.pause();
 			}
 			if (options.action)
@@ -181,6 +189,13 @@ var GameRunner = Base.extend({
 			requirePlaying: false,
 			action: function (game) {
 				return game.reset();
+			}
+		});
+	},
+	restart: function () {
+		this._play({
+			action: function (game) {
+				return game.restart();
 			}
 		});
 	},

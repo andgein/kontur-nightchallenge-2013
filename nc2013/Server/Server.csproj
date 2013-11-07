@@ -68,6 +68,7 @@
     <Compile Include="Debugging\DebuggerProgramStartInfo.cs" />
     <Compile Include="Debugging\DebuggerRemoveBreakpointHandler.cs" />
     <Compile Include="Debugging\DebuggerResetHandler.cs" />
+    <Compile Include="Debugging\DebuggerRestartHandler.cs" />
     <Compile Include="Debugging\DebuggerState.cs" />
     <Compile Include="Debugging\DebuggerStepResponse.cs" />
     <Compile Include="Debugging\Debugger.cs" />
