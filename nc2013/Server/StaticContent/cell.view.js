@@ -17,11 +17,17 @@ var CellView = Base.extend({
 			if (this.cell)
 				this.cell.detachView(this);
 			this.cell = cell;
-			if (this.cell)
+			if (this.cell) {
 				this.cell.attachView(this);
+				this.$view.removeClass("hidden");
+			} else
+				this.$view.addClass("hidden");
 		}
 	},
 	scrollIntoView: function () { },
+	remove$: function () {
+		this.$view.remove();
+	},
 	addClass: function (viewClass) {
 		this.$view.addClass(viewClass);
 	},
@@ -33,13 +39,23 @@ var CellView = Base.extend({
 			this.$view.text(text);
 	}
 }, {
+	itemTemplate: "<div class='%cellClass%'>%cellText%</div>",
 	Builder: Base.extend({
 		constructor: function (options) {
 			this.$container = options.$container;
 			this.cellClass = options.cellClass;
 			this.useText = options.useText;
 			var viewClass = options.viewClass || CellView;
+			var itemTemplate = options.itemTemplate || viewClass.itemTemplate || CellView.itemTemplate;
+			var that = this;
 			this.viewFactory = options.viewFactory || function (cellCreationOptions) { return new viewClass(cellCreationOptions); };
+			this.itemFactory = options.itemFactory || function (cell) {
+				var cellClass = that.cellClass + " " + cell.getViewClass();
+				var cellText = that.useText ? cell.getViewText() : "";
+				return itemTemplate
+					.replace("%cellClass%", cellClass)
+					.replace("%cellText%", cellText);
+			};
 			this.cells = [];
 		},
 		addCell: function (cell) {
@@ -55,8 +71,7 @@ var CellView = Base.extend({
 			var cellsHtml = "";
 			for (var i = 0; i < this.cells.length; ++i) {
 				var cell = this.cells[i];
-				var cellClass = this.cellClass + " " + cell.getViewClass();
-				cellsHtml += "<div class='" + cellClass + "'>" + (this.useText ? cell.getViewText() : "") + "</div>";
+				cellsHtml += this.itemFactory(cell);
 			}
 			var result = [];
 			var that = this;

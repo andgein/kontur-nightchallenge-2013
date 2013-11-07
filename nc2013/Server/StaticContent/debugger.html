@@ -18,6 +18,7 @@
 	<script src="cell.view.js"></script>
 	<script src="listingitem.view.js"></script>
 	<script src="program.js"></script>
+	<script src="breakpoints.js"></script>
 	<script type="text/javascript">
 
 		var coreSize = 8000;
@@ -74,10 +75,15 @@
 				$enabled: $("#enabledProgramB"),
 				programIndex: 1
 			}));
+			var breakpoints = new Breakpoints({
+				$container: $("#breakpoints"),
+				memory: memory
+			});
 			var game = new Game({
 				$currentStep: $("#currentStep"),
 				programs: programs,
-				memory: memory
+				memory: memory,
+				breakpoints: breakpoints
 			});
 			gameRunner = new GameRunner({
 				game: game,
@@ -288,7 +294,7 @@
 		.listing-container {
 			display: inline-block;
 			float: left;
-			width: 240px;
+			width: 250px;
 		}
 
 		#listing {
@@ -334,15 +340,15 @@
 				color: blue;
 			}
 
-		#listing .listingItem.nextCommand {
+		#listing .listingItem.nextCommand, #breakpoints .listingItem.nextCommand {
 			background-color: gold;
 		}
 
-			#listing .listingItem.nextCommand.modified0 {
+			#listing .listingItem.nextCommand.modified0, #breakpoints .listingItem.nextCommand.modified0 {
 				background-color: #df7c00;
 			}
 
-			#listing .listingItem.nextCommand.modified1 {
+			#listing .listingItem.nextCommand.modified1, #breakpoints .listingItem.nextCommand.modified1 {
 				background-color: #70be60;
 			}
 
@@ -439,8 +445,22 @@
 				padding: 0;
 			}
 
-		.listing-breakpoints {
-			padding-top: 10px;
+		#breakpoints {
+			border: 1px black solid;
+			height: 150px;
+			overflow-y: scroll;
+		}
+
+		#breakpoints .item-control {
+			float: right;
+			font-size: x-small;
+			color: blue;
+			cursor: pointer;
+			padding-left: 5px;
+			margin-top: 2px;
+		}
+		#breakpoints .item-control:hover {
+			text-decoration: underline;
 		}
 	</style>
 </head>
@@ -537,7 +557,7 @@
 			<div id="listing">
 			</div>
 			<div class="listing-header listing-header-second">Breakpoints</div>
-			<div class="listing-breakpoints">
+			<div id="breakpoints">
 			</div>
 		</div>
 	</div>

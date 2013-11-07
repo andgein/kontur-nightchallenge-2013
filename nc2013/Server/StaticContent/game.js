@@ -2,6 +2,7 @@ var Game = Base.extend({
 	constructor: function (options) {
 		this.programs = options.programs;
 		this.memory = options.memory;
+		this.breakpoints = options.breakpoints;
 		this.$currentStep = options.$currentStep;
 	},
 	load: function () {
@@ -13,6 +14,7 @@ var Game = Base.extend({
 			.pipe(function (debuggerState) {
 				for (var i = 0; i < that.programs.length; ++i)
 					that.programs[i].setProgramStartInfo(debuggerState.programStartInfos && debuggerState.programStartInfos[i]);
+				that.breakpoints.setBreakpoints(debuggerState.breakpoints);
 				return {
 					gameRunStatus: debuggerState.gameState ? that._setGameState(debuggerState.gameState) : that._resetState()
 				};

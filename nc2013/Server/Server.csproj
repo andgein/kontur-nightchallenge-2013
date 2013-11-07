@@ -223,6 +223,9 @@
     <None Include="StaticContent\listingitem.view.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="StaticContent\breakpoints.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="StaticContent\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
