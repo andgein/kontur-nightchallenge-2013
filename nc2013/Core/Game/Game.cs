@@ -9,19 +9,27 @@ namespace Core.Game
 {
 	public class Game : IGame
 	{
-		private readonly GameEngine engine;
+		private GameEngine engine;
 		private readonly ProgramStartInfo[] programStartInfos;
+		private readonly IEnumerable<WarriorStartInfo> warriors;
 
 		public Game([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			this.programStartInfos = programStartInfos;
+
 			var r = new Random();
 			var parser = new WarriorParser();
-			var warriors = programStartInfos.Select(
+			warriors = programStartInfos.Select(
 				psi => new WarriorStartInfo(
 					parser.Parse(psi.Program),
-					psi.StartAddress.HasValue ? (int) psi.StartAddress : r.Next(Parameters.CoreSize)
-					));
+					psi.StartAddress.HasValue ? (int)psi.StartAddress : r.Next(Parameters.CoreSize)
+					)).ToList();
+
+			Init();
+		}
+
+		private void Init()
+		{
 			engine = new GameEngine(warriors);
 		}
 
@@ -84,6 +92,16 @@ namespace Core.Game
 						Winner = engine.Winner,
 					}
 				};
+			if (stepCount < 0)
+			{
+				var currentStep = engine.CurrentStep;
+				currentStep += stepCount;
+				if (currentStep < 0)
+					currentStep = 0;
+				Init();
+				Step(currentStep, breakpoints);
+				return new GameStepResult();
+			}
 
 			var programStateDiffs = new List<ProgramStateDiff>();
 
