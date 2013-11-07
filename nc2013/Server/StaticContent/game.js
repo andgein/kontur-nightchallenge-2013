@@ -152,7 +152,7 @@ var GameRunner = Base.extend({
 		var that = this;
 		function nextAction(status) {
 			var result, justStarted = false;
-			if (options.requirePlaying && status.gameRunStatus != "playing") {
+			if (options.requirePlaying && status.gameRunStatus != "playing" && status.gameRunStatus != "gameover") {
 				result = that.game.start();
 				justStarted = true;
 			} else
