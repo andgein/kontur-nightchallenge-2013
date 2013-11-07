@@ -2,16 +2,65 @@
 <script>
 	var NavCtrl = function ($scope, $http) {
 		var f = MakeJsonController(server.basePath() + "nav");
-		
+
+		var refreshTime;
+		var initialTimeToContestStart;
+		var initialContestTimeLeft;
+
+		function parseTime(s) {
+			if (!s)
+				return null;
+			var parts = (s || "").split(":", 3);
+			var hours = parseInt(parts[0]) || 0;
+			var minutes = parseInt(parts[1]) || 0;
+			var seconds = parseInt(parts[2]) || 0;
+			return ((hours * 60 + minutes) * 60 + seconds) * 1000;
+		}
+
+		function formatTime(t) {
+			if (t < 0)
+				t = 0;
+			var seconds = Math.floor(t / 1000);
+			var minutes = Math.floor(seconds / 60);
+			seconds = (seconds - 60 * minutes) + "";
+			var hours = Math.floor(minutes / 60);
+			minutes = (minutes - 60 * hours) + "";
+			return hours + ":" + (minutes.length == 1 ? "0" : "") + minutes + ":" + (seconds.length == 1 ? "0" : "") + seconds;
+		}
+
 		function refresh() {
-			f($scope, $http);
+			f($scope, $http).then(function () {
+				refreshTime = new Date().getTime();
+				initialTimeToContestStart = parseTime($scope.timeToContestStart);
+				initialContestTimeLeft = parseTime($scope.contestTimeLeft);
+			});
+		}
+
+		function clientRefresh() {
+			if (!refreshTime)
+				return;
+			var elapsedTimeFromLastRefresh = new Date().getTime() - refreshTime;
+			var timeToContestStart;
+			if (initialTimeToContestStart != null) {
+				timeToContestStart = initialTimeToContestStart - elapsedTimeFromLastRefresh;
+				$scope.timeToContestStart = formatTime(timeToContestStart);
+			}
+			var contestTimeLeft;
+			if (initialContestTimeLeft != null) {
+				contestTimeLeft = initialContestTimeLeft - elapsedTimeFromLastRefresh;
+				$scope.contestTimeLeft = formatTime(contestTimeLeft);
+			}
+			$scope.$apply();
+			if (timeToContestStart != null && timeToContestStart <= 0 || contestTimeLeft != null && contestTimeLeft <= 0)
+				refresh();
 		}
 
 		var godMode = $.cookie("godMode") != undefined;
 		$scope.homeText = godMode ? "God Mode!" : "Home";
 
 		refresh();
-		setInterval(refresh, 1000);
+		setInterval(refresh, 1000 * 60);
+		setInterval(clientRefresh, 1000);
 	};
 </script>
 <nav class="navbar navbar-default" role="navigation" ng-controller="NavCtrl">

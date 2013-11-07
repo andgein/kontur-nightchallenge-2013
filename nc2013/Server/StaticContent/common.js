@@ -13,7 +13,7 @@ function load(url) {
 
 function MakeJsonController(url) {
 	return function($scope, $http) {
-		$http
+		return $http
 			.get(url)
 			.success(function(json) { for (var p in json) $scope[p] = json[p]; });
 	};
