@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app>
+<head>
+	<meta charset="utf-8" />
+	<title>Core War Arena</title>
+	<script src="jquery-1.7.2.min.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
+	<script src="common.js"></script>
+	<script src="server.js"></script>
+	<style>
+    .text {
+      font-size: 11pt;
+    }
+
+    .text div, div.code { 
+      margin-top: 15px;
+    }
+
+    div.code + .code {
+      margin-top: 0px;
+    }
+
+    div.code {
+      font-size: 12pt;
+      border-left: 2px solid #CCC;
+      padding-left: 12px;
+    }
+
+    .code {
+      font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+      white-space: nowrap;
+    }
+
+    .command, .addr {      
+    }
+
+    .command {
+      color: #050;
+      font-weight: bold;
+    }
+
+    .addr {
+      color: #900;
+    }
+
+    .hint {
+      border-bottom : 1px dashed #666;
+    }
+
+    div.todo {
+      color: #777;
+    }
+	</style>
+	<link rel="stylesheet" href="common.css" />
+</head>
+<body>
+	<div class="container">
+
+		<script>nav()</script>
+
+    <div class="text">
+
+		<div class="page-header">
+			<h1>Куда я попал</h1>		
+    </div>
+
+    <div>
+      Сегодня нас ждут сражения. Полем битвы выбрана память компьютера, а бойцами &mdash; программы, которые вы напишете.
+      В каждом раунде турнира будет сражать две из них, а победит сильнейшая!
+    </div>
+
+    <h3>Правила</h3>
+    <div>
+      Возможно, вы слышали о таком соревновании как CoreWar.
+      Мы взяли за основу правила <a href="http://stuff.mit.edu/afs/sipb/project/corewars/koth/doc/ICWS-88">Corewar 88-ого года</a>, однако не обошлось <todo>без серьезных изменений</todo>.
+    </div>
+
+    <h3>Память</h3>
+    <div>
+      Память нашего компьютера состоит из <b>ячеек</b>, а именно из <b>8000</b> ячеек.
+      Она зациклена таким образом, что после последней ячейки идет первая (а соответственно перед первой &mdash; последняя).
+      Мы пронумеровали все ячейки номерами от 0 до 7999. Каждая из них содержит ровно одну инструкцию, более того &mdash;
+      в памяти нашего компьютера хранятся только инструкции и ничего кроме инструкций.
+    </div>
+
+    <div>
+      У каждой инструкции есть один или два операнда.
+      Чаще всего они указывают на адрес ячейки или ячеек, над которыми нужно провести операцию.
+      Обратите внимание, что вы никогда не можете обратиться к ячейке по ее абсолютному адресу,
+      вы можете только указать ее относительное смещение относительно текущей.
+      Из этого следует, что вы никогда не сможете узнать абсолютный адрес какой бы то ни было ячейки.
+    </div>
+
+    <div class="todo">
+      // язык очень похож на ассемблер, есть условные и безусловные перехода, копирование, сложение, вычитание. Однако адрессация только косвенная. 
+    </div>
+
+    <div>
+      Рассмотрим пример простейшей программы, состоящей из одной команды:
+    </div>
+
+    <div class="code">
+      <span class="code"><span class="command">MOV</span> <span class="addr">$0</span>, <span class="addr">$1</span></span>
+    </div>
+
+    <div>
+      Первым делом здесь записано <b>название команды (<span class="command">MOV</span>)</b>,
+      после чего через запятую указаны два его <b>операнда</b> (или <b>аргумента</b>).
+      Первый операнд так же называется <b>А-полем</b> (A-field), а второй &mdash; <b>В-полем</b> (B-field).
+      Оба операнда всегда являются целыми числами. 
+    </div>
+
+    <div>
+      Команда <span class="code"><span class="command">MOV</span> <span class="addr">$0</span>, <span class="addr">$1</span></span>,
+      как понятно из ее названия, скопирует содержимое ячейки, лежащей по адресу <span class="addr">$0</span>,
+      в ячейку по адресу <span class="addr">$1</span>. <div class="todo">Что же это за адреса такие, с долларами?</div>
+      Запись <span class="addr">$N</span> указывает на ячейку,
+      находящуюся на позиции через <span class="addr">N</span> после текущей.
+      Таким образом, <span class="addr">$1</span> указывает на следующую ячейку,
+      а <span class="addr">$5</span> &mdash; на ячейку через четыре.
+      Однако число <span class="addr">N</span> вовсе не обязано быть положительным (хотя, конечно, должно быть целым),
+      например <span class="addr">$-1</span> указывает на предшествующую ячейку, а <span class="addr">$0</span>
+      &mdash; на непосредственно исполняемую.
+    </div>
+
+    <div>
+      Теперь мы понимаем, что команда <span class="code"><span class="command">MOV</span> <span class="addr">$0</span>, <span class="addr">$1</span></span>
+      скопирует содержимое текущей ячейки памяти (то есть саму себя) в следующую ячейку.
+      Что же произойдет дальше? А дальше, как и в большинстве других языках программирования,
+      исполнение перейдет к следующей инструкции, то есть к инструкции, лежащей в следующей ячейке памяти.
+      Так как мы туда только что скопировали инструкцию <span class="code"><span class="command">MOV</span> <span class="addr">$0</span>, <span class="addr">$1</span></span>,
+      то выполняться будет именно она. Эта инструкция сделает то же самое, что и первая
+      &mdash; скопирует себя в следующую ячейку, в которую затем передастся выполнение.
+      Таким образом, эта программа (которая так же называется <i>Imp</i>) заполняет своей программу всю память, двигаясь вперед на одну ячейку каждый такт.
+    </div>
+
+    <h3>Смерть</h3>
+    <div>
+      Однако всё было бы слишком хорошо, если бы программы могли только копировать ячейки и ничего не угрожало бы их существованию.
+    </div>
+
+    <div>
+      Рассмотрим другую команду &mdash; <span class="command">DAT</span>.
+      Она имеет сразу два назначения: во-первых, в ее операндах можно хранить данные &mdash; произвольные неотрицательные целые числа,
+      меньшие 8000, а во-вторых, программа, выполнившая команду <span class="command">DAT</span> (неважно, с какими аргументами),
+      моментально умирает и прекращает свое дальнейшее выполнение.
+    </div>
+
+    <div>      
+      Сразу становится понятна главная цель любой программы &mdash; необходимо заставить противника наткнуться на команду <span class="command">DAT</span>
+      и выполнить её. Один из очевидных способов это сделать &mdash; пытаться &laquo;разбрасывать&raquo; команды <span class="command">DAT</span> по всему полю.
+    </div>
+
+    <div>
+      Именно такой стратегии придерживается <i>Бомбер</i>, который каждые несколько тактов &laquo;бросает&raquo; команду <span class="command">DAT</span>
+      в какую-то ячейку памяти:
+    </div>
+
+    <div class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">$3</span></div>
+    <div class="code"><span class="command">MOV</span> <span class="addr">$2</span>, <span class="addr">@2</span></div>
+    <div class="code"><span class="command">JMP</span> <span class="addr">$-2</span></div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#0</span></div>
+
+    <div>
+      В самом начале, еще до исполнения любых команд, программа размещается в случайной последовательной области памяти. В случае боя двух программ, они размещаются в случайных непересекающихся областях на расстоянии друг от друга не менее, чем 1024 ячеек. В любую незанятую какой-либо программой ячейку записывается команда <span class="code"><span class="command">DAT</span> <span class="addr">$0</span>, <span class="addr">$0</span></span>.
+    </div>
+
+    <h3>Адресация</h3>
+
+    <div>
+      Мы видим, что в <i>Бомбере</i> появились символы перед операндами, отличные от знака доллара:
+      <ul>
+        <li>
+          Запись <span class="addr">$N</span>, которую мы уже видели в ранее, называется <span class="hint" title="Direct">прямой</span> адресацией.
+        </li>
+        <li>
+          Запись <span class="addr">#N</span> означает <span class="hint" title="Immediate">непосредственную</span> адресацию, то есть она не указывает на какую бы то ни было ячейку в памяти, она показывает, что операндом является число N.
+        </li>
+        <li>
+          Запись <span class="addr">@N</span> называется <span class="hint" title="Indirect">косвенной</span> адресацией, она берет В-поле ячейки <span class="addr">$N</span> (по прямой адресации), в итоге указывая на ячейку, смещенную относительно ячейки <span class="addr">$N</span> на значение, записанном в этом В-поле.
+        </li>
+        Подробнее о способах адресации читайте в <todo>...</todo>.
+    </div>
+
+
+    <div>
+      Давайте подробнее рассмотрим алгоритм <i>Бомбера</i>.
+      Выполнение программы, если не указано иное, начинается с её первой инструкции, в данном случае
+      с&nbsp;<span class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">$3</span></span>,
+      которая прибавляет число 4 к инструкции <span class="addr">$3</span>.
+      Прибавления числа к инструкции ведет к увеличению В-поля указанной инструкции, в данном случае команда превратит <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#0</span></span>
+      в&nbsp;<span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></span>.
+    </div>
+
+    <div>
+      Следующая команда, <span class="code"><span class="command">MOV</span> <span class="addr">$2</span>, <span class="addr">@2</span></span>,
+      как мы уже знаем, копирует содержимое ячейки <span class="addr">$2</span>
+      (в текущий момент это <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></span>)
+      в ячейку <span class="addr">@2</span>.
+      Чтобы узнать, куда ссылается <span class="addr">@2</span>, сначала посмотрим на ячейку <span class="addr">$2</span> (это инструкция <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></span>)
+      и возьмем ее В-поле.
+      В итоге <span class="addr">@2</span> ссылается на четвертую ячейку относительно <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></span>. Если бы вместо этого там было записано <span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#10</span>,
+      он бы ссылался на 10 ячейку относительно неё и так далее.
+    </div>
+
+    <div>
+      Имеем, что команда <span class="code"><span class="command">MOV</span> <span class="addr">$2</span>, <span class="addr">@2</span></span> копирует команду <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></span> в ячейку, находящуюся через три после нашей программы:
+    </div>
+
+    <div class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">$3</span></div>
+    <div class="code"><span class="command">MOV</span> <span class="addr">$2</span>, <span class="addr">@2</span></div>
+    <div class="code"><span class="command">JMP</span> <span class="addr">$-2</span></div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></div>
+
+    <div>
+      Следующая инструкция<span class="code"><span class="command">JMP</span> <span class="addr">$-2</span></span>
+      имеет только один операнд и означает безусловный переход на ячейку <span class="addr">$-2</span>,
+      организуя тем самым вечный цикл из первых трех команд. На следующей итерации в четвертой инструкции программы будет записано уже
+      <span class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#8</span></span>, в следствие чего эта команда скопируется на ячейку, находящуюся на расстоянии 8:
+    </div>
+
+    <div class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">$3</span></div>
+    <div class="code"><span class="command">MOV</span> <span class="addr">$2</span>, <span class="addr">@2</span></div>
+    <div class="code"><span class="command">JMP</span> <span class="addr">$-2</span></div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#8</span></div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#4</span></div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code">...</div>
+    <div class="code"><span class="command">DAT</span> <span class="addr">#0</span>, <span class="addr">#8</span></div>
+
+    <div>
+      Продолжая выполнение, <i>Бомбер</i> будет заполнять каждую четвертую ячейку памяти командой <span class="command">DAT</span>, пытаясь &laquo;попасть&raquo; в противника.
+    </div>
+
+    <div class="todo">
+      // Отладчик на примере Импа и Бомбера. Только после начала соревнования
+    </div>
+
+    <h3>Потоки выполнения</h3>
+
+    <div>
+      Чтобы защитить себя от смерти, программа может создавать новые потоки выполнения,
+      которые будут исполняться независимо от главного. В случае смерти любого из потоков остальные продолжают жить
+      и выполнять свою задачу. Однако будьте аккуратны &mdash; компьютер по прежнему будет выполнять только одну инструкцию
+      вашей программы за такт, независимо от количества потоков.
+      Чтобы узнать, какую инструкцию сейчас выполнить, он хранит и поддерживает <b>очередь исполнения</b> вашей программы.
+      Изначально в очереди лежит один адрес &mdash; адрес инструкции, с которой нужно начать исполнение вашей программы.
+      Перед исполнением очередной команды, компьютер извлекает адрес из очереди и выполняет команду по этому адресу.
+      После этого, если не было произведено условного или безусловного перехода, адрес, на единицу больший текущего, добавляется в конец очереди. В случае выполнения перехода (условного или безусловного) в очередь попадает адрес, куда был совершен переход. Если программа породила новый процесс, то адрес инструкции, с которой начнется выполнение в новом процессе, так же добавляется в очередь выполнения.
+    </div>
+
+    <h3>Способы адресации</h3>
+    <div class="todo">
+      // ...
+    </div>
+    <div class="todo">
+      // По умолчанию доллар
+    </div>
+
+    <h3>Команды</h3>
+    <div class="todo">
+      // Таблица: количество операндов у инструкций. 
+    </div>
+    <div class="todo">
+      Если какая-либо команда использует только один свой операнд, она тем не менее может содержать оба. Однако если ей необходимы оба операнда, то отсутствие одного из них приведет к ошибке компиляции. 
+    </div>
+
+    <div>
+      В качестве любого из операндов можно использовать арифметическое выражение. Поддерживаются скобки, сложение (+), вычитание (-), умножение (*), целочисленное деление (/), унарные плюс и минус. Значение выражения вычисляется в момент компиляции, и в память в качестве операнда попадает уже вычисленное значение, взятое по модулю 8000. 
+    </div>
+
+    <div>
+      Рассмотрим подробнее возможные команды:
+      <div class="todo">// здесь почти дословный перевод из спецификации</div>
+      <ul>      
+        <li>DAT A, B</li>
+
+        <li>MOV A, B</li>
+
+        <li>ADD A, B</li>
+
+        <li>SUB A, B</li>
+
+        <li>JMP A, B</li>
+
+        <li>JMZ A, B</li>
+
+        <li>JMN A, B</li>
+
+        <li>CMP A, B</li>
+
+        <li>SLT A, B</li>
+
+        <li>DJN A, B</li>
+
+        <li>SPL A, B</li>
+      </ul>        
+
+      Важным отличием нашего компьютера от всех подобных заключается в наличии следующих трех команд:
+
+      <ul>
+        <li>MOV.4 A, B</li>
+
+        <li>ADD.4 A, B</li>
+
+        <li>SUB.4 A, B</li>
+
+      </ul>
+    </div>
+
+    <div>
+      Любая команда выполняется следующим образом. Первым делом, если А-поле имеет не непосредственную адресацию,
+      вычисляется адрес ячейки, куда оно ссылается. Если необходимо, при этом выполняется соответствующий декремент.
+      Содержимое ячейки, ссылку на которую мы получили, запоминается.
+    </div>
+
+    <div>
+      После этого, аналогичным образом, если В-поле имеет не непосредственную адресацию, вычисляется адрес, на который оно указывает. Это делается даже в том случае, если для текущей команды не нужен второй операнд. Например, команда <span class="code"><span class="command">DAT</span> <span class="addr">&lt;5</span>, <span class="addr">&lt;7</span></span> перед смертью потока успеет уменьшить В-поля двух инструкций. 
+    </div>
+
+    <div>
+      И только в самом конце выполняется сама инструкция.
+      При этом если для исполнения компьютеру необходимо содержимое ячейки, на которую указывает А-поле,
+      то используется именно сохраненное значение, так как вычисление указателя в В-поле теоретически могло изменить его. 
+    </div>
+
+    <h3>Общая структура программы</h3>
+    <div>
+      Программа представляет собой набор строк, в каждой из которых либо не находится ни одной команды,
+      либо находится ровно одна. В любом месте программы может встречаться комментарий &mdash; любой текст,
+      начинающийся с точки с запятой (;). Комментарий длится до конца строки, в которой он начался. 
+    </div>
+
+    <div>
+      Пустые строки никак не влияют на исполнение программы. В любом месте, где необходим пробел, может стоять любое ненулевое количество пробелов. 
+    </div>
+
+    <div>
+      Названия команд являются регистронезависимыми, то есть вы можете писать <span class="command">MOV</span>, <span class="command">mov</span> или даже <span class="command">mOv</span>. 
+    </div>div>
+
+    <div>
+      Кроме того, каждая команда может содержать перед собой метку, отделенную от самой команды одним или более пробелами.
+      Метка не может совпадать с названием какой-либо команды (<span class="command">MOV</span>, <span class="command">ADD</span> и так далее), и должно быть уникально среди всех меток программы. 
+    </div>
+
+
+    <div class="todo">
+      // EQU и END
+    </div>
+
+    <div class="todo">
+      // модульная арифметика, отрицательные числа
+    </div>
+
+    <div class="todo">
+      // Бой
+    </div>
+    
+    <div class="todo">
+      // Таблица: константы
+    </div>
+
+    <div class="todo">
+      // Всевозможные сообщения об ошибках компиляции
+    </div>
+    </div>
+
+	</div>
+</body>
+</html>
