@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using JetBrains.Annotations;
 using log4net;
@@ -9,8 +10,9 @@ namespace Server
 	{
 		private const string defaultPrefix = "http://*:8080/corewar/";
 		private const int defaultBattlesPerPair = 5;
+		private const int defaultContestDurationInHours = 12;
 
-		private static readonly ILog log = LogManager.GetLogger(typeof (SettingsFile));
+		private static readonly ILog log = LogManager.GetLogger(typeof(SettingsFile));
 
 		public SettingsFile([CanBeNull] string settingsFilename)
 		{
@@ -19,6 +21,8 @@ namespace Server
 			ProductionMode = false;
 			GodAccessOnly = false;
 			GodModeSecret = Guid.NewGuid().ToString();
+			ContestStartTimestamp = null;
+			ContestDurationInHours = defaultContestDurationInHours;
 			if (string.IsNullOrEmpty(settingsFilename))
 				log.Warn("Using default settings");
 			else if (!File.Exists(settingsFilename))
@@ -30,7 +34,7 @@ namespace Server
 				{
 					if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith("#"))
 						continue;
-					var strings = line.Split(new[] {'='}, 2);
+					var strings = line.Split(new[] { '=' }, 2);
 					if (strings.Length != 2)
 					{
 						log.Warn("Invalid line in settings file: " + line);
@@ -48,6 +52,10 @@ namespace Server
 						ParseBoolSetting(settingName, settingValue, v => ProductionMode = v);
 					else if (string.Equals(settingName, "GodAccessOnly", StringComparison.OrdinalIgnoreCase))
 						ParseBoolSetting(settingName, settingValue, v => GodAccessOnly = v);
+					else if (string.Equals(settingName, "ContestStartTimestamp", StringComparison.OrdinalIgnoreCase))
+						ParseTimestampSetting(settingName, settingValue, v => ContestStartTimestamp = v);
+					else if (string.Equals(settingName, "ContestDurationInHours", StringComparison.OrdinalIgnoreCase))
+						ParseIntSetting(settingName, settingValue, v => ContestDurationInHours = v);
 					else
 						log.Warn(string.Format("Unknown setting '{0}' in settings file", settingName));
 				}
@@ -90,6 +98,20 @@ namespace Server
 			}
 		}
 
+		private static void ParseTimestampSetting([NotNull] string settingName, [NotNull] string settingValue, Action<DateTime> setter)
+		{
+			if (string.IsNullOrWhiteSpace(settingValue))
+				log.Warn(string.Format("Empty value of setting '{0}'", settingName));
+			else
+			{
+				DateTime settingIntValue;
+				if (!DateTime.TryParseExact(settingValue, "u", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out settingIntValue))
+					log.Warn(string.Format("Invalid timestamp value for setting '{0}' in settings file: {1}", settingName, settingValue));
+				else
+					setter(settingIntValue);
+			}
+		}
+
 		[NotNull]
 		public string HttpListenerPrefix { get; private set; }
 
@@ -100,10 +122,14 @@ namespace Server
 		[NotNull]
 		public string GodModeSecret { get; private set; }
 
-		[NotNull]
+		public DateTime? ContestStartTimestamp { get; private set; }
+
+		public int ContestDurationInHours { get; private set; }
+
 		public override string ToString()
 		{
-			return string.Format("HttpListenerPrefix: {0}, BattlesPerPair: {1}, ProductionMode: {2}, GodAccessOnly: {3}, GodModeSecret: {4}", HttpListenerPrefix, BattlesPerPair, ProductionMode, GodAccessOnly, GodModeSecret);
+			return string.Format("HttpListenerPrefix: {0}, BattlesPerPair: {1}, ProductionMode: {2}, GodAccessOnly: {3}, GodModeSecret: {4}, ContestStartTimestamp: {5} UTC, ContestDurationInHours: {6}",
+				HttpListenerPrefix, BattlesPerPair, ProductionMode, GodAccessOnly, GodModeSecret, ContestStartTimestamp, ContestDurationInHours);
 		}
 	}
 }

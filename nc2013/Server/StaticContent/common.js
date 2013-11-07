@@ -1,6 +1,7 @@
 function nav() {
-	load("_nav.html");
+	load("nav.html");
 }
+
 function load(url) {
 	$.ajax(url, {
 		async: false,
@@ -127,11 +128,3 @@ $.cookie = function(name) {
 	}
 	return setStr;
 };
-
-var godMode;
-$(function() {
-	godMode = $.cookie("godMode") != undefined;
-	if (godMode) {
-		$("#home").text("You are in God Mode");
-	}
-})

@@ -54,6 +54,7 @@
     <Compile Include="Arena\BattleResult.cs" />
     <Compile Include="Arena\BattleRunner.cs" />
     <Compile Include="Arena\CachingGamesRepo.cs" />
+    <Compile Include="Arena\CountdownProvider.cs" />
     <Compile Include="Arena\GamesRepo.cs" />
     <Compile Include="Arena\IBattleRunner.cs" />
     <Compile Include="Arena\IGamesRepo.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Arena\RoundRobinTournament.cs" />
     <Compile Include="Arena\RoundRobinTournamentResult.cs" />
     <Compile Include="Arena\RoundRobinTournament_Test.cs" />
+    <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="Arena\TournamentPlayer.cs" />
     <Compile Include="Arena\TournamentRanking.cs" />
     <Compile Include="Engine\EvaluatedOp.cs" />

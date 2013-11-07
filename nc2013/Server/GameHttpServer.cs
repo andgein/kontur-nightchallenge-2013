@@ -35,13 +35,15 @@ namespace Server
 			this.arenaState = arenaState;
 			this.sessionManager = sessionManager;
 			var baseUri = new Uri(prefix.Replace("*", "localhost").Replace("+", "localhost"));
-			DefaultUrl = new Uri(baseUri, string.Format("index.html?godModeSecret={0}", arenaState.GodModeSecret)).AbsoluteUri;
+			DefaultUrl = new Uri(baseUri, string.Format("?godModeSecret={0}", arenaState.GodModeSecret)).AbsoluteUri;
 			basePath = baseUri.AbsolutePath;
 			listener = new HttpListener();
 			listener.Prefixes.Add(prefix);
 			handlers = new IHttpHandler[]
 			{
-				new IndexHandler(),
+				new RootHandler(),
+				new IndexHandler(arenaState),
+				new NavPanelHandler(arenaState),
 				new DebuggerStartHandler(debuggerManager),
 				new DebuggerStateHandler(debuggerManager),
 				new DebuggerStepHandler(debuggerManager),
@@ -175,6 +177,9 @@ namespace Server
 			if (requestedPath.EndsWith(".js")) return true;
 			if (requestedPath.EndsWith(".css")) return true;
 			if (requestedPath.StartsWith("fonts")) return true;
+			if (requestedPath.EndsWith("/nav")) return true;
+			if (requestedPath.EndsWith("/index")) return true;
+			if (requestedPath.EndsWith("/nav.html")) return true;
 			if (requestedPath.EndsWith("/index.html")) return true;
 			if (requestedPath.EndsWith("/tutorial.html")) return true;
 			return false;
