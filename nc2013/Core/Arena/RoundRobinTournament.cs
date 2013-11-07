@@ -73,8 +73,9 @@ namespace Core.Arena
 		{
 			var result = new List<Tuple<TournamentPlayer, TournamentPlayer>>();
 			for (var i = 0; i < players.Length; i++)
-				for (var j = i + 1; j < players.Length; j++)
-					result.Add(Tuple.Create(players[i], players[j]));
+				for (var j = 0; j < players.Length; j++)
+					if (i != j)
+						result.Add(Tuple.Create(players[i], players[j]));
 			return result;
 		}
 
