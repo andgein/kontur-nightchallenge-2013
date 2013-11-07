@@ -24,6 +24,12 @@ var CellView = Base.extend({
 				this.$view.addClass("hidden");
 		}
 	},
+	getCell: function () {
+		return this.cell;
+	},
+	getAddress: function () {
+		return this.cell && this.cell.getAddress();
+	},
 	scrollIntoView: function () { },
 	remove$: function () {
 		this.$view.remove();

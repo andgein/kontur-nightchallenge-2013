@@ -25,6 +25,7 @@
 
 		var programs;
 		var gameRunner;
+		var breakpoints;
 
 		$(function () {
 			$("#autofocus").click(switchAutofocus);
@@ -37,7 +38,7 @@
 					gameRunner.step(-1);
 					return false;
 				}
-				else if (!event.ctrlKey && !event.altKey  && !event.shiftKey && event.which == 119 /*F8*/) {
+				else if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 119 /*F8*/) {
 					gameRunner.step(+1);
 					return false;
 				}
@@ -75,9 +76,17 @@
 				$enabled: $("#enabledProgramB"),
 				programIndex: 1
 			}));
-			var breakpoints = new Breakpoints({
+			breakpoints = new BreakpointsCollection({
 				$container: $("#breakpoints"),
-				memory: memory
+				$editContainer: $("#breakpointEditContainer"),
+				$add: $("#addBreakpoint"),
+				$clear: $("#clearBreakpoints"),
+				editControls$: [{ Execution: $("#breakA"), MemoryChange: $("#breakMemoryA") }, { Execution: $("#breakB"), MemoryChange: $("#breakMemoryB") }],
+				$editCancel: $("#editBreakpoint-cancel"),
+				$editApply: $("#editBreakpoint-apply"),
+				$editCell: $("#editBreakpoint-cell"),
+				memory: memory,
+				onError: showBreakpointsError
 			});
 			var game = new Game({
 				$currentStep: $("#currentStep"),
@@ -118,6 +127,17 @@
 			else {
 				$("#error-message").text("");
 				$("#error-message").addClass("hidden");
+			}
+		}
+
+		function showBreakpointsError(err) {
+			if (err) {
+				$("#error-message-breakpoints").text(err);
+				$("#error-message-breakpoints").removeClass("hidden");
+			}
+			else {
+				$("#error-message-breakpoints").text("");
+				$("#error-message-breakpoints").addClass("hidden");
 			}
 		}
 
@@ -324,10 +344,10 @@
 			padding: 2px;
 			cursor: pointer;
 		}
-		
+
 			.listingItem:hover {
 				text-decoration: underline;
-				color: blue;
+				color: #2a6496;
 			}
 
 		.command {
@@ -335,9 +355,10 @@
 			padding: 2px;
 			cursor: pointer;
 		}
+
 			.command:hover {
 				text-decoration: underline;
-				color: blue;
+				color: #2a6496;
 			}
 
 		#listing .listingItem.nextCommand, #breakpoints .listingItem.nextCommand {
@@ -416,7 +437,7 @@
 
 		.debugger-gameRunStatus-loading {
 			display: none;
-			background-color: lightpink;
+			background-color: skyblue;
 		}
 
 		.debugger-gameRunStatus-gameover {
@@ -428,7 +449,6 @@
 		}
 
 		.nextCommands-label {
-			/*display: inline-block;*/
 			vertical-align: top;
 		}
 
@@ -451,17 +471,58 @@
 			overflow-y: scroll;
 		}
 
-		#breakpoints .item-control {
-			float: right;
-			font-size: x-small;
-			color: blue;
+			#breakpoints .item-control {
+				float: right;
+				font-size: x-small;
+				color: #2a6496;
+				cursor: pointer;
+				padding-left: 2px;
+				padding-right: 3px;
+				margin-top: 2px;
+			}
+
+				#breakpoints .item-control:hover {
+					text-decoration: underline;
+				}
+
+		.breakpoints-add {
+			margin-left: 10px;
+			font-size: small;
+			font-weight: normal;
+		}
+
+		.breakpoints-clear {
+			margin-left: 5px;
+			font-size: small;
+			font-weight: normal;
+		}
+
+		#breakpointEditContainer {
+			padding-top: 5px;
+		}
+
+		#error-message-breakpoints {
+			padding-top: 5px;
+		}
+
+		#breakpointEditContainer label {
+			font-size: small;
+			font-weight: normal;
+		}
+
+		.breakpoint-breakAddress-container {
+			padding-bottom: 5px;
+		}
+
+		.break-command {
+			font-family: monospace;
 			cursor: pointer;
-			padding-left: 5px;
-			margin-top: 2px;
 		}
-		#breakpoints .item-control:hover {
-			text-decoration: underline;
-		}
+
+			.break-command:hover {
+				text-decoration: underline;
+				color: #2a6496;
+			}
 	</style>
 </head>
 <body class="run-status-loading">
@@ -556,8 +617,29 @@
 			</div>
 			<div id="listing">
 			</div>
-			<div class="listing-header listing-header-second">Breakpoints</div>
+			<div class="listing-header listing-header-second">Breakpoints <a href="javascript:void(0)" id="addBreakpoint" class="breakpoints-add">add</a> <a href="javascript:void(0)" id="clearBreakpoints" class="breakpoints-clear">clear</a></div>
+			<div id="error-message-breakpoints" class="debugger-error hidden"></div>
 			<div id="breakpoints">
+			</div>
+			<div id="breakpointEditContainer" class="hidden">
+				<div class="breakpoint-breakAddress-container">Break on address:
+					<div class="break-command" id="editBreakpoint-cell"></div>
+				</div>
+				<div>
+					<input type="checkbox" id="breakA" />
+					<label for="breakA">Break A here</label></div>
+				<div>
+					<input type="checkbox" id="breakB" />
+					<label for="breakB">Break B here</label></div>
+				<div>
+					<input type="checkbox" id="breakMemoryA" />
+					<label for="breakMemoryA">Break when A changes memory</label></div>
+				<div>
+					<input type="checkbox" id="breakMemoryB" />
+					<label for="breakMemoryB">Break when B changes memory</label></div>
+				<div>
+					<button id="editBreakpoint-apply">Apply</button>
+					<button id="editBreakpoint-cancel">Cancel</button></div>
 			</div>
 		</div>
 	</div>

@@ -2,9 +2,12 @@ var Memory = Base.extend({
 	constructor: function (options) {
 		var cellCount = options.cellCount;
 		this.cells = [];
-		var memoryData = {};
+		this.memoryData = {};
 		for (var i = 0; i < cellCount; ++i)
-			this.cells.push(new Cell({ address: i, memoryData: memoryData }));
+			this.cells.push(new Cell({ address: i, memoryData: this.memoryData }));
+	},
+	getJustScrolledCell: function () {
+		return this.memoryData.justScrolledCell;
 	},
 	applyDiffs: function (memoryDiffs) {
 		for (var i = 0; i < memoryDiffs.length; ++i) {

@@ -14,6 +14,9 @@ var Cell = Base.extend({
 		this._isJustScrolled = false;
 		this._activeInstructionPointers = {};
 	},
+	getAddress: function () {
+		return this.address;
+	},
 	setCellState: function (cellState) {
 		this.beginUpdate();
 		if (!cellState) {
