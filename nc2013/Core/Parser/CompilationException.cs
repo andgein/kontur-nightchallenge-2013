@@ -12,7 +12,7 @@ namespace Core.Parser
 		{
 		}
 
-		public CompilationException(string message, string line, int pos)
+		public CompilationException(string message, string line = null, int pos = 0)
 			: base(FormatMessage(message, line, pos))
 		{
 			Line = line;
@@ -21,7 +21,9 @@ namespace Core.Parser
 
 		private static string FormatMessage(string message, string line, int pos)
 		{
-			return string.Format("Line [{0}], Pos: {1}, Error: {2}", line, pos, message);
+			return line == null
+				? string.Format("Error: {0}", message)
+				: string.Format("Line [{0}], Pos: {1}, Error: {2}", line, pos, message);
 		}
 	}
 }
