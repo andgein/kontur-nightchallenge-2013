@@ -80,6 +80,10 @@
     <Compile Include="Arena\ArenaRankingHandler.cs" />
     <Compile Include="Debugging\DebuggerStepToEndHandler.cs" />
     <Compile Include="Handlers\IndexHandler.cs" />
+    <Compile Include="Handlers\IndexResponse.cs" />
+    <Compile Include="Handlers\RootHandler.cs" />
+    <Compile Include="Handlers\NavPanelHandler.cs" />
+    <Compile Include="Handlers\NavPanelResponse.cs" />
     <Compile Include="Handlers\StrictPathHttpHandlerBase.cs" />
     <Compile Include="Debugging\DebuggerStateHandler.cs" />
     <Compile Include="Handlers\IHttpHandler.cs" />
@@ -98,6 +102,7 @@
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
     <Compile Include="SettingsFile.cs" />
+    <Compile Include="Timestamp_Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StaticContent\fonts\glyphicons-halflings-regular.eot">
@@ -140,6 +145,15 @@
     <Content Include="log.config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="StaticContent\jquery-1.7.2.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\logo.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="StaticContent\jquery-1.7.2.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -173,9 +187,6 @@
     <None Include="StaticContent\index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="StaticContent\_nav.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="StaticContent\common.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -198,6 +209,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="StaticContent\tutorial.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\nav.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\cell.view.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\cell.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="StaticContent\listingitem.view.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="StaticContent\fonts\glyphicons-halflings-regular.svg">

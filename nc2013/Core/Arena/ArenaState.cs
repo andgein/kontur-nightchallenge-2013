@@ -4,10 +4,11 @@ namespace Core.Arena
 {
 	public class ArenaState
 	{
-		public ArenaState([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] string godModeSecret, bool godAccessOnly)
+		public ArenaState([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] CountdownProvider countdownProvider, [NotNull] string godModeSecret, bool godAccessOnly)
 		{
 			PlayersRepo = playersRepo;
 			GamesRepo = gamesRepo;
+			CountdownProvider = countdownProvider;
 			GodModeSecret = godModeSecret;
 			GodAccessOnly = godAccessOnly;
 			SubmitIsAllowed = true;
@@ -18,6 +19,9 @@ namespace Core.Arena
 
 		[NotNull]
 		public IGamesRepo GamesRepo { get; private set; }
+
+		[NotNull]
+		public CountdownProvider CountdownProvider { get; private set; }
 
 		[NotNull]
 		public string GodModeSecret { get; private set; }

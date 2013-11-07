@@ -10,21 +10,29 @@
 	<link rel="stylesheet" href="bootstrap/bootstrap.css" />
 	<link rel="stylesheet" href="common.css" />
 	<script src="common.js"></script>
+	<script>
+		var IndexCtrl = function ($scope, $http) {
+			var f = MakeJsonController(server.basePath() + "index");
+			f($scope, $http);
+		};
+	</script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" ng-controller="IndexCtrl">
 		<script>nav()</script>
 		<div class="jumbotron">
 			<h1>Core War <small>n͑̎́̓̏̄̃ḯ̔͒g̐̍ͨͥh̃̊ͪ͊̉̿t̄̄ͤ̐ ͩ̍̿͌c̈́̇̈̏ͥͮ̃͊ḧ́̊̾ͣ͋͛aͤͬ̓ͤ̒lͩ͋ͫ͐̍l̐ͯͤeͯ̈ń̉̍͗ͩͤͪg͐ͦ̔ͧ̃ͮ̾e͐̃ͥͮ̃ ̅ͫ̿̂ͪ̔2̈ͭ͛͋ͥ̏̀0̾̌̒ͩ1ͩͩͥ̃̇̊ͦͥ3ͪͯ̇</small></h1>
 			<p>Память. Циклически замкнута. В памяти команды процессору. Одна программа ваша, одна вражеская. В конце должна остаться только одна!</p>
 		</div>
-	</div>
-	<div class="container">
-		<p><a href="http://corewar.co.uk/icws88.txt">Подробная спецификация CoreWar</a></p>
-		<h1>Краткая спецификация</h1>
-		<p>
-		</p>
-		<p><a href="corewar.zip">Среда для запуска и исходники</a></p>
+
+		<div>
+			<p><a href="tutorial.html">Core War для чайников</a></p>
+			<p><a href="http://corewar.co.uk/icws88.txt">Подробная спецификация CoreWar</a></p>
+			<h1>Краткая спецификация</h1>
+			<p>
+			</p>
+			<p ng-if="!navigationIsDisabled"><a href="corewar.zip">Среда для запуска и исходники</a></p>
+		</div>
 	</div>
 </body>
 </html>

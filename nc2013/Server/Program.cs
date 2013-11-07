@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,12 +30,8 @@ namespace Server
 		private static void RunServer([NotNull] IEnumerable<string> args)
 		{
 			var staticContentPath = GetStaticContentDir();
-			var settingsFile = GetSettingsFile(args);
-			var prefix = settingsFile.HttpListenerPrefix;
-			var battlesPerPair = settingsFile.BattlesPerPair;
-			var productionMode = settingsFile.ProductionMode;
-			var godAccessOnly = settingsFile.GodAccessOnly;
-			var godModeSecret = settingsFile.GodModeSecret;
+			var settings = GetSettingsFile(args);
+			var httpListenerPrefix = settings.HttpListenerPrefix;
 			var warriorProgramParser = new WarriorParser();
 			var playersRepo = new PlayersRepo(new DirectoryInfo("../players"), warriorProgramParser);
 			var gamesRepo = new CachingGamesRepo(new GamesRepo(new DirectoryInfo("../games")));
@@ -42,9 +39,10 @@ namespace Server
 			var gameServer = new GameServer();
 			var debuggerManager = new DebuggerManager(gameServer);
 			var battleRunner = new BattleRunner();
-			var arenaState = new ArenaState(playersRepo, gamesRepo, godModeSecret, godAccessOnly);
-			var tournamentRunner = new TournamentRunner(arenaState, battleRunner, battlesPerPair);
-			var httpServer = new GameHttpServer(prefix, arenaState, sessionManager, debuggerManager, tournamentRunner, staticContentPath);
+			var countdownProvider = new CountdownProvider(settings.ContestStartTimestamp, TimeSpan.FromHours(settings.ContestDurationInHours));
+			var arenaState = new ArenaState(playersRepo, gamesRepo, countdownProvider, settings.GodModeSecret, settings.GodAccessOnly);
+			var tournamentRunner = new TournamentRunner(arenaState, battleRunner, settings.BattlesPerPair);
+			var httpServer = new GameHttpServer(httpListenerPrefix, arenaState, sessionManager, debuggerManager, tournamentRunner, staticContentPath);
 			Runtime.SetConsoleCtrlHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
@@ -53,8 +51,8 @@ namespace Server
 			});
 			tournamentRunner.Start();
 			httpServer.Run();
-			log.InfoFormat("Listening on: {0}", prefix);
-			if (!productionMode)
+			log.InfoFormat("Listening on: {0}", httpListenerPrefix);
+			if (!settings.ProductionMode)
 				Process.Start(httpServer.DefaultUrl);
 			httpServer.WaitForTermination();
 			tournamentRunner.WaitForTermination();

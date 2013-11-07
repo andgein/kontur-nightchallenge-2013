@@ -1,16 +1,25 @@
+using Core.Arena;
 using JetBrains.Annotations;
 
 namespace Server.Handlers
 {
 	public class IndexHandler : StrictPathHttpHandlerBase
 	{
-		public IndexHandler() : base("")
+		private readonly ArenaState arenaState;
+
+		public IndexHandler([NotNull] ArenaState arenaState)
+			: base("index")
 		{
+			this.arenaState = arenaState;
 		}
 
 		public override void Handle([NotNull] GameHttpContext context, bool godMode)
 		{
-			context.Redirect(context.BasePath + "index.html");
+			var response = new IndexResponse
+			{
+				NavigationIsDisabled = arenaState.GodAccessOnly && !godMode,
+			};
+			context.SendResponse(response);
 		}
 	}
 }
