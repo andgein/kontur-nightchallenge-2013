@@ -59,6 +59,13 @@ var Game = Base.extend({
 				return that._handleStepResponse(stepResponse);
 			});
 	},
+	restart: function () {
+		var that = this;
+		return server.get("debugger/restart")
+			.pipe(function (stepResponse) {
+				return that._handleStepResponse(stepResponse);
+			});
+	},
 	step: function (stepCount) {
 		var that = this;
 		return server.get("debugger/step", { count: stepCount, currentStep: this.currentStep })
@@ -182,6 +189,13 @@ var GameRunner = Base.extend({
 			requirePlaying: false,
 			action: function (game) {
 				return game.reset();
+			}
+		});
+	},
+	restart: function () {
+		this._play({
+			action: function (game) {
+				return game.restart();
 			}
 		});
 	},

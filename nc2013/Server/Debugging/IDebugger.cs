@@ -14,6 +14,9 @@ namespace Server.Debugging
 		[NotNull]
 		GameStepResult StepToEnd();
 
+		[NotNull]
+		GameStepResult Restart();
+
 		void AddBreakpoint([NotNull] Breakpoint breakpoint);
 		void RemoveBreakpoint([NotNull] Breakpoint breakpoint);
 		void ClearBreakpoints();
