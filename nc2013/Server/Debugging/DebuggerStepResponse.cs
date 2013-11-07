@@ -16,6 +16,7 @@ namespace Server.Debugging
 		public GameState GameState { get; set; }
 
 		[JsonProperty]
-		public bool StoppedOnBreakpoint { get; set; }
+		[CanBeNull]
+		public Breakpoint StoppedOnBreakpoint { get; set; }
 	}
 }

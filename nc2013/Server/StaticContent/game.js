@@ -37,6 +37,7 @@ var Game = Base.extend({
 			});
 	},
 	_handleStepResponse: function (stepResponse) {
+		this.breakpoints.stoppedOnBreakpoint(stepResponse.stoppedOnBreakpoint);
 		if (stepResponse.gameState) {
 			return {
 				gameRunStatus: this._setGameState(stepResponse.gameState),
@@ -150,7 +151,7 @@ var GameRunner = Base.extend({
 			} else
 				result = $.when(status);
 			if (status.stoppedOnBreakpoint) {
-				status.stoppedOnBreakpoint = false;
+				status.stoppedOnBreakpoint = null;
 				that.pause();
 			}
 			if (options.action)

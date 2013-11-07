@@ -106,14 +106,14 @@ namespace Core.Game
 			var programStateDiffs = new List<ProgramStateDiff>();
 
 			var memoryDiffs = new HashSet<int>();
-			var stoppedOnBreakpoint = false;
+			Breakpoint stoppedOnBreakpoint = null;
 			for (var i = 0; i < stepCount; ++i)
 			{
 				var stepResult = engine.Step();
 				memoryDiffs.UnionWith(stepResult.MemoryDiffs);
 				programStateDiffs.AddRange(stepResult.ProgramStateDiffs);
 				stoppedOnBreakpoint = StoppedOnBreakpoint(stepResult, breakpoints);
-				if (stoppedOnBreakpoint)
+				if (stoppedOnBreakpoint != null)
 					break;
 			}
 
@@ -141,14 +141,16 @@ namespace Core.Game
 			};
 		}
 
-		private bool StoppedOnBreakpoint([CanBeNull] StepResult stepResult, [CanBeNull] HashSet<Breakpoint> breakpoints)
+		[CanBeNull]
+		private Breakpoint StoppedOnBreakpoint([CanBeNull] StepResult stepResult, [CanBeNull] HashSet<Breakpoint> breakpoints)
 		{
 			if (breakpoints == null || breakpoints.Count <= 0)
-				return false;
-			return IsMemoryBreakpoint(stepResult, breakpoints) || IsExecutionBreakpoint(breakpoints);
+				return null;
+			return IsMemoryBreakpoint(stepResult, breakpoints) ?? IsExecutionBreakpoint(breakpoints);
 		}
 
-		private bool IsExecutionBreakpoint([NotNull] HashSet<Breakpoint> breakpoints)
+		[CanBeNull]
+		private Breakpoint IsExecutionBreakpoint([NotNull] HashSet<Breakpoint> breakpoints)
 		{
 			var warrior = engine.CurrentWarrior;
 			var newCurrentWarriorInstructionPointer = engine.Warriors[warrior].Queue.PeekOrNull();
@@ -156,33 +158,34 @@ namespace Core.Game
 			{
 				var breakpoint = new Breakpoint((uint) newCurrentWarriorInstructionPointer.Value, warrior, BreakpointType.Execution);
 				if (breakpoints.Contains(breakpoint))
-					return true;
+					return breakpoint;
 			}
-			return false;
+			return null;
 		}
 
-		private bool IsMemoryBreakpoint([CanBeNull] StepResult stepResult, [NotNull] HashSet<Breakpoint> breakpoints)
+		[CanBeNull]
+		private Breakpoint IsMemoryBreakpoint([CanBeNull] StepResult stepResult, [NotNull] HashSet<Breakpoint> breakpoints)
 		{
 			if (stepResult == null || !engine.LastExecutedWarrior.HasValue)
-				return false;
+				return null;
 			foreach (var address in stepResult.MemoryDiffs)
 			{
 				var breakpoint = new Breakpoint((uint) address, engine.LastExecutedWarrior.Value, BreakpointType.MemoryChange);
 				if (breakpoints.Contains(breakpoint))
-					return true;
+					return breakpoint;
 			}
-			return false;
+			return null;
 		}
 
 		[NotNull]
 		public GameStepResult StepToEnd([CanBeNull] HashSet<Breakpoint> breakpoints = null)
 		{
-			var stoppedOnBreakpoint = false;
+			Breakpoint stoppedOnBreakpoint = null;
 			while (!engine.GameOver)
 			{
 				var stepResult = engine.Step();
 				stoppedOnBreakpoint = StoppedOnBreakpoint(stepResult, breakpoints);
-				if (stoppedOnBreakpoint)
+				if (stoppedOnBreakpoint != null)
 					break;
 			}
 			return new GameStepResult

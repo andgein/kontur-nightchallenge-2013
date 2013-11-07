@@ -27,6 +27,19 @@ var BreakpointsCollection = Base.extend({
 		});
 		this.editCell = new CellView({ $view: this.$editCell, useText: true });
 	},
+	stoppedOnBreakpoint: function (breakpoint) {
+		if (this._lastStoppedOnBreakpointView) {
+			this._lastStoppedOnBreakpointView.removeClass("stopped");
+			this._lastStoppedOnBreakpointView = null;
+		}
+		if (breakpoint) {
+			var breakpointInfo = this.breakpointsMap[breakpoint.address];
+			if (breakpointInfo) {
+				this._lastStoppedOnBreakpointView = breakpointInfo.breakpointView;
+				this._lastStoppedOnBreakpointView.addClass("stopped");
+			}
+		}
+	},
 	setBreakpoints: function (breakpoints) {
 		breakpoints = breakpoints || [];
 		this.breakpointsMap = {};
@@ -66,6 +79,7 @@ var BreakpointsCollection = Base.extend({
 				breakpointsMapArray[i].breakpointView = this.breakpointViews[i];
 			}
 		}
+		this.stoppedOnBreakpoint(null);
 	},
 	_editBreakpoint: function (cell) {
 		if (!cell) {
@@ -281,5 +295,5 @@ var BreakpointView = CellView.extend({
 		this.$text.text(text);
 	}
 }, {
-	itemTemplate: "<div><span class='%cellClass%'>%cellText%</span><span class='item-control remove'>del</span><span class='item-control edit'>edit</span></div>"
+	itemTemplate: "<div class='breakpoint'><span class='%cellClass%'>%cellText%</span><span class='item-control remove'>del</span><span class='item-control edit'>edit</span></div>"
 });
