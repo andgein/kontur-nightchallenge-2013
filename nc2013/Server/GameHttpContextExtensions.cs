@@ -272,5 +272,11 @@ namespace Server
 			if (!context.TryHandleStatic(localPath))
 				throw new HttpException(HttpStatusCode.NotFound, string.Format("Static resource '{0}' is not found", context.Request.RawUrl));
 		}
+
+		public static bool IsRootPathRequested([NotNull] this GameHttpContext context)
+		{
+			var requestPath = context.Request.Url.AbsolutePath;
+			return requestPath.Equals(context.BasePath, StringComparison.OrdinalIgnoreCase) || (requestPath + "/").Equals(context.BasePath, StringComparison.OrdinalIgnoreCase);
+		}
 	}
 }

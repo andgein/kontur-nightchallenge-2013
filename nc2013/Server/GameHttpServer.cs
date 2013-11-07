@@ -73,7 +73,7 @@ namespace Server
 				while (true)
 				{
 					var asyncResult = listener.BeginGetContext(null, null);
-					if (WaitHandle.WaitAny(new[] {asyncResult.AsyncWaitHandle, stopEvent}) == 1)
+					if (WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, stopEvent }) == 1)
 						break;
 					var httpListenerContext = listener.EndGetContext(asyncResult);
 					Task.Factory.StartNew(() => HandleRequest(httpListenerContext));
@@ -116,7 +116,10 @@ namespace Server
 							godMode = true;
 						}
 						else if (arenaState.GodAccessOnly)
-							throw new HttpException(HttpStatusCode.Forbidden, "GodAccessOnly mode is ON");
+						{
+							if (!RequestedContentIsPublic(context))
+								throw new HttpException(HttpStatusCode.Forbidden, "GodAccessOnly mode is ON");
+						}
 
 						var handlersThatCanHandle = handlers.Where(h => h.CanHandle(context)).ToArray();
 						if (handlersThatCanHandle.Length == 1)
@@ -148,7 +151,7 @@ namespace Server
 					Log.For(this).Error("Request failed", e);
 					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+					httpListenerContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
 						writer.Write(e.ToString());
 					httpListenerContext.Response.Close();
@@ -163,6 +166,18 @@ namespace Server
 				Tuple<string, Stopwatch> dummy;
 				activeRequests.TryRemove(currentRequestId, out dummy);
 			}
+		}
+
+		private static bool RequestedContentIsPublic([NotNull] GameHttpContext context)
+		{
+			if (context.IsRootPathRequested()) return true;
+			var requestedPath = context.Request.Url.LocalPath;
+			if (requestedPath.EndsWith(".js")) return true;
+			if (requestedPath.EndsWith(".css")) return true;
+			if (requestedPath.StartsWith("fonts")) return true;
+			if (requestedPath.EndsWith("/index.html")) return true;
+			if (requestedPath.EndsWith("/tutorial.html")) return true;
+			return false;
 		}
 
 		private bool TryHandleActivity([NotNull] GameHttpContext context)

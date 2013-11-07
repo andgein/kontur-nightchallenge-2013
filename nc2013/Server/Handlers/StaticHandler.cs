@@ -31,8 +31,7 @@ namespace Server.Handlers
 		private static string TryGetLocalPath([NotNull] GameHttpContext context)
 		{
 			var relPath = context.Request.Url.LocalPath;
-			if (!relPath.Contains("..")
-				&& relPath.StartsWith(context.BasePath, StringComparison.OrdinalIgnoreCase))
+			if (!relPath.Contains("..") && relPath.StartsWith(context.BasePath, StringComparison.OrdinalIgnoreCase))
 				return relPath.Substring(context.BasePath.Length);
 			return null;
 		}

@@ -15,10 +15,7 @@ namespace Server.Handlers
 		public bool CanHandle([NotNull] GameHttpContext context)
 		{
 			if (string.IsNullOrEmpty(path))
-			{
-				return context.Request.Url.AbsolutePath.Equals(context.BasePath, StringComparison.OrdinalIgnoreCase)
-					|| (context.Request.Url.AbsolutePath + "/").Equals(context.BasePath, StringComparison.OrdinalIgnoreCase);
-			}
+				return context.IsRootPathRequested();
 			return context.Request.Url.AbsolutePath.Equals(context.BasePath + path, StringComparison.OrdinalIgnoreCase);
 		}
 
