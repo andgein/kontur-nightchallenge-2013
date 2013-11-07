@@ -29,6 +29,9 @@
 		.ranking-table th {
 			text-align: center;
 		}
+		.tournament-running {
+			background-color: yellow;
+		}
 	</style>
 	<link rel="stylesheet" href="common.css" />
 </head>
@@ -39,10 +42,10 @@
 
 		<div class="page-header">
 			<h1>Турнирная таблица</h1>
-			<span ng-if="tournamentIsRunning">Идет очередной турнир...</span>
+			<span class="tournament-running" ng-if="tournamentIsRunning">Идет очередной турнир...</span>
 		</div>
 
-		<div>Время завершения последнего турнира: {{ranking.timestamp}} UTC</div>
+		<div>Время завершения турнира: {{ranking.timestamp}} UTC</div>
 		<table class="table table-condensed table-bordered ranking-table">
 			<tr>
 				<th>№</th>
@@ -66,7 +69,7 @@
 				<td>{{p.loses}}</td>
 				<td class="small">{{100*p.loses / p.games | number:0}}%</td>
 				<td>{{p.games}}</td>
-				<td ng-if="godMode"><a href="javascript:void(0)" ng-click="removePlayer({{p}})">Удалить насовсем!</a></td>
+				<td ng-if="godMode"><a href="javascript:void(0)" ng-click="removePlayer({{p}})">Удалить бота и пересчитать статистику</a></td>
 			</tr>
 		</table>
 		
