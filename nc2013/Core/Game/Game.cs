@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Arena;
 using Core.Engine;
 using Core.Parser;
 using JetBrains.Annotations;
@@ -11,19 +12,26 @@ namespace Core.Game
 	{
 		private GameEngine engine;
 		private readonly ProgramStartInfo[] programStartInfos;
-		private readonly IEnumerable<WarriorStartInfo> warriors;
+		private readonly List<WarriorStartInfo> warriors;
 
 		public Game([NotNull] ProgramStartInfo[] programStartInfos)
 		{
 			this.programStartInfos = programStartInfos;
 
-			var r = new Random();
+			var r = new RandomAllocator(Parameters.CoreSize, Parameters.MinWarriorsDistance);
 			var parser = new WarriorParser();
-			warriors = programStartInfos.Select(
-				psi => new WarriorStartInfo(
-					parser.Parse(psi.Program),
-					psi.StartAddress.HasValue ? (int)psi.StartAddress : r.Next(Parameters.CoreSize)
-					)).ToList();
+
+			var lastAddress = 0;
+			warriors = new List<WarriorStartInfo>();
+			foreach (var psi in programStartInfos)
+			{
+				var warrior = parser.Parse(psi.Program);
+				warriors.Add(new WarriorStartInfo(
+					warrior,
+					psi.StartAddress.HasValue ? (int) psi.StartAddress : r.NextLoadAddress(lastAddress, warrior.Length)
+					));
+				lastAddress = warriors.Last().LoadAddress + warriors.Last().Warrior.Length;
+			}
 
 			Init();
 		}

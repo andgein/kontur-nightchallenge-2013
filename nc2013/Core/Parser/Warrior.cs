@@ -15,6 +15,11 @@ namespace Core.Parser
 		public Expression StartAddressExpression = null;
 		public int StartAddress { get; private set; }
 
+		public int Length
+		{
+			get { return Statements.Count;  }
+		}
+
 		public Warrior(List<Statement> statements)
 		{
 			Statements = statements;

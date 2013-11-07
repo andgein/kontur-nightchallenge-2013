@@ -21,6 +21,7 @@ namespace Core.Arena
 		private readonly Rules rules;
 		private readonly Random rnd = new Random();
 		private readonly WarriorParser warriorParser = new WarriorParser();
+		private readonly RandomAllocator randomAllocator;
 
 		public RoundRobinTournament([NotNull] IBattleRunner battleRunner, int battlesPerPair, [NotNull] string tournamentId, [NotNull] TournamentPlayer[] players, [CanBeNull] AutoResetEvent botSubmissionSignal, [CanBeNull]ManualResetEvent stopSignal, bool suppressBattleErrors = true)
 		{
@@ -46,6 +47,7 @@ namespace Core.Arena
 				ScoreFormula = ScoreFormula.Standard,
 				ICWSStandard = ICWStandard.ICWS88,
 			};
+			this.randomAllocator = new RandomAllocator(rules.CoreSize, rules.MinDistance);
 		}
 
 		[NotNull]
@@ -95,7 +97,7 @@ namespace Core.Arena
 						Player1 = pair.Item1,
 						StartAddress1 = 0,
 						Player2 = pair.Item2,
-						StartAddress2 = NextLoadAddress(0),
+						StartAddress2 = randomAllocator.NextLoadAddress(pair.Item1.Warrior.Length, pair.Item2.Warrior.Length),
 					};
 					var battleResult = RunBattle(battle);
 					if (battleResult.RunToCompletion)
@@ -114,13 +116,6 @@ namespace Core.Arena
 			if (!winner.HasValue) return BattlePlayerResultType.Draw;
 			if (winner == player) return BattlePlayerResultType.Win;
 			return BattlePlayerResultType.Loss;
-		}
-
-		private int NextLoadAddress(int baseAddress)
-		{
-			var positions = rules.CoreSize + 1 - (rules.MinDistance << 1);
-			var nextLoadAddress = ModularArith.Mod(baseAddress + rules.MinDistance + rnd.Next() % positions);
-			return nextLoadAddress;
 		}
 
 		[NotNull]
