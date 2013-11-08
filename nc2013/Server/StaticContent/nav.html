@@ -56,7 +56,7 @@
 		}
 
 		var godMode = $.cookie("godMode") != undefined;
-		$scope.homeText = godMode ? "God Mode!" : "Home";
+		$scope.homeText = godMode ? "God Mode!" : "Домой";
 
 		refresh();
 		setInterval(refresh, 1000 * 60);
@@ -70,6 +70,7 @@
 	<div class="collapse navbar-collapse">
 		<ul class="nav navbar-nav" ng-if="!navigationIsDisabled">
 			<li><a href="ranking.html">Текущие результаты</a></li>
+  		<li><a href="tutorial.html">Спецификация</a></li>
 			<li><a href="submit.html">Отправить своего бота</a></li>
 			<li><a href="debugger.html">Визуальный отладчик</a></li>
 		</ul>
