@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using Core;
 using JetBrains.Annotations;
@@ -31,14 +34,42 @@ namespace Server
 			}
 		}
 
-		public static void SetConsoleCtrlHandler([NotNull] Action handler)
+		public static void SetStopHandler([NotNull] Action handler)
 		{
 			onCtrlBreak = sig =>
 			{
 				handler();
 				return true;
 			};
+			var stopSignal = CreateStopSignal();
+			RegisterStopSignalCallback(stopSignal, handler);
 			WinApi.SetConsoleCtrlHandler(onCtrlBreak, true);
+		}
+
+		private static void RegisterStopSignalCallback([NotNull] WaitHandle stopSignal, [NotNull] Action onStopSignalCallback)
+		{
+			var state = new RegisteredWaitHandleState();
+			state.Handle = ThreadPool.RegisterWaitForSingleObject(stopSignal, (o, timedOut) =>
+			{
+				onStopSignalCallback();
+				var handle = ((RegisteredWaitHandleState)o).Handle;
+				if (handle != null)
+					handle.Unregister(null);
+			}, state, Timeout.Infinite, true);
+		}
+
+		[NotNull]
+		private static EventWaitHandle CreateStopSignal()
+		{
+			var stopSignalName = string.Format("Global\\{0}", Process.GetCurrentProcess().ProcessName);
+			var everyoneSid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+			var handleSecurity = new EventWaitHandleSecurity();
+			handleSecurity.AddAccessRule(new EventWaitHandleAccessRule(everyoneSid, EventWaitHandleRights.Modify | EventWaitHandleRights.Synchronize, AccessControlType.Allow));
+			bool createdNew;
+			var stopSignal = new EventWaitHandle(false, EventResetMode.ManualReset, stopSignalName, out createdNew, handleSecurity);
+			if (!createdNew)
+				stopSignal.Reset();
+			return stopSignal;
 		}
 
 		private static void InitAppDomain([NotNull] ILog log)
@@ -66,5 +97,11 @@ namespace Server
 			[DllImport("kernel32.dll")]
 			public static extern bool SetConsoleCtrlHandler([NotNull] HandlerRoutine handler, bool add);
 		}
+
+		private class RegisteredWaitHandleState
+		{
+			public RegisteredWaitHandle Handle { get; set; }
+		}
+
 	}
 }

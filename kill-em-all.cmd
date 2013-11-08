@@ -1,4 +1,3 @@
 pushd %~dp0
-pskill -accepteula >nul 2>nul
-pskill corewar.exe
+corewar.stopper.exe %1
 popd

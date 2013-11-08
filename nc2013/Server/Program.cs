@@ -43,7 +43,7 @@ namespace Server
 			var arenaState = new ArenaState(playersRepo, gamesRepo, countdownProvider, settings.GodModeSecret, settings.GodAccessOnly);
 			var tournamentRunner = new TournamentRunner(arenaState, battleRunner, settings.BattlesPerPair);
 			var httpServer = new GameHttpServer(httpListenerPrefix, arenaState, sessionManager, debuggerManager, tournamentRunner, staticContentPath);
-			Runtime.SetConsoleCtrlHandler(() =>
+			Runtime.SetStopHandler(() =>
 			{
 				log.InfoFormat("Stopping...");
 				httpServer.Stop();
