@@ -69,7 +69,7 @@ var BreakpointsCollection = Base.extend({
 				$container: this.$container,
 				useText: true,
 				viewClass: BreakpointView,
-				cellClass: "listingItem"
+				cellClass: "breakpoint"
 			});
 			for (var i = oldBreakpointsCount; i < breakpointsMapArray.length; ++i)
 				builder.addCell(this.memory.getCell(breakpointsMapArray[i].address));
@@ -110,6 +110,8 @@ var BreakpointsCollection = Base.extend({
 		this.$clear.addClass("hidden");
 		this.$container.addClass("hidden");
 		this.$editContainer.removeClass("hidden");
+		this.$editApply.removeClass("hidden");
+		this.$editCancel.removeClass("hidden");
 
 		var that = this;
 		function hide() {
@@ -119,6 +121,8 @@ var BreakpointsCollection = Base.extend({
 			that.$editContainer.addClass("hidden");
 			that.$editCancel.unbind("click.editBreakpoint");
 			that.$editApply.unbind("click.editBreakpoint");
+			that.$editApply.addClass("hidden");
+			that.$editCancel.addClass("hidden");
 		}
 
 		function apply() {
@@ -179,7 +183,7 @@ var BreakpointsCollection = Base.extend({
 								$container: that.$container,
 								useText: true,
 								viewClass: BreakpointView,
-								cellClass: "listingItem"
+								cellClass: "breakpoint"
 							});
 							builder.addCell(cell);
 							breakpointView = builder.build()[0];
@@ -295,5 +299,5 @@ var BreakpointView = CellView.extend({
 		this.$text.text(text);
 	}
 }, {
-	itemTemplate: "<div class='breakpoint'><span class='%cellClass%'>%cellText%</span><span class='item-control remove'>del</span><span class='item-control edit'>edit</span></div>"
+	itemTemplate: "<div class='%cellClass%'><span class='item-text'>%cellText%</span><span class='item-control remove'>del</span><span class='item-control edit'>edit</span></div>"
 });
