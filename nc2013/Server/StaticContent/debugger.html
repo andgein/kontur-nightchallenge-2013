@@ -34,12 +34,20 @@
 					step();
 			});
 			$(document.body).on("keydown", function (event) {
-				if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 118 /*F7*/) {
+				if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 120 /*F9*/) {
 					gameRunner.step(-1);
 					return false;
 				}
-				else if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 119 /*F8*/) {
+				else if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 121 /*F10*/) {
 					gameRunner.step(+1);
+					return false;
+				}
+				else if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 119 /*F8*/) {
+					gameRunner.stepToEnd();
+					return false;
+				}
+				else if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 118 /*F7*/) {
+					gameRunner.run(slowSpeed);
 					return false;
 				}
 			});
@@ -561,9 +569,9 @@
 				<textarea class="program" id="programB"></textarea>
 			</div>
 			<div class="programs-buttons-container">
-				<button onclick="gameRunner.run(slowSpeed);">Run</button>
-				<button onclick="gameRunner.step(+1);">Step into debugger</button>
-				<button onclick="gameRunner.stepToEnd();">Run until game is over</button>
+				<button onclick="gameRunner.run(slowSpeed);">Run (F7)</button>
+				<button onclick="gameRunner.step(+1);">Step into debugger (F10)</button>
+				<button onclick="gameRunner.stepToEnd();">Run to end or to breakpoint (F8)</button>
 			</div>
 		</div>
 	</div>
@@ -572,16 +580,18 @@
 			<a href="javascript:void(0)" title="Reset current game and return to programs listing" onclick="gameRunner.reset();">< back</a>
 			&nbsp;&nbsp;
 			<button title="Restart game. Warriors start addresses will not change" onclick="gameRunner.restart();">&#8634;</button>
-				<button title="Run to end" onclick="gameRunner.stepToEnd();">>>>|</button>
+				<button title="Run to end or to breakpoint (F8)" onclick="gameRunner.stepToEnd();">>>>|</button>
 			<button title="Run very fast (x32)" onclick="gameRunner.run(speedX32);">>>></button>
 			<button title="Run fast (x16)" onclick="gameRunner.run(speedX16);">>></button>
-			<button title="Run slow (x1)" onclick="gameRunner.run(slowSpeed);">></button>
+			<button title="Run slow (x1) (F7)" onclick="gameRunner.run(slowSpeed);">></button>
 			<button title="Pause" onclick="gameRunner.pause();">||</button>
 			&nbsp; steps:
-				<button title="F7" onclick="gameRunner.step(-1);">-1</button>
-			<button title="F8" onclick="gameRunner.step(+1);">+1</button>
+				<button title="Go to previous step (F9)" onclick="gameRunner.step(-1);">-1</button>
+			<button title="Go to next step (F10)" onclick="gameRunner.step(+1);">+1</button>
 			&nbsp;
-				<input type="text" value="+16" id="stepCount" />
+			<input type="text" title="Samples:
+enter '+99' to make 99 steps forward
+enter '-22' to make 22 steps back" value="+16" id="stepCount" />
 			<button onclick="step()">go</button>
 			&nbsp;&nbsp;
 			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-gameover">game over</span></span>
