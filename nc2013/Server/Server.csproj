@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arena\ArenaPlayerHandler_Test.cs" />
     <Compile Include="Arena\ArenaRankingResponse.cs" />
     <Compile Include="Arena\ArenaRemovePlayerHandler.cs" />
     <Compile Include="Arena\ArenaSetSubmitIsAllowedHandler.cs" />

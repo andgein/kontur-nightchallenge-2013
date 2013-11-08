@@ -25,5 +25,10 @@ namespace Server.Arena
 
 		[JsonProperty]
 		public FinishedGameInfo[] GameInfos;
+
+		public override string ToString()
+		{
+			return string.Format("Enemy: {0}, EnemyVersion: {1}, Wins: {2}, Draws: {3}, Loses: {4}", Enemy, EnemyVersion, Wins, Draws, Loses);
+		}
 	}
 }

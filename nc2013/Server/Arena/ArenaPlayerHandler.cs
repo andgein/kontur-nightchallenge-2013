@@ -75,21 +75,7 @@ namespace Server.Arena
 				Version = arenaPlayer.Version,
 			};
 			var games = arenaState.GamesRepo.LoadGames(ranking.TournamentId);
-			var gamesByEnemy = games
-				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result, true)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result, false)))
-				.Where(x => x.Item1.Player.Name == arenaPlayer.Name && x.Item1.Player.Version == arenaPlayer.Version)
-				.GroupBy(x => x.Item2.Player)
-				.Select(g => new FinishedGamesWithEnemy
-				{
-					Enemy = g.Key.Name,
-					EnemyVersion = g.Key.Version,
-					Wins = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Win),
-					Draws = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Draw),
-					Loses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
-					GameInfos = godMode ? GetGameInfos(g) : null,
-				})
-				.OrderByDescending(x => x.Wins)
-				.ToArray();
+			var gamesByEnemy = GetFinishedGamesWithEnemies(games, arenaPlayer.Name, arenaPlayer.Version, godMode);
 			var playerInfo = new PlayerInfo
 			{
 				RankingEntry = rankingEntry,
@@ -98,9 +84,30 @@ namespace Server.Arena
 				GamesByEnemy = gamesByEnemy,
 				BotVersionInfos = botVersionInfos,
 				GodMode = godMode,
-				Program = godMode ? arenaPlayer.Program : null
+				Program = godMode ? arenaPlayer.Program : null,
 			};
 			return playerInfo;
+		}
+
+		[NotNull]
+		public static FinishedGamesWithEnemy[] GetFinishedGamesWithEnemies([NotNull] List<BattleResult> games, [NotNull] string arenaPlayerName, int arenaPlayerVersion, bool godMode)
+		{
+			var gamesByEnemy = games
+				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result, true)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result, false)))
+				.Where(x => x.Item1.Player.Name == arenaPlayerName && x.Item1.Player.Version == arenaPlayerVersion)
+				.GroupBy(x => x.Item2.Player)
+				.Select(g => new FinishedGamesWithEnemy
+				{
+					Enemy = g.Key.Name,
+					EnemyVersion = g.Key.Version,
+					Wins = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Win),
+					Draws = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Draw),
+					Loses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
+					GameInfos = godMode ? GetGameInfos(g.ToList()) : null,
+				})
+				.OrderByDescending(x => x.Wins)
+				.ToArray();
+			return gamesByEnemy;
 		}
 
 		[NotNull]
@@ -110,6 +117,7 @@ namespace Server.Arena
 			{
 				Player1Result = x.Item3 ? x.Item1 : x.Item2,
 				Player2Result = x.Item3 ? x.Item2 : x.Item1,
+				Label = x.Item1.ResultType.ToString(),
 			}).ToArray();
 		}
 	}

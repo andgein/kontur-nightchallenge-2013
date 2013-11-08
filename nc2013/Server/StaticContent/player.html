@@ -56,7 +56,7 @@
 				<td class="small">{{100*enemyStats.loses/enemyStats.games | number:0}}%</td>
 				<td ng-if="godMode">
 					<span ng-repeat="gameInfo in enemyStats.gameInfos">
-						<a href="javascript:void(0)" ng-click="openDebugger({{gameInfo}})">{{gameInfo.player1Result.resultType}}</a>
+						<a href="javascript:void(0)" ng-click="openDebugger({{gameInfo}})">{{gameInfo.label}}</a>
 					</span>
 				</td>
 			</tr>
