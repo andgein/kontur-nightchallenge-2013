@@ -249,6 +249,8 @@ namespace Server
 				return "image/jpeg";
 			if (Path.GetExtension(file) == ".png")
 				return "image/png";
+			if (Path.GetExtension(file) == ".ico")
+				return "image/vnd.microsoft.icon";
 			if (Path.GetExtension(file) == ".zip")
 				return "application/x-zip-compressed";
 			return null;
