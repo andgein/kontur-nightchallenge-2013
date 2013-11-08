@@ -76,7 +76,7 @@ namespace Server.Arena
 			};
 			var games = arenaState.GamesRepo.LoadGames(ranking.TournamentId);
 			var gamesByEnemy = games
-				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result)))
+				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result, true)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result, false)))
 				.Where(x => x.Item1.Player.Name == arenaPlayer.Name && x.Item1.Player.Version == arenaPlayer.Version)
 				.GroupBy(x => x.Item2.Player)
 				.Select(g => new FinishedGamesWithEnemy
@@ -104,12 +104,12 @@ namespace Server.Arena
 		}
 
 		[NotNull]
-		private static FinishedGameInfo[] GetGameInfos([NotNull] IEnumerable<Tuple<BattlePlayerResult, BattlePlayerResult>> games)
+		private static FinishedGameInfo[] GetGameInfos([NotNull] IEnumerable<Tuple<BattlePlayerResult, BattlePlayerResult, bool>> games)
 		{
 			return games.Select(x => new FinishedGameInfo
 			{
-				Player1Result = x.Item1,
-				Player2Result = x.Item2,
+				Player1Result = x.Item3 ? x.Item1 : x.Item2,
+				Player2Result = x.Item3 ? x.Item2 : x.Item1,
 			}).ToArray();
 		}
 	}
