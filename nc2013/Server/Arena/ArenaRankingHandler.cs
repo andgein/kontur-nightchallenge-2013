@@ -24,7 +24,7 @@ namespace Server.Arena
 			{
 				TournamentId = id,
 				CreationTimestamp = new DateTime(long.Parse(id), DateTimeKind.Utc),
-			}).OrderByDescending(x => x.CreationTimestamp).ToArray();
+			}).OrderByDescending(x => x.CreationTimestamp).Take(20).ToArray();
 			var response = new ArenaRankingResponse
 			{
 				Ranking = ranking,

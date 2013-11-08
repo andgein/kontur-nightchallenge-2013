@@ -41,6 +41,7 @@ namespace Server.Arena
 					arenaPlayer = playerVersions.FirstOrDefault(p => p.Version == version.Value);
 					if (arenaPlayer != null)
 					{
+						arenaPlayer.Authors = lastVersion.Authors;
 						var tournamentId = "last";
 						if (arenaPlayer.Version != lastVersion.Version)
 						{
