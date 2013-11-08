@@ -172,20 +172,20 @@
     <div>
       Мы видим, что в <i>Бомбере</i> появились символы перед операндами, отличные от знака доллара:
       <ul>
-        <li>
+        <li id="addressing-direct">
           Запись <span class="addr">$N</span>, которую мы уже видели ранее, называется <b><span class="hint" title="Direct">прямой</span></b> адресацией.
         </li>
-        <li>
+        <li id="addressing-immediate">
           Запись <span class="addr">#N</span> означает <b><span class="hint" title="Immediate">непосредственную</span></b> адресацию, то есть она не указывает на какую бы то ни было ячейку в памяти, она показывает, что операндом является число N.
         </li>
-    		<li>
+    		<li id="addressing-indirect">
     			Запись <span class="addr">@N</span> называется <b><span class="hint" title="Indirect">косвенной</span></b> адресацией.
           Значение&nbsp;<span class="addr">N</span> используется как относительно смещение для поиска некоторой ячейки, обозначим её как&nbsp;<span class="addr">X</span>.
           После этого В-поле ячейки <span class="addr">X</span> используется как смещение относительно ячейки&nbsp;<span class="addr">X</span> &mdash; на эту ячейку и будет указывать запись <span class="addr">@N</span>.
     		</li>
-        <li>
+        <li id="addressing-predecrement-indirect">
           Кроме того, существует четвёртый тип адресации, <b><span class="hint" title="Pre-decrement indirect">предекрементный косвенный</span></b>. Он записывается как <span class="addr">&lt;N</span> и означает следующее: значение&nbsp;<span class="addr">N</span> используется как относительно смещение для поиска некоторой ячейки, обозначим её как&nbsp;<span class="addr">X</span>.
-          После этого В-поле ячейки <span class="addr">X</span> уменьшается на единицу и записывается в то же В-поле, где оно было взято. Затем это новое значение В-поля используется как смещение относительно ячейки&nbsp;<span class="addr">X</span> &mdash; на эту ячейку и будет указывать запись <span class="addr">&lt;N</span>.
+          После этого В-поле ячейки <span class="addr">X</span> уменьшается на единицу и записывается в то же В-поле, где оно было взято. Затем это новое значение В-поля используется как смещение относительно ячейки&nbsp;<span class="addr">X</span> &mdash; на эту ячейку и будет указывать запись&nbsp;<span class="addr">&lt;N</span>.
         </li>
 	   </ul>		
     </div>
@@ -195,6 +195,9 @@
       <span class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">$3</span></span>
       можно написать
       <span class="code"><span class="command">ADD</span> <span class="addr">#4</span>, <span class="addr">3</span></span>.
+
+      Не все виды адресации допустимо использовать с теми или иными командами. Список допустимых адресаций указан в разделе 
+      &laquo;<a href="#addresses">Возможные адресации всех команд</a>&raquo;. В случае использования недопустимых адресаций возникает ошибка компиляции <a href="#error-invalid-addressing-mode">Invalid addressing mode</a>.
 
     </div>
 
@@ -379,12 +382,12 @@
     </div>
 
     <div>
-      Большинство команд требует двух операндов, однако команды <span class="command">SPL</span> и <span class="command">JMP</span> можно использовать и только с одним. В этом случае не записываются запятая и второй аргумент. 
+      Большинство команд требует двух операндов, однако команды <span class="command">SPL</span> и <span class="command">JMP</span> можно использовать и только с одним. В этом случае не записываются запятая и второй&nbsp;аргумент. 
     </div>    
 
     <div>
       Любая команда выполняется следующим образом. Первым делом, если А-поле имеет не непосредственную адресацию,
-      вычисляется адрес ячейки, куда оно ссылается. Если необходимо, при этом выполняется соответствующий декремент.
+      вычисляется адрес ячейки, куда оно ссылается. Если необходимо, при этом выполняется соответствующий декремент (см.&nbsp;<a href="#addressing-predecrement-indirect">предекрементную косвенную адресацию</a>).
       Содержимое ячейки, ссылку на которую мы получили, запоминается.
     </div>
 
@@ -416,11 +419,11 @@
     <h3>Метки</h3>
     <div>
       Кроме того, каждая команда может содержать перед собой метку, отделенную от самой команды одним или более пробелами.
-      Метка не может совпадать с названием какой-либо команды (<span class="command">MOV</span>, <span class="command">ADD</span> и так далее), и должна быть уникальной среди всех меток программы. 
+      Название метки не может совпадать с названием какой-либо команды (то есть не может быть <span class="command">MOV</span>, <span class="command">ADD</span> и так далее), и должно быть уникальным среди названий всех меток программы. 
     </div>
 
     <div>      
-      Метка команды может использоваться внутри арифметических выражений в А- и В-полях этой или других команд. Во время компиляции программы в момент вычисления значения выражения имя метки заменяется на смещение строки с этой меткой относительно текущей.
+      Метка команды может использоваться внутри арифметических выражений в А- и В-полях любой команд. Во время компиляции программы в момент вычисления значения выражения имя метки заменяется на смещение строки с этой меткой относительно текущей.
     </div>
 
     <div>
@@ -439,7 +442,7 @@
       Существует также две структуры языка, которые не являются командами &mdash; это <span class="command">EQU</span> и
       <span class="command">END</span>.
 
-      Первая позволяет создавать умные арифметические макросы подстановки, которые могут быть использованы внутри
+      Первая позволяет создавать умные арифметические макросы подстановки (&laquo;константы&raquo;), которые могут быть использованы внутри
       арифметических выражений в операндах или определении других макросов:
     </div>
 
@@ -470,6 +473,17 @@
     <div>
       Название макроса должно быть уникально, должно отличать от названий меток в программе и может состоять только из букв, цифр, символов точки (.) и подчеркивания (_).
     </div>
+
+    <div>
+      Как уже было сказано, макрос может использовать в своём определении метки или названия других макросов, однако не может
+      образовывать циклическую зависимость макросов друг от друга. Следующий код
+    </div>
+
+    <div class="code">a <span class="command">EQU</span> b + 10</div>
+    <div class="code">b <span class="command">EQU</span> c + 10</div>
+    <div class="code">c <span class="command">EQU</span> a + 5</div>
+
+    <div>вызывает ошибку компиляции <a href="#error-cycle">Cycle in constants evaluation detected</a>.</div>
 
     <div>Вторая структура языка имеет синтаксис команды, может иметь метку, хотя командой как таковой не является. Это ключевое
     слово <span class="command">END</span>. После себя оно может иметь один параметр (число, метку или макрос, но не арифметическое выражение), либо не иметь параметров вообще (что равносильно одному параметру, равному&nbsp;0). Весь текст программы после строки, содержащей ключевое слово <span class="command">END</span>, игнорируется. Если <span class="command">END</span> имеет параметр, то он используется как номер команды в программе, с которой начнётся выполнение. Команды в программе нумеруются с нуля.</div>
@@ -522,7 +536,7 @@
       <tr><td>Количество ходов, которое сделает программа каждого из участников, после которого наступает ничья</td><td>80&nbsp;000</td></tr>
     </table>
 
-    <h3>Сообщения об ошибках</h3>
+    <h3 id="errors">Сообщения об ошибках</h3>
     <div>
       Сообщение об ошибке можно увидеть при начале отладке или при отправке бота. Любое сообщение содержит строку, в которой была найдена ошибка, а также поясняющее сообщение о типе ошибки. Возможные сообщения приведены в таблице ниже. Если вы не понимаете, почему возникает та или иная ошибка, обратитесь к организаторам. 
     </div>
@@ -536,17 +550,21 @@
       <tr><td>Constant with same label '&lt;name&gt;' already</td><td>Попытка объявить макрос или команду с меткой, которые имеют такое же имя, как уже существующий макрос</td></tr>
       <tr><td>Too long program. Max allowed length is&nbsp;512</td><td>Превышено максимальное количество инструкций в программе</td></tr>
       <tr><td>Not a command</td><td>То, что записано в строке, не является верной командой</td></tr>
-      <tr><td>A-Field expected in '&lt;command&gt;'</td><td>У команды не указано А-поле</td></tr>
+      <tr><td>A-Field expected in '&lt;command&gt;'</td><td>У команды не указано А-поле. В качестве &lt;command&gt; может быть название команды или конструкция&nbsp;<span class="command">EQU</span></td></tr>
       <tr><td>B-Field expected in '&lt;command&gt;'</td><td>У команды не указано B-поле, хотя данный тип команд не подразумевает использования с одним операндом</td></tr>
-      <tr><td>Invalid addressing mode</td><td>Для этой команды не подразумевается такие типы адресаций в операндах</td></tr>
+      <tr><td id="error-invalid-addressing-mode">Invalid addressing mode</td><td>Для этой команды не подразумевается такие типы адресаций в операндах</td></tr>
       <tr><td>Expected comma</td><td>Между операндами ожидается запятая</td></tr>
       <tr><td>Can't find close bracket</td><td>В строке не найдена парная закрывающаяся скобка</td></tr>
       <tr><td>Invalid token in expression</td><td>Неизвестный токен или символ в арифметическом выражении</td></tr>
       <tr><td>Unexpected end of line</td><td>Неожиданный конец строки</td></tr>
       <tr><td>Division by zero</td><td>Деление на ноль в выражении</td></tr>
+      <tr><td id="error-cycle">Cycle in constants evaluation detected</td><td>Макросы не могут ссылаться друг на друга циклически</td></tr>
+      <tr><td>END argument must be label, constant name or number</td><td>Аргумент конструкции <span class="command">END</span> должен быть меткой, названием макроса или числом и не может быть арифметическим выражением</td></tr>
+      <tr><td>EQU statement should have label</td><td>Конструкция <span class="command">EQU</span> должна иметь перед собой метку &mdash; название макроса</td></tr>
+      <tr><td>Expected end of command</td><td>Ожидался конец команды или служебной инструкции, но были найдены лишние символы</td></tr>
     </table>
 
-    <h3>Возможные адресации всех команд</h3>
+    <h3 id="addresses">Возможные адресации всех команд</h3>
     <table class="table table-bordered table-condensed">
       <tr><th class="command">ADD</th><td><span class="code">ADD    A    B </span></td><td><span class="code">ADD    A  @B </span></td><td><span class="code">ADD    A  &lt;B </span></td><td><span class="code">ADD  #A    B </span></td><td><span class="code">ADD  #A  @B </span></td><td><span class="code">ADD  #A  &lt;B </span></td><td><span class="code">ADD  @A    B </span></td><td><span class="code">ADD  @A  @B </span></td><td><span class="code">ADD  @A  &lt;B </span></td><td><span class="code">ADD  &lt;A    B </span></td><td><span class="code">ADD  &lt;A  @B </span></td><td><span class="code">ADD  &lt;A  &lt;B </span></td></tr>
       <tr><th class="command">CMP</th><td><span class="code">CMP    A    B </span></td><td><span class="code">CMP    A  @B </span></td><td><span class="code">CMP    A  &lt;B </span></td><td><span class="code">CMP  #A    B </span></td><td><span class="code">CMP  #A  @B </span></td><td><span class="code">CMP  #A  &lt;B </span></td><td><span class="code">CMP  @A    B </span></td><td><span class="code">CMP  @A  @B </span></td><td><span class="code">CMP  @A  &lt;B </span></td><td><span class="code">CMP  &lt;A    B </span></td><td><span class="code">CMP  &lt;A  @B </span></td><td><span class="code">CMP  &lt;A  &lt;B </span></td></tr>

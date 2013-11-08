@@ -88,7 +88,7 @@ namespace Core.Parser
 				else if (StartAddressExpression.GetType() == typeof(NumberExpression))
 					StartAddress = StartAddressExpression.Calculate(this, Statements.Count);
 				else
-					throw new CompilationException("END argument must be label or number", StartAddressExpression.ToString(), 0);
+					throw new CompilationException("END argument must be label, constant name or number", StartAddressExpression.ToString(), 0);
 			}
 		}
 	}

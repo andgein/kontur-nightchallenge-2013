@@ -130,10 +130,12 @@ namespace Core.Parser
 			if (!RestOnlyWhitespaces())
 				a = ReadModeAndField();
 			else if (statement.Type != StatementType.End)
-				throw new CompilationException("A-Field expected in " + command, State);
+				throw new CompilationException("A-Field expected in " + command.ToUpper(), State);
 
 			if (!RestOnlyWhitespaces())
 			{
+				if (statement.Type == StatementType.Equ || statement.Type == StatementType.End)
+					throw new CompilationException("Expected end of command", State);
 				ParseComma();
 				b = ReadModeAndField();
 			}
@@ -142,7 +144,11 @@ namespace Core.Parser
 				&& statement.Type != StatementType.Spl
 				&& statement.Type != StatementType.Jmp
 				)
-				throw new CompilationException("B-Field Expected in " + command, State);
+				throw new CompilationException("B-Field Expected in " + command.ToUpper(), State);
+
+			if (! RestOnlyWhitespaces())
+				throw new CompilationException("Expected end of command", State);
+
 			statement.SetFields(a, b);
 			CheckStatementIsCorrect(statement);
 			return statement;
