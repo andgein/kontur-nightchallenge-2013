@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using Core;
 using JetBrains.Annotations;
 
 namespace Server
@@ -174,6 +175,10 @@ namespace Server
 						context.Response.AppendHeader("Content-Encoding", "gzip");
 						value = gzipedStream.ToArray();
 					}
+				}
+				else
+				{
+					Log.Network.Warn(string.Format("Client do not accept gzip. Request: {0}. Session: {1}. Accept-Encoding: {2}", context.Request.RawUrl, context.Session.SessionId, acceptEncoding));
 				}
 				context.Response.ContentLength64 = value.Length;
 				context.Response.OutputStream.Write(value, 0, value.Length);
