@@ -30,8 +30,10 @@
 		$(function () {
 			$("#autofocus").click(switchAutofocus);
 			$("#stepCount").keydown(function (event) {
-				if (event.which == 13)
+				if (event.which == 13) {
 					step();
+					return false;
+				}
 			});
 			$(document.body).on("keydown", function (event) {
 				if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 120 /*F9*/) {
@@ -154,8 +156,11 @@
 		}
 
 		function gameRunStatusChanged(gameRunStatus) {
-			$(document.body).removeClass("run-status-loading run-status-reset run-status-playing run-status-gameover");
-			$(document.body).addClass("run-status-" + gameRunStatus);
+			var allStatusClasses = "run-status-loading run-status-reset run-status-playing run-status-ajax run-status-error run-status-gameover";
+			var newStatus = "run-status-" + gameRunStatus;
+			var statusesToRemove = allStatusClasses.replace(newStatus, "");
+			$(document.body).removeClass(statusesToRemove);
+			$(document.body).addClass(newStatus);
 		}
 
 		function switchAutofocus() {
@@ -226,6 +231,8 @@
 		}
 
 		.run-status-playing .debugger-container,
+		.run-status-ajax .debugger-container,
+		.run-status-error .debugger-container,
 		.run-status-gameover .debugger-container {
 			display: block;
 		}
@@ -424,27 +431,34 @@
 
 		.run-status-playing .debugger-gameRunStatus-playing,
 		.run-status-loading .debugger-gameRunStatus-loading,
+		.run-status-ajax .debugger-gameRunStatus-ajax,
+		.run-status-error .debugger-gameRunStatus-error,
 		.run-status-gameover .debugger-gameRunStatus-gameover {
 			display: inline-block;
 		}
 
 		.debugger-gameRunStatus span {
 			position: relative;
-			padding: 3px 10px 3px 10px;
+			padding: 1px 10px 1px 10px;
 			border-radius: 5px;
 			font-size: 16px;
 			top: 0;
 		}
 
-		.debugger-gameRunStatus-playing {
+		.debugger-gameRunStatus-error {
+			display: none;
+			background-color: #b94a48;
+		}
+		.debugger-gameRunStatus-playing, .debugger-gameRunStatus-ajax {
 			display: none;
 			background-color: lightgreen;
 		}
 
-			.debugger-gameRunStatus-playing .loader {
+			.debugger-gameRunStatus-playing .loader, .debugger-gameRunStatus-ajax .loader {
 				background: url("ajax-loader.gif") no-repeat;
 				position: relative;
-				top: 6px;
+				top: 2px;
+				left: -1px;
 			}
 
 		.debugger-gameRunStatus-loading {
@@ -604,6 +618,8 @@ enter '-22' to make 22 steps back"
 			<button onclick="step()">go</button>
 			&nbsp;&nbsp;
 			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-gameover">game over</span></span>
+			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-ajax"><span class="loader"></span>please wait</span></span>
+			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-error">error</span></span>
 		</div>
 		<div class="map-container">
 			<div class="map-header">Memory</div>

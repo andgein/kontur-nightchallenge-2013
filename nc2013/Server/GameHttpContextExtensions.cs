@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Text;
+using Core;
 using JetBrains.Annotations;
 
 namespace Server
@@ -164,7 +166,7 @@ namespace Server
 				if (!string.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
 				var acceptEncoding = context.Request.Headers["Accept-Encoding"] ?? string.Empty;
-				if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
+				if (true || acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
 				{
 					var gzipedStream = new MemoryStream();
 					using (var gzipStream = new GZipStream(gzipedStream, CompressionMode.Compress, true))
@@ -174,6 +176,13 @@ namespace Server
 						context.Response.AppendHeader("Content-Encoding", "gzip");
 						value = gzipedStream.ToArray();
 					}
+				}
+				else
+				{
+					var headersString = new StringBuilder();
+					foreach (string header in context.Request.Headers)
+						headersString.AppendFormat("{0}={1}\r\n", header, context.Request.Headers[header]);
+					Log.Network.Warn(string.Format("Client do not accept gzip. Request: {0}. Session: {1}. Headers: {2}", context.Request.RawUrl, context.Session.SessionId, headersString));
 				}
 				context.Response.ContentLength64 = value.Length;
 				context.Response.OutputStream.Write(value, 0, value.Length);

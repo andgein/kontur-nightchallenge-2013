@@ -17,8 +17,11 @@ namespace Server.Sessions
 
 		public Session(Guid sessionId, [NotNull] string sessionStorageFolder)
 		{
+			SessionId = sessionId;
 			this.sessionStorageFolder = Path.Combine(sessionStorageFolder, sessionId.ToString());
 		}
+
+		public Guid SessionId { get; private set; }
 
 		[NotNull]
 		public ISessionItems Items
