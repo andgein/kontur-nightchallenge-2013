@@ -24,7 +24,7 @@ namespace Core.Engine
 		public GameEngine(params WarriorStartInfo[] warriorsStartInfos)
 			: this((IEnumerable<WarriorStartInfo>)warriorsStartInfos)
 		{
-			
+
 		}
 		public GameEngine(IEnumerable<WarriorStartInfo> warriorsStartInfos)
 		{
@@ -66,27 +66,31 @@ namespace Core.Engine
 
 			ExecuteInstruction(Warriors[CurrentWarrior], instruction);
 
-			if (!stepResult.KilledInInstruction)
-			{
-				var nextIp = ModularArith.Mod(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
-				if (!Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
-					throw new InvalidOperationException("Execution should never overflow queue");
-				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Executed });
-			}
-			else
+			if (stepResult.KilledInInstruction)
 			{
 				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = null, ChangeType = ProcessStateChangeType.Killed });
 				if (Warriors[CurrentWarrior].Queue.Count == 0)
 					countLivedWarriors--;
 			}
-
-			if (stepResult.SplittedInInstruction.HasValue)
+			else
 			{
-				var nextIp = ModularArith.Mod(stepResult.SplittedInInstruction.GetValueOrDefault());
-				if (Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
-					stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Splitted });
+				int nextIp;
+				if (stepResult.SplittedInInstruction.HasValue)
+				{
+					if (Warriors[CurrentWarrior].Queue.Count < Parameters.MaxQueueSize - 1)
+					{
+						nextIp = ModularArith.Mod(stepResult.SplittedInInstruction.GetValueOrDefault());
+						if (!Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
+							throw new InvalidOperationException("Execution should never overflow queue");
+						stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Splitted });
+					}
+				}
+				nextIp = ModularArith.Mod(stepResult.SetNextIP.HasValue ? stepResult.SetNextIP.GetValueOrDefault() : CurrentIp + 1);
+				if (!Warriors[CurrentWarrior].Queue.Enqueue(nextIp))
+					throw new InvalidOperationException("Execution should never overflow queue");
+				stepResult.ProgramStateDiffs.Add(new ProgramStateDiff { Program = CurrentWarrior, NextPointer = (uint?)nextIp, ChangeType = ProcessStateChangeType.Executed });
 			}
-			
+
 			CurrentStep++;
 
 			var nextWarrior = GetNextWarrior(CurrentWarrior);
@@ -119,7 +123,7 @@ namespace Core.Engine
 		private void ExecuteInstruction(RunningWarrior warrior, Instruction instruction)
 		{
 			instructionExecutor.Execute(this, instruction);
-			warrior.LastPointer = (uint) instruction.Address;
+			warrior.LastPointer = (uint)instruction.Address;
 		}
 
 		public void WriteToMemory(int address, Statement statement)
