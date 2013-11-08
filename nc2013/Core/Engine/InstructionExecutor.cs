@@ -173,15 +173,15 @@ namespace Core.Engine
 			var statementsB = b.Statements;
 			if (a.IsImmediate)
 				for (int i = 0; i < 4; i++)
-					engine.WriteToMemory(b.Addr[i], statementsB[i].SetB(a.Value[i] - statementsB[i].FieldB.Calculate()));
+					engine.WriteToMemory(b.Addr[i], statementsB[i].SetB(statementsB[i].FieldB.Calculate() - a.Value[i]));
 			else
 			{
 				var statementsA = a.Statements;
 				for (int i = 0; i < 4; i++)
 					engine.WriteToMemory(b.Addr[i],
 					statementsB[i]
-						.SetA(statementsA[i].FieldA.Calculate() - statementsB[i].FieldA.Calculate())
-						.SetB(statementsA[i].FieldB.Calculate() - statementsB[i].FieldB.Calculate()));
+						.SetA(statementsB[i].FieldA.Calculate() - statementsA[i].FieldA.Calculate())
+						.SetB(statementsB[i].FieldB.Calculate() - statementsA[i].FieldB.Calculate()));
 			}
 		}
 		private void Sub(GameEngine engine, EvaluatedOp a, EvaluatedOp b)
