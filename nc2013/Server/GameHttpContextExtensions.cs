@@ -166,7 +166,7 @@ namespace Server
 				if (!string.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
 				var acceptEncoding = context.Request.Headers["Accept-Encoding"] ?? string.Empty;
-				if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
+				if (true || acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
 				{
 					var gzipedStream = new MemoryStream();
 					using (var gzipStream = new GZipStream(gzipedStream, CompressionMode.Compress, true))
