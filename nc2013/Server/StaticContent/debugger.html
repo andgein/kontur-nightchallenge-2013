@@ -156,8 +156,11 @@
 		}
 
 		function gameRunStatusChanged(gameRunStatus) {
-			$(document.body).removeClass("run-status-loading run-status-reset run-status-playing run-status-ajax run-status-error run-status-gameover");
-			$(document.body).addClass("run-status-" + gameRunStatus);
+			var allStatusClasses = "run-status-loading run-status-reset run-status-playing run-status-ajax run-status-error run-status-gameover";
+			var newStatus = "run-status-" + gameRunStatus;
+			var statusesToRemove = allStatusClasses.replace(newStatus, "");
+			$(document.body).removeClass(statusesToRemove);
+			$(document.body).addClass(newStatus);
 		}
 
 		function switchAutofocus() {
