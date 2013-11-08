@@ -176,6 +176,7 @@ namespace Server
 			var requestedPath = context.Request.Url.LocalPath;
 			if (requestedPath.EndsWith(".js")) return true;
 			if (requestedPath.EndsWith(".css")) return true;
+			if (requestedPath.EndsWith(".ico")) return true;
 			if (requestedPath.StartsWith("fonts")) return true;
 			if (requestedPath.EndsWith("/nav")) return true;
 			if (requestedPath.EndsWith("/index")) return true;
