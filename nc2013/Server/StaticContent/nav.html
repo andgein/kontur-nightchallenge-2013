@@ -25,7 +25,8 @@
 			seconds = (seconds - 60 * minutes) + "";
 			var hours = Math.floor(minutes / 60);
 			minutes = (minutes - 60 * hours) + "";
-			return hours + ":" + (minutes.length == 1 ? "0" : "") + minutes + ":" + (seconds.length == 1 ? "0" : "") + seconds;
+			hours = hours + "";
+			return (hours.length == 1 ? "0" : "") + hours + ":" + (minutes.length == 1 ? "0" : "") + minutes + ":" + (seconds.length == 1 ? "0" : "") + seconds;
 		}
 
 		function refresh() {
