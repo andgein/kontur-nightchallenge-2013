@@ -19,6 +19,6 @@ namespace Server.Handlers
 			return context.Request.Url.AbsolutePath.Equals(context.BasePath + path, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public abstract void Handle([NotNull] GameHttpContext context, bool godMode);
+		public abstract void Handle([NotNull] GameHttpContext context);
 	}
 }

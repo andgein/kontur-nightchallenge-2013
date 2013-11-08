@@ -14,12 +14,12 @@ namespace Server.Arena
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var response = new ArenaSubmitFormResponse
 			{
 				SubmitIsAllowed = arenaState.SubmitIsAllowed,
-				GodMode = godMode,
+				GodMode = context.GodMode,
 			};
 			context.SendResponse(response);
 		}

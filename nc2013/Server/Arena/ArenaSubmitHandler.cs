@@ -18,7 +18,7 @@ namespace Server.Arena
 			this.tournamentRunner = tournamentRunner;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			if (!arenaState.SubmitIsAllowed)
 				throw new HttpException(HttpStatusCode.Forbidden, "Bot submission is disabled");

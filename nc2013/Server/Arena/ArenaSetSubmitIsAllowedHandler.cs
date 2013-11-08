@@ -15,9 +15,9 @@ namespace Server.Arena
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
-			if (!godMode)
+			if (!context.GodMode)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
 			arenaState.SubmitIsAllowed = context.GetBoolParam("value");

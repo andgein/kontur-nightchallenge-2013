@@ -14,13 +14,13 @@ namespace Server.Handlers
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var timeToContestStart = arenaState.CountdownProvider.GetTimeToContestStart();
 			var contestTimeLeft = arenaState.CountdownProvider.GetContestTimeLeft();
 			var response = new NavPanelResponse
 			{
-				NavigationIsDisabled = arenaState.GodAccessOnly && !godMode,
+				NavigationIsDisabled = arenaState.GodAccessOnly && !context.GodMode,
 				TimeToContestStart = !timeToContestStart.HasValue ? null : timeToContestStart.Value.DropMillis().ToString("c"),
 				ContestTimeLeft = !contestTimeLeft.HasValue ? null : contestTimeLeft.Value.DropMillis().ToString("c"),
 			};

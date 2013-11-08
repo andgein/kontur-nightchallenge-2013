@@ -13,11 +13,11 @@ namespace Server.Handlers
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var response = new IndexResponse
 			{
-				NavigationIsDisabled = arenaState.GodAccessOnly && !godMode,
+				NavigationIsDisabled = arenaState.GodAccessOnly && !context.GodMode,
 			};
 			context.SendResponse(response);
 		}
