@@ -112,6 +112,8 @@ namespace Core.Parser
 			var token = ParseToken(IsIdentificatorChar);
 			if (!IsCommandToken(token))
 			{
+				if (! IsIdentificator(token))
+					throw new CompilationException("Label and constant names should start from non-digit symbol", State);
 				label = token;
 				command = ParseToken(IsIdentificatorChar);
 			}

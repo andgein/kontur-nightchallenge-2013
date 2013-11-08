@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Core.Parser
 {
@@ -34,6 +35,11 @@ namespace Core.Parser
 		protected static bool IsIdentificatorChar(string s, int idx)
 		{
 			return IsIdentificatorChar(s[idx]);
+		}
+
+		protected static bool IsIdentificator(string s)
+		{
+			return s.All(IsIdentificatorChar) && !Char.IsNumber(s[0]);
 		}
 	}
 }
