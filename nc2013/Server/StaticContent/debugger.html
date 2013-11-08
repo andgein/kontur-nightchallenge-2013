@@ -573,9 +573,9 @@
 				<textarea class="program" id="programB"></textarea>
 			</div>
 			<div class="programs-buttons-container">
-				<button onclick="gameRunner.run(slowSpeed);">Run (F7)</button>
-				<button onclick="gameRunner.step(+1);">Step into debugger (F10)</button>
-				<button onclick="gameRunner.stepToEnd();">Run to end or to breakpoint (F8)</button>
+				<button onclick="gameRunner.run(slowSpeed);">Run — F7</button>
+				<button onclick="gameRunner.stepToEnd();">Run super fast (non-interactive) — F8</button>
+				<button onclick="gameRunner.step(+1);">Step into debugger — F10</button>
 			</div>
 		</div>
 	</div>
@@ -584,14 +584,14 @@
 			<a href="javascript:void(0)" title="Reset current game and return to programs listing" onclick="gameRunner.reset();">< back</a>
 			&nbsp;&nbsp;
 			<button title="Restart game. Warriors start addresses will not change" onclick="gameRunner.restart();">&#8634;</button>
-				<button title="Run to end or to breakpoint (F8)" onclick="gameRunner.stepToEnd();">>>>|</button>
+				<button title="Run super fast (non-interactive) — F8" onclick="gameRunner.stepToEnd();">>>>|</button>
 			<button title="Run very fast (x32)" onclick="gameRunner.run(speedX32);">>>></button>
 			<button title="Run fast (x16)" onclick="gameRunner.run(speedX16);">>></button>
-			<button title="Run slow (x1) (F7)" onclick="gameRunner.run(slowSpeed);">></button>
-			<button title="Pause (Shift+F7)" onclick="gameRunner.pause();">||</button>
+			<button title="Run slow (x1) — F7" onclick="gameRunner.run(slowSpeed);">></button>
+			<button title="Pause — Shift+F7" onclick="gameRunner.pause();">||</button>
 			&nbsp; steps:
-				<button title="Go to previous step (F9)" onclick="gameRunner.step(-1);">-1</button>
-			<button title="Go to next step (F10)" onclick="gameRunner.step(+1);">+1</button>
+				<button title="Go to previous step — F9" onclick="gameRunner.step(-1);">-1</button>
+			<button title="Go to next step — F10" onclick="gameRunner.step(+1);">+1</button>
 			&nbsp;
 			<input type="text" title="Samples:
 enter '+99' to make 99 steps forward
