@@ -30,8 +30,10 @@
 		$(function () {
 			$("#autofocus").click(switchAutofocus);
 			$("#stepCount").keydown(function (event) {
-				if (event.which == 13)
+				if (event.which == 13) {
 					step();
+					return false;
+				}
 			});
 			$(document.body).on("keydown", function (event) {
 				if (!event.ctrlKey && !event.altKey && !event.shiftKey && event.which == 120 /*F9*/) {
