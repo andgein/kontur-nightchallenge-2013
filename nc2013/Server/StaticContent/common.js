@@ -1,5 +1,5 @@
 function nav() {
-	load("nav.html?version=1");
+	load("nav.html?version=2");
 }
 
 function load(url) {
