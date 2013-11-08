@@ -18,8 +18,6 @@ namespace Server
 {
 	public class GameHttpServer
 	{
-		private const string godModeSecretCookieName = "godModeSecret";
-		private const string godModeCookieName = "godMode";
 		private readonly HttpListener listener;
 		private readonly IHttpHandler[] handlers;
 		private Task listenerTask;
@@ -27,6 +25,7 @@ namespace Server
 		private readonly ManualResetEvent stopEvent;
 		private readonly ArenaState arenaState;
 		private readonly SessionManager sessionManager;
+		private readonly ConcurrentQueue<Tuple<string, long, DateTime>> lastRequests = new ConcurrentQueue<Tuple<string, long, DateTime>>();
 		private readonly ConcurrentDictionary<int, Tuple<string, Stopwatch>> activeRequests = new ConcurrentDictionary<int, Tuple<string, Stopwatch>>();
 		private int requestId;
 
@@ -48,7 +47,7 @@ namespace Server
 				new DebuggerStateHandler(debuggerManager),
 				new DebuggerStepHandler(debuggerManager),
 				new DebuggerStepToEndHandler(debuggerManager),
-				new DebuggerRestartHandler(debuggerManager), 
+				new DebuggerRestartHandler(debuggerManager),
 				new DebuggerResetHandler(debuggerManager),
 				new DebuggerRemoveBreakpointHandler(debuggerManager),
 				new DebuggerAddBreakpointHandler(debuggerManager),
@@ -60,7 +59,7 @@ namespace Server
 				new ArenaPlayerHandler(arenaState),
 				new ArenaRemovePlayerHandler(arenaState),
 				new ArenaSubmitFormHandler(arenaState),
-				new ArenaSetSubmitIsAllowedHandler(arenaState),
+				new ArenaSetSubmitIsAllowedHandler(arenaState)
 			};
 			stopEvent = new ManualResetEvent(false);
 		}
@@ -76,7 +75,7 @@ namespace Server
 				while (true)
 				{
 					var asyncResult = listener.BeginGetContext(null, null);
-					if (WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle, stopEvent }) == 1)
+					if (WaitHandle.WaitAny(new[] {asyncResult.AsyncWaitHandle, stopEvent}) == 1)
 						break;
 					var httpListenerContext = listener.EndGetContext(asyncResult);
 					Task.Factory.StartNew(() => HandleRequest(httpListenerContext));
@@ -103,22 +102,14 @@ namespace Server
 				Log.For(this).DebugFormat("Incoming request: {0}", requestUrl);
 				var handleTime = Stopwatch.StartNew();
 				activeRequests[currentRequestId] = Tuple.Create(requestUrl, handleTime);
-				var context = new GameHttpContext(httpListenerContext, basePath, sessionManager);
+				var context = new GameHttpContext(httpListenerContext, basePath, sessionManager, arenaState.GodModeSecret);
 				if (TryHandleActivity(context))
 					return;
 				try
 				{
 					lock (context.Session)
 					{
-						var godMode = false;
-						var secretValue = context.GetOptionalStringParam(godModeSecretCookieName) ?? context.TryGetCookie(godModeSecretCookieName);
-						if (secretValue == arenaState.GodModeSecret)
-						{
-							context.SetCookie(godModeSecretCookieName, arenaState.GodModeSecret, persistent: false, httpOnly: false);
-							context.SetCookie(godModeCookieName, "true", persistent: false, httpOnly: false);
-							godMode = true;
-						}
-						else if (arenaState.GodAccessOnly)
+						if (arenaState.GodAccessOnly && !context.GodMode)
 						{
 							if (!RequestedContentIsPublic(context))
 								throw new HttpException(HttpStatusCode.Forbidden, "GodAccessOnly mode is ON");
@@ -128,7 +119,7 @@ namespace Server
 						if (handlersThatCanHandle.Length == 1)
 						{
 							Log.For(this).DebugFormat("Handling request with {0}: {1}", handlersThatCanHandle[0].GetType().Name, requestUrl);
-							handlersThatCanHandle[0].Handle(context, godMode);
+							handlersThatCanHandle[0].Handle(context);
 							context.Response.Close();
 							Log.For(this).DebugFormat("Request handled in {0} ms: {1}", handleTime.ElapsedMilliseconds, requestUrl);
 						}
@@ -154,7 +145,7 @@ namespace Server
 					Log.For(this).Error("Request failed", e);
 					httpListenerContext.Response.Headers.Clear();
 					httpListenerContext.Response.ContentType = "text/plain; charset: utf-8";
-					httpListenerContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+					httpListenerContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 					using (var writer = new StreamWriter(httpListenerContext.Response.OutputStream))
 						writer.Write(e.ToString());
 					httpListenerContext.Response.Close();
@@ -166,8 +157,16 @@ namespace Server
 			}
 			finally
 			{
-				Tuple<string, Stopwatch> dummy;
-				activeRequests.TryRemove(currentRequestId, out dummy);
+				Tuple<string, Stopwatch> lastRequest;
+				if (activeRequests.TryRemove(currentRequestId, out lastRequest))
+				{
+					lastRequests.Enqueue(Tuple.Create(lastRequest.Item1, lastRequest.Item2.ElapsedMilliseconds, DateTime.UtcNow - lastRequest.Item2.Elapsed));
+					while (lastRequests.Count > 100)
+					{
+						Tuple<string, long, DateTime> dummy;
+						lastRequests.TryDequeue(out dummy);
+					}
+				}
 			}
 		}
 
@@ -190,10 +189,17 @@ namespace Server
 		{
 			if (!string.Equals(context.Request.Url.AbsolutePath, basePath + "activity", StringComparison.OrdinalIgnoreCase))
 				return false;
+			if (!context.GodMode)
+				return false;
 			using (var writer = new StreamWriter(context.Response.OutputStream))
 			{
-				foreach (var activeRequest in activeRequests.Values.OrderBy(x => x.Item1, StringComparer.OrdinalIgnoreCase))
+				writer.WriteLine("Active requests:");
+				foreach (var activeRequest in activeRequests.Values.OrderBy(x => x.Item1, StringComparer.OrdinalIgnoreCase).Where(x => !x.Item1.EndsWith("/activity", StringComparison.OrdinalIgnoreCase)).ToArray())
 					writer.WriteLine("{0} running for {1} ms", activeRequest.Item1, activeRequest.Item2.ElapsedMilliseconds);
+				writer.WriteLine();
+				writer.WriteLine("Last requests:");
+				foreach (var lastRequest in lastRequests.Reverse().Where(x => !x.Item1.EndsWith("/activity", StringComparison.OrdinalIgnoreCase)).ToArray())
+					writer.WriteLine("[{0}] {1} ms - {2}", lastRequest.Item3.ToLocalTime(), lastRequest.Item2, lastRequest.Item1);
 			}
 			context.Response.Close();
 			return true;

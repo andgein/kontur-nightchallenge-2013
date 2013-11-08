@@ -12,10 +12,10 @@ namespace Server.Debugging
 			this.debuggerManager = debuggerManager;
 		}
 
-		public override sealed void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override sealed void Handle([NotNull] GameHttpContext context)
 		{
 			var debugger = debuggerManager.GetDebugger(context.Session);
-			DoHandle(context, debugger, godMode);
+			DoHandle(context, debugger, context.GodMode);
 		}
 
 		protected abstract void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode);

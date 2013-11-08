@@ -16,7 +16,7 @@ namespace Server.Arena
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var tournamentId = context.GetOptionalStringParam("tournamentId");
 			var ranking = arenaState.GamesRepo.TryLoadRanking(tournamentId ?? "last");
@@ -30,7 +30,7 @@ namespace Server.Arena
 				Ranking = ranking,
 				HistoryItems = tournamentHistoryItems,
 				TournamentIsRunning = arenaState.TournamentIsRunning,
-				GodMode = godMode,
+				GodMode = context.GodMode,
 			};
 			context.SendResponse(response);
 		}

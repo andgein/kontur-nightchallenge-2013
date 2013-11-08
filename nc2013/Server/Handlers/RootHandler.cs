@@ -9,7 +9,7 @@ namespace Server.Handlers
 		{
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			context.Redirect(context.BasePath + "index.html");
 		}

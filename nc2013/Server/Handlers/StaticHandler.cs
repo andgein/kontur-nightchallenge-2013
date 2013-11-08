@@ -19,7 +19,7 @@ namespace Server.Handlers
 			return GameHttpContextExtensions.TryGetContentType(context.Request.Url.AbsolutePath) != null;
 		}
 
-		public void Handle([NotNull] GameHttpContext context, bool godMode)
+		public void Handle([NotNull] GameHttpContext context)
 		{
 			var localPath = TryGetLocalPath(context);
 			if (localPath == null)

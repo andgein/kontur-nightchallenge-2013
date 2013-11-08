@@ -17,7 +17,7 @@ namespace Server.Arena
 			this.arenaState = arenaState;
 		}
 
-		public override void Handle([NotNull] GameHttpContext context, bool godMode)
+		public override void Handle([NotNull] GameHttpContext context)
 		{
 			var playerName = context.GetStringParam("name");
 			var version = context.GetOptionalIntParam("version");
@@ -60,7 +60,7 @@ namespace Server.Arena
 					ranking = arenaState.GamesRepo.TryLoadRanking("last");
 				}
 				if (ranking != null)
-					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, godMode);
+					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, context.GodMode);
 			}
 			context.SendResponse(playerInfo);
 		}
