@@ -154,7 +154,7 @@
 		}
 
 		function gameRunStatusChanged(gameRunStatus) {
-			$(document.body).removeClass("run-status-loading run-status-reset run-status-playing run-status-gameover");
+			$(document.body).removeClass("run-status-loading run-status-reset run-status-playing run-status-ajax run-status-error run-status-gameover");
 			$(document.body).addClass("run-status-" + gameRunStatus);
 		}
 
@@ -226,6 +226,8 @@
 		}
 
 		.run-status-playing .debugger-container,
+		.run-status-ajax .debugger-container,
+		.run-status-error .debugger-container,
 		.run-status-gameover .debugger-container {
 			display: block;
 		}
@@ -424,6 +426,8 @@
 
 		.run-status-playing .debugger-gameRunStatus-playing,
 		.run-status-loading .debugger-gameRunStatus-loading,
+		.run-status-ajax .debugger-gameRunStatus-ajax,
+		.run-status-error .debugger-gameRunStatus-error,
 		.run-status-gameover .debugger-gameRunStatus-gameover {
 			display: inline-block;
 		}
@@ -436,15 +440,20 @@
 			top: 0;
 		}
 
-		.debugger-gameRunStatus-playing {
+		.debugger-gameRunStatus-error {
+			display: none;
+			background-color: #b94a48;
+		}
+		.debugger-gameRunStatus-playing, .debugger-gameRunStatus-ajax {
 			display: none;
 			background-color: lightgreen;
 		}
 
-			.debugger-gameRunStatus-playing .loader {
+			.debugger-gameRunStatus-playing .loader, .debugger-gameRunStatus-ajax .loader {
 				background: url("ajax-loader.gif") no-repeat;
 				position: relative;
-				top: 6px;
+				top: 5px;
+				left: -1px;
 			}
 
 		.debugger-gameRunStatus-loading {
@@ -604,6 +613,8 @@ enter '-22' to make 22 steps back"
 			<button onclick="step()">go</button>
 			&nbsp;&nbsp;
 			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-gameover">game over</span></span>
+			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-ajax"><span class="loader"></span>please wait</span></span>
+			<span class="debugger-gameRunStatus"><span class="debugger-gameRunStatus-error">error</span></span>
 		</div>
 		<div class="map-container">
 			<div class="map-header">Memory</div>

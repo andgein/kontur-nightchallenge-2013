@@ -152,7 +152,7 @@ var GameRunner = Base.extend({
 		var that = this;
 		function nextAction(status) {
 			var result, justStarted = false;
-			if (options.requirePlaying && status.gameRunStatus != "playing" && status.gameRunStatus != "gameover") {
+			if (options.requirePlaying && status.gameRunStatus != "playing" && status.gameRunStatus != "error" && status.gameRunStatus != "gameover") {
 				result = that.game.start();
 				justStarted = true;
 			} else
@@ -163,6 +163,7 @@ var GameRunner = Base.extend({
 			}
 			if (options.action)
 				result = result.pipe(function () {
+					that.onGameRunStatusChanged && that.onGameRunStatusChanged("ajax");
 					return options.action(that.game, justStarted) || status;
 				});
 			return result;
@@ -176,6 +177,7 @@ var GameRunner = Base.extend({
 			})
 			.fail(function (err) {
 				that.pause();
+				that.onGameRunStatusChanged && that.onGameRunStatusChanged("error");
 				that.onGameError && that.onGameError(err);
 			});
 	},
