@@ -163,7 +163,7 @@ namespace Server
 			{
 				if (!string.IsNullOrEmpty(contentType))
 					context.Response.ContentType = contentType;
-				var acceptEncoding = context.Request.Headers["Accept-Encoding"];
+				var acceptEncoding = context.Request.Headers["Accept-Encoding"] ?? string.Empty;
 				if (acceptEncoding.IndexOf("gzip", StringComparison.OrdinalIgnoreCase) >= 0)
 				{
 					var gzipedStream = new MemoryStream();
