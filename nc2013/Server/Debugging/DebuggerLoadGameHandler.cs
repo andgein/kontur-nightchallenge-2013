@@ -15,9 +15,9 @@ namespace Server.Debugging
 			this.arenaState = arenaState;
 		}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
-			if (!godMode)
+			if (!context.GodMode && !arenaState.EnableDeepNavigation)
 				throw new HttpException(HttpStatusCode.Forbidden, "This operation is only allowed in god mode :-)");
 
 			var playerName1 = context.GetStringParam("player1Result[player][name]");

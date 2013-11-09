@@ -15,9 +15,9 @@ namespace Server.Debugging
 		public override sealed void Handle([NotNull] GameHttpContext context)
 		{
 			var debugger = debuggerManager.GetDebugger(context.Session);
-			DoHandle(context, debugger, context.GodMode);
+			DoHandle(context, debugger);
 		}
 
-		protected abstract void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode);
+		protected abstract void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger);
 	}
 }

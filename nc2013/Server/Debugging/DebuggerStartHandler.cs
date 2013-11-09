@@ -8,7 +8,7 @@ namespace Server.Debugging
 	{
 		public DebuggerStartHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/start", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var programStartInfos = context.GetRequest<DebuggerProgramStartInfo[]>();
 			try

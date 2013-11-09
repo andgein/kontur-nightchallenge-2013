@@ -6,7 +6,7 @@ namespace Server.Debugging
 	{
 		public DebuggerRestartHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/restart", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var gameStepResult = debugger.Restart();
 			var response = new DebuggerStepResponse

@@ -10,7 +10,7 @@ namespace Server.Debugging
 
 		public DebuggerStepHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/step", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			var stepCount = context.GetOptionalIntParam("count") ?? 1;
 			var currentStep = context.GetOptionalIntParam("currentStep");

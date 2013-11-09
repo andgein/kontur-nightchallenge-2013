@@ -6,7 +6,7 @@ namespace Server.Debugging
 	{
 		public DebuggerStateHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/state", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			context.SendResponse(debugger.State);
 		}

@@ -6,7 +6,7 @@ namespace Server.Debugging
 	{
 		public DebuggerResetHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/reset", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			debugger.Reset();
 		}

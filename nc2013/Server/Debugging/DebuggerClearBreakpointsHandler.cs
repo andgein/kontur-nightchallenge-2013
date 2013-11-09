@@ -6,7 +6,7 @@ namespace Server.Debugging
 	{
 		public DebuggerClearBreakpointsHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/breakpoints/clear", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			debugger.ClearBreakpoints();
 		}

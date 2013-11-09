@@ -61,13 +61,13 @@ namespace Server.Arena
 					ranking = arenaState.GamesRepo.TryLoadRanking("last");
 				}
 				if (ranking != null)
-					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, context.GodMode);
+					playerInfo = CreatePlayerInfo(arenaPlayer, ranking, botVersionInfos, context.GodMode || arenaState.EnableDeepNavigation);
 			}
 			context.SendResponse(playerInfo);
 		}
 
 		[NotNull]
-		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer, [NotNull] TournamentRanking ranking, [NotNull] BotVersionInfo[] botVersionInfos, bool godMode)
+		private PlayerInfo CreatePlayerInfo([NotNull] ArenaPlayer arenaPlayer, [NotNull] TournamentRanking ranking, [NotNull] BotVersionInfo[] botVersionInfos, bool deepNavigationEnabled)
 		{
 			var rankingEntry = ranking.Places.FirstOrDefault(r => r.Name == arenaPlayer.Name && r.Version == arenaPlayer.Version) ?? new RankingEntry
 			{
@@ -75,7 +75,7 @@ namespace Server.Arena
 				Version = arenaPlayer.Version,
 			};
 			var games = arenaState.GamesRepo.LoadGames(ranking.TournamentId);
-			var gamesByEnemy = GetFinishedGamesWithEnemies(games, arenaPlayer.Name, arenaPlayer.Version, godMode);
+			var gamesByEnemy = GetFinishedGamesWithEnemies(games, arenaPlayer.Name, arenaPlayer.Version, deepNavigationEnabled);
 			var playerInfo = new PlayerInfo
 			{
 				RankingEntry = rankingEntry,
@@ -83,14 +83,14 @@ namespace Server.Arena
 				SubmitTimestamp = arenaPlayer.Timestamp,
 				GamesByEnemy = gamesByEnemy,
 				BotVersionInfos = botVersionInfos,
-				GodMode = godMode,
-				Program = godMode ? arenaPlayer.Program : null,
+				DeepNavigationEnabled = deepNavigationEnabled,
+				Program = deepNavigationEnabled ? arenaPlayer.Program : null,
 			};
 			return playerInfo;
 		}
 
 		[NotNull]
-		public static FinishedGamesWithEnemy[] GetFinishedGamesWithEnemies([NotNull] List<BattleResult> games, [NotNull] string arenaPlayerName, int arenaPlayerVersion, bool godMode)
+		public static FinishedGamesWithEnemy[] GetFinishedGamesWithEnemies([NotNull] List<BattleResult> games, [NotNull] string arenaPlayerName, int arenaPlayerVersion, bool deepNavigationEnabled)
 		{
 			var gamesByEnemy = games
 				.Select(x => Tuple.Create(x.Player1Result, x.Player2Result, true)).Concat(games.Select(x => Tuple.Create(x.Player2Result, x.Player1Result, false)))
@@ -103,7 +103,7 @@ namespace Server.Arena
 					Wins = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Win),
 					Draws = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Draw),
 					Loses = g.Count(x => x.Item1.ResultType == BattlePlayerResultType.Loss),
-					GameInfos = godMode ? GetGameInfos(g.ToList()) : null,
+					GameInfos = deepNavigationEnabled ? GetGameInfos(g.ToList()) : null,
 				})
 				.OrderByDescending(x => x.Wins)
 				.ToArray();

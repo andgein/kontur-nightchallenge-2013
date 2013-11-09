@@ -10,7 +10,7 @@ namespace Server.Arena
 		[JsonProperty] public string Authors;
 		[JsonProperty] public BotVersionInfo[] BotVersionInfos;
 		[JsonProperty] public FinishedGamesWithEnemy[] GamesByEnemy;
-		[JsonProperty] public bool GodMode;
+		[JsonProperty] public bool DeepNavigationEnabled;
 		[JsonProperty] public string Program;
 		[JsonProperty] public RankingEntry RankingEntry;
 		[JsonProperty] public DateTime SubmitTimestamp;

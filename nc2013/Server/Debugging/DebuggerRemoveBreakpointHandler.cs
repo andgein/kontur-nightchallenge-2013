@@ -7,7 +7,7 @@ namespace Server.Debugging
 	{
 		public DebuggerRemoveBreakpointHandler([NotNull] IDebuggerManager debuggerManager) : base("debugger/breakpoints/remove", debuggerManager) {}
 
-		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger, bool godMode)
+		protected override void DoHandle([NotNull] GameHttpContext context, [NotNull] IDebugger debugger)
 		{
 			debugger.RemoveBreakpoint(new Breakpoint(context.GetUIntParam("address"), context.GetIntParam("program"), context.GetEnumParam<BreakpointType>("breakpointType")));
 		}
