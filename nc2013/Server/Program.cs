@@ -40,7 +40,7 @@ namespace Server
 			var debuggerManager = new DebuggerManager(gameServer);
 			var battleRunner = new BattleRunner();
 			var countdownProvider = new CountdownProvider(settings.ContestStartTimestamp, TimeSpan.FromHours(settings.ContestDurationInHours));
-			var arenaState = new ArenaState(playersRepo, gamesRepo, countdownProvider, settings.GodModeSecret, settings.GodAccessOnly);
+			var arenaState = new ArenaState(playersRepo, gamesRepo, countdownProvider, settings.GodModeSecret, settings.GodAccessOnly, settings.SubmitIsAllowed);
 			var tournamentRunner = new TournamentRunner(arenaState, battleRunner, settings.BattlesPerPair);
 			var httpServer = new GameHttpServer(httpListenerPrefix, arenaState, sessionManager, debuggerManager, tournamentRunner, staticContentPath);
 			Runtime.SetStopHandler(() =>

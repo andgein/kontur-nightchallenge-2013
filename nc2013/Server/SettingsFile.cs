@@ -52,6 +52,8 @@ namespace Server
 						ParseBoolSetting(settingName, settingValue, v => ProductionMode = v);
 					else if (string.Equals(settingName, "GodAccessOnly", StringComparison.OrdinalIgnoreCase))
 						ParseBoolSetting(settingName, settingValue, v => GodAccessOnly = v);
+					else if (string.Equals(settingName, "SubmitIsAllowed", StringComparison.OrdinalIgnoreCase))
+						ParseBoolSetting(settingName, settingValue, v => SubmitIsAllowed = v);
 					else if (string.Equals(settingName, "ContestStartTimestamp", StringComparison.OrdinalIgnoreCase))
 						ParseTimestampSetting(settingName, settingValue, v => ContestStartTimestamp = v);
 					else if (string.Equals(settingName, "ContestDurationInHours", StringComparison.OrdinalIgnoreCase))
@@ -118,6 +120,7 @@ namespace Server
 		public int BattlesPerPair { get; private set; }
 		public bool ProductionMode { get; private set; }
 		public bool GodAccessOnly { get; private set; }
+		public bool SubmitIsAllowed { get; private set; }
 
 		[NotNull]
 		public string GodModeSecret { get; private set; }
@@ -128,8 +131,8 @@ namespace Server
 
 		public override string ToString()
 		{
-			return string.Format("HttpListenerPrefix: {0}, BattlesPerPair: {1}, ProductionMode: {2}, GodAccessOnly: {3}, GodModeSecret: {4}, ContestStartTimestamp: {5} UTC, ContestDurationInHours: {6}",
-				HttpListenerPrefix, BattlesPerPair, ProductionMode, GodAccessOnly, GodModeSecret, ContestStartTimestamp, ContestDurationInHours);
+			return string.Format("HttpListenerPrefix: {0}, BattlesPerPair: {1}, ProductionMode: {2}, GodAccessOnly: {3}, GodModeSecret: {4}, ContestStartTimestamp: {5} UTC, ContestDurationInHours: {6}, SubmitIsAllowed: {7}",
+				HttpListenerPrefix, BattlesPerPair, ProductionMode, GodAccessOnly, GodModeSecret, ContestStartTimestamp, ContestDurationInHours, SubmitIsAllowed);
 		}
 	}
 }

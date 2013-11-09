@@ -4,14 +4,14 @@ namespace Core.Arena
 {
 	public class ArenaState
 	{
-		public ArenaState([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] CountdownProvider countdownProvider, [NotNull] string godModeSecret, bool godAccessOnly)
+		public ArenaState([NotNull] IPlayersRepo playersRepo, [NotNull] IGamesRepo gamesRepo, [NotNull] CountdownProvider countdownProvider, [NotNull] string godModeSecret, bool godAccessOnly, bool submitIsAllowed)
 		{
 			PlayersRepo = playersRepo;
 			GamesRepo = gamesRepo;
 			CountdownProvider = countdownProvider;
 			GodModeSecret = godModeSecret;
 			GodAccessOnly = godAccessOnly;
-			SubmitIsAllowed = true;
+			SubmitIsAllowed = submitIsAllowed;
 		}
 
 		[NotNull]
