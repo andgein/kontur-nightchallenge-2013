@@ -10,11 +10,17 @@
 		function parseTime(s) {
 			if (!s)
 				return null;
+			var days = 0;
+			var pparts = (s || "").split(".", 2);
+			if (pparts.length == 2) {
+				days = parseInt(pparts[0]) || 0;
+				s = pparts[1];
+			}
 			var parts = (s || "").split(":", 3);
 			var hours = parseInt(parts[0]) || 0;
 			var minutes = parseInt(parts[1]) || 0;
 			var seconds = parseInt(parts[2]) || 0;
-			return ((hours * 60 + minutes) * 60 + seconds) * 1000;
+			return (((days * 24 + hours) * 60 + minutes) * 60 + seconds) * 1000;
 		}
 
 		function formatTime(t) {
@@ -25,8 +31,9 @@
 			seconds = (seconds - 60 * minutes) + "";
 			var hours = Math.floor(minutes / 60);
 			minutes = (minutes - 60 * hours) + "";
-			hours = hours + "";
-			return (hours.length == 1 ? "0" : "") + hours + ":" + (minutes.length == 1 ? "0" : "") + minutes + ":" + (seconds.length == 1 ? "0" : "") + seconds;
+			var days = Math.floor(hours / 24);
+			hours = (hours - 24 * days) + "";
+			return (days > 0 ? days + ":" : "") + (hours.length == 1 ? "0" : "") + hours + ":" + (minutes.length == 1 ? "0" : "") + minutes + ":" + (seconds.length == 1 ? "0" : "") + seconds;
 		}
 
 		function refresh() {
